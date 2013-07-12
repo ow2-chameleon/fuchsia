@@ -1,0 +1,17 @@
+# Lines starting with '#' are considered comments.
+# Ignore any directory named target (produced by Maven):
+target
+
+# Ignore any file named .classpath and .project, and directory named .settings 
+# (produced by Eclipse):
+.classpath
+.project
+.settings
+
+# Ignore any file named *.iml, *.iws or *.ipr, and directory named .idea
+# (produced by IntelliJ IDEA):
+.idea/
+*.ipr
+*.iml
+*.iws
+
