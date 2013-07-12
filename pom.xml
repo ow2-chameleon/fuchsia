@@ -58,7 +58,7 @@
             </activation>
             <modules>
                 <module>core</module>
-                <module>test-components</module>
+                <module>fool-components</module>
             </modules>
         </profile>
 
