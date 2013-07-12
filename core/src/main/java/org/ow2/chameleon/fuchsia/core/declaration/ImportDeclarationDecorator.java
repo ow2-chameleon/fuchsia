@@ -10,7 +10,6 @@ import java.util.Map;
 /**
  * @author Morgan Martinet
  */
-@Component(name = "ImportDeclarationFactory")
 public class ImportDeclarationDecorator implements ImportDeclaration {
 
     private final ImportDeclaration importDeclaration;

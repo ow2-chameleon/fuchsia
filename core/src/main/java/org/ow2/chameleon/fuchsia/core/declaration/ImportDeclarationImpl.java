@@ -15,7 +15,6 @@ import java.util.Map;
  * @author jnascimento
  * @author Morgan Martinet
  */
-@Component(name = "ImportDeclarationFactory")
 public class ImportDeclarationImpl implements ImportDeclaration {
 
     // List of importerServices bind to this ImportDeclaration
