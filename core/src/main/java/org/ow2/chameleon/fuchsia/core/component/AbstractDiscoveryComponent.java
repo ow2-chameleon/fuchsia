@@ -48,6 +48,8 @@ public abstract class AbstractDiscoveryComponent implements DiscoveryService {
      * Must be override !
      */
     protected void stop() {
+        logger.debug("Stopping discovery");
+
         synchronized (importDeclarationsRegistered) {
             for (ServiceRegistration registration : importDeclarationsRegistered.values()) {
                 if (registration != null) {

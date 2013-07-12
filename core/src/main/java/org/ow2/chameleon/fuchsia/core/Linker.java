@@ -3,7 +3,9 @@ package org.ow2.chameleon.fuchsia.core;
 import org.apache.felix.ipojo.annotations.Bind;
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
+import org.apache.felix.ipojo.annotations.Invalidate;
 import org.apache.felix.ipojo.annotations.Unbind;
+import org.apache.felix.ipojo.annotations.Validate;
 import org.osgi.framework.Filter;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
@@ -40,6 +42,15 @@ public class Linker {
      */
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    @Validate
+    public void start() {
+        logger.debug("Fuchsia linker starting");
+    }
+
+    @Invalidate
+    public void stop() {
+        logger.debug("Fuchsia linker stopping");
+    }
 
     public Linker() {
         //
