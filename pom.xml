@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+        Copyright 2009 OW2 Chameleon Licensed under the Apache License,
+        Version 2.0 (the "License"); you may not use this file except in
+        compliance with the License. You may obtain a copy of the License at
+        http://www.apache.org/licenses/LICENSE-2.0 Unless required by
+        applicable law or agreed to in writing, software distributed under the
+        License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+        CONDITIONS OF ANY KIND, either express or implied. See the License for
+        the specific language governing permissions and limitations under the
+        License.
+    -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.ow2.chameleon.fuchsia</groupId>
+    <artifactId>fuchsia-parent</artifactId>
+    <version>0.0.1</version>
+    <name>Fuchsia Parent</name>
+    <packaging>pom</packaging>
+
+    <parent>
+        <artifactId>ow2</artifactId>
+        <groupId>org.ow2</groupId>
+        <version>1.3</version>
+    </parent>
+
+    <properties>
+        <!-- Dependencies version -->
+        <ipojo.version>1.10.1</ipojo.version>
+        <ipojo.plugin.version>1.10.1</ipojo.plugin.version>
+        <osgi-core.version>5.0.0</osgi-core.version>
+        <osgi.version>4.3.1</osgi.version>
+        <bundle.plugin.version>2.4.0</bundle.plugin.version>
+        <compiler.plugin.version>2.5.1</compiler.plugin.version>
+        <javadoc.plugin.version>2.9.1</javadoc.plugin.version>
+        <slf4j.version>1.6.6</slf4j.version>
+
+        <!-- Test dependencies version -->
+        <mockito.version>1.9.5</mockito.version>
+        <junit.version>4.9</junit.version>
+
+        <!-- Encoding -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- Website deploy -->
+        <site.path>snapshot</site.path>
+        <github.global.server>github</github.global.server>
+    </properties>
+
+    <profiles>
+        <profile>
+            <id>all</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>core</module>
+                <module>test-components</module>
+            </modules>
+        </profile>
+
+        <!-- Profile used to build core bundles -->
+        <profile>
+            <id>core</id>
+            <modules>
+                <module>core</module>
+            </modules>
+        </profile>
+
+        <!-- Profile used to build protocol bundles -->
+        <profile>
+            <id>protocol</id>
+            <modules>
+            </modules>
+        </profile>
+
+        <!-- Profile used to build distribution -->
+        <profile>
+            <id>dist</id>
+            <modules>
+            </modules>
+        </profile>
+
+        <!-- Profile used in order to run the integration tests -->
+        <profile>
+            <id>test</id>
+            <modules>
+            </modules>
+        </profile>
+
+    </profiles>
+
+    <scm>
+        <connection>scm:git:git@github.com:ow2-chameleon/fuchsia.git</connection>
+        <url>scm:git:git@github.com:ow2-chameleon/fuchsia.git</url>
+        <developerConnection>scm:git:git@github.com:ow2-chameleon/fuchsia.git</developerConnection>
+        <tag>0.0.1</tag>
+    </scm>
+
+    <!-- Maven Repo -->
+    <repositories>
+        <!-- OW2 Repo -->
+        <repository>
+            <id>objectweb-public</id>
+            <name>ow2 Maven Repository</name>
+            <url>http://repository.ow2.org/nexus/content/repositories/public</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>objectweb-old-release</id>
+            <name>ow2 Maven Repository [OLD]</name>
+            <url>http://maven.ow2.org/maven2</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <!-- Java.net repo -->
+        <repository>
+            <id>java.net-Public</id>
+            <name>Maven Java Net Snapshots and Releases</name>
+            <url>https://maven.java.net/content/groups/public</url>
+        </repository>
+    </repositories>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.ow2.chameleon.fuchsia</groupId>
+                <artifactId>fuchsia-core</artifactId>
+                <version>0.0.1</version>
+            </dependency>
+
+            <!-- OSGi -->
+            <dependency>
+                <groupId>org.osgi</groupId>
+                <artifactId>org.osgi.core</artifactId>
+                <version>${osgi-core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.osgi</groupId>
+                <artifactId>org.osgi.compendium</artifactId>
+                <version>${osgi.version}</version>
+            </dependency>
+
+            <!-- iPOJO -->
+            <dependency>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>org.apache.felix.ipojo</artifactId>
+                <version>${ipojo.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>org.apache.felix.ipojo.api</artifactId>
+                <version>${ipojo.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>org.apache.felix.ipojo.annotations</artifactId>
+                <version>${ipojo.version}</version>
+            </dependency>
+            <dependency>
+                <artifactId>org.apache.felix.ipojo.handler.eventadmin</artifactId>
+                <groupId>org.apache.felix</groupId>
+                <version>${ipojo.handler.eventadmin}</version>
+            </dependency>
+
+            <!--SLF4J-->
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>maven-bundle-plugin</artifactId>
+                    <version>${bundle.plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>maven-ipojo-plugin</artifactId>
+                    <version>${ipojo.plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${compiler.plugin.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <configuration>
+                    <useReleaseProfile>false</useReleaseProfile>
+                    <arguments>-Pall</arguments>
+                    <goals>deploy</goals>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${javadoc.plugin.version}</version>
+                <configuration>
+                    <outputDirectory>${project.parent.basedir}/target/site/api/</outputDirectory>
+                    <aggregate>true</aggregate>
+                </configuration>
+
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>javadoc</goal>
+                            <goal>test-javadoc</goal>
+                        </goals>
+                        <phase>site</phase>
+                        <configuration>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-webdav-jackrabbit</artifactId>
+                <version>2.2</version>
+            </extension>
+        </extensions>
+    </build>
+
+
+</project>
+
