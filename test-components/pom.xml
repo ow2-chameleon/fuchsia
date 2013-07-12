@@ -40,6 +40,11 @@
             <groupId>org.ow2.chameleon.fuchsia</groupId>
             <artifactId>fuchsia-core</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
     </dependencies>
 
     <!-- Build configuration -->
