@@ -31,6 +31,8 @@ import java.util.Set;
 @Instantiate(name = "FuchsiaLinker")
 public class Linker {
 
+    private final String linker_name;
+
     private final Object lock = new Object();
 
     private final Map<ImporterService, Filter> importerServices = new HashMap<ImporterService, Filter>();
@@ -44,28 +46,29 @@ public class Linker {
 
     @Validate
     public void start() {
-        logger.debug("Fuchsia linker starting");
+        logger.debug(linker_name + " starting");
     }
 
     @Invalidate
     public void stop() {
-        logger.debug("Fuchsia linker stopping");
+        logger.debug(linker_name + " stopping");
     }
 
     public Linker() {
-        //
+        // FIXME : temporary name before permit to use multiples linker
+        linker_name = "linker";
     }
 
     /**
      * Bind all the {@link ImporterService}.
      * <p/>
-     * foreach ImporterService, check all the already bound declarations.
+     * Foreach ImporterService, check all the already bound declarations.
      * If the metadata of the importDeclaration match the filter exposed by the importer
      * bind the importDeclaration to the importer
      */
-    @Bind(aggregate = true, optional = true)
+    @Bind(id = "importerServices", aggregate = true, optional = true)
     void bindImporterService(ImporterService importerService, Map<String, Object> properties) {
-        logger.debug("Bind an ImporterService");
+        logger.debug(linker_name + " : Bind the ImporterService " + importerService);
         Filter filter;
         Object propTarget = properties.get("target");
         if (propTarget instanceof String) {
@@ -73,20 +76,24 @@ public class Linker {
                 filter = FrameworkUtil.createFilter((String) propTarget);
             } catch (InvalidSyntaxException e) {
                 // FIXME
-                // The target properties of the ImporterService " + properties.get("instance.name"))
-                // contains a String that the syntax doesn't fit with the LDAP syntax
+                logger.error(linker_name + " : The target properties of the ImporterService "
+                        + properties.get("instance.name") +
+                        " contains a String that the syntax doesn't respect the LDAP syntax");
                 return;
             }
         } else if (propTarget instanceof Filter) {
             filter = (Filter) propTarget;
         } else {
             // FIXME
-            // The target properties of the ImporterService " + properties.get("instance.name"))
-            // must be a String (LDAP syntax) or a org.osgi.framework.Filter
+            logger.error(linker_name + " : The target properties of the ImporterService  "
+                    + properties.get("instance.name") + " must be a String using LDAP syntax or a org.osgi.framework.Filter");
             return;
         }
 
         synchronized (lock) {
+            logger.debug(linker_name + " : Add the ImporterService " + importerService
+                    + " with filter " + filter.toString());
+
             importerServices.put(importerService, filter);
             for (ImportDeclaration importDeclaration : importDeclarations) {
                 tryToBind(importDeclaration, importerService);
@@ -94,9 +101,9 @@ public class Linker {
         }
     }
 
-    @Unbind
+    @Unbind(id = "importerServices")
     void unbindImporterService(ImporterService importerService) {
-        logger.debug("Unbind an ImporterService");
+        logger.debug(linker_name + " : Unbind the ImporterService " + importerService);
         synchronized (lock) {
             importerServices.remove(importerService);
             for (ImportDeclaration importDeclaration : importDeclarations) {
@@ -117,9 +124,9 @@ public class Linker {
      * <p/>
      * Foreach ImportDeclaration, check if metadata match the filter given exposed by the importerServices bound.
      */
-    @Bind(aggregate = true, optional = true)
+    @Bind(id = "importDeclarations", aggregate = true, optional = true)
     void bindImportDeclaration(ImportDeclaration importDeclaration) {
-        logger.debug("Bind an ImportDeclaration");
+        logger.debug(linker_name + " : Bind the ImportDeclaration " + importDeclaration);
         synchronized (lock) {
             importDeclarations.add(importDeclaration);
             for (ImporterService importerService : importerServices.keySet()) {
@@ -129,9 +136,9 @@ public class Linker {
         }
     }
 
-    @Unbind
+    @Unbind(id = "importDeclarations")
     void unbindImportDeclaration(ImportDeclaration importDeclaration) {
-        logger.debug("Unbind an ImportDeclaration");
+        logger.debug(linker_name + " : Unbind the ImportDeclaration " + importDeclaration);
         synchronized (lock) {
             for (ImporterService importerService : importDeclaration.getStatus().getImporterServices()) {
                 try {
@@ -144,17 +151,30 @@ public class Linker {
         }
     }
 
+    /**
+     * Try to bind the importDeclaration with the importerService, return true if they have been bind together,
+     * false otherwise.
+     *
+     * @param importDeclaration The ImportDeclaration
+     * @param importerService The ImporterService
+     * @return true if they have been bind together, false otherwise.
+     */
     private boolean tryToBind(ImportDeclaration importDeclaration, ImporterService importerService) {
         Filter filter = importerServices.get(importerService);
         if (filter.matches(importDeclaration.getMetadata())) {
             try {
                 importerService.addImportDeclaration(importDeclaration);
             } catch (BadImportRegistration bir) {
-                // TODO
+                logger.debug(importDeclaration + " match the filter of " + importerService
+                        + " but throw an exception when add to it", bir);
+                return false;
             }
             importDeclaration.bind(importerService);
+            logger.debug(importDeclaration + " match the filter of " + importerService + " : they are bind together");
             return true;
         }
+        logger.debug(importDeclaration + " doesn't match the filter of " + importerService
+                + "(" + importDeclaration.getMetadata().toString() + ")");
         return false;
     }
 }
