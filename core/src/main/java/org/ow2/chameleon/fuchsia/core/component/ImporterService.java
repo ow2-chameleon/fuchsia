@@ -6,12 +6,13 @@ import org.ow2.chameleon.fuchsia.core.util.BadImportRegistration;
 import java.util.List;
 
 /**
- * The component providing this service are capable of creating a proxy thanks to an {@link ImportDeclaration}.
+ * The components providing this service are capable of creating a proxy thanks to an {@link ImportDeclaration}.
  *
  * @author barjo
+ * @author Morgan Martinet
  */
 // TODO : Think to methods to :
-// TODO :  - return all the importDeclaration/ServiceRegistration or what else ;
+// TODO :  - return all the ImportDeclaration/ServiceRegistration or what else ;
 // TODO :  - get the linker(s?) that the importerService is linked to.
 public interface ImporterService {
 

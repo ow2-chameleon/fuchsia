@@ -26,13 +26,13 @@ public abstract class AbstractImporterComponent implements ImporterService {
     /**
      * Abstract method, is called when the sub class must create the proxy or do other stuff, like APAM things... dun know
      * <p/>
-     * TODO : should maybe be able to throw which exception if there's problem ?
+     * TODO : Does it should be able to throw an exception if there's problem ? which one ?
      */
     protected abstract void createProxy(final ImportDeclaration importDeclaration);
 
     /**
-     * Abstract method, is called when the sub class must destroy the proxy. Do not forget to unregister the proxy, call:
-     * <code>registration.unregister()</code>
+     * Abstract method, is called when the sub class must destroy the proxy.
+     * Do not forget to unregister the proxy, call: <code>proxy.unregister()</code>
      */
     protected abstract void destroyProxy(final ImportDeclaration importDeclaration);
 
@@ -75,7 +75,9 @@ public abstract class AbstractImporterComponent implements ImporterService {
 	 *---------------------------------*/
 
     /**
-     * @param importDeclaration The ImportDeclartion pass to the ImporterService
+     *
+     * @param importDeclaration The {@link ImportDeclaration} of the service to be imported.
+     * @throws BadImportRegistration
      */
     public void addImportDeclaration(ImportDeclaration importDeclaration) throws BadImportRegistration {
         if (!isValid) {
@@ -96,6 +98,12 @@ public abstract class AbstractImporterComponent implements ImporterService {
         }
     }
 
+
+    /**
+     *
+     * @param importDeclaration The {@link ImportDeclaration} of the service to stop to be imported.
+     * @throws BadImportRegistration
+     */
     public void removeImportDeclaration(ImportDeclaration importDeclaration) throws BadImportRegistration {
         if (!isValid) {
             throw new BadImportRegistration("This ImporterService is no more available. !");
