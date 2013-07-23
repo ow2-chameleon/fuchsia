@@ -17,8 +17,6 @@ import java.util.Set;
 public abstract class AbstractImporterComponent implements ImporterService {
     private final Set<ImportDeclaration> importDeclarations;
 
-    private volatile boolean isValid = false;
-
     public AbstractImporterComponent() {
         importDeclarations = new HashSet<ImportDeclaration>();
     }
@@ -49,7 +47,6 @@ public abstract class AbstractImporterComponent implements ImporterService {
             }
             // Clear the map
             importDeclarations.clear();
-            isValid = false;
         }
     }
 
@@ -58,17 +55,9 @@ public abstract class AbstractImporterComponent implements ImporterService {
      * Must be override !
      */
     protected void start() {
-        synchronized (importDeclarations) {
-            isValid = true;
-        }
+        //
     }
 
-    /**
-     * @return <code>true</code> if the {@link ImporterService} is in a valid state, <code>false</code> otherwise.
-     */
-    protected final boolean isValid() {
-        return isValid;
-    }
 
 	/*---------------------------------*
      *  ImportService implementation *
@@ -80,10 +69,6 @@ public abstract class AbstractImporterComponent implements ImporterService {
      * @throws BadImportRegistration
      */
     public void addImportDeclaration(ImportDeclaration importDeclaration) throws BadImportRegistration {
-        if (!isValid) {
-            throw new BadImportRegistration("This ImporterService is no more available. !");
-        }
-
         synchronized (importDeclarations) {
             if (importDeclarations.contains(importDeclaration)) {
                 // Already register
@@ -105,9 +90,6 @@ public abstract class AbstractImporterComponent implements ImporterService {
      * @throws BadImportRegistration
      */
     public void removeImportDeclaration(ImportDeclaration importDeclaration) throws BadImportRegistration {
-        if (!isValid) {
-            throw new BadImportRegistration("This ImporterService is no more available. !");
-        }
         synchronized (importDeclarations) {
             destroyProxy(importDeclaration);
             importDeclarations.remove(importDeclaration);
