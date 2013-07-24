@@ -47,7 +47,7 @@ public class ImportDeclarationImpl implements ImportDeclaration {
 
     public Status getStatus() {
         synchronized (importerServicesBound) {
-            return new Status(new ArrayList<ImporterService>(importerServicesBound));
+            return Status.from(importerServicesBound);
         }
     }
 
