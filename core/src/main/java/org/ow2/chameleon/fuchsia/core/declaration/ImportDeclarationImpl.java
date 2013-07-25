@@ -1,6 +1,5 @@
 package org.ow2.chameleon.fuchsia.core.declaration;
 
-import org.apache.felix.ipojo.annotations.Component;
 import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 
 import java.util.ArrayList;
@@ -29,7 +28,7 @@ public class ImportDeclarationImpl implements ImportDeclaration {
     private final Map<String, Object> extraMetadata;
 
     public ImportDeclarationImpl(Map<String, Object> metadata) {
-        if (metadata == null) {
+        if (metadata == null || metadata.isEmpty()) {
             throw new IllegalArgumentException("Can't create a ImportDeclaration without metadata.");
         }
         this.metadata = Collections.unmodifiableMap(new HashMap<String, Object>(metadata));

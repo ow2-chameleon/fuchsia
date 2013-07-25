@@ -1,6 +1,5 @@
 package org.ow2.chameleon.fuchsia.core.declaration;
 
-import org.apache.felix.ipojo.annotations.Component;
 import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 
 import java.util.Collections;
@@ -14,7 +13,7 @@ public class ImportDeclarationDecorator implements ImportDeclaration {
 
     private final ImportDeclaration importDeclaration;
 
-    // The extra-metadata of the ImportDeclaration, set by the FuchsiaMachine or by the Linker
+    // The extra-metadata of the ImportDeclaration, set by the Linker
     private final Map<String, Object> extraMetadata;
 
     public ImportDeclarationDecorator(ImportDeclaration importDeclaration, Map<String, Object> extraMetadata) {
