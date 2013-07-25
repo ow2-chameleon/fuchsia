@@ -21,9 +21,9 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * The {@link Linker} are used by the FuchsiaMachine to make the link between the
+ * The {@link Linker} are used by the FuchsiaMediator to make the link between the
  * {@link ImportDeclaration} and the {@link org.ow2.chameleon.fuchsia.core.component.ImporterService}.
- * A FuchsiaMachine can have multiple {@link Linker} with different configurations.
+ * A FuchsiaMediator can have multiple {@link Linker} with different configurations.
  *
  * @author Morgan Martinet
  */
