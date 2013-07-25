@@ -1,14 +1,10 @@
 package org.ow2.chameleon.fuchsia.core;
 
-import org.apache.felix.ipojo.annotations.Component;
-import org.apache.felix.ipojo.annotations.Instantiate;
 import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 
 import java.util.Map;
 import java.util.Set;
 
-@Component(name = "FuchsiaMediatorFactory", publicFactory = false)
-@Instantiate(name = "FuchsiaMediator")
 public interface FuchsiaMediator {
     /**
      * System property identifying the host name for this FuchsiaMediator.
