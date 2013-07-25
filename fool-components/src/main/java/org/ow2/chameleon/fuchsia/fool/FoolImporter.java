@@ -29,6 +29,9 @@ public class FoolImporter extends AbstractImporterComponent {
     @ServiceProperty(name = "target", value = "(fool-number=1)")
     private String filter;
 
+    @ServiceProperty(name = "instance.name")
+    private String name;
+
     @Override
     @Validate
     protected void stop() {
@@ -55,5 +58,9 @@ public class FoolImporter extends AbstractImporterComponent {
         List<String> l = new ArrayList<String>();
         l.add("fool");
         return l;
+    }
+
+    public String getName() {
+        return name;
     }
 }

@@ -3,9 +3,12 @@ package org.ow2.chameleon.fuchsia.fool;
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Invalidate;
+import org.apache.felix.ipojo.annotations.Provides;
+import org.apache.felix.ipojo.annotations.ServiceProperty;
 import org.apache.felix.ipojo.annotations.Validate;
 import org.osgi.framework.BundleContext;
 import org.ow2.chameleon.fuchsia.core.component.AbstractDiscoveryComponent;
+import org.ow2.chameleon.fuchsia.core.component.DiscoveryService;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclarationBuilder;
 import org.slf4j.Logger;
@@ -24,8 +27,12 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
  * It don't really get what it does, but it's ok.
  */
 @Component(name = "Fuchsia-FoolDiscovery-Factory")
+@Provides(specifications = DiscoveryService.class)
 @Instantiate(name = "Fuchsia-FoolDiscovery")
 public class FoolDiscovery extends AbstractDiscoveryComponent {
+
+    @ServiceProperty(name = "instance.name")
+    private String name;
 
     private final ScheduledThreadPoolExecutor pool_register = new ScheduledThreadPoolExecutor(1);
     private final ScheduledThreadPoolExecutor pool_unregister = new ScheduledThreadPoolExecutor(1);
@@ -69,6 +76,10 @@ public class FoolDiscovery extends AbstractDiscoveryComponent {
         pool_register.shutdown();
 
         importDeclarations.clear();
+    }
+
+    public String getName() {
+        return name;
     }
 
 
