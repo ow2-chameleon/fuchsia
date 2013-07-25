@@ -7,8 +7,8 @@ import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 import java.util.Map;
 import java.util.Set;
 
-@Component(name = "FuchsiaCentralFactory", publicFactory = false)
-@Instantiate(name = "FuchsiaCentral")
+@Component(name = "FuchsiaMediatorFactory", publicFactory = false)
+@Instantiate(name = "FuchsiaMediator")
 public interface FuchsiaMediator {
     /**
      * System property identifying the host name for this FuchsiaMediator.
