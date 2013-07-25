@@ -1,5 +1,6 @@
 package org.ow2.chameleon.fuchsia.core;
 
+import org.ow2.chameleon.fuchsia.core.component.DiscoveryService;
 import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 
 import java.util.Map;
@@ -21,9 +22,19 @@ public interface FuchsiaMediator {
     }
 
     /**
-     * @return The ImporterService linked to this FuchsiaMediator
+     * @return The Linkers created the the FuchsiaMediator
      */
-    Set<ImporterService> getLinkers();
+    Set<Linker> getLinkers();
+
+    /**
+     * @return The ImporterServices services on the platform
+     */
+    Set<ImporterService> getImporterServices();
+
+    /**
+     * @return The DiscoveryService services on the platform
+     */
+    Set<DiscoveryService> getDiscoveryServices();
 
     /**
      * @return This FuchsiaMediator host.
