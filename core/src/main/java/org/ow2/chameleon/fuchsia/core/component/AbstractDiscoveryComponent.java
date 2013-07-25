@@ -93,4 +93,9 @@ public abstract class AbstractDiscoveryComponent implements DiscoveryService {
             registration.unregister();
         }
     }
+
+    @Override
+    public String toString() {
+        return getName();
+    }
 }

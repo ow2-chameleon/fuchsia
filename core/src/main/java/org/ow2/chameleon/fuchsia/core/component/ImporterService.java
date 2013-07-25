@@ -35,4 +35,6 @@ public interface ImporterService {
      */
     List<String> getConfigPrefix();
 
+    String getName();
+
 }

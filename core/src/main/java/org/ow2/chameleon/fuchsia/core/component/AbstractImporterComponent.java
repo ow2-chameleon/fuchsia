@@ -95,4 +95,9 @@ public abstract class AbstractImporterComponent implements ImporterService {
             importDeclarations.remove(importDeclaration);
         }
     }
+
+    @Override
+    public String toString() {
+        return getName();
+    }
 }
