@@ -73,6 +73,9 @@
             <modules>
                 <module>core</module>
                 <module>fool-components</module>
+                <module>fake-discovery</module>
+                <module>fake-device</module>
+                <module>fake-importer</module>
             </modules>
         </profile>
 
