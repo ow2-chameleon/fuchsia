@@ -1,23 +1,23 @@
-package org.ow2.chameleon.fushia.device;
+package org.ow2.chameleon.fuchsia.device;
 
-import org.apache.felix.ipojo.annotations.Component;
-import org.apache.felix.ipojo.annotations.Property;
-import org.apache.felix.ipojo.annotations.Provides;
+import org.apache.felix.ipojo.annotations.*;
+import org.osgi.framework.Constants;
 
 /**
  * This class represent a generic fake device
  */
 @Component (name = "iCasa.GenericFakeDevice")
-@Provides (specifications = GenericDevice.class)
+@Provides(specifications = GenericDevice.class, properties = { @StaticServiceProperty(type = "java.lang.String", name = Constants.SERVICE_DESCRIPTION) })
+//@Instantiate
 public class GenericFakeDevice implements GenericDevice {
 
-    @Property
+    @ServiceProperty(name = GenericFakeDevice.DEVICE_SERIAL_NUMBER, mandatory = true)
     String serialNumber;
 
-    @Property
+    @ServiceProperty
     String deviceType;
 
-    @Property
+    @ServiceProperty
     String deviceSubTYpe;
 
 

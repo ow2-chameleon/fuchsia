@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fushia.discovery;
+package org.ow2.chameleon.fuchsia.discovery;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

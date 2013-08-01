@@ -1,5 +1,6 @@
 package org.ow2.chameleon.fuchsia.core.component;
 
+import org.osgi.framework.InvalidSyntaxException;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.util.BadImportRegistration;
 
@@ -26,7 +27,7 @@ public abstract class AbstractImporterComponent implements ImporterService {
      * <p/>
      * TODO : Does it should be able to throw an exception if there's problem ? which one ?
      */
-    protected abstract void createProxy(final ImportDeclaration importDeclaration);
+    protected abstract void createProxy(final ImportDeclaration importDeclaration) throws InvalidSyntaxException;
 
     /**
      * Abstract method, is called when the sub class must destroy the proxy.
@@ -76,7 +77,11 @@ public abstract class AbstractImporterComponent implements ImporterService {
                         "not supported by the AbstractImporterComponent");
             } else {
                 //First registration, create the proxy
-                createProxy(importDeclaration);
+                try {
+                    createProxy(importDeclaration);
+                } catch (InvalidSyntaxException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
                 importDeclarations.add(importDeclaration);
             }
         }
