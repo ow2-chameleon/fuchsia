@@ -32,6 +32,10 @@ public class ImporterService extends AbstractImporterComponent {
 
     private BundleContext m_bundleContext;
 
+    /**
+     * Constructor in order to have the bundle context injected
+     * @param bundleContext
+     */
     public ImporterService(BundleContext bundleContext) {
         m_bundleContext = bundleContext;
     }
@@ -61,6 +65,11 @@ public class ImporterService extends AbstractImporterComponent {
         super.start();
     }
 
+    /**
+     * Call if an import declaration match with the LDAP filter
+     * @param importDeclaration
+     * @throws InvalidSyntaxException
+     */
     @Override
     protected void createProxy(ImportDeclaration importDeclaration) throws InvalidSyntaxException {
 
