@@ -1,5 +1,8 @@
 package org.ow2.chameleon.fuchsia.importer;
 
+import org.apache.felix.ipojo.annotations.Component;
+import org.apache.felix.ipojo.annotations.Instantiate;
+import org.apache.felix.ipojo.annotations.Provides;
 import org.ow2.chameleon.fuchsia.device.GenericDevice;
 
 import java.lang.reflect.InvocationHandler;
@@ -20,9 +23,6 @@ public class DelegationProxy implements InvocationHandler {
     }
 
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-//
-//        if(method.getName().startsWith("getSerial"))
-//            return "test";
 
         return method.invoke(m_proxied, args);
     }

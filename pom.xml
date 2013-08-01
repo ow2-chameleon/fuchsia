@@ -76,6 +76,7 @@
                 <module>fake-discovery</module>
                 <module>fake-device</module>
                 <module>fake-importer</module>
+                <module>tests</module>
             </modules>
         </profile>
 
