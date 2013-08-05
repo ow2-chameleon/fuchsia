@@ -71,9 +71,14 @@ public class ImporterService extends AbstractImporterComponent {
      * @throws InvalidSyntaxException
      */
     @Override
-    protected void createProxy(ImportDeclaration importDeclaration) throws InvalidSyntaxException {
+    protected void createProxy(ImportDeclaration importDeclaration) {
 
-        ServiceReference[] deviceRef = m_bundleContext.getServiceReferences(GenericDevice.class.getName(),"(device.serialNumber=BL-1234)");
+        ServiceReference[] deviceRef = new ServiceReference[0];
+        try {
+            deviceRef = m_bundleContext.getServiceReferences(GenericDevice.class.getName(),"(device.serialNumber=BL-1234)");
+        } catch (InvalidSyntaxException e) {
+            e.printStackTrace();
+        }
         Object device =  m_bundleContext.getService(deviceRef[0]);
         GenericFakeDevice genericDevice = (GenericFakeDevice) device;
         logger.debug("FakeImporter create a proxy for " + importDeclaration);

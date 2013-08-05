@@ -27,7 +27,7 @@ public abstract class AbstractImporterComponent implements ImporterService {
      * <p/>
      * TODO : Does it should be able to throw an exception if there's problem ? which one ?
      */
-    protected abstract void createProxy(final ImportDeclaration importDeclaration) throws InvalidSyntaxException;
+    protected abstract void createProxy(final ImportDeclaration importDeclaration);
 
     /**
      * Abstract method, is called when the sub class must destroy the proxy.
@@ -77,11 +77,7 @@ public abstract class AbstractImporterComponent implements ImporterService {
                         "not supported by the AbstractImporterComponent");
             } else {
                 //First registration, create the proxy
-                try {
-                    createProxy(importDeclaration);
-                } catch (InvalidSyntaxException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                }
+                createProxy(importDeclaration);
                 importDeclarations.add(importDeclaration);
             }
         }
