@@ -78,6 +78,11 @@ public class FoolDiscovery extends AbstractDiscoveryComponent {
         importDeclarations.clear();
     }
 
+    @Override
+    public Logger getLogger() {
+        return logger;
+    }
+
     public String getName() {
         return name;
     }
