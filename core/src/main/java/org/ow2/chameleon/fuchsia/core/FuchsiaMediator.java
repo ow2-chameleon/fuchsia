@@ -72,6 +72,13 @@ public interface FuchsiaMediator {
     public LinkerUpdater updateLinker(String name);
 
     /**
+     * Destroy the linker named name
+     *
+     * @param name the name of the Linker that must be destroyed
+     */
+    public void destroyLinker(String name);
+
+    /**
      * Add the ComponentInstance of the linker named name to the FuchsiaMediator
      *
      * @param name the name of the Linker
