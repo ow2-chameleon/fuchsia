@@ -25,11 +25,8 @@ public abstract class AbstractDiscoveryComponent implements DiscoveryService {
 
     private BundleContext bundleContext;
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public AbstractDiscoveryComponent(BundleContext bundleContext) {
-        logger.debug("Creating discovery");
-
         this.importDeclarationsRegistered = new HashMap<ImportDeclaration, ServiceRegistration>();
         this.bundleContext = bundleContext;
     }
@@ -39,8 +36,6 @@ public abstract class AbstractDiscoveryComponent implements DiscoveryService {
      * Must be override !
      */
     protected void start() {
-        logger.debug("Starting discovery");
-
     }
 
     /**
@@ -48,8 +43,6 @@ public abstract class AbstractDiscoveryComponent implements DiscoveryService {
      * Must be override !
      */
     protected void stop() {
-        logger.debug("Stopping discovery");
-
         synchronized (importDeclarationsRegistered) {
             for (ServiceRegistration registration : importDeclarationsRegistered.values()) {
                 if (registration != null) {
@@ -98,4 +91,6 @@ public abstract class AbstractDiscoveryComponent implements DiscoveryService {
     public String toString() {
         return getName();
     }
+
+    public abstract Logger getLogger();
 }
