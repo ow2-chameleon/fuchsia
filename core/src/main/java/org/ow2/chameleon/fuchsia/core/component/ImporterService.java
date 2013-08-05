@@ -13,7 +13,7 @@ import java.util.List;
  */
 // TODO : Think to methods to :
 // TODO :  - return all the ImportDeclaration/ServiceRegistration or what else ;
-// TODO :  - get the linker(s?) that the importerService is linked to.
+// TODO :  - get the linker(s) that the importerService is linked to.
 public interface ImporterService {
 
     /**
@@ -31,7 +31,8 @@ public interface ImporterService {
     void removeImportDeclaration(ImportDeclaration importDeclaration) throws BadImportRegistration;
 
     /**
-     * @return The configuration prefix used or defined by this {@link ImporterService}. (i.e <code>json-rpc,org.jabsorb,jax-rs</code>.
+     * @return The configuration prefix used or defined by this {@link ImporterService}.
+     * (i.e <code>json-rpc,org.jabsorb,jax-rs,bluetooth,upnp</code>.
      */
     List<String> getConfigPrefix();
 
