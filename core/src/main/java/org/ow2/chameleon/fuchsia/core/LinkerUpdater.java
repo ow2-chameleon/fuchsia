@@ -9,7 +9,7 @@ import org.osgi.framework.InvalidSyntaxException;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
-public class LinkerUpdater {
+class LinkerUpdater {
 
     private final ComponentInstance componentInstance;
     private Filter importDeclarationFilter;
