@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
 public class AbstractImporterComponentTest {
@@ -29,12 +29,12 @@ public class AbstractImporterComponentTest {
     Linker linker;
 
     //Tested Object
-    TestedClass creator;
+    TestedClass testedClass;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this); //initialize the object with mocks annotations
-        creator = new TestedClass();
+        testedClass = new TestedClass();
     }
 
     @After
@@ -47,14 +47,13 @@ public class AbstractImporterComponentTest {
         EndpointDescription desc = mock(EndpointDescription.class);
 
         ImportDeclaration idec = mock(ImportDeclaration.class);
-        creator.createProxy(idec);
+        testedClass.createProxy(idec);
 
-        assertEquals(1, creator.nbProxies()); //Check that createProxy has been called
+        assertThat(testedClass.nbProxies()).isEqualTo(1); //Check that createProxy has been called
 
-        creator.destroyProxy(idec);
+        testedClass.destroyProxy(idec);
 
-        assertEquals(0, creator.nbProxies()); //Check that destroyProxy has been called
-
+        assertThat(testedClass.nbProxies()).isEqualTo(0); //Check that destroyProxy has been called
     }
 
     @Test
@@ -64,17 +63,17 @@ public class AbstractImporterComponentTest {
 
         for (int i = 0; i < IMPORT_MAX; i++) {
             ImportDeclaration idec = mock(ImportDeclaration.class);
-            creator.createProxy(idec);
-            assertEquals(i + 1, creator.nbProxies()); //Check that createProxy has been called
+            testedClass.createProxy(idec);
+            assertThat(testedClass.nbProxies()).isEqualTo(i + 1); //Check that createProxy has been called
 
             decs.add(idec);
         }
 
         for (ImportDeclaration idec : decs) {
-            creator.destroyProxy(idec);
+            testedClass.destroyProxy(idec);
         }
 
-        assertEquals(0, creator.nbProxies()); //Check that destroyProxy has been called
+        assertThat(testedClass.nbProxies()).isEqualTo(0); //Check that destroyProxy has been called
     }
 
     public class TestedClass extends AbstractImporterComponent {
