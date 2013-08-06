@@ -2,7 +2,6 @@ package org.ow2.chameleon.fuchsia.core;
 
 import org.apache.felix.ipojo.annotations.Bind;
 import org.apache.felix.ipojo.annotations.Component;
-import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Invalidate;
 import org.apache.felix.ipojo.annotations.Provides;
 import org.apache.felix.ipojo.annotations.ServiceProperty;
@@ -39,9 +38,9 @@ public class DefaultLinker implements Linker {
     private final String linker_name;
 
     @ServiceProperty(name = PROPERTY_FILTER_IMPORTDECLARATION)
-    private String importDeclarationFilter;
+    private Object importDeclarationFilter;
 
-    @ServiceProperty(name = PROPERTY_FILTER_IMPORTERSERVICE)
+    //@ServiceProperty(name = PROPERTY_FILTER_IMPORTERSERVICE)
     private Object importerServiceFilter;
 
     private final Object lock = new Object();
