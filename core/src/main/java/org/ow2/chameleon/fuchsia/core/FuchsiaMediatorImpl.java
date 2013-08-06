@@ -19,8 +19,8 @@ import java.util.Map;
 import java.util.Set;
 
 @Component(name = "FuchsiaMediatorFactory", publicFactory = false)
-@Instantiate(name = "FuchsiaMediator")
 @Provides(specifications = FuchsiaMediator.class)
+@Instantiate(name = "FuchsiaMediator")
 public class FuchsiaMediatorImpl implements FuchsiaMediator {
 
     @ServiceProperty(name = "instance.name")
@@ -61,7 +61,7 @@ public class FuchsiaMediatorImpl implements FuchsiaMediator {
         for (ComponentInstance ci : linkerComponentInstances.values()) {
             ci.dispose();
         }
-        linkers.clear();
+        linkerComponentInstances.clear();
         logger.debug(name + " stopping");
     }
 
@@ -104,6 +104,7 @@ public class FuchsiaMediatorImpl implements FuchsiaMediator {
         ci.dispose();
     }
 
+    // FIXME : Does it should'nt be public ?
     public void addLinker(String name, ComponentInstance componentInstance) {
         linkerComponentInstances.put(name, componentInstance);
     }
