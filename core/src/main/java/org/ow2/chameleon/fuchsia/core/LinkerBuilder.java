@@ -13,7 +13,7 @@ import org.osgi.framework.InvalidSyntaxException;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
-class LinkerBuilder {
+public class LinkerBuilder {
     private final FuchsiaMediator fuchsiaMediator;
     private final String name;
     private Factory factory;

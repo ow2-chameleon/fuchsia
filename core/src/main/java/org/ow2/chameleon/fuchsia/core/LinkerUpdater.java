@@ -9,7 +9,7 @@ import org.osgi.framework.InvalidSyntaxException;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
-class LinkerUpdater {
+public class LinkerUpdater {
 
     private final ComponentInstance componentInstance;
     private Filter importDeclarationFilter;
@@ -27,7 +27,7 @@ class LinkerUpdater {
         return importDeclarationFilter(FrameworkUtil.createFilter((String) filter));
     }
 
-    public void update(){
+    public void update() {
         Dictionary prop = new Hashtable();
         prop.put(Linker.PROPERTY_FILTER_IMPORTDECLARATION, importDeclarationFilter);
         componentInstance.reconfigure(prop);
