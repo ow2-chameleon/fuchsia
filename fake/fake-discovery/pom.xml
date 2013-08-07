@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>fuchsia-parent</artifactId>
         <groupId>org.ow2.chameleon.fuchsia</groupId>
+        <artifactId>fuchsia-fake</artifactId>
         <version>0.0.1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
@@ -36,9 +36,9 @@
         </dependency>
 
         <dependency>
-            <groupId>${parent.groupId}</groupId>
+            <groupId>${project.parent.groupId}</groupId>
             <artifactId>fuchsia-fake-device</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
     </dependencies>
 

@@ -15,7 +15,7 @@ import javax.inject.Inject;
 
 import java.lang.reflect.Proxy;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.ops4j.pax.exam.CoreOptions.*;
 
 /**
@@ -43,8 +43,7 @@ public class DiscoveryTest extends BaseTest {
 
 
                 //Fest assert wrapper bundles
-                wrappedBundle(mavenBundle("org.easytesting", "fest-util").versionAsInProject()),
-                wrappedBundle(mavenBundle("org.easytesting", "fest-assert").versionAsInProject())
+                wrappedBundle(mavenBundle("org.assertj", "assertj-core").versionAsInProject())
 
         );
     }

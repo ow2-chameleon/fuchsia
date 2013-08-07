@@ -17,7 +17,7 @@
 
     <parent>
         <groupId>org.ow2.chameleon.fuchsia</groupId>
-        <artifactId>fuchsia-parent</artifactId>
+        <artifactId>fuchsia-fake</artifactId>
         <version>0.0.1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
@@ -25,193 +25,54 @@
     <!-- Project description -->
     <artifactId>fuchsia-fake-it</artifactId>
     <name>OW2 Chameleon - Fuchsia Fake - IT</name>
-    <packaging>bundle</packaging>
-
-    <properties>
-        <exam.version>3.0.1</exam.version>
-        <url.version>1.5.1</url.version>
-        <ipojoVersion>1.10.1 </ipojoVersion>
-    </properties>
 
     <!-- Project dependencies -->
     <dependencies>
 
         <dependency>
-            <groupId>${parent.groupId}</groupId>
+            <groupId>${project.parent.groupId}</groupId>
             <artifactId>fuchsia-core</artifactId>
-            <version>${parent.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>${parent.groupId}</groupId>
+            <groupId>${project.parent.groupId}</groupId>
             <artifactId>fuchsia-fake-device</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>${parent.groupId}</groupId>
+            <groupId>${project.parent.groupId}</groupId>
             <artifactId>fuchsia-fake-discovery</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>${parent.groupId}</groupId>
+            <groupId>${project.parent.groupId}</groupId>
             <artifactId>fuchsia-fake-importer</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
 
         <!-- Dependencies for tests -->
         <dependency>
-            <groupId>org.ops4j.pax.exam</groupId>
-            <artifactId>pax-exam-container-native</artifactId>
-            <version>${exam.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.ops4j.pax.exam</groupId>
-            <artifactId>pax-exam-junit4</artifactId>
-            <version>${exam.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.ops4j.pax.exam</groupId>
-            <artifactId>pax-exam-link-mvn</artifactId>
-            <version>${exam.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.ops4j.pax.url</groupId>
-            <artifactId>pax-url-aether</artifactId>
-            <version>${url.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
             <groupId>org.apache.felix</groupId>
             <artifactId>org.apache.felix.framework</artifactId>
-            <version>4.2.0</version>
             <scope>test</scope>
         </dependency>
-
         <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-core</artifactId>
-            <version>0.9.6</version>
-            <scope>test</scope>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.core</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>0.9.6</version>
-            <scope>test</scope>
-        </dependency>
-
-
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.11</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <version>1.9.5</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.ops4j.pax.tinybundles</groupId>
-            <artifactId>tinybundles</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.ow2.chameleon.testing</groupId>
-            <artifactId>tinybundles-ipojo</artifactId>
-            <version>0.3.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.felix</groupId>
-            <artifactId>org.apache.felix.ipojo.manipulator</artifactId>
-            <version>${ipojoVersion}</version>
-        </dependency>
-
         <dependency>
             <groupId>org.apache.felix</groupId>
             <artifactId>org.apache.felix.ipojo</artifactId>
-            <version>${ipojoVersion}</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.felix</groupId>
-            <artifactId>org.apache.felix.configadmin</artifactId>
-            <version>1.6.0</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.4</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.ow2.chameleon.testing</groupId>
-            <artifactId>osgi-helpers</artifactId>
-            <version>0.6.1</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.felix</groupId>
-            <artifactId>org.apache.felix.ipojo.handler.eventadmin</artifactId>
-            <version>1.9.0-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.felix</groupId>
-            <artifactId>org.apache.felix.log</artifactId>
-            <version>1.0.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.felix</groupId>
-            <artifactId>org.apache.felix.eventadmin</artifactId>
-            <version>1.3.2</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.ops4j.pax.url</groupId>
-            <artifactId>pax-url-wrap</artifactId>
-            <version>1.5.2</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.easytesting</groupId>
-            <artifactId>fest-assert</artifactId>
-            <version>1.4</version>
-            <scope>test</scope>
-        </dependency>
-
+        <!-- We need to override the project version of slf4j-api to be compatible with pax-exam in the tests-->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>1.5.11</version>
         </dependency>
-
-        <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.core</artifactId>
-            <version>4.3.1</version>
-        </dependency>
-
-
     </dependencies>
 
     <!-- Build configuration -->
@@ -220,7 +81,6 @@
             <plugin>
                 <groupId>org.apache.servicemix.tooling</groupId>
                 <artifactId>depends-maven-plugin</artifactId>
-                <version>1.2</version>
                 <executions>
                     <execution>
                         <id>generate-config</id>
@@ -231,35 +91,6 @@
                 </executions>
             </plugin>
 
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <extensions>true</extensions>
-                <configuration>
-                    <instructions>
-                        <Bundle-SymbolicName>
-                            ${project.artifactId}
-                        </Bundle-SymbolicName>
-                        <Export-Package>
-                            org.ow2.chameleon.fuchsia.fake.discovery
-                        </Export-Package>
-                        <Import-Package>
-                            *
-                        </Import-Package>
-                    </instructions>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-ipojo-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>ipojo-bundle</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
