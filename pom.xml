@@ -73,10 +73,10 @@
             <modules>
                 <module>core</module>
                 <module>fool-components</module>
-                <module>fake-discovery</module>
-                <module>fake-device</module>
-                <module>fake-importer</module>
-                <module>tests</module>
+                <module>fake/fake-discovery</module>
+                <module>fake/fake-device</module>
+                <module>fake/fake-importer</module>
+                <module>fake/tests</module>
             </modules>
         </profile>
 
