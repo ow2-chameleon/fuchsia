@@ -64,7 +64,7 @@ public interface FuchsiaMediator {
     public LinkerBuilder createLinker(String name);
 
     /**
-     *  Initiate the reconfiguration of the Linker named name
+     * Initiate the reconfiguration of the Linker named name
      *
      * @param name the name of the Linker to update
      * @return a LinkerUpdater to reconfigure the linker
@@ -81,7 +81,7 @@ public interface FuchsiaMediator {
     /**
      * Add the ComponentInstance of the linker named name to the FuchsiaMediator
      *
-     * @param name the name of the Linker
+     * @param name              the name of the Linker
      * @param componentInstance the ComponentInstance of the Linker
      */
     void addLinker(String name, ComponentInstance componentInstance);

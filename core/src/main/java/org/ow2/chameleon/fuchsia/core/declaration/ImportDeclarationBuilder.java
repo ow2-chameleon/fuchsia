@@ -7,7 +7,7 @@ import java.util.Map;
  * A Builder for ImportDeclaration. There's two way to use it :
  * - Build a ImportDeclaration with metadata
  * - Build a ImportDeclaration from another ImportDeclaration with extra-metadata
- *
+ * <p/>
  * If you doing it wrong, IllegalStateException are thrown.
  */
 public class ImportDeclarationBuilder {
@@ -24,7 +24,6 @@ public class ImportDeclarationBuilder {
         this.importDeclaration = null;
         this.extraMetadata = new HashMap<String, Object>();
     }
-
 
 
     public ImportDeclarationBuilder withMetadata(Map<String, Object> metadata) {
