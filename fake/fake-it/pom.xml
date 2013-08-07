@@ -23,8 +23,8 @@
     </parent>
 
     <!-- Project description -->
-    <artifactId>fuchsia-tests</artifactId>
-    <name>OW2 Chameleon - Fuchsia Tests</name>
+    <artifactId>fuchsia-fake-it</artifactId>
+    <name>OW2 Chameleon - Fuchsia Fake - IT</name>
     <packaging>bundle</packaging>
 
     <properties>
