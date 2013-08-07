@@ -44,6 +44,8 @@
         <bundle.plugin.version>2.4.0</bundle.plugin.version>
         <compiler.plugin.version>2.5.1</compiler.plugin.version>
         <javadoc.plugin.version>2.9.1</javadoc.plugin.version>
+        <depends-maven-plugin.version>1.2</depends-maven-plugin.version>
+
 
         <!-- Test dependencies version -->
         <mockito.version>1.9.5</mockito.version>
@@ -264,6 +266,11 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>${compiler.plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.servicemix.tooling</groupId>
+                    <artifactId>depends-maven-plugin</artifactId>
+                    <version>${depends-maven-plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
