@@ -91,5 +91,9 @@ public abstract class AbstractDiscoveryComponent implements DiscoveryService {
         return getName();
     }
 
+    protected BundleContext getBundleContext() {
+        return bundleContext;
+    }
+
     public abstract Logger getLogger();
 }
