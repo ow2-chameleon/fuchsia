@@ -34,11 +34,6 @@
             <groupId>org.osgi</groupId>
             <artifactId>org.osgi.compendium</artifactId>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>org.osgi</groupId>-->
-            <!--<artifactId>org.osgi.enterprise</artifactId>-->
-            <!--<version>${osgi.ent.version}</version>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>org.apache.felix</groupId>
             <artifactId>org.apache.felix.ipojo</artifactId>
@@ -47,12 +42,11 @@
             <groupId>org.apache.felix</groupId>
             <artifactId>org.apache.felix.ipojo.annotations</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
         </dependency>
-
-
     </dependencies>
 
     <!-- Build configuration -->

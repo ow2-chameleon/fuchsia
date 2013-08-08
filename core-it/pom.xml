@@ -15,10 +15,6 @@
     <artifactId>fuchsia-core-it</artifactId>
     <name>OW2 Chameleon - Fuchsia Core - IT</name>
 
-
-    <properties>
-        <exam.version>3.0.1</exam.version>
-    </properties>
     <!-- Project dependencies -->
     <dependencies>
         <dependency>
@@ -40,10 +36,6 @@
         <dependency>
             <groupId>org.apache.felix</groupId>
             <artifactId>org.apache.felix.ipojo</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.felix</groupId>
-            <artifactId>org.apache.felix.ipojo.annotations</artifactId>
         </dependency>
 
         <!-- We need to override the project version of slf4j-api to be compatible with pax-exam in the tests-->

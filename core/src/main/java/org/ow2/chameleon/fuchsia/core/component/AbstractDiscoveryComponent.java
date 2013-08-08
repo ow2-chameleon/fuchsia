@@ -5,7 +5,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Dictionary;
 import java.util.HashMap;
@@ -23,10 +22,10 @@ public abstract class AbstractDiscoveryComponent implements DiscoveryService {
 
     private final Map<ImportDeclaration, ServiceRegistration> importDeclarationsRegistered;
 
-    private BundleContext bundleContext;
+    private final BundleContext bundleContext;
 
 
-    public AbstractDiscoveryComponent(BundleContext bundleContext) {
+    protected AbstractDiscoveryComponent(BundleContext bundleContext) {
         this.importDeclarationsRegistered = new HashMap<ImportDeclaration, ServiceRegistration>();
         this.bundleContext = bundleContext;
     }

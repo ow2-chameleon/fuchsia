@@ -37,7 +37,7 @@ public class LinkerBuilder {
     }
 
     public LinkerBuilder importDeclarationFilter(String filter) throws InvalidSyntaxException {
-        return importDeclarationFilter(FrameworkUtil.createFilter((String) filter));
+        return importDeclarationFilter(FrameworkUtil.createFilter(filter));
     }
 
     public void build() throws MissingHandlerException, UnacceptableConfiguration, ConfigurationException {

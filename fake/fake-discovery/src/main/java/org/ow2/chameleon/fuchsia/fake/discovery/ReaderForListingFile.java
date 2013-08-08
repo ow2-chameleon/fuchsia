@@ -20,8 +20,8 @@ public class ReaderForListingFile {
     /**
      * This method parses the XML file and returns a HASHMAP containing metadata
      */
-    public synchronized HashMap<String,Map> parserXML() {
-        HashMap<String,Map> metadatas = new HashMap<String, Map>();
+    public synchronized HashMap<String,Map<String,Object>> parserXML() {
+        HashMap<String,Map<String,Object>> metadatas = new HashMap<String, Map<String,Object>>();
         try {
 
             File stocks = new File("listing.xml");
@@ -52,7 +52,7 @@ public class ReaderForListingFile {
 
     private synchronized static String getValue(String tag, Element element) {
         NodeList nodes = element.getElementsByTagName(tag).item(0).getChildNodes();
-        Node node = (Node) nodes.item(0);
+        Node node = nodes.item(0);
         return node.getNodeValue();
     }
 }

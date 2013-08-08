@@ -6,7 +6,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.osgi.service.log.LogService;
-import org.osgi.service.remoteserviceadmin.EndpointDescription;
 import org.ow2.chameleon.fuchsia.core.Linker;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 
@@ -44,8 +43,6 @@ public class AbstractImporterComponentTest {
 
     @Test
     public void testImportDeclaration() {
-        EndpointDescription desc = mock(EndpointDescription.class);
-
         ImportDeclaration idec = mock(ImportDeclaration.class);
         testedClass.createProxy(idec);
 
@@ -58,7 +55,6 @@ public class AbstractImporterComponentTest {
 
     @Test
     public void testMultiplesImportDeclaration() {
-        EndpointDescription desc = mock(EndpointDescription.class);
         Collection<ImportDeclaration> decs = new HashSet<ImportDeclaration>();
 
         for (int i = 0; i < IMPORT_MAX; i++) {
@@ -78,7 +74,7 @@ public class AbstractImporterComponentTest {
 
     public class TestedClass extends AbstractImporterComponent {
 
-        private Collection<ImportDeclaration> decs = new HashSet<ImportDeclaration>();
+        private final Collection<ImportDeclaration> decs = new HashSet<ImportDeclaration>();
 
         @Override
         protected void createProxy(ImportDeclaration importDeclaration) {

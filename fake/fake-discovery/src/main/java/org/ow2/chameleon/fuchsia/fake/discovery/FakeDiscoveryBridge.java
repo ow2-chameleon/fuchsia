@@ -34,9 +34,9 @@ public class FakeDiscoveryBridge extends AbstractDiscoveryComponent {
     @ServiceProperty(name = "instance.name")
     private String name;
 
-    private Map<String, Factory> m_factories = new HashMap<String, Factory>();
+    private final Map<String, Factory> m_factories = new HashMap<String, Factory>();
 
-    private ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
+    private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 
     private ReaderForListingFile m_readerForListingFile;
 
@@ -51,7 +51,7 @@ public class FakeDiscoveryBridge extends AbstractDiscoveryComponent {
      * logger
      */
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    private HashMap<String, Map> m_metadata;
+    private HashMap<String, Map<String,Object>> m_metadata;
 
     public FakeDiscoveryBridge(BundleContext bundleContext) {
         super(bundleContext);
@@ -173,7 +173,7 @@ public class FakeDiscoveryBridge extends AbstractDiscoveryComponent {
 
     protected class Registrator implements Runnable {
 
-        Random random = new Random();
+        final Random random = new Random();
 
         private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -194,13 +194,13 @@ public class FakeDiscoveryBridge extends AbstractDiscoveryComponent {
 
     protected class Unregistrator implements Runnable {
 
-        Random random = new Random();
+        final Random random = new Random();
 
         private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
         public void run() {
             while (index_importDeclaration_unregister < importDeclarations.size()) {
-                while (index_importDeclaration_unregister == index_importDeclaration_register) {
+                while (index_importDeclaration_unregister.equals(index_importDeclaration_register)) {
                     try {
                         Thread.sleep((random.nextInt(5) + 1) * 2000);
                     } catch (InterruptedException e) {

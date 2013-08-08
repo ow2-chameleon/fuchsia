@@ -23,7 +23,7 @@ import static org.ops4j.pax.exam.CoreOptions.*;
 public class DiscoveryTest extends BaseTest {
 
     @Inject
-    BundleContext m_bundleContext;
+    private BundleContext m_bundleContext;
 
     /**
      * Common test options.
@@ -70,8 +70,8 @@ public class DiscoveryTest extends BaseTest {
     @Test
     public void testCreateFakeBL() throws InvalidSyntaxException {
 
-        ServiceReference[] deviceRef = m_bundleContext.getServiceReferences(GenericDevice.class.getName(),"(device.serialNumber=BL-1234)");
-        Object device =  m_bundleContext.getService(deviceRef[0]);
+        ServiceReference[] deviceRef = m_bundleContext.getServiceReferences(GenericDevice.class.getName(), "(device.serialNumber=BL-1234)");
+        Object device = m_bundleContext.getService(deviceRef[0]);
         GenericFakeDevice genericDevice = (GenericFakeDevice) device;
 
         assertThat(genericDevice.getSerialNumber()).isEqualTo("BL-1234");
@@ -80,8 +80,8 @@ public class DiscoveryTest extends BaseTest {
     @Test
     public void testCreateFakeDL() throws InvalidSyntaxException {
 
-        ServiceReference[] deviceRef = m_bundleContext.getServiceReferences(GenericDevice.class.getName(),"(device.serialNumber=DL-5678)");
-        Object device =  m_bundleContext.getService(deviceRef[0]);
+        ServiceReference[] deviceRef = m_bundleContext.getServiceReferences(GenericDevice.class.getName(), "(device.serialNumber=DL-5678)");
+        Object device = m_bundleContext.getService(deviceRef[0]);
         GenericFakeDevice genericDevice = (GenericFakeDevice) device;
 
         assertThat(genericDevice.getSerialNumber()).isEqualTo("DL-5678");
@@ -90,8 +90,8 @@ public class DiscoveryTest extends BaseTest {
     @Test
     public void testCreateFakePT() throws InvalidSyntaxException {
 
-        ServiceReference[] deviceRef = m_bundleContext.getServiceReferences(GenericDevice.class.getName(),"(device.serialNumber=PT-1234)");
-        Object device =  m_bundleContext.getService(deviceRef[0]);
+        ServiceReference[] deviceRef = m_bundleContext.getServiceReferences(GenericDevice.class.getName(), "(device.serialNumber=PT-1234)");
+        Object device = m_bundleContext.getService(deviceRef[0]);
         GenericFakeDevice genericDevice = (GenericFakeDevice) device;
 
         assertThat(genericDevice.getSerialNumber()).isEqualTo("PT-1234");

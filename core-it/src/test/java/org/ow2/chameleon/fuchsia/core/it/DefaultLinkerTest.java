@@ -25,12 +25,12 @@ import static org.ops4j.pax.exam.CoreOptions.*;
 
 public class DefaultLinkerTest extends BaseTest {
 
-    final String linkerInstanceName = "linker";
+    private final String linkerInstanceName = "linker";
 
     //Tested Object
-    ComponentInstance defaultLinkerCI;
+    private ComponentInstance defaultLinkerCI;
 
-    BundleContext context;
+    private BundleContext context;
 
     @Override
     protected Option[] getCustomOptions() {

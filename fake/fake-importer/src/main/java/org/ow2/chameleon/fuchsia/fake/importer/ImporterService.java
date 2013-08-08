@@ -29,7 +29,7 @@ import java.util.List;
 public class ImporterService extends AbstractImporterComponent {
 
 
-    private BundleContext m_bundleContext;
+    private final BundleContext m_bundleContext;
 
     /**
      * Constructor in order to have the bundle context injected

@@ -6,19 +6,19 @@ import org.osgi.framework.Constants;
 /**
  * This class represent a generic fake device
  */
-@Component (name = "iCasa.GenericFakeDevice")
-@Provides(specifications = GenericDevice.class, properties = { @StaticServiceProperty(type = "java.lang.String", name = Constants.SERVICE_DESCRIPTION) })
+@Component(name = "iCasa.GenericFakeDevice")
+@Provides(specifications = GenericDevice.class, properties = {@StaticServiceProperty(type = "java.lang.String", name = Constants.SERVICE_DESCRIPTION)})
 //@Instantiate
 public class GenericFakeDevice implements GenericDevice {
 
     @ServiceProperty(name = DEVICE_SERIAL_NUMBER, mandatory = true)
-    String serialNumber;
+    private String serialNumber;
 
     @ServiceProperty
-    String deviceType;
+    private String deviceType;
 
     @ServiceProperty
-    String deviceSubTYpe;
+    private String deviceSubTYpe;
 
 
     public String getDeviceType() {

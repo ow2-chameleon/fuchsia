@@ -90,7 +90,7 @@ public class FoolDiscovery extends AbstractDiscoveryComponent {
 
     protected class Registrator implements Runnable {
 
-        Random random = new Random();
+        final Random random = new Random();
 
         private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -111,13 +111,13 @@ public class FoolDiscovery extends AbstractDiscoveryComponent {
 
     protected class Unregistrator implements Runnable {
 
-        Random random = new Random();
+        final Random random = new Random();
 
         private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
         public void run() {
             while (index_importDeclaration_unregister < importDeclarations.size()) {
-                while (index_importDeclaration_unregister == index_importDeclaration_register) {
+                while (index_importDeclaration_unregister.equals(index_importDeclaration_register)) {
                     try {
                         Thread.sleep((random.nextInt(5) + 1) * 2000);
                     } catch (InterruptedException e) {

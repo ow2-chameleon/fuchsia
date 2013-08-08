@@ -24,7 +24,7 @@ public class LinkerUpdater {
     }
 
     public LinkerUpdater importDeclarationFilter(String filter) throws InvalidSyntaxException {
-        return importDeclarationFilter(FrameworkUtil.createFilter((String) filter));
+        return importDeclarationFilter(FrameworkUtil.createFilter(filter));
     }
 
     public void update() {
