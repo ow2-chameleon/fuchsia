@@ -47,7 +47,7 @@ public class DefaultLinkerTest extends BaseTest {
         Dictionary<String, String> props = new Hashtable<String, String>();
         props.put("instance.name", linkerInstanceName);
         props.put(Linker.PROPERTY_FILTER_IMPORTDECLARATION, "(*=*)");
-        defaultLinkerCI = ipojoHelper.createComponentInstance("FuchsiaDefaultLinkerFactory", linkerInstanceName);
+        defaultLinkerCI = ipojoHelper.createComponentInstance("FuchsiaDefaultLinkerFactory", linkerInstanceName, props);
     }
 
     @After
