@@ -44,7 +44,7 @@
                             ${project.artifactId}
                         </Bundle-SymbolicName>
                         <Export-Package>
-                            org.ow2.chameleon.fuchsia.device
+                            org.ow2.chameleon.fuchsia.fake.device
                         </Export-Package>
                         <Import-Package>
                             *

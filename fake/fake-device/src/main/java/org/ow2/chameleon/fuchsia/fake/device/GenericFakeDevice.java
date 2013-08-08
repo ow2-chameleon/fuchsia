@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.device;
+package org.ow2.chameleon.fuchsia.fake.device;
 
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.Constants;
@@ -11,7 +11,7 @@ import org.osgi.framework.Constants;
 //@Instantiate
 public class GenericFakeDevice implements GenericDevice {
 
-    @ServiceProperty(name = GenericFakeDevice.DEVICE_SERIAL_NUMBER, mandatory = true)
+    @ServiceProperty(name = DEVICE_SERIAL_NUMBER, mandatory = true)
     String serialNumber;
 
     @ServiceProperty

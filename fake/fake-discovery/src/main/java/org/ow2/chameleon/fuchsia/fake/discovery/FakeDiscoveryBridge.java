@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.discovery;
+package org.ow2.chameleon.fuchsia.fake.discovery;
 
 import org.apache.felix.ipojo.ConfigurationException;
 import org.apache.felix.ipojo.Factory;
@@ -10,7 +10,7 @@ import org.ow2.chameleon.fuchsia.core.component.AbstractDiscoveryComponent;
 import org.ow2.chameleon.fuchsia.core.component.DiscoveryService;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclarationBuilder;
-import org.ow2.chameleon.fuchsia.device.GenericDevice;
+import org.ow2.chameleon.fuchsia.fake.device.GenericDevice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,7 +63,7 @@ public class FakeDiscoveryBridge extends AbstractDiscoveryComponent {
      * Factory binding with filter on generic device
      * @param factory
      */
-    @Bind(id = "factories", aggregate = true, optional = true, filter = "(component.providedServiceSpecifications=org.ow2.chameleon.fuchsia.device.GenericDevice)")
+    @Bind(id = "factories", aggregate = true, optional = true, filter = "(component.providedServiceSpecifications=org.ow2.chameleon.fuchsia.fake.device.GenericDevice)")
     public void bindFactory(Factory factory) {
         System.out.println("Bind factory : " + factory.toString());
         String deviceType = factory.getName();

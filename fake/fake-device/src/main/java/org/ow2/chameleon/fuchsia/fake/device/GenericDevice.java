@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.device;
+package org.ow2.chameleon.fuchsia.fake.device;
 
 /**
  * Define a simple interface for generic device !

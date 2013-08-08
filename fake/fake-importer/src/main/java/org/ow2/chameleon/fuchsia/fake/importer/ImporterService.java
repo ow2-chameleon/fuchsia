@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.importer;
+package org.ow2.chameleon.fuchsia.fake.importer;
 
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
@@ -7,14 +7,13 @@ import org.osgi.framework.ServiceReference;
 import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 
-import org.ow2.chameleon.fuchsia.device.GenericDevice;
-import org.ow2.chameleon.fuchsia.device.GenericFakeDevice;
+import org.ow2.chameleon.fuchsia.fake.device.GenericDevice;
+import org.ow2.chameleon.fuchsia.fake.device.GenericFakeDevice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**

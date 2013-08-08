@@ -1,9 +1,6 @@
-package org.ow2.chameleon.fuchsia.importer;
+package org.ow2.chameleon.fuchsia.fake.importer;
 
-import org.apache.felix.ipojo.annotations.Component;
-import org.apache.felix.ipojo.annotations.Instantiate;
-import org.apache.felix.ipojo.annotations.Provides;
-import org.ow2.chameleon.fuchsia.device.GenericDevice;
+import org.ow2.chameleon.fuchsia.fake.device.GenericDevice;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;

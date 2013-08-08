@@ -6,14 +6,11 @@ import org.ops4j.pax.exam.Option;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
-import org.ow2.chameleon.fuchsia.device.GenericDevice;
-import org.ow2.chameleon.fuchsia.device.GenericFakeDevice;
-import org.ow2.chameleon.fuchsia.importer.DelegationProxy;
+import org.ow2.chameleon.fuchsia.fake.device.GenericDevice;
+import org.ow2.chameleon.fuchsia.fake.device.GenericFakeDevice;
 import org.ow2.chameleon.testing.helpers.BaseTest;
 
 import javax.inject.Inject;
-
-import java.lang.reflect.Proxy;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.ops4j.pax.exam.CoreOptions.*;
