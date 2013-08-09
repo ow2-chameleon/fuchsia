@@ -35,7 +35,7 @@ import java.util.Set;
 public class DefaultLinker implements Linker {
 
     @ServiceProperty(name = "instance.name")
-    private final String linker_name;
+    private String linker_name;
 
     @ServiceProperty(name = PROPERTY_FILTER_IMPORTDECLARATION)
     private Object importDeclarationFilter;
@@ -65,8 +65,7 @@ public class DefaultLinker implements Linker {
     }
 
     public DefaultLinker() {
-        // FIXME : temporary name before permit to use multiples linker
-        linker_name = "linker";
+        //
     }
 
     /**
