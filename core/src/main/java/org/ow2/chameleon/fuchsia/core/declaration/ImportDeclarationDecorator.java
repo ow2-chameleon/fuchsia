@@ -9,14 +9,14 @@ import java.util.Map;
 /**
  * @author Morgan Martinet
  */
-public class ImportDeclarationDecorator implements ImportDeclaration {
+class ImportDeclarationDecorator implements ImportDeclaration {
 
     private final ImportDeclaration importDeclaration;
 
     // The extra-metadata of the ImportDeclaration, set by the Linker
     private final Map<String, Object> extraMetadata;
 
-    public ImportDeclarationDecorator(ImportDeclaration importDeclaration, Map<String, Object> extraMetadata) {
+    ImportDeclarationDecorator(ImportDeclaration importDeclaration, Map<String, Object> extraMetadata) {
         if (importDeclaration == null) {
             throw new IllegalArgumentException("Cannot decorate a null object");
         }

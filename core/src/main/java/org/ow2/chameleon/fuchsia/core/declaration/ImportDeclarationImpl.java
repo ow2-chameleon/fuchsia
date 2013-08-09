@@ -14,7 +14,7 @@ import java.util.Map;
  * @author jnascimento
  * @author Morgan Martinet
  */
-public class ImportDeclarationImpl implements ImportDeclaration {
+class ImportDeclarationImpl implements ImportDeclaration {
 
     // List of importerServices bind to this ImportDeclaration
     private final List<ImporterService> importerServicesBound;
@@ -27,7 +27,7 @@ public class ImportDeclarationImpl implements ImportDeclaration {
     // the extraMetadata are provided in the ImportDeclarationDecorator
     private final Map<String, Object> extraMetadata;
 
-    public ImportDeclarationImpl(Map<String, Object> metadata) {
+    ImportDeclarationImpl(Map<String, Object> metadata) {
         if (metadata == null || metadata.isEmpty()) {
             throw new IllegalArgumentException("Can't create a ImportDeclaration without metadata.");
         }
