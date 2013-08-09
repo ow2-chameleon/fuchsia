@@ -111,7 +111,7 @@ public class FakeDiscoveryBridge extends AbstractDiscoveryComponent {
             createFakeDevice("iCasa.GenericFakeDevice",(String)m_metadata.get(key).get("id"),(String)m_metadata.get(key).get("type"),(String)m_metadata.get(key).get("subtype"));
 
             //publish an importDeclaration
-            importDeclarations.add(ImportDeclarationBuilder.create().withMetadata(m_metadata.get(key)).build());
+            importDeclarations.add(ImportDeclarationBuilder.fromMetadata(m_metadata.get(key)).build());
         }
         index_importDeclaration_register = -1;
         index_importDeclaration_unregister = -1;

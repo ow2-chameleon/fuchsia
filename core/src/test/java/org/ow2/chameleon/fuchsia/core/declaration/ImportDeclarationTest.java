@@ -16,10 +16,22 @@ import static org.mockito.Mockito.mock;
 public class ImportDeclarationTest {
 
     @Test
+    public void testBuildEmpty() {
+        Map<String, Object> md = new HashMap<String, Object>();
+        ImportDeclaration id = ImportDeclarationBuilder.empty()
+                .key("md").value("value")
+                .build();
+
+        assertThat(id).isNotNull();
+        assertThat(id.getMetadata().get("md")).isEqualTo("value");
+        assertThat(id.getMetadata().size()).isEqualTo(1);
+    }
+
+    @Test
     public void testBuildSimple() {
         Map<String, Object> md = new HashMap<String, Object>();
         md.put("md", "value");
-        ImportDeclaration id = ImportDeclarationBuilder.create().withMetadata(md).build();
+        ImportDeclaration id = ImportDeclarationBuilder.fromMetadata(md).build();
 
         assertThat(id).isNotNull();
         assertThat(id.getMetadata().get("md")).isEqualTo("value");
@@ -30,9 +42,9 @@ public class ImportDeclarationTest {
     public void testBuildFromAnImportDeclaration() {
         Map<String, Object> md = new HashMap<String, Object>();
         md.put("md", "value");
-        ImportDeclaration id = ImportDeclarationBuilder.create().withMetadata(md).build();
+        ImportDeclaration id = ImportDeclarationBuilder.fromMetadata(md).build();
 
-        ImportDeclaration id2 = ImportDeclarationBuilder.create().from(id).build();
+        ImportDeclaration id2 = ImportDeclarationBuilder.fromImportDeclaration(id).build();
 
         assertThat(id2).isNotNull();
         assertThat(id2.getMetadata().get("md")).isEqualTo("value");
@@ -43,11 +55,11 @@ public class ImportDeclarationTest {
     public void testBuildFromAnImportDeclarationWithExtraMetadata() {
         Map<String, Object> md = new HashMap<String, Object>();
         md.put("md", "value");
-        ImportDeclaration id = ImportDeclarationBuilder.create().withMetadata(md).build();
+        ImportDeclaration id = ImportDeclarationBuilder.fromMetadata(md).build();
 
         Map<String, Object> emd = new HashMap<String, Object>();
         emd.put("emd", "value2");
-        ImportDeclaration id2 = ImportDeclarationBuilder.create().from(id).withExtraMetadata(emd).build();
+        ImportDeclaration id2 = ImportDeclarationBuilder.fromImportDeclaration(id).withExtraMetadata(emd).build();
 
         assertThat(id2).isNotNull();
         assertThat(id2.getMetadata().get("md")).isEqualTo("value");
@@ -61,11 +73,11 @@ public class ImportDeclarationTest {
     public void testImmutability() {
         Map<String, Object> md = new HashMap<String, Object>();
         md.put("md", "value");
-        ImportDeclaration id = ImportDeclarationBuilder.create().withMetadata(md).build();
+        ImportDeclaration id = ImportDeclarationBuilder.fromMetadata(md).build();
 
         Map<String, Object> emd = new HashMap<String, Object>();
         emd.put("emd", "value2");
-        ImportDeclaration id2 = ImportDeclarationBuilder.create().from(id).withExtraMetadata(emd).build();
+        ImportDeclaration id2 = ImportDeclarationBuilder.fromImportDeclaration(id).withExtraMetadata(emd).build();
 
         try {
             id2.getMetadata().put("new_key", "new_value");
@@ -90,7 +102,7 @@ public class ImportDeclarationTest {
     public void testDependencies() {
         Map<String, Object> md = new HashMap<String, Object>();
         md.put("md", "value");
-        ImportDeclaration id = ImportDeclarationBuilder.create().withMetadata(md).build();
+        ImportDeclaration id = ImportDeclarationBuilder.fromMetadata(md).build();
 
         Map<Integer, ImporterService> mocks = new HashMap<Integer, ImporterService>();
         List<Status> statusList = new ArrayList<Status>();

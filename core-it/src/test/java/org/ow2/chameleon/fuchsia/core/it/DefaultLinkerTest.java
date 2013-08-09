@@ -81,7 +81,7 @@ public class DefaultLinkerTest extends BaseTest {
         metadata.put(ImportDeclaration.IMPORTATION_PROTOCOL_NAME, "test");
         metadata.put("n", 0);
         metadata.put("instance.name", "importdec-" + 0);
-        ImportDeclaration iD = ImportDeclarationBuilder.create().withMetadata(metadata).build();
+        ImportDeclaration iD = ImportDeclarationBuilder.fromMetadata(metadata).build();
 
         ServiceRegistration reg = registerImportDeclaration(iD);
         assertThat(reg).isNotNull();

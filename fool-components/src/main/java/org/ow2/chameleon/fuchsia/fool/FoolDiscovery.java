@@ -59,7 +59,7 @@ public class FoolDiscovery extends AbstractDiscoveryComponent {
             Map<String, Object> metadata = new HashMap<String, Object>();
             metadata.put("fool", "fool");
             metadata.put("fool-number", i);
-            importDeclarations.add(ImportDeclarationBuilder.create().withMetadata(metadata).build());
+            importDeclarations.add(ImportDeclarationBuilder.fromMetadata(metadata).build());
         }
         index_importDeclaration_register = -1;
         index_importDeclaration_unregister = -1;
