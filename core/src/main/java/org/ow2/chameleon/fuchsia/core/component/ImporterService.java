@@ -1,7 +1,7 @@
 package org.ow2.chameleon.fuchsia.core.component;
 
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
-import org.ow2.chameleon.fuchsia.core.util.BadImportRegistration;
+import org.ow2.chameleon.fuchsia.core.exceptions.BadImportRegistration;
 
 import java.util.List;
 

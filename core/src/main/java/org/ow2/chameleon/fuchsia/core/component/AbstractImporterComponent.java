@@ -2,7 +2,7 @@ package org.ow2.chameleon.fuchsia.core.component;
 
 import org.osgi.framework.InvalidSyntaxException;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
-import org.ow2.chameleon.fuchsia.core.util.BadImportRegistration;
+import org.ow2.chameleon.fuchsia.core.exceptions.BadImportRegistration;
 
 import java.util.HashSet;
 import java.util.Set;

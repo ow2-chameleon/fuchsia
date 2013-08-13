@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.core.util;
+package org.ow2.chameleon.fuchsia.core.exceptions;
 
 
 public class BadImportRegistration extends Throwable {
