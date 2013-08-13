@@ -7,13 +7,13 @@ import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import java.util.Set;
 
 /**
- * The components providing this service are used by the FuchsiaMediator to make the link between the
+ * The components providing this service are used by Fuchsia to make the link between the
  * {@link org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration} and the {@link org.ow2.chameleon.fuchsia.core.component.ImporterService}.
- * A FuchsiaMediator can handle multiple {@link Linker} with different configurations.
+ * You can use multiples {@link Linker} with different configurations.
  * <p/>
  * A default implementation of {@link Linker} is provided by the {@link DefaultLinker} component.
- * If the {@link DefaultLinker} doesn't fit to your needs, you can give to the FuchsiaMediator your own implementation
- * of this interface.
+ * If the {@link DefaultLinker} doesn't fit to your needs, you can use your own implementation
+ * of this interface, by subclassing {@link DefaultLinker} or by implementing this {@link Linker} interface.
  *
  * @author Morgan Martinet
  */

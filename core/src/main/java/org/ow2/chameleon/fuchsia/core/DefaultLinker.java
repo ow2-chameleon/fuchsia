@@ -22,8 +22,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * The {@link DefaultLinker} component is the implementation of the interface Linker used by default by the
- * {@link FuchsiaMediator}.
+ * The {@link DefaultLinker} component is the default implementation of the interface Linker.
  * <p/>
  * TODO : finish documentation
  * The {@link DefaultLinker} component take has configuration a filter on the {@link ImportDeclaration} ...
