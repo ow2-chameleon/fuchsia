@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <parent>
+        <artifactId>fuchsia-parent</artifactId>
+        <groupId>org.ow2.chameleon.fuchsia</groupId>
+        <version>0.0.1</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <name>OW2 Chameleon - Fuchsia Distributution</name>
+    <artifactId>distribution</artifactId>
+
+    <description>
+        A distribution of fuchsia platform
+    </description>
+
+    <profiles>
+
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.parent.groupId}</groupId>
+                    <artifactId>fuchsia-core</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>org.apache.felix.http.jetty</artifactId>
+                    <version>2.2.0</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>org.apache.felix.http.whiteboard</artifactId>
+                    <version>2.2.0</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>org.apache.felix.ipojo.webconsole</artifactId>
+                    <version>1.7.0</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>org.apache.felix.webconsole</artifactId>
+                    <version>4.2.0</version>
+                    <classifier>all</classifier>
+                </dependency>
+
+            </dependencies>
+
+        </profile>
+
+        <profile>
+            <id>core</id>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.parent.groupId}</groupId>
+                    <artifactId>fuchsia-core</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>org.apache.felix.http.jetty</artifactId>
+                    <version>2.2.0</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>org.apache.felix.http.whiteboard</artifactId>
+                    <version>2.2.0</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>org.apache.felix.ipojo.webconsole</artifactId>
+                    <version>1.7.0</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>org.apache.felix.webconsole</artifactId>
+                    <version>4.2.0</version>
+                    <classifier>all</classifier>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>fake</id>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.parent.groupId}</groupId>
+                    <artifactId>fuchsia-core</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>${project.parent.groupId}</groupId>
+                    <artifactId>fuchsia-fake-device</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>${project.parent.groupId}</groupId>
+                    <artifactId>fuchsia-fake-discovery</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>${project.parent.groupId}</groupId>
+                    <artifactId>fuchsia-fake-importer</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>org.apache.felix.http.jetty</artifactId>
+                    <version>2.2.0</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>org.apache.felix.http.whiteboard</artifactId>
+                    <version>2.2.0</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>org.apache.felix.ipojo.webconsole</artifactId>
+                    <version>1.7.0</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>org.apache.felix.webconsole</artifactId>
+                    <version>4.2.0</version>
+                    <classifier>all</classifier>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.ow2.chameleon.everest</groupId>
+                    <artifactId>everest-core</artifactId>
+                    <version>1.0-SNAPSHOT</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.ow2.chameleon.everest</groupId>
+                    <artifactId>everest-osgi</artifactId>
+                    <version>1.0-SNAPSHOT</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.ow2.chameleon.everest</groupId>
+                    <artifactId>everest-ipojo</artifactId>
+                    <version>1.0-SNAPSHOT</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.ow2.chameleon.everest</groupId>
+                    <artifactId>everest-servlet</artifactId>
+                    <version>1.0-SNAPSHOT</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.osgi</groupId>
+                    <artifactId>org.osgi.compendium</artifactId>
+                    <version>4.3.1</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>org.apache.felix.ipojo</artifactId>
+                    <version>1.10.1</version>
+                </dependency>
+
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>webservices</id>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.parent.groupId}</groupId>
+                    <artifactId>cxf-importer</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+                <!--dependency>
+                    <groupId>${project.parent.groupId}</groupId>
+                    <artifactId>cxf-exporter</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency-->
+                <!--dependency>
+                    <groupId>org.apache.cxf.dosgi</groupId>
+                    <artifactId>cxf-dosgi-ri-singlebundle-distribution</artifactId>
+                    <version>${apacheCXF.version}</version>
+                </dependency-->
+
+            </dependencies>
+        </profile>
+
+    </profiles>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.8</version>
+                <executions>
+                    <execution>
+                        <id>copy-chameleon-distribution</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${chameleon.destination}</outputDirectory>
+                            <artifactItems>
+                                <artifactItem>
+                                    <type>zip</type>
+                                    <groupId>org.ow2.chameleon</groupId>
+                                    <artifactId>chameleon-core</artifactId>
+                                    <version>${chameleon.version}</version>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                    <!-- -->
+                    <execution>
+                        <id>copy-dependencies-chameleon</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${chameleon.destination}/runtime</outputDirectory>
+                            <excludeTransitive>true</excludeTransitive>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <attach>true</attach>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>build-distribution</id>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <phase>package</phase>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>src/distribution.xml</descriptor>
+                            </descriptors>
+                            <appendAssemblyId>false</appendAssemblyId>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>

@@ -39,6 +39,22 @@
         <osgi.version>4.3.1</osgi.version>
         <felix.framework.version>4.2.1</felix.framework.version>
         <slf4j.version>1.6.6</slf4j.version>
+        <chameleon.version>1.0.0-SNAPSHOT</chameleon.version>
+        <apacheCXF.version>1.4.0</apacheCXF.version>
+        <site.path>snapshot</site.path>
+
+
+        <!--
+       The location where the chameleon distribution.xml is downloaded and expanded
+      -->
+        <chameleon.destination>${project.build.directory}/chameleon-distribution</chameleon.destination>
+
+        <!--
+         The base directory of the distribution.xml
+        -->
+        <distribution.baseDirectory>Distribution-Fuchsia-${project.version}</distribution.baseDirectory>
+
+
 
         <!-- Plugins versions -->
         <bundle.plugin.version>2.4.0</bundle.plugin.version>
