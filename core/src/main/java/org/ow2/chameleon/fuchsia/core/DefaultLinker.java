@@ -232,8 +232,8 @@ public class DefaultLinker implements Linker {
                         + importDeclaration, e);
                 return false;
             }
+            logger.debug(importDeclaration + " match the filter of " + importerService + " : bind them together");
             importDeclaration.bind(importerService);
-            logger.debug(importDeclaration + " match the filter of " + importerService + " : they are bind together");
             return true;
         }
         logger.debug(importDeclaration + " doesn't match the filter of " + importerService
