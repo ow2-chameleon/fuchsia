@@ -2,16 +2,17 @@ package org.ow2.chameleon.fuchsia.core;
 
 import org.apache.felix.ipojo.annotations.Bind;
 import org.apache.felix.ipojo.annotations.Component;
+import org.apache.felix.ipojo.annotations.Controller;
 import org.apache.felix.ipojo.annotations.Invalidate;
+import org.apache.felix.ipojo.annotations.Property;
 import org.apache.felix.ipojo.annotations.Provides;
 import org.apache.felix.ipojo.annotations.ServiceProperty;
 import org.apache.felix.ipojo.annotations.Unbind;
 import org.apache.felix.ipojo.annotations.Validate;
 import org.osgi.framework.Filter;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.InvalidSyntaxException;
 import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
+import org.ow2.chameleon.fuchsia.core.exceptions.InvalidFilterException;
 import org.ow2.chameleon.fuchsia.core.exceptions.BadImportRegistration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,11 +22,23 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import static org.ow2.chameleon.fuchsia.core.FuchsiaUtils.getFilter;
+
 /**
  * The {@link DefaultLinker} component is the default implementation of the interface Linker.
  * <p/>
- * TODO : finish documentation
- * The {@link DefaultLinker} component take has configuration a filter on the {@link ImportDeclaration} ...
+ * The {@link DefaultLinker} component take as mandatory ServiceProperty a filter on the {@link ImportDeclaration} named
+ * {@literal {@link #PROPERTY_FILTER_IMPORTDECLARATION}} and a filter on {@link ImporterService} named
+ * {@literal {@link #PROPERTY_FILTER_IMPORTERSERVICE}}.
+ * <p/>
+ * The filters are String with the LDAP syntax OR {@Link Filter}.
+ * <p/>
+ * An optional ServiceProperty @literal {@link #PROPERTY_UNIQUE_IMPORTATION}} can disallow the DefaultLinker to give an
+ * ImportDeclaration to more than one ImporterService. This Property is set to False by default.
+ * WARNING : this property is actually based on the number of ImporterService actually bind to the ImportDeclaration,
+ * if an other Linker has already bind the ImportDeclaration to an ImporterService, the DefaultLinker will not give the
+ * ImportDeclaration to any of its ImporterService. The others Linker can bind theirs ImportDeclaration to many
+ * ImporterService if they are not configured for an unique import by ImportDeclaration.
  *
  * @author Morgan Martinet
  */
@@ -33,14 +46,54 @@ import java.util.Set;
 @Provides(specifications = Linker.class)
 public class DefaultLinker implements Linker {
 
+    @Controller
+    private boolean state;
+
     @ServiceProperty(name = "instance.name")
     private String linker_name;
 
-    @ServiceProperty(name = PROPERTY_FILTER_IMPORTDECLARATION)
-    private Object importDeclarationFilter;
+    @ServiceProperty(name = PROPERTY_FILTER_IMPORTDECLARATION, mandatory = true)
+    private Object importDeclarationFilterProperty;
 
-    //@ServiceProperty(name = PROPERTY_FILTER_IMPORTERSERVICE)
-    private Object importerServiceFilter;
+    private Filter importDeclarationFilter;
+
+    @Property(name = PROPERTY_FILTER_IMPORTDECLARATION, mandatory = true)
+    public void computeImportDeclarationFilter(Object filterProperty) {
+        if (!state) {
+            return;
+        }
+        try {
+            importDeclarationFilter = getFilter(filterProperty);
+            state = true;
+        } catch (InvalidFilterException invalidFilterException) {
+            logger.debug("The value of the Property " + PROPERTY_FILTER_IMPORTDECLARATION + " is invalid,"
+                    + " the recuperation of the Filter has failed. The instance gonna stop.", invalidFilterException);
+            state = false;
+        }
+    }
+
+    @ServiceProperty(name = PROPERTY_FILTER_IMPORTERSERVICE, mandatory = true)
+    private Object importerServiceFilterProperty;
+
+    private Filter importerServiceFilter;
+
+    @Property(name = PROPERTY_FILTER_IMPORTERSERVICE, mandatory = true)
+    public void computeImporterServiceFilter(Object filterProperty) {
+        if (!state) {
+            return;
+        }
+        try {
+            importerServiceFilter = getFilter(filterProperty);
+            state = true;
+        } catch (InvalidFilterException invalidFilterException) {
+            logger.debug("The value of the Property " + PROPERTY_FILTER_IMPORTERSERVICE + " is invalid,"
+                    + " the recuperation of the Filter has failed. The instance gonna stop.", invalidFilterException);
+            state = false;
+        }
+    }
+
+    @ServiceProperty(name = PROPERTY_UNIQUE_IMPORTATION, mandatory = false)
+    private boolean uniqueImportationProperty = false;
 
     private final Object lock = new Object();
 
@@ -68,7 +121,7 @@ public class DefaultLinker implements Linker {
     }
 
     /**
-     * Bind all the {@link ImporterService}.
+     * Bind all the {@link ImporterService} matching the importerServiceFilter.
      * <p/>
      * Foreach ImporterService, check all the already bound declarations.
      * If the metadata of the importDeclaration match the filter exposed by the importer
@@ -76,25 +129,18 @@ public class DefaultLinker implements Linker {
      */
     @Bind(id = "importerServices", aggregate = true, optional = true)
     void bindImporterService(ImporterService importerService, Map<String, Object> properties) {
+        if (!importerServiceFilter.matches(properties)) {
+            return;
+        }
         logger.debug(linker_name + " : Bind the ImporterService " + importerService);
-        Filter filter;
-        Object propTarget = properties.get("target");
-        if (propTarget instanceof String) {
-            try {
-                filter = FrameworkUtil.createFilter((String) propTarget);
-            } catch (InvalidSyntaxException e) {
-                // FIXME
-                logger.error(linker_name + " : The target properties of the ImporterService "
-                        + properties.get("instance.name") +
-                        " contains a String that the syntax doesn't respect the LDAP syntax");
-                return;
-            }
-        } else if (propTarget instanceof Filter) {
-            filter = (Filter) propTarget;
-        } else {
-            // FIXME
-            logger.error(linker_name + " : The target properties of the ImporterService  "
-                    + properties.get("instance.name") + " must be a String using LDAP syntax or a org.osgi.framework.Filter");
+
+        Filter filter = null;
+        try {
+            filter = getFilter(properties.get("target"));
+        } catch (InvalidFilterException invalidFilterException) {
+            logger.error("The ServiceProperty \"target\" of the ImporterService " + importerService
+                    + " doesn't provides a valid Filter."
+                    + " To be used, it must provides a correct \"target\" ServiceProperty.", invalidFilterException);
             return;
         }
 
@@ -109,6 +155,9 @@ public class DefaultLinker implements Linker {
         }
     }
 
+    /**
+     * Unbind the {@link ImporterService}.
+     */
     @Unbind(id = "importerServices")
     void unbindImporterService(ImporterService importerService) {
         logger.debug(linker_name + " : Unbind the ImporterService " + importerService);
@@ -123,13 +172,17 @@ public class DefaultLinker implements Linker {
     }
 
     /**
-     * Bind all the {@link ImportDeclaration}
+     * Bind all the {@link ImportDeclaration} matching the filter importDeclarationFilter.
      * <p/>
      * Foreach ImportDeclaration, check if metadata match the filter given exposed by the importerServices bound.
      */
     @Bind(id = "importDeclarations", aggregate = true, optional = true)
     void bindImportDeclaration(ImportDeclaration importDeclaration) {
+        if (!importDeclarationFilter.matches(importDeclaration.getMetadata())) {
+            return;
+        }
         logger.debug(linker_name + " : Bind the ImportDeclaration " + importDeclaration);
+
         synchronized (lock) {
             importDeclarations.add(importDeclaration);
             for (ImporterService importerService : importerServices.keySet()) {
@@ -139,6 +192,9 @@ public class DefaultLinker implements Linker {
         }
     }
 
+    /**
+     * Unbind the {@link ImportDeclaration}.
+     */
     @Unbind(id = "importDeclarations")
     void unbindImportDeclaration(ImportDeclaration importDeclaration) {
         logger.debug(linker_name + " : Unbind the ImportDeclaration " + importDeclaration);
@@ -159,6 +215,10 @@ public class DefaultLinker implements Linker {
      * @return true if they have been bind together, false otherwise.
      */
     private boolean tryToBind(ImportDeclaration importDeclaration, ImporterService importerService) {
+        // if the uniqueImportationProperty is set to true and the importDeclaration is already bind, just return.
+        if (uniqueImportationProperty && importDeclaration.getStatus().isBound()) {
+            return false;
+        }
         Filter filter = importerServices.get(importerService);
         if (filter.matches(importDeclaration.getMetadata())) {
             try {
