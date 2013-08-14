@@ -65,6 +65,7 @@
                         <Export-Package>
                             org.ow2.chameleon.fuchsia.core,
                             org.ow2.chameleon.fuchsia.core.component,
+                            org.ow2.chameleon.fuchsia.core.exceptions,
                             org.ow2.chameleon.fuchsia.core.util,
                             org.ow2.chameleon.fuchsia.core.declaration
                         </Export-Package>
