@@ -116,12 +116,7 @@ public class DefaultLinker implements Linker {
             importerServices.remove(importerService);
             for (ImportDeclaration importDeclaration : importDeclarations) {
                 if (importDeclaration.getStatus().getImporterServices().contains(importerService)) {
-                    try {
-                        importerService.removeImportDeclaration(importDeclaration);
-                    } catch (BadImportRegistration bir) {
-                        // TODO
-                    }
-                    importDeclaration.unbind(importerService);
+                    tryToUnbind(importDeclaration, importerService);
                 }
             }
         }
@@ -149,11 +144,7 @@ public class DefaultLinker implements Linker {
         logger.debug(linker_name + " : Unbind the ImportDeclaration " + importDeclaration);
         synchronized (lock) {
             for (ImporterService importerService : importDeclaration.getStatus().getImporterServices()) {
-                try {
-                    importerService.removeImportDeclaration(importDeclaration);
-                } catch (BadImportRegistration bir) {
-                    // TODO
-                }
+                tryToUnbind(importDeclaration, importerService);
             }
             importDeclarations.remove(importDeclaration);
         }
@@ -173,8 +164,12 @@ public class DefaultLinker implements Linker {
             try {
                 importerService.addImportDeclaration(importDeclaration);
             } catch (BadImportRegistration bir) {
-                logger.debug(importDeclaration + " match the filter of " + importerService
-                        + " but throw an exception when add to it", bir);
+                logger.debug(importerService + " throw an exception when giving to it the ImportDeclaration "
+                        + importDeclaration, bir);
+                return false;
+            } catch (Exception e) {
+                logger.debug(importerService + " throw an exception with giving to it the ImportDeclaration "
+                        + importDeclaration, e);
                 return false;
             }
             importDeclaration.bind(importerService);
@@ -184,6 +179,22 @@ public class DefaultLinker implements Linker {
         logger.debug(importDeclaration + " doesn't match the filter of " + importerService
                 + "(" + importDeclaration.getMetadata().toString() + ")");
         return false;
+    }
+
+    private boolean tryToUnbind(ImportDeclaration importDeclaration, ImporterService importerService) {
+        importDeclaration.unbind(importerService);
+        try {
+            importerService.removeImportDeclaration(importDeclaration);
+        } catch (BadImportRegistration bir) {
+            logger.debug(importerService + " throw an exception when removing of it the ImportDeclaration "
+                    + importDeclaration, bir);
+            return false;
+        } catch (Exception e) {
+            logger.debug(importerService + " throw an exception with removing of it the ImportDeclaration "
+                    + importDeclaration, e);
+            return false;
+        }
+        return true;
     }
 
     public String getName() {
