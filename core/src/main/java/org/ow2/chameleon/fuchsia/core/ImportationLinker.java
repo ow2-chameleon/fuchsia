@@ -9,15 +9,15 @@ import java.util.Set;
 /**
  * The components providing this service are used by Fuchsia to make the link between the
  * {@link org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration} and the {@link org.ow2.chameleon.fuchsia.core.component.ImporterService}.
- * You can use multiples {@link Linker} with different configurations.
+ * You can use multiples {@link ImportationLinker} with different configurations.
  * <p/>
- * A default implementation of {@link Linker} is provided by the {@link DefaultLinker} component.
- * If the {@link DefaultLinker} doesn't fit to your needs, you can use your own implementation
- * of this interface, by subclassing {@link DefaultLinker} or by implementing this {@link Linker} interface.
+ * A default implementation of {@link ImportationLinker} is provided by the {@link DefaultImportationLinker} component.
+ * If the {@link DefaultImportationLinker} doesn't fit to your needs, you can use your own implementation
+ * of this interface, by subclassing {@link DefaultImportationLinker} or by implementing this {@link ImportationLinker} interface.
  *
  * @author Morgan Martinet
  */
-public interface Linker {
+public interface ImportationLinker {
 
     final static String PROPERTY_FILTER_IMPORTDECLARATION = "fuchsia.linker.filter.importDeclaration";
 
@@ -29,16 +29,16 @@ public interface Linker {
     String getName();
 
     /**
-     * Return the importerServices linked the Linker
+     * Return the importerServices linked the ImportationLinker
      *
-     * @return The importerServices linked to the Linker
+     * @return The importerServices linked to the ImportationLinker
      */
     Set<ImporterService> getLinkedImporters();
 
     /**
-     * Return the importDeclarations bind by the Linker
+     * Return the importDeclarations bind by the ImportationLinker
      *
-     * @return The importDeclarations bind by the Linker
+     * @return The importDeclarations bind by the ImportationLinker
      */
     Set<ImportDeclaration> getImportDeclarations();
 

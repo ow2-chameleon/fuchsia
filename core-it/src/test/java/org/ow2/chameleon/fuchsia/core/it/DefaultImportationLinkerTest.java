@@ -10,7 +10,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
-import org.ow2.chameleon.fuchsia.core.Linker;
+import org.ow2.chameleon.fuchsia.core.ImportationLinker;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclarationBuilder;
 import org.ow2.chameleon.testing.helpers.BaseTest;
@@ -23,7 +23,7 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.ops4j.pax.exam.CoreOptions.*;
 
-public class DefaultLinkerTest extends BaseTest {
+public class DefaultImportationLinkerTest extends BaseTest {
 
     private final String linkerInstanceName = "linker";
 
@@ -46,7 +46,7 @@ public class DefaultLinkerTest extends BaseTest {
         context = super.getContext();
         Dictionary<String, String> props = new Hashtable<String, String>();
         props.put("instance.name", linkerInstanceName);
-        props.put(Linker.PROPERTY_FILTER_IMPORTDECLARATION, "(*=*)");
+        props.put(ImportationLinker.PROPERTY_FILTER_IMPORTDECLARATION, "(*=*)");
         defaultLinkerCI = ipojoHelper.createComponentInstance("FuchsiaDefaultLinkerFactory", linkerInstanceName, props);
     }
 
@@ -72,10 +72,10 @@ public class DefaultLinkerTest extends BaseTest {
      */
     @Test
     public void testBindImportDeclaration() throws InvalidSyntaxException {
-        ServiceReference sr = ipojoHelper.getServiceReferenceByName(Linker.class.getName(), linkerInstanceName);
-        Linker linker = (Linker) osgiHelper.getServiceObject(sr);
+        ServiceReference sr = ipojoHelper.getServiceReferenceByName(ImportationLinker.class.getName(), linkerInstanceName);
+        ImportationLinker importationLinker = (ImportationLinker) osgiHelper.getServiceObject(sr);
 
-        assertThat(linker.getImportDeclarations().size()).isZero();
+        assertThat(importationLinker.getImportDeclarations().size()).isZero();
 
         Map<String, Object> metadata = new HashMap<String, Object>();
         metadata.put(ImportDeclaration.IMPORTATION_PROTOCOL_NAME, "test");
@@ -87,10 +87,10 @@ public class DefaultLinkerTest extends BaseTest {
         assertThat(reg).isNotNull();
         ImportDeclaration serviceID = osgiHelper.waitForService(ImportDeclaration.class, "(instance.name=importdec*)", 0);
         assertThat(serviceID).isNotNull();
-        assertThat(linker.getImportDeclarations().size()).isEqualTo(1);
+        assertThat(importationLinker.getImportDeclarations().size()).isEqualTo(1);
 
         reg.unregister();
-        assertThat(linker.getImportDeclarations().size()).isZero();
+        assertThat(importationLinker.getImportDeclarations().size()).isZero();
     }
 
 

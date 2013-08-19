@@ -41,7 +41,7 @@ public interface ImportDeclaration {
      * Bind the given ImporterService to the ImportDeclaration.
      * This method stock the ImporterService to remember the binding.
      * <p/>
-     * This method should only be called by a Linker.
+     * This method should only be called by a ImportationLinker.
      * The linker must call this method when it give the ImportDeclaration to the ImporterService.
      *
      * @param importerService the ImporterService the ImportDeclaration is bind to.
@@ -52,7 +52,7 @@ public interface ImportDeclaration {
      * Unbind the given ImporterService of the ImportDeclaration.
      * This method remove the ImporterService to forget the binding.
      * <p/>
-     * This method should only be called by a Linker.
+     * This method should only be called by a ImportationLinker.
      * The linker must call this method when it remove the ImportDeclaration of the ImporterService.
      *
      * @param importerService the ImporterService the ImportDeclaration is unbind to.

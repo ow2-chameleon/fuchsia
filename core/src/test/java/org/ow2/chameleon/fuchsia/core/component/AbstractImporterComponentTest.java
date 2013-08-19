@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.osgi.service.log.LogService;
-import org.ow2.chameleon.fuchsia.core.Linker;
+import org.ow2.chameleon.fuchsia.core.ImportationLinker;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 
 import java.util.Collection;
@@ -25,7 +25,7 @@ public class AbstractImporterComponentTest {
     LogService logservice;
 
     @Mock
-    Linker linker;
+    ImportationLinker importationLinker;
 
     //Tested Object
     TestedClass testedClass;

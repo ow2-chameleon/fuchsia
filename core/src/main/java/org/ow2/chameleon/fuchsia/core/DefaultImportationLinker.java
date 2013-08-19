@@ -25,26 +25,26 @@ import java.util.Set;
 import static org.ow2.chameleon.fuchsia.core.FuchsiaUtils.getFilter;
 
 /**
- * The {@link DefaultLinker} component is the default implementation of the interface Linker.
+ * The {@link DefaultImportationLinker} component is the default implementation of the interface ImportationLinker.
  * <p/>
- * The {@link DefaultLinker} component take as mandatory ServiceProperty a filter on the {@link ImportDeclaration} named
+ * The {@link DefaultImportationLinker} component take as mandatory ServiceProperty a filter on the {@link ImportDeclaration} named
  * {@literal {@link #PROPERTY_FILTER_IMPORTDECLARATION}} and a filter on {@link ImporterService} named
  * {@literal {@link #PROPERTY_FILTER_IMPORTERSERVICE}}.
  * <p/>
  * The filters are String with the LDAP syntax OR {@Link Filter}.
  * <p/>
- * An optional ServiceProperty @literal {@link #PROPERTY_UNIQUE_IMPORTATION}} can disallow the DefaultLinker to give an
+ * An optional ServiceProperty @literal {@link #PROPERTY_UNIQUE_IMPORTATION}} can disallow the DefaultImportationLinker to give an
  * ImportDeclaration to more than one ImporterService. This Property is set to False by default.
  * WARNING : this property is actually based on the number of ImporterService actually bind to the ImportDeclaration,
- * if an other Linker has already bind the ImportDeclaration to an ImporterService, the DefaultLinker will not give the
- * ImportDeclaration to any of its ImporterService. The others Linker can bind theirs ImportDeclaration to many
+ * if an other ImportationLinker has already bind the ImportDeclaration to an ImporterService, the DefaultImportationLinker will not give the
+ * ImportDeclaration to any of its ImporterService. The others ImportationLinker can bind theirs ImportDeclaration to many
  * ImporterService if they are not configured for an unique import by ImportDeclaration.
  *
  * @author Morgan Martinet
  */
 @Component(name = "FuchsiaDefaultLinkerFactory")
-@Provides(specifications = Linker.class)
-public class DefaultLinker implements Linker {
+@Provides(specifications = ImportationLinker.class)
+public class DefaultImportationLinker implements ImportationLinker {
 
     @Controller
     private boolean state;
@@ -116,7 +116,7 @@ public class DefaultLinker implements Linker {
         logger.debug(linker_name + " stopping");
     }
 
-    public DefaultLinker() {
+    public DefaultImportationLinker() {
         //
     }
 
@@ -262,18 +262,18 @@ public class DefaultLinker implements Linker {
     }
 
     /**
-     * Return the importerServices linked this DefaultLinker
+     * Return the importerServices linked this DefaultImportationLinker
      *
-     * @return The importerServices linked to this DefaultLinker
+     * @return The importerServices linked to this DefaultImportationLinker
      */
     public Set<ImporterService> getLinkedImporters() {
         return new HashSet<ImporterService>(importerServices.keySet());
     }
 
     /**
-     * Return the importDeclarations bind by this DefaultLinker
+     * Return the importDeclarations bind by this DefaultImportationLinker
      *
-     * @return The importDeclarations bind by this DefaultLinker
+     * @return The importDeclarations bind by this DefaultImportationLinker
      */
     public Set<ImportDeclaration> getImportDeclarations() {
         return new HashSet<ImportDeclaration>(importDeclarations);

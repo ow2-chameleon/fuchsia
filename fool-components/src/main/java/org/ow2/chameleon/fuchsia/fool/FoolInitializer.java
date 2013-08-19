@@ -4,8 +4,8 @@ import org.apache.felix.ipojo.configuration.Configuration;
 import org.apache.felix.ipojo.configuration.Instance;
 
 import static org.apache.felix.ipojo.configuration.Instance.instance;
-import static org.ow2.chameleon.fuchsia.core.Linker.PROPERTY_FILTER_IMPORTDECLARATION;
-import static org.ow2.chameleon.fuchsia.core.Linker.PROPERTY_FILTER_IMPORTERSERVICE;
+import static org.ow2.chameleon.fuchsia.core.ImportationLinker.PROPERTY_FILTER_IMPORTDECLARATION;
+import static org.ow2.chameleon.fuchsia.core.ImportationLinker.PROPERTY_FILTER_IMPORTERSERVICE;
 
 @Configuration
 public class FoolInitializer {

@@ -13,7 +13,7 @@ class ImportDeclarationDecorator implements ImportDeclaration {
 
     private final ImportDeclaration importDeclaration;
 
-    // The extra-metadata of the ImportDeclaration, set by the Linker
+    // The extra-metadata of the ImportDeclaration, set by the ImportationLinker
     private final Map<String, Object> extraMetadata;
 
     ImportDeclarationDecorator(ImportDeclaration importDeclaration, Map<String, Object> extraMetadata) {
