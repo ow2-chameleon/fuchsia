@@ -10,6 +10,7 @@ import org.apache.felix.ipojo.annotations.ServiceProperty;
 import org.apache.felix.ipojo.annotations.Unbind;
 import org.apache.felix.ipojo.annotations.Validate;
 import org.osgi.framework.Filter;
+import org.osgi.framework.ServiceReference;
 import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.exceptions.InvalidFilterException;
@@ -31,7 +32,7 @@ import static org.ow2.chameleon.fuchsia.core.FuchsiaUtils.getFilter;
  * {@literal {@link #PROPERTY_FILTER_IMPORTDECLARATION}} and a filter on {@link ImporterService} named
  * {@literal {@link #PROPERTY_FILTER_IMPORTERSERVICE}}.
  * <p/>
- * The filters are String with the LDAP syntax OR {@Link Filter}.
+ * The filters are String with the LDAP syntax OR {@link Filter}.
  * <p/>
  * An optional ServiceProperty @literal {@link #PROPERTY_UNIQUE_IMPORTATION}} can disallow the DefaultImportationLinker to give an
  * ImportDeclaration to more than one ImporterService. This Property is set to False by default.
@@ -99,6 +100,8 @@ public class DefaultImportationLinker implements ImportationLinker {
 
     private final Map<ImporterService, Filter> importerServices = new HashMap<ImporterService, Filter>();
 
+    private final Map<ServiceReference, ImporterService> importerServiceReferences = new HashMap<ServiceReference, ImporterService>();
+
     private final Set<ImportDeclaration> importDeclarations = new HashSet<ImportDeclaration>();
 
     /**
@@ -123,12 +126,12 @@ public class DefaultImportationLinker implements ImportationLinker {
     /**
      * Bind all the {@link ImporterService} matching the importerServiceFilter.
      * <p/>
-     * Foreach ImporterService, check all the already bound declarations.
+     * Foreach ImporterService, check all the already bound importDeclarations.
      * If the metadata of the importDeclaration match the filter exposed by the importer
      * bind the importDeclaration to the importer
      */
     @Bind(id = "importerServices", aggregate = true, optional = true)
-    void bindImporterService(ImporterService importerService, Map<String, Object> properties) {
+    void bindImporterService(ImporterService importerService, Map<String, Object> properties, ServiceReference serviceReference) {
         if (!importerServiceFilter.matches(properties)) {
             return;
         }
@@ -149,8 +152,9 @@ public class DefaultImportationLinker implements ImportationLinker {
                     + " with filter " + filter.toString());
 
             importerServices.put(importerService, filter);
+            importerServiceReferences.put(serviceReference, importerService);
             for (ImportDeclaration importDeclaration : importDeclarations) {
-                tryToBind(importDeclaration, importerService);
+                tryToBind(importDeclaration, serviceReference);
             }
         }
     }
@@ -159,15 +163,16 @@ public class DefaultImportationLinker implements ImportationLinker {
      * Unbind the {@link ImporterService}.
      */
     @Unbind(id = "importerServices")
-    void unbindImporterService(ImporterService importerService) {
+    void unbindImporterService(ImporterService importerService, ServiceReference serviceReference) {
         logger.debug(linker_name + " : Unbind the ImporterService " + importerService);
         synchronized (lock) {
-            importerServices.remove(importerService);
             for (ImportDeclaration importDeclaration : importDeclarations) {
-                if (importDeclaration.getStatus().getImporterServices().contains(importerService)) {
-                    tryToUnbind(importDeclaration, importerService);
+                if (importDeclaration.getStatus().getServiceReferences().contains(importerService)) {
+                    tryToUnbind(importDeclaration, serviceReference);
                 }
             }
+            importerServices.remove(importerService);
+            importerServiceReferences.remove(serviceReference);
         }
     }
 
@@ -185,8 +190,8 @@ public class DefaultImportationLinker implements ImportationLinker {
 
         synchronized (lock) {
             importDeclarations.add(importDeclaration);
-            for (ImporterService importerService : importerServices.keySet()) {
-                tryToBind(importDeclaration, importerService);
+            for (ServiceReference serviceReference : importerServiceReferences.keySet()) {
+                tryToBind(importDeclaration, serviceReference);
             }
 
         }
@@ -199,26 +204,28 @@ public class DefaultImportationLinker implements ImportationLinker {
     void unbindImportDeclaration(ImportDeclaration importDeclaration) {
         logger.debug(linker_name + " : Unbind the ImportDeclaration " + importDeclaration);
         synchronized (lock) {
-            for (ImporterService importerService : importDeclaration.getStatus().getImporterServices()) {
-                tryToUnbind(importDeclaration, importerService);
+            for (ServiceReference serviceReference : importDeclaration.getStatus().getServiceReferences()) {
+                tryToUnbind(importDeclaration, serviceReference);
             }
             importDeclarations.remove(importDeclaration);
         }
     }
 
     /**
-     * Try to bind the importDeclaration with the importerService, return true if they have been bind together,
-     * false otherwise.
+     * Try to bind the importDeclaration with the importerService referenced by the ServiceReference,
+     * return true if they have been bind together, false otherwise.
      *
      * @param importDeclaration The ImportDeclaration
-     * @param importerService   The ImporterService
+     * @param importerServiceReference The ServiceReference of the ImporterService
+     *
      * @return true if they have been bind together, false otherwise.
      */
-    private boolean tryToBind(ImportDeclaration importDeclaration, ImporterService importerService) {
+    private boolean tryToBind(ImportDeclaration importDeclaration, ServiceReference importerServiceReference) {
         // if the uniqueImportationProperty is set to true and the importDeclaration is already bind, just return.
         if (uniqueImportationProperty && importDeclaration.getStatus().isBound()) {
             return false;
         }
+        ImporterService importerService = importerServiceReferences.get(importerServiceReference);
         Filter filter = importerServices.get(importerService);
         if (filter.matches(importDeclaration.getMetadata())) {
             try {
@@ -233,7 +240,7 @@ public class DefaultImportationLinker implements ImportationLinker {
                 return false;
             }
             logger.debug(importDeclaration + " match the filter of " + importerService + " : bind them together");
-            importDeclaration.bind(importerService);
+            importDeclaration.bind(importerServiceReference);
             return true;
         }
         logger.debug(importDeclaration + " doesn't match the filter of " + importerService
@@ -241,8 +248,18 @@ public class DefaultImportationLinker implements ImportationLinker {
         return false;
     }
 
-    private boolean tryToUnbind(ImportDeclaration importDeclaration, ImporterService importerService) {
-        importDeclaration.unbind(importerService);
+    /**
+     * Try to unbind the importDeclaration from the importerService referenced by the ServiceReference,
+     * return true if they have been cleanly unbind, false otherwise.
+     *
+     * @param importDeclaration The ImportDeclaration
+     * @param importerServiceReference The ServiceReference of the ImporterService
+     *
+     * @return true if they have been cleanly unbind, false otherwise.
+     */
+    private boolean tryToUnbind(ImportDeclaration importDeclaration, ServiceReference importerServiceReference) {
+        ImporterService importerService = importerServiceReferences.get(importerServiceReference);
+        importDeclaration.unbind(importerServiceReference);
         try {
             importerService.removeImportDeclaration(importDeclaration);
         } catch (BadImportRegistration bir) {

@@ -1,7 +1,7 @@
 package org.ow2.chameleon.fuchsia.core.declaration;
 
 import org.junit.Test;
-import org.ow2.chameleon.fuchsia.core.component.ImporterService;
+import org.osgi.framework.ServiceReference;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,41 +17,41 @@ public class StatusTest {
 
     @Test
     public void testCreationFromEmptyList() throws Exception {
-        Status status = Status.from(Collections.<ImporterService>emptyList());
+        Status status = Status.from(Collections.<ServiceReference>emptyList());
         assertThat(status.isBound()).isEqualTo(false);
-        assertThat(status.getImporterServices().size()).isEqualTo(0);
+        assertThat(status.getServiceReferences().size()).isEqualTo(0);
     }
 
     @Test
     public void testCreation() throws Exception {
-        List<ImporterService> list = new ArrayList<ImporterService>();
-        list.add(mock(ImporterService.class));
-        list.add(mock(ImporterService.class));
+        List<ServiceReference> list = new ArrayList<ServiceReference>();
+        list.add(mock(ServiceReference.class));
+        list.add(mock(ServiceReference.class));
         Status status = Status.from(list);
         assertThat(status.isBound()).isEqualTo(true);
-        assertThat(status.getImporterServices().size()).isEqualTo(2);
+        assertThat(status.getServiceReferences().size()).isEqualTo(2);
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void testImmutability() throws Exception {
-        List<ImporterService> list = new ArrayList<ImporterService>();
-        list.add(mock(ImporterService.class));
+        List<ServiceReference> list = new ArrayList<ServiceReference>();
+        list.add(mock(ServiceReference.class));
         Status status = Status.from(list);
         assertThat(status.isBound()).isEqualTo(true);
 
-        status.getImporterServices().add(mock(ImporterService.class));
+        status.getServiceReferences().add(mock(ServiceReference.class));
     }
 
     @Test
     public void testDependency() throws Exception {
-        List<ImporterService> list = new ArrayList<ImporterService>();
-        list.add(mock(ImporterService.class));
+        List<ServiceReference> list = new ArrayList<ServiceReference>();
+        list.add(mock(ServiceReference.class));
         Status status = Status.from(list);
         assertThat(status.isBound()).isEqualTo(true);
-        assertThat(status.getImporterServices().size()).isEqualTo(1);
+        assertThat(status.getServiceReferences().size()).isEqualTo(1);
 
-        list.add(mock(ImporterService.class));
-        assertThat(status.getImporterServices().size()).isEqualTo(1);
+        list.add(mock(ServiceReference.class));
+        assertThat(status.getServiceReferences().size()).isEqualTo(1);
     }
 
     @Test(expected = IllegalArgumentException.class)

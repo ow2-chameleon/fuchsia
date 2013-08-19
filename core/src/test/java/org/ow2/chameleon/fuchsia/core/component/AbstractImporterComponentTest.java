@@ -28,7 +28,7 @@ public class AbstractImporterComponentTest {
     ImportationLinker importationLinker;
 
     //Tested Object
-    TestedClass testedClass;
+    private TestedClass testedClass;
 
     @Before
     public void setUp() {
