@@ -16,6 +16,8 @@ import java.util.List;
 // TODO :  - get the linker(s) that the importerService is linked to.
 public interface ImporterService {
 
+    String TARGET_FILTER_PROPERTY = "target";
+
     /**
      * Reify the importDeclaration of given description as a local service.
      *

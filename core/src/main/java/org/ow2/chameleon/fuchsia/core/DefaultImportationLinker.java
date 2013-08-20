@@ -23,18 +23,20 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
 import static org.ow2.chameleon.fuchsia.core.FuchsiaUtils.getFilter;
+import static org.ow2.chameleon.fuchsia.core.component.ImporterService.TARGET_FILTER_PROPERTY;
 
 /**
  * The {@link DefaultImportationLinker} component is the default implementation of the interface ImportationLinker.
  * <p/>
  * The {@link DefaultImportationLinker} component take as mandatory ServiceProperty a filter on the {@link ImportDeclaration} named
- * {@literal {@link #PROPERTY_FILTER_IMPORTDECLARATION}} and a filter on {@link ImporterService} named
- * {@literal {@link #PROPERTY_FILTER_IMPORTERSERVICE}}.
+ * {@literal {@link #FILTER_IMPORTDECLARATION_PROPERTY }} and a filter on {@link ImporterService} named
+ * {@literal {@link #FILTER_IMPORTERSERVICE_PROPERTY }}.
  * <p/>
  * The filters are String with the LDAP syntax OR {@link Filter}.
  * <p/>
- * An optional ServiceProperty @literal {@link #PROPERTY_UNIQUE_IMPORTATION}} can disallow the DefaultImportationLinker to give an
+ * An optional ServiceProperty @literal {@link #UNIQUE_IMPORTATION_PROPERTY}} can disallow the DefaultImportationLinker to give an
  * ImportDeclaration to more than one ImporterService. This Property is set to False by default.
  * WARNING : this property is actually based on the number of ImporterService actually bind to the ImportDeclaration,
  * if an other ImportationLinker has already bind the ImportDeclaration to an ImporterService, the DefaultImportationLinker will not give the
@@ -43,22 +45,22 @@ import static org.ow2.chameleon.fuchsia.core.FuchsiaUtils.getFilter;
  *
  * @author Morgan Martinet
  */
-@Component(name = "FuchsiaDefaultLinkerFactory")
+@Component(name = FuchsiaConstants.DEFAULT_IMPORTATION_LINKER_FACTORY_NAME)
 @Provides(specifications = ImportationLinker.class)
 public class DefaultImportationLinker implements ImportationLinker {
 
     @Controller
     private boolean state;
 
-    @ServiceProperty(name = "instance.name")
+    @ServiceProperty(name = INSTANCE_NAME_PROPERTY)
     private String linker_name;
 
-    @ServiceProperty(name = PROPERTY_FILTER_IMPORTDECLARATION, mandatory = true)
+    @ServiceProperty(name = FILTER_IMPORTDECLARATION_PROPERTY, mandatory = true)
     private Object importDeclarationFilterProperty;
 
     private Filter importDeclarationFilter;
 
-    @Property(name = PROPERTY_FILTER_IMPORTDECLARATION, mandatory = true)
+    @Property(name = FILTER_IMPORTDECLARATION_PROPERTY, mandatory = true)
     public void computeImportDeclarationFilter(Object filterProperty) {
         if (!state) {
             return;
@@ -67,18 +69,18 @@ public class DefaultImportationLinker implements ImportationLinker {
             importDeclarationFilter = getFilter(filterProperty);
             state = true;
         } catch (InvalidFilterException invalidFilterException) {
-            logger.debug("The value of the Property " + PROPERTY_FILTER_IMPORTDECLARATION + " is invalid,"
+            logger.debug("The value of the Property " + FILTER_IMPORTDECLARATION_PROPERTY + " is invalid,"
                     + " the recuperation of the Filter has failed. The instance gonna stop.", invalidFilterException);
             state = false;
         }
     }
 
-    @ServiceProperty(name = PROPERTY_FILTER_IMPORTERSERVICE, mandatory = true)
+    @ServiceProperty(name = FILTER_IMPORTERSERVICE_PROPERTY, mandatory = true)
     private Object importerServiceFilterProperty;
 
     private Filter importerServiceFilter;
 
-    @Property(name = PROPERTY_FILTER_IMPORTERSERVICE, mandatory = true)
+    @Property(name = FILTER_IMPORTERSERVICE_PROPERTY, mandatory = true)
     public void computeImporterServiceFilter(Object filterProperty) {
         if (!state) {
             return;
@@ -87,13 +89,13 @@ public class DefaultImportationLinker implements ImportationLinker {
             importerServiceFilter = getFilter(filterProperty);
             state = true;
         } catch (InvalidFilterException invalidFilterException) {
-            logger.debug("The value of the Property " + PROPERTY_FILTER_IMPORTERSERVICE + " is invalid,"
+            logger.debug("The value of the Property " + FILTER_IMPORTERSERVICE_PROPERTY + " is invalid,"
                     + " the recuperation of the Filter has failed. The instance gonna stop.", invalidFilterException);
             state = false;
         }
     }
 
-    @ServiceProperty(name = PROPERTY_UNIQUE_IMPORTATION, mandatory = false)
+    @ServiceProperty(name = UNIQUE_IMPORTATION_PROPERTY, mandatory = false)
     private boolean uniqueImportationProperty = false;
 
     private final Object lock = new Object();
@@ -139,11 +141,12 @@ public class DefaultImportationLinker implements ImportationLinker {
 
         Filter filter = null;
         try {
-            filter = getFilter(properties.get("target"));
+            filter = getFilter(properties.get(TARGET_FILTER_PROPERTY));
         } catch (InvalidFilterException invalidFilterException) {
-            logger.error("The ServiceProperty \"target\" of the ImporterService " + importerService
-                    + " doesn't provides a valid Filter."
-                    + " To be used, it must provides a correct \"target\" ServiceProperty.", invalidFilterException);
+            logger.error("The ServiceProperty \"" + TARGET_FILTER_PROPERTY + "\" of the ImporterService "
+                    + importerService + " doesn't provides a valid Filter."
+                    + " To be used, it must provides a correct \"" + TARGET_FILTER_PROPERTY + "\" ServiceProperty.",
+                    invalidFilterException);
             return;
         }
 

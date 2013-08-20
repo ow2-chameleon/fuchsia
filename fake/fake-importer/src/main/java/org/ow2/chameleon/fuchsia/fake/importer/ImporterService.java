@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
+
 /**
  * This class is an importer service.
  * Its goal is to  receive the import declaration and instantiate the proxy.
@@ -47,10 +49,11 @@ public class ImporterService extends AbstractImporterComponent {
      */
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @ServiceProperty(name = "target", value = "(id=*)")
+    @ServiceProperty(name = TARGET_FILTER_PROPERTY, value = "(id=*)")
+
     private String filter;
 
-    @ServiceProperty(name = "instance.name")
+    @ServiceProperty(name = INSTANCE_NAME_PROPERTY)
     private String name;
 
     @Override

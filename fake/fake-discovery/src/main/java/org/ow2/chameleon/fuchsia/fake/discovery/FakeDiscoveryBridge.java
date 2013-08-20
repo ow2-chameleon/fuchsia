@@ -18,6 +18,8 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
+import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
+
 /**
  * This component according to its configuration create a fake device AND publish an
  * ImportDeclaration.
@@ -31,7 +33,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 @Instantiate(name = "Fuchsia-FakeDiscovery")
 public class FakeDiscoveryBridge extends AbstractDiscoveryComponent {
 
-    @ServiceProperty(name = "instance.name")
+    @ServiceProperty(name = INSTANCE_NAME_PROPERTY)
     private String name;
 
     @Requires (optional = false)

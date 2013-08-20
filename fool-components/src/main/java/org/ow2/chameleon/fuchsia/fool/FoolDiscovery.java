@@ -21,6 +21,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
+import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
+
 /**
  * Because it's a fool factory it just create and destroy ImportDeclaration using threads
  * and pre-created ImportDeclarations.
@@ -31,7 +33,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 @Instantiate(name = "Fuchsia-FoolDiscovery")
 public class FoolDiscovery extends AbstractDiscoveryComponent {
 
-    @ServiceProperty(name = "instance.name")
+    @ServiceProperty(name = INSTANCE_NAME_PROPERTY)
     private String name;
 
     private final ScheduledThreadPoolExecutor pool_register = new ScheduledThreadPoolExecutor(1);

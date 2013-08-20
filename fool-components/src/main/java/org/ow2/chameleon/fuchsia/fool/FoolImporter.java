@@ -15,6 +15,8 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
+
 @Component(name = "Fuchsia-FoolImporter-Factory")
 @Provides(specifications = ImporterService.class)
 @Instantiate(name = "Fuchsia-FoolImporter")
@@ -25,10 +27,10 @@ public class FoolImporter extends AbstractImporterComponent {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 
-    @ServiceProperty(name = "target", value = "(fool-number=1)")
+    @ServiceProperty(name = TARGET_FILTER_PROPERTY, value = "(&(fool-number=1)(fool=fool))")
     private String filter;
 
-    @ServiceProperty(name = "instance.name")
+    @ServiceProperty(name = INSTANCE_NAME_PROPERTY)
     private String name;
 
     @Override

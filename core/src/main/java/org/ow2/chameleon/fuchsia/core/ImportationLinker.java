@@ -19,12 +19,11 @@ import java.util.Set;
  */
 public interface ImportationLinker {
 
-    final static String PROPERTY_FILTER_IMPORTDECLARATION = "fuchsia.linker.filter.importDeclaration";
+    final static String FILTER_IMPORTDECLARATION_PROPERTY = "fuchsia.linker.filter.importDeclaration";
 
-    final static String PROPERTY_FILTER_IMPORTERSERVICE = "fuchsia.linker.filter.importerService";
+    final static String FILTER_IMPORTERSERVICE_PROPERTY = "fuchsia.linker.filter.importerService";
 
-    final static String PROPERTY_UNIQUE_IMPORTATION = "fuchsia.linker.uniqueImportation";
-
+    final static String UNIQUE_IMPORTATION_PROPERTY = "fuchsia.linker.uniqueImportation";
 
     String getName();
 
