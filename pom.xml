@@ -122,6 +122,7 @@
             <id>test</id>
             <modules>
                 <module>core</module>
+                <module>testing</module>
                 <module>core-it</module>
             </modules>
         </profile>
@@ -275,6 +276,13 @@
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
                 <version>${slf4j.version}</version>
+            </dependency>
+
+            <!-- TESTS -->
+            <dependency>
+                <groupId>org.osgi</groupId>
+                <artifactId>org.osgi.enterprise</artifactId>
+                <version>5.0.0</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
