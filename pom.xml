@@ -91,6 +91,7 @@
                 <module>core</module>
                 <module>fool-components</module>
                 <module>fake</module>
+                <module>json-rpc</module>
             </modules>
         </profile>
 
@@ -107,6 +108,7 @@
             <id>protocol</id>
             <modules>
                 <module>fake</module>
+                <module>json-rpc</module>
             </modules>
         </profile>
 
