@@ -1,5 +1,7 @@
 package org.ow2.chameleon.fuchsia.fake.importer;
 
+import org.ow2.chameleon.fuchsia.fake.device.GenericDevice;
+import org.ow2.chameleon.fuchsia.fake.device.GenericFakeDevice;
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
@@ -7,18 +9,17 @@ import org.osgi.framework.ServiceReference;
 import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 
-import org.ow2.chameleon.fuchsia.fake.device.GenericDevice;
-import org.ow2.chameleon.fuchsia.fake.device.GenericFakeDevice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
  * This class is an importer service.
- * It's goal its to  receive the import declaration and instantiate the proxy.
+ * Its goal is to  receive the import declaration and instantiate the proxy.
  *
  * @author jeremy.savonet@gmail.com
  */
@@ -31,12 +32,14 @@ public class ImporterService extends AbstractImporterComponent {
 
     private final BundleContext m_bundleContext;
 
+    private HashMap<String, GenericDevice> listOfCreatedProxies;
     /**
      * Constructor in order to have the bundle context injected
      * @param bundleContext
      */
     public ImporterService(BundleContext bundleContext) {
         m_bundleContext = bundleContext;
+        listOfCreatedProxies = new HashMap<String, GenericDevice>();
     }
 
     /**
@@ -44,7 +47,7 @@ public class ImporterService extends AbstractImporterComponent {
      */
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @ServiceProperty(name = "target", value = "(id=BL-1234)")
+    @ServiceProperty(name = "target", value = "(id=*)")
     private String filter;
 
     @ServiceProperty(name = "instance.name")
@@ -53,28 +56,29 @@ public class ImporterService extends AbstractImporterComponent {
     @Override
     @Invalidate
     protected void stop() {
-        System.out.println("STOP FAKE IMPORTER SERVICE");
+        logger.info("STOP FAKE IMPORTER SERVICE");
         super.stop();
     }
 
     @Override
     @Validate
     protected void start() {
-        System.out.println("START FAKE IMPORTER SERVICE");
+        logger.info("START FAKE IMPORTER SERVICE");
         super.start();
     }
 
     /**
      * Call if an import declaration match with the LDAP filter
-     * @param importDeclaration
-     * @throws InvalidSyntaxException
+     * @param importDeclaration : the matching import declaration
      */
     @Override
     protected void createProxy(ImportDeclaration importDeclaration) {
 
+        String id = (String) importDeclaration.getMetadata().get("id");
+
         ServiceReference[] deviceRef = new ServiceReference[0];
         try {
-            deviceRef = m_bundleContext.getServiceReferences(GenericDevice.class.getName(),"(device.serialNumber=BL-1234)");
+            deviceRef = m_bundleContext.getServiceReferences(GenericDevice.class.getName(),"(device.serialNumber="+id+")");
         } catch (InvalidSyntaxException e) {
             e.printStackTrace();
         }
@@ -83,12 +87,19 @@ public class ImporterService extends AbstractImporterComponent {
         logger.debug("FakeImporter create a proxy for " + importDeclaration);
 
         GenericDevice proxy = (GenericDevice) Proxy.newProxyInstance(DelegationProxy.class.getClassLoader(), new Class[] {GenericDevice.class}, new DelegationProxy(genericDevice));
-        System.out.println(proxy.getSerialNumber());
+        listOfCreatedProxies.put(proxy.getSerialNumber(),proxy);
+        logger.debug(proxy.getSerialNumber());
     }
 
+    /**
+     * Call when an import declaration is leaving the OSGi register
+     * @param importDeclaration : the leaving import declaration
+     */
     @Override
     protected void destroyProxy(ImportDeclaration importDeclaration) {
         logger.debug("FakeImporter destroy a proxy for " + importDeclaration);
+        GenericDevice toBeRemovedProxy = listOfCreatedProxies.get(importDeclaration.getMetadata().get("id"));
+        logger.debug("Removed proxy :" +toBeRemovedProxy.getSerialNumber());
     }
 
     public List<String> getConfigPrefix() {
