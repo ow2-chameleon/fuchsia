@@ -1,0 +1,151 @@
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/DECORATION/1.3.0"
+         xsi:schemaLocation="http://maven.apache.org/DECORATION/1.3.0 http://maven.apache.org/xsd/decoration-1.3.0.xsd"
+        >
+
+    <skin>
+        <groupId>lt.velykis.maven.skins</groupId>
+        <artifactId>reflow-maven-skin</artifactId>
+        <version>1.0.0</version>
+    </skin>
+
+    <publishDate position="bottom" format="yyyy-MM-dd"/>
+    <version position="bottom"/>
+
+    <custom>
+        <reflowSkin>
+            <protocolRelativeURLs>false</protocolRelativeURLs>
+            <smoothScroll>true</smoothScroll>
+
+            <theme>site</theme>
+
+            <highlightJs>true</highlightJs>
+            <highlightJsTheme>github</highlightJsTheme>
+
+            <brand>
+                <name>
+                    <![CDATA[
+                        <span class="color-highlight">OW2 Chameleon</span> ~ Fuchsia
+                    ]]>
+                </name>
+                <href>index.html</href>
+            </brand>
+
+            <slogan>A framework to import distant resources.</slogan>
+
+            <titleTemplate>%2$s | %1$s</titleTemplate>
+            <!--
+            <toc>sidebar</toc>
+            <tocTopMax>6</tocTopMax>
+            <topNav>Documentation|Contribute</topNav>
+            <navbarInverse>true</navbarInverse>
+             -->
+            <bottomNav maxSpan="9" >
+                <column>Main|Download</column>
+                <column>Contribute</column>
+                <column>Documentation</column>
+            </bottomNav>
+            <bottomDescription>
+                <![CDATA[
+          <span class="color-highlight">OW2 Chameleon</span> ~ fuchsia is a framework used to import distant resources.
+        ]]>
+            </bottomDescription>
+
+            <breadcrumbs>false</breadcrumbs>
+
+            <pages>
+
+                <index project="fuchsia">
+                    <!-- Override the title -->
+                    <titleTemplate>OW2 Chameleon ~ Fuchsia</titleTemplate>
+                    <!-- no breadcrumbs on the main index page -->
+                    <!-- no ToC on the main index page -->
+                    <toc>false</toc>
+                    <markPageHeader>false</markPageHeader>
+                    <sections>
+                        <body />
+                        <sidebar />
+                    </sections>
+                </index>
+                <contribute>
+                    <breadcrumbs>false</breadcrumbs>
+                </contribute>
+
+                <!-- Disable source highlighting for Maven reports -->
+                <source-repository>
+                    <highlightJs>false</highlightJs>
+                </source-repository>
+                <issue-tracking>
+                    <highlightJs>false</highlightJs>
+                    <toc>false</toc>
+                </issue-tracking>
+                <license>
+                    <highlightJs>false</highlightJs>
+                    <toc>false</toc>
+                </license>
+                <!-- Disable ToC for some Maven reports -->
+                <project-info>
+                    <toc>false</toc>
+                </project-info>
+                <dependencies>
+                    <tocTopMax>4</tocTopMax>
+                </dependencies>
+                <downloads>
+                    <toc>false</toc>
+                </downloads>
+
+
+            </pages>
+
+            <skinAttribution>false</skinAttribution>
+
+        </reflowSkin>
+    </custom>
+
+    <body>
+        <head>
+            <link rel="stylesheet" href="css/font-awesome.css"/>
+            <link type="text/css" href="css/orange.css" rel="stylesheet" media="screen"/>
+            <link type="text/css" href="css/style.css" rel="stylesheet" media="screen"/>
+        </head>
+
+
+        <links>
+            <item name="Download" href="downloads.html" />
+            <item name="GitHub project" href="http://github.com/ow2-chameleon/fuchsia" />
+        </links>
+
+        <breadcrumbs>
+            <item name="fuchsia" href="/" />
+        </breadcrumbs>
+
+        <menu name="Main">
+            <item name="Home" href="./" />
+            <item name="GitHub project" href="http://github.com/ow2-chameleon/fuchsia" />
+            <item name="Release notes" href="github-report.html" />
+        </menu>
+
+        <menu name="Documentation" inherit="bottom">
+            <item name="Fuchsia Core" href="measures.html"/>
+            <item name="Fuchsia Fool" href="quantities.html"/>
+            <item name="Fuchsia Fake" href="units.html"/>
+            <item name="Examples" href="systemsOfUnits.html">
+                <item name="JAX-WS" href="systemsOfUnits.html"/>
+                <item name="File Based" href="systemsOfUnits.html"/>
+            </item>
+        </menu>
+
+
+        <menu name="Download" inherit="top">
+            <item name="Download" href="downloads.html" />
+            <item name="License" href="license.html" />
+        </menu>
+
+        <menu name="Contribute" inherit="bottom">
+            <item name="Contribute" href="contribution.html" />
+            <item name="Sources" href="source-repository.html"/>
+            <item name="Issues" href="http://github.com/ow2-chameleon/fuchsia/issues/" />
+            <item name="Fork on GitHub" href="http://github.com/ow2-chameleon/fuchsia" />
+        </menu>
+
+    </body>
+</project>

@@ -19,6 +19,6 @@
         <module>fake-device</module>
         <module>fake-discovery</module>
         <module>fake-importer</module>
-        <module>fake-it</module>
+        <!--module>fake-it</module-->
     </modules>
 </project>

@@ -4,6 +4,8 @@ package org.ow2.chameleon.fuchsia.fake.device;
  * Define a simple interface for generic device !
  *
  * Really simple just for fake discovery !
+ *
+ * @author jeremy.savonet@gmail.com
  */
 public interface GenericDevice {
 

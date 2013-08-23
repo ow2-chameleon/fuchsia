@@ -7,7 +7,7 @@ import java.lang.reflect.Method;
 
 /**
  * This class is a proxy in order to delegate calls on the fake device
- * Note : In the future this will use events !
+ * <strong>Note : In the future this will use events !</strong>
  *
  * @author jeremy.savonet@gmail.com
  */
