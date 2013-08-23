@@ -138,6 +138,15 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
+
+        <repository>
+            <id>chameleon</id>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <url>http://repository.ow2.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+
         <repository>
             <id>objectweb-old-release</id>
             <name>ow2 Maven Repository [OLD]</name>
