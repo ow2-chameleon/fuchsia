@@ -1,0 +1,125 @@
+<div style="width: 940px;">
+<header class="jumbotron subhead">
+    <div class="row" id="banner">
+        <div class="span12">
+            <div class="pull-left">
+                <a href="index.html" id="bannerLeft"><h1><span class="color-highlight">OW2 Chameleon</span> ~ Fuchsia</h1></a>
+                <p class="lead">Framework to import distant resources.</p>
+            </div>
+            <div class="pull-right">
+            </div>
+        </div>
+    </div>
+</header>
+</div>
+
+<div class="intro">
+    <div class="span12">
+    <div class="row">
+
+        <div class="span6">
+            The <code>Fuchsia Framework</code> could be used to discovered multiple protocol such as :
+            <ul>
+                <li>JAX-WS</li>
+                <li>File Based</li>
+                <li>UPnP(TM)</li>
+                <li>JSON-RPC</li>
+                <li>Bluetooth (coming soon)</li>
+            </ul>
+        </div>
+
+        <div class="span6">
+            <a href="http://chameleon.ow2.org">
+                <img src="img/chameleon-project.png" style="width: 60%;">
+            </a>
+        </div>
+
+    </div>
+    </div>
+</div>
+<div class="clearfix"></div>
+
+<div class="features">
+    <div class="row">
+        <div class="span12">
+
+            <!-- Features hero -->
+            <div class="hero">
+                <!-- Title. Don't forget the <span> tag -->
+                <h3><span>Concepts</span></h3>
+                <!-- para -->
+                <p>The main idea behind Fuchsia is to have a clear separation of concern between the distributed part of
+                    your applications and the local ones. The Fuchsia framework is based on OSGi and iPOJO. Once you
+                    have populated your OSGi framework with the fuchsia bundles and your applications ones you are able
+                    to dynamically create and publishes Endpoint Description for your local OSGi services.
+                </p>
+            </div>
+
+            <!-- Features -->
+
+            <div class="ifeature">
+
+                <div class="ifeat">
+                    <div class="row">
+                        <div class="span6">
+                            <h4>Core</h4>
+                            <p>The <code>Fuchsia Core</code> contains the core components of the framework.
+                            <p>Fuchsia allows you to simply build your own importers and discoveries components </p>
+                            <div class="button"><a href="fuchsiaCore.html">Read more</a></div>
+                        </div>
+                        <div class="span6">
+                            <h4>Fool</h4>
+                            <p>The <code>Fuchsia Fool</code> contains a minimal set of components to demonstrate the
+                                the simplisity of building your own dicoveries and importers componenents.
+                                It is composed of a :
+                                <li>FoolDiscovery</li>
+                                <li>FoolImporter</li>
+                                <li>FoolInitializer</li>
+
+                            </p>
+                            <div class="button"><a href="fuchsiaFool.html">Read more</a></div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+
+                <div class="ifeat">
+                    <div class="row">
+                        <div class="span6">
+                            <h4>Fake</h4>
+                            <p>The <code>Fuchsia Fake</code> contains a set of component in order to allow file
+                                based discovery and importer on your platform.</p>
+                            <p>Imagine you have installed a Chameleon Platform, you just need to deploy the Fuchsia Core
+                            and Fuchsia Suite Component to start using the file based discovery.</p>
+                            <div class="button"><a href="fuchsiaFake.html">Read more</a></div>
+                        </div>
+                        <div class="span6">
+                            <h4>Jax-WS</h4>
+                            <p>The <code>Fuchsia Jax-WS</code> contains a set of component in order to allow WebService
+                                reification on your platform.
+                            <div class="button"><a href="fuchsiaJax.html">Read more</a></div>
+                        </div>
+                        <div class="Read more"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="license">
+    <div class="row">
+        <div class="span12">
+
+            <!-- Features hero -->
+            <div class="hero">
+                <!-- Title. Don't forget the <span> tag -->
+                <h3><span>License</span></h3>
+                <!-- para -->
+                <p>The library is part of the OW2 Chameleon project and is licensed under the Apache Software
+                    License 2.0.</p>
+            </div>
+        </div>
+    </div>
+</div>
