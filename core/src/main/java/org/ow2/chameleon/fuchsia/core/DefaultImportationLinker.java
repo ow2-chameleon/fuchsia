@@ -133,7 +133,12 @@ public class DefaultImportationLinker implements ImportationLinker {
      * bind the importDeclaration to the importer
      */
     @Bind(id = "importerServices", aggregate = true, optional = true)
-    void bindImporterService(ImporterService importerService, Map<String, Object> properties, ServiceReference serviceReference) {
+    void bindImporterService(ImporterService importerService, ServiceReference serviceReference) {
+        Map<String, Object> properties = new HashMap<String, Object>();
+
+        for(String key : serviceReference.getPropertyKeys()){
+            properties.put(key,serviceReference.getProperty(key));
+        }
         if (!importerServiceFilter.matches(properties)) {
             return;
         }
