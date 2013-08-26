@@ -91,6 +91,7 @@
                 <module>core</module>
                 <module>fool-components</module>
                 <module>fake</module>
+                <module>upnp</module>
             </modules>
         </profile>
 
@@ -174,6 +175,19 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
+
+        <repository>
+            <id>upnp-release</id>
+            <name>ow2 Maven Repository [OLD]</name>
+            <url>http://repo1.maven.org/maven2</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+
         <!-- Java.net repo -->
         <repository>
             <id>java.net-Public</id>
