@@ -44,18 +44,19 @@ public class DefaultImportationLinkerTest extends BaseTest {
 
     @Before
     public void setUp() {
-        super.commonSetUp();
         context = super.getContext();
         Dictionary<String, String> props = new Hashtable<String, String>();
         props.put(INSTANCE_NAME_PROPERTY, linkerInstanceName);
-        props.put(ImportationLinker.FILTER_IMPORTDECLARATION_PROPERTY, "(*=*)");
-        props.put(ImportationLinker.FILTER_IMPORTERSERVICE_PROPERTY, "(*=*)");
+        props.put(ImportationLinker.FILTER_IMPORTDECLARATION_PROPERTY,
+                "(" + INSTANCE_NAME_PROPERTY + "=importdec*)");
+        props.put(ImportationLinker.FILTER_IMPORTERSERVICE_PROPERTY,
+                "(" + INSTANCE_NAME_PROPERTY + "=*)");
+        props.put(ImportationLinker.UNIQUE_IMPORTATION_PROPERTY, "false");
         defaultLinkerCI = ipojoHelper.createComponentInstance(DEFAULT_IMPORTATION_LINKER_FACTORY_NAME, linkerInstanceName, props);
     }
 
     @After
     public void tearDown() {
-        super.commonTearDown();
     }
 
     @Override
