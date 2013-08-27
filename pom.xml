@@ -55,7 +55,6 @@
         <distribution.baseDirectory>Distribution-Fuchsia-${project.version}</distribution.baseDirectory>
 
 
-
         <!-- Plugins versions -->
         <bundle.plugin.version>2.4.0</bundle.plugin.version>
         <compiler.plugin.version>2.5.1</compiler.plugin.version>
@@ -68,6 +67,12 @@
         <junit.version>4.11</junit.version>
         <assertj-core.version>1.3.0</assertj-core.version>
         <osgi-helpers.version>0.6.1</osgi-helpers.version>
+        <pax-exam.version>3.0.1</pax-exam.version>
+        <pax-swissbox.version>1.3.2</pax-swissbox.version>
+        <ops4j.version>1.4.0</ops4j.version>
+        <tinybundles-ipojo.version>0.3.0</tinybundles-ipojo.version>
+        <TEST.slf4j-api.version>1.5.6</TEST.slf4j-api.version>
+        <TEST.logback-classic.version>0.9.6</TEST.logback-classic.version>
 
         <!-- Encoding -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -185,36 +190,6 @@
         </repository>
     </repositories>
 
-    <!-- ============ -->
-    <!-- DEPENDENCIES -->
-    <!-- ============ -->
-    <dependencies>
-        <!--TEST-->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-core</artifactId>
-            <version>${assertj-core.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <version>${mockito.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.ow2.chameleon.testing</groupId>
-            <artifactId>osgi-helpers</artifactId>
-            <version>${osgi-helpers.version}</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
 
     <!-- ===================== -->
     <!-- DEPENDENCY MANAGEMENT -->
@@ -280,11 +255,87 @@
                 <version>${slf4j.version}</version>
             </dependency>
 
-            <!-- TESTS -->
+            <!-- TESTS DEPENDENCIES -->
             <dependency>
                 <groupId>org.osgi</groupId>
                 <artifactId>org.osgi.enterprise</artifactId>
                 <version>5.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.ow2.chameleon.testing</groupId>
+                <artifactId>osgi-helpers</artifactId>
+                <version>${osgi-helpers.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.ow2.chameleon.fuchsia.testing</groupId>
+                <artifactId>fuchsia-helpers</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-all</artifactId>
+                <version>${mockito.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+                <type>jar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.ops4j.pax.exam</groupId>
+                <artifactId>pax-exam</artifactId>
+                <version>${pax-exam.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.ops4j.pax.exam</groupId>
+                <artifactId>pax-exam-junit4</artifactId>
+                <version>${pax-exam.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.ops4j.pax.exam</groupId>
+                <artifactId>pax-exam-container-native</artifactId>
+                <version>${pax-exam.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.ops4j.pax.exam</groupId>
+                <artifactId>pax-exam-link-mvn</artifactId>
+                <version>${pax-exam.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.ops4j.pax.swissbox</groupId>
+                <artifactId>pax-swissbox-tinybundles</artifactId>
+                <version>${pax-swissbox.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.ops4j.pax.swissbox</groupId>
+                <artifactId>pax-swissbox-bnd</artifactId>
+                <version>${pax-swissbox.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.ops4j.base</groupId>
+                <artifactId>ops4j-base</artifactId>
+                <version>${ops4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.ow2.chameleon.testing</groupId>
+                <artifactId>tinybundles-ipojo</artifactId>
+                <version>${tinybundles-ipojo.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.assertj</groupId>
+                <artifactId>assertj-core</artifactId>
+                <version>${assertj-core.version}</version>
+            </dependency>
+            <!--<dependency>-->
+                <!--<groupId>org.slf4j</groupId>-->
+                <!--<artifactId>slf4j-api</artifactId>-->
+                <!--<version>${TEST.slf4j-api.version}</version>-->
+            <!--</dependency>-->
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${TEST.logback-classic.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
