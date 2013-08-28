@@ -81,7 +81,7 @@ class DeclarationBuilder<BUILDER extends DeclarationBuilder<BUILDER,DECLARATION>
         extraMetadata.put(key, value);
     }
 
-    protected class ValueSetter {
+    public class ValueSetter {
         private final String key;
 
         ValueSetter(String key) {
@@ -94,7 +94,7 @@ class DeclarationBuilder<BUILDER extends DeclarationBuilder<BUILDER,DECLARATION>
         }
     }
 
-    protected class ExtraValueSetter {
+    public class ExtraValueSetter {
         private final String key;
 
         ExtraValueSetter(String key) {
