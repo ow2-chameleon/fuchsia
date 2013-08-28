@@ -5,7 +5,6 @@ import org.apache.felix.ipojo.ComponentInstance;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.ops4j.pax.exam.Option;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
@@ -13,7 +12,7 @@ import org.osgi.framework.ServiceRegistration;
 import org.ow2.chameleon.fuchsia.core.ImportationLinker;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclarationBuilder;
-import org.ow2.chameleon.testing.helpers.BaseTest;
+import org.ow2.chameleon.fuchsia.testing.CommonTest;
 
 import java.util.Dictionary;
 import java.util.HashMap;
@@ -22,10 +21,9 @@ import java.util.Map;
 
 import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.ops4j.pax.exam.CoreOptions.*;
 import static org.ow2.chameleon.fuchsia.core.FuchsiaConstants.DEFAULT_IMPORTATION_LINKER_FACTORY_NAME;
 
-public class DefaultImportationLinkerTest extends BaseTest {
+public class DefaultImportationLinkerTest extends CommonTest {
 
     private final String linkerInstanceName = "linker";
 
@@ -33,14 +31,6 @@ public class DefaultImportationLinkerTest extends BaseTest {
     private ComponentInstance defaultLinkerCI;
 
     private BundleContext context;
-
-    @Override
-    protected Option[] getCustomOptions() {
-        return options(
-                mavenBundle("org.ow2.chameleon.fuchsia", "fuchsia-core").versionAsInProject(),
-                wrappedBundle(mavenBundle("org.assertj", "assertj-core").versionAsInProject())
-        );
-    }
 
     @Before
     public void setUp() {

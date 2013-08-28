@@ -8,19 +8,20 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.ow2.chameleon.fuchsia.fake.device.GenericDevice;
 import org.ow2.chameleon.fuchsia.fake.device.GenericFakeDevice;
-import org.ow2.chameleon.testing.helpers.BaseTest;
+import org.ow2.chameleon.fuchsia.testing.CommonTest;
 
 import javax.inject.Inject;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.ops4j.pax.exam.CoreOptions.*;
+import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
+import static org.ops4j.pax.exam.CoreOptions.options;
 
 /**
  * Test class to test the weel functionning of discovery->fake device->proxy
  *
  * @author jeremy.savonet@gmail.com
  */
-public class DiscoveryTest extends BaseTest {
+public class DiscoveryTest extends CommonTest {
 
     @Inject
     private BundleContext m_bundleContext;
@@ -33,15 +34,9 @@ public class DiscoveryTest extends BaseTest {
 
         return options(
                 // iCasa bundles to test
-                mavenBundle("org.ow2.chameleon.fuchsia", "fuchsia-core").versionAsInProject(),
                 mavenBundle("org.ow2.chameleon.fuchsia", "fuchsia-fake-device").versionAsInProject(),
                 mavenBundle("org.ow2.chameleon.fuchsia", "fuchsia-fake-discovery").versionAsInProject(),
-                mavenBundle("org.ow2.chameleon.fuchsia", "fuchsia-fake-importer").versionAsInProject(),
-
-
-                //Fest assert wrapper bundles
-                wrappedBundle(mavenBundle("org.assertj", "assertj-core").versionAsInProject())
-
+                mavenBundle("org.ow2.chameleon.fuchsia", "fuchsia-fake-importer").versionAsInProject()
         );
     }
 

@@ -5,29 +5,21 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.ops4j.pax.exam.Option;
 import org.osgi.service.log.LogEntry;
 import org.osgi.service.log.LogService;
 import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.exceptions.BadImportRegistration;
-import org.ow2.chameleon.testing.helpers.BaseTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.ops4j.pax.exam.CoreOptions.*;
 
-public abstract class ImporterComponentAbstractTest extends BaseTest {
-
-    protected static String HTTP_PORT = "8042";
+public abstract class ImporterComponentAbstractTest extends CommonTest {
 
     // Number of mock object by test.
     protected static final int MAX_MOCK = 10;
-
-    // The Fuchsia Helper
-    protected FuchsiaHelper fuchsiaHelper;
 
     // Mock LogService
     @Mock
@@ -42,8 +34,6 @@ public abstract class ImporterComponentAbstractTest extends BaseTest {
      */
     @Before
     public void setUp() {
-        fuchsiaHelper = new FuchsiaHelper(context);
-
         //initialise the annotated mock objects
         initMocks(this);
     }
@@ -53,33 +43,7 @@ public abstract class ImporterComponentAbstractTest extends BaseTest {
      */
     @After
     public void tearDown() {
-        fuchsiaHelper.dispose();
-    }
-
-    protected Option baseConfiguration() {
-        return composite(
-                systemProperty("org.osgi.service.http.port").value(HTTP_PORT),
-                fuchsiaBundles(),
-                assertjBundles()
-        );
-    }
-
-    protected Option fuchsiaBundles() {
-        return composite(
-                mavenBundle().groupId("org.ow2.chameleon.fuchsia").artifactId("fuchsia-core").versionAsInProject(),
-                mavenBundle().groupId("org.ow2.chameleon.fuchsia.testing").artifactId("fuchsia-helpers").versionAsInProject()
-        );
-    }
-
-    protected Option assertjBundles() {
-        return composite(
-                wrappedBundle(mavenBundle("org.assertj", "assertj-core").versionAsInProject())
-        );
-    }
-
-    @Override
-    public boolean deployMockito() {
-        return true;
+        //
     }
 
     @Override

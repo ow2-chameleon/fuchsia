@@ -18,6 +18,7 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
+import static org.ops4j.pax.exam.CoreOptions.systemProperty;
 import static org.ow2.chameleon.fuchsia.core.component.ImporterService.TARGET_FILTER_PROPERTY;
 import static org.ow2.chameleon.fuchsia.core.declaration.Constants.*;
 
@@ -27,9 +28,10 @@ import static org.ow2.chameleon.fuchsia.core.declaration.Constants.*;
  * @author Morgan Martinet
  */
 public class ImporterTest extends ImporterComponentAbstractTest {
+    protected static String HTTP_PORT = "8042";
+
     private static final String SERVLET_NAME = "/JSONRPC";
     private static final String IMPORTER_NAME = "json-importer";
-
 
     @Before
     public void setUpFinal() {
@@ -47,7 +49,7 @@ public class ImporterTest extends ImporterComponentAbstractTest {
     @Override
     public Option[] getCustomOptions() {
         return CoreOptions.options(
-                baseConfiguration(),
+                systemProperty("org.osgi.service.http.port").value(HTTP_PORT),
                 getBundles(),
                 buildTestBundle()
         );
