@@ -5,11 +5,8 @@ import org.junit.Test;
 import org.osgi.framework.ServiceReference;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclarationBuilder;
-import org.ow2.chameleon.fuchsia.core.declaration.Status;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -20,14 +17,13 @@ public class ImportDeclarationTest {
 
     @Test
     public void testBuildEmpty() {
-        Map<String, Object> md = new HashMap<String, Object>();
         ImportDeclaration id = ImportDeclarationBuilder.empty()
                 .key("md").value("value")
                 .build();
 
         assertThat(id).isNotNull();
-        assertThat(id.getMetadata().get("md")).isEqualTo("value");
-        assertThat(id.getMetadata().size()).isEqualTo(1);
+        assertThat(id.getMetadata()).containsEntry("md", "value");
+        assertThat(id.getMetadata()).hasSize(1);
     }
 
     @Test
@@ -37,8 +33,8 @@ public class ImportDeclarationTest {
         ImportDeclaration id = ImportDeclarationBuilder.fromMetadata(md).build();
 
         assertThat(id).isNotNull();
-        assertThat(id.getMetadata().get("md")).isEqualTo("value");
-        assertThat(id.getMetadata().size()).isEqualTo(1);
+        assertThat(id.getMetadata()).containsEntry("md", "value");
+        assertThat(id.getMetadata()).hasSize(1);
     }
 
     @Test
@@ -50,8 +46,8 @@ public class ImportDeclarationTest {
         ImportDeclaration id2 = ImportDeclarationBuilder.fromImportDeclaration(id).build();
 
         assertThat(id2).isNotNull();
-        assertThat(id2.getMetadata().get("md")).isEqualTo("value");
-        assertThat(id2.getMetadata().size()).isEqualTo(1);
+        assertThat(id2.getMetadata()).containsEntry("md", "value");
+        assertThat(id2.getMetadata()).hasSize(1);
     }
 
     @Test
@@ -65,12 +61,30 @@ public class ImportDeclarationTest {
         ImportDeclaration id2 = ImportDeclarationBuilder.fromImportDeclaration(id).withExtraMetadata(emd).build();
 
         assertThat(id2).isNotNull();
-        assertThat(id2.getMetadata().get("md")).isEqualTo("value");
-        assertThat(id2.getMetadata().size()).isEqualTo(1);
+        assertThat(id2.getMetadata()).containsEntry("md", "value");
+        assertThat(id2.getMetadata()).hasSize(1);
 
-        assertThat(id2.getExtraMetadata().get("emd")).isEqualTo("value2");
-        assertThat(id2.getExtraMetadata().size()).isEqualTo(1);
+        assertThat(id2.getExtraMetadata()).containsEntry("emd", "value2");
+        assertThat(id2.getExtraMetadata()).hasSize(1);
     }
+
+
+    @Test
+    public void testBuildFromADeclarationAddingExtraMetadata() {
+        Map<String, Object> md = new HashMap<String, Object>();
+        md.put("md", "value");
+        ImportDeclaration id = ImportDeclarationBuilder.fromMetadata(md).build();
+
+        ImportDeclaration id2 = ImportDeclarationBuilder.fromImportDeclaration(id).extraKey("emd").value("value2").build();
+
+        assertThat(id2).isNotNull();
+        assertThat(id2.getMetadata()).containsEntry("md", "value");
+        assertThat(id2.getMetadata()).hasSize(1);
+
+        assertThat(id2.getExtraMetadata()).containsEntry("emd", "value2");
+        assertThat(id2.getExtraMetadata()).hasSize(1);
+    }
+
 
     @Test
     public void testImmutability() {
@@ -108,35 +122,22 @@ public class ImportDeclarationTest {
         ImportDeclaration id = ImportDeclarationBuilder.fromMetadata(md).build();
 
         Map<Integer, ServiceReference> mocks = new HashMap<Integer, ServiceReference>();
-        List<Status> statusList = new ArrayList<Status>();
 
         mocks.put(0, mock(ServiceReference.class));
         mocks.put(1, mock(ServiceReference.class));
-
-        // 1
-        statusList.add(id.getStatus());
+        assertThat(id.getStatus().getServiceReferences()).hasSize(0);
 
         id.bind(mocks.get(0));
-        // 2
-        statusList.add(id.getStatus());
+        assertThat(id.getStatus().getServiceReferences()).hasSize(1);
 
         id.bind(mocks.get(1));
-        // 3
-        statusList.add(id.getStatus());
+        assertThat(id.getStatus().getServiceReferences()).hasSize(2);
 
         id.unbind(mocks.get(0));
-        // 4
-        statusList.add(id.getStatus());
+        assertThat(id.getStatus().getServiceReferences()).hasSize(1);
 
         id.unbind(mocks.get(1));
-        // 5
-        statusList.add(id.getStatus());
-
-        assertThat(statusList.remove(0).getServiceReferences().size()).isEqualTo(0);
-        assertThat(statusList.remove(0).getServiceReferences().size()).isEqualTo(1);
-        assertThat(statusList.remove(0).getServiceReferences().size()).isEqualTo(2);
-        assertThat(statusList.remove(0).getServiceReferences().size()).isEqualTo(1);
-        assertThat(statusList.remove(0).getServiceReferences().size()).isEqualTo(0);
+        assertThat(id.getStatus().getServiceReferences()).hasSize(0);
     }
 
 
