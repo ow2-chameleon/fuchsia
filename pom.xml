@@ -132,6 +132,13 @@
             </modules>
         </profile>
 
+        <!-- Profile used in order to build examples-->
+        <profile>
+            <id>examples</id>
+            <modules>
+                <module>examples</module>
+            </modules>
+        </profile>
     </profiles>
 
     <!-- === -->

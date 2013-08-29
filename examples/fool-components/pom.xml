@@ -16,8 +16,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>fuchsia-parent</artifactId>
-        <groupId>org.ow2.chameleon.fuchsia</groupId>
+        <artifactId>fuchsia-examples</artifactId>
+        <groupId>org.ow2.chameleon.fuchsia.examples</groupId>
         <version>0.0.1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
