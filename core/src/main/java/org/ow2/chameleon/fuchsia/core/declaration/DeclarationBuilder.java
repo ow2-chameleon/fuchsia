@@ -40,7 +40,7 @@ class DeclarationBuilder<BUILDER extends DeclarationBuilder<BUILDER,DECLARATION>
     }
 
     public ExtraValueSetter extraKey(String key) {
-        if (declaration != null) {
+        if (declaration == null) {
             throw new IllegalStateException();
         }
         return new ExtraValueSetter(key);
