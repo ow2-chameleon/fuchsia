@@ -26,7 +26,7 @@
     <artifactId>fuchsia-examples</artifactId>
     <version>0.0.1</version>
 
-    <name>Fuchsia Parent</name>
+    <name>Fuchsia Examples</name>
     <packaging>pom</packaging>
 
     <modules>
