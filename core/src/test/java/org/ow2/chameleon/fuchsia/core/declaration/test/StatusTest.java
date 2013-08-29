@@ -1,7 +1,8 @@
-package org.ow2.chameleon.fuchsia.core.declaration;
+package org.ow2.chameleon.fuchsia.core.declaration.test;
 
 import org.junit.Test;
 import org.osgi.framework.ServiceReference;
+import org.ow2.chameleon.fuchsia.core.declaration.Status;
 
 import java.util.ArrayList;
 import java.util.Collections;

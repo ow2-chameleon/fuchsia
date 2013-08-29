@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.core.component;
+package org.ow2.chameleon.fuchsia.core.component.test;
 
 import org.junit.After;
 import org.junit.Before;
@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.osgi.service.log.LogService;
 import org.ow2.chameleon.fuchsia.core.ImportationLinker;
+import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 
 import java.util.Collection;
