@@ -10,6 +10,7 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.ow2.chameleon.fuchsia.core.ImportationLinker;
+import org.ow2.chameleon.fuchsia.core.declaration.Constants;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclarationBuilder;
 import org.ow2.chameleon.fuchsia.testing.CommonTest;
@@ -72,7 +73,7 @@ public class DefaultImportationLinkerTest extends CommonTest {
         assertThat(importationLinker.getImportDeclarations().size()).isZero();
 
         Map<String, Object> metadata = new HashMap<String, Object>();
-        metadata.put(ImportDeclaration.IMPORTATION_PROTOCOL_NAME, "test");
+        metadata.put(Constants.PROTOCOL_NAME, "test");
         metadata.put("n", 0);
         metadata.put(INSTANCE_NAME_PROPERTY, "importdec-" + 0);
         ImportDeclaration iD = ImportDeclarationBuilder.fromMetadata(metadata).build();
