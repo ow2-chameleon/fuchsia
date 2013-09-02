@@ -75,15 +75,8 @@
             <artifactId>cxf-dosgi-ri-singlebundle-distribution</artifactId>
             <version>1.3</version>
         </dependency>
-
-        <dependency>
-            <groupId>${project.parent.groupId}</groupId>
-            <artifactId>hello.ws.interface</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-
     </dependencies>
+
     <build>
         <plugins>
             <plugin>
