@@ -223,9 +223,89 @@
                 </dependency>
 
                 <dependency>
+                    <groupId>org.ow2.chameleon.fuchsia.examples</groupId>
+                    <artifactId>weather.ws.interface</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.ow2.chameleon.fuchsia.examples</groupId>
+                    <artifactId>weather.ws.client</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.ow2.chameleon.fuchsia.examples</groupId>
+                    <artifactId>weather.ws.iDec</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+
+                <dependency>
                     <groupId>org.apache.cxf.dosgi</groupId>
                     <artifactId>cxf-dosgi-ri-singlebundle-distribution</artifactId>
                     <version>${apacheCXF.version}</version>
+                </dependency>
+
+                <!-- DEPENDENCIES FOR EVEREST AND WEBCONSOLE -->
+                <dependency>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>org.apache.felix.http.jetty</artifactId>
+                    <version>2.2.0</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>org.apache.felix.http.whiteboard</artifactId>
+                    <version>2.2.0</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>org.apache.felix.ipojo.webconsole</artifactId>
+                    <version>1.7.0</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>org.apache.felix.webconsole</artifactId>
+                    <version>4.2.0</version>
+                    <classifier>all</classifier>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.ow2.chameleon.everest</groupId>
+                    <artifactId>everest-core</artifactId>
+                    <version>1.0-SNAPSHOT</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.ow2.chameleon.everest</groupId>
+                    <artifactId>everest-osgi</artifactId>
+                    <version>1.0-SNAPSHOT</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.ow2.chameleon.everest</groupId>
+                    <artifactId>everest-ipojo</artifactId>
+                    <version>1.0-SNAPSHOT</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.ow2.chameleon.everest</groupId>
+                    <artifactId>everest-servlet</artifactId>
+                    <version>1.0-SNAPSHOT</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.osgi</groupId>
+                    <artifactId>org.osgi.compendium</artifactId>
+                    <version>4.3.1</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>org.apache.felix.ipojo</artifactId>
+                    <version>1.10.1</version>
                 </dependency>
             </dependencies>
         </profile>
@@ -246,9 +326,112 @@
                 </dependency>
 
                 <dependency>
+                    <groupId>org.ow2.chameleon.fuchsia.examples</groupId>
+                    <artifactId>weather.ws.interface</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.ow2.chameleon.fuchsia.examples</groupId>
+                    <artifactId>weather.ws.impl</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+
+                <dependency>
                     <groupId>org.apache.cxf.dosgi</groupId>
                     <artifactId>cxf-dosgi-ri-singlebundle-distribution</artifactId>
                     <version>${apacheCXF.version}</version>
+                </dependency>
+
+                <!-- DEPENCIES FOR READING RSS WEATHER FEEDS-->
+                <dependency>
+                    <groupId>org.ow2.chameleon.syndication</groupId>
+                    <artifactId>syndication-service</artifactId>
+                    <version>0.2.0</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.ow2.chameleon.syndication</groupId>
+                    <artifactId>rome</artifactId>
+                    <version>0.2.0</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.ow2.chameleon.syndication</groupId>
+                    <artifactId>syndication-service</artifactId>
+                    <version>0.2.0</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.servicemix.bundles</groupId>
+                    <artifactId>org.apache.servicemix.bundles.jdom</artifactId>
+                    <version>1.1_4</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>org.apache.felix.eventadmin</artifactId>
+                    <version>1.3.2</version>
+                </dependency>
+
+                <!-- DEPENDENCIES FOR EVEREST AND WEBCONSOLE -->
+                <dependency>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>org.apache.felix.http.jetty</artifactId>
+                    <version>2.2.0</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>org.apache.felix.http.whiteboard</artifactId>
+                    <version>2.2.0</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>org.apache.felix.ipojo.webconsole</artifactId>
+                    <version>1.7.0</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>org.apache.felix.webconsole</artifactId>
+                    <version>4.2.0</version>
+                    <classifier>all</classifier>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.ow2.chameleon.everest</groupId>
+                    <artifactId>everest-core</artifactId>
+                    <version>1.0-SNAPSHOT</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.ow2.chameleon.everest</groupId>
+                    <artifactId>everest-osgi</artifactId>
+                    <version>1.0-SNAPSHOT</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.ow2.chameleon.everest</groupId>
+                    <artifactId>everest-ipojo</artifactId>
+                    <version>1.0-SNAPSHOT</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.ow2.chameleon.everest</groupId>
+                    <artifactId>everest-servlet</artifactId>
+                    <version>1.0-SNAPSHOT</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.osgi</groupId>
+                    <artifactId>org.osgi.compendium</artifactId>
+                    <version>4.3.1</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>org.apache.felix.ipojo</artifactId>
+                    <version>1.10.1</version>
                 </dependency>
 
             </dependencies>
