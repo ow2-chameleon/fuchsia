@@ -12,6 +12,7 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.ow2.chameleon.fuchsia.core.ImportationLinker;
+import org.ow2.chameleon.fuchsia.core.ImportationLinkerIntrospection;
 import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
 import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 import org.ow2.chameleon.fuchsia.core.declaration.Constants;
@@ -42,6 +43,8 @@ public class DefaultImportationLinkerTest extends CommonTest {
 
     //Tested Object
     private ImportationLinker importationLinker;
+    private ImportationLinkerIntrospection importationLinkerIntrospection;
+
     //Tested Object ComponentInstance
     private ComponentInstance importationLinkerCI;
 
@@ -68,6 +71,8 @@ public class DefaultImportationLinkerTest extends CommonTest {
 
         importationLinker = (ImportationLinker) osgiHelper.getServiceObject(ImportationLinker.class);
         assertThat(importationLinker).isNotNull();
+        assertThat(importationLinker).isInstanceOf(ImportationLinkerIntrospection.class);
+        importationLinkerIntrospection = (ImportationLinkerIntrospection) importationLinker;
     }
 
     @After
@@ -96,7 +101,7 @@ public class DefaultImportationLinkerTest extends CommonTest {
     @Test
     public void testBindImportDeclaration() throws InvalidSyntaxException {
 
-        assertThat(importationLinker.getImportDeclarations()).isEmpty();
+        assertThat(importationLinkerIntrospection.getImportDeclarations()).isEmpty();
 
         Map<String, Object> metadata = new HashMap<String, Object>();
         metadata.put(Constants.PROTOCOL_NAME, "test");
@@ -108,10 +113,10 @@ public class DefaultImportationLinkerTest extends CommonTest {
         assertThat(reg).isNotNull();
         ImportDeclaration serviceID = osgiHelper.waitForService(ImportDeclaration.class, "(" + INSTANCE_NAME_PROPERTY + "=importdec-0)", 0);
         assertThat(serviceID).isNotNull();
-        assertThat(importationLinker.getImportDeclarations()).containsOnly(iD);
+        assertThat(importationLinkerIntrospection.getImportDeclarations()).containsOnly(iD);
 
         reg.unregister();
-        assertThat(importationLinker.getImportDeclarations()).isEmpty();
+        assertThat(importationLinkerIntrospection.getImportDeclarations()).isEmpty();
     }
 
     /**
@@ -122,7 +127,7 @@ public class DefaultImportationLinkerTest extends CommonTest {
     @Test
     public void testBindImportDeclarationFilterDoesNotMatch() throws InvalidSyntaxException {
 
-        assertThat(importationLinker.getImportDeclarations()).isEmpty();
+        assertThat(importationLinkerIntrospection.getImportDeclarations()).isEmpty();
 
         Map<String, Object> metadata = new HashMap<String, Object>();
         metadata.put(Constants.PROTOCOL_NAME, "not test");
@@ -134,7 +139,7 @@ public class DefaultImportationLinkerTest extends CommonTest {
         assertThat(reg).isNotNull();
         ImportDeclaration serviceID = osgiHelper.waitForService(ImportDeclaration.class, "(" + INSTANCE_NAME_PROPERTY + "=importdec-0)", 0);
         assertThat(serviceID).isNotNull();
-        assertThat(importationLinker.getImportDeclarations()).isEmpty();
+        assertThat(importationLinkerIntrospection.getImportDeclarations()).isEmpty();
 
         reg.unregister();
     }
@@ -146,7 +151,7 @@ public class DefaultImportationLinkerTest extends CommonTest {
     @Test
     public void testBindImporterServices() {
 
-        assertThat(importationLinker.getLinkedImporters()).isEmpty();
+        assertThat(importationLinkerIntrospection.getLinkedImporters()).isEmpty();
 
         Dictionary<String, Object> props = new Hashtable<String, Object>();
         props.put(INSTANCE_NAME_PROPERTY, "importer1-instance");
@@ -157,7 +162,7 @@ public class DefaultImportationLinkerTest extends CommonTest {
         ImporterService is = osgiHelper.waitForService(ImporterService.class, "(" + INSTANCE_NAME_PROPERTY + "=importer1-instance)", 0);
         assertThat(is).isNotNull();
 
-        assertThat(importationLinker.getLinkedImporters()).containsOnly(importer1);
+        assertThat(importationLinkerIntrospection.getLinkedImporters()).containsOnly(importer1);
 
         Dictionary<String, Object> props2 = new Hashtable<String, Object>();
         props2.put(INSTANCE_NAME_PROPERTY, "importer2-instance");
@@ -167,13 +172,13 @@ public class DefaultImportationLinkerTest extends CommonTest {
         ImporterService is2 = osgiHelper.waitForService(ImporterService.class, "(" + INSTANCE_NAME_PROPERTY + "=importer2-instance)", 0);
         assertThat(is2).isNotNull();
 
-        assertThat(importationLinker.getLinkedImporters()).containsOnly(importer1, importer2);
+        assertThat(importationLinkerIntrospection.getLinkedImporters()).containsOnly(importer1, importer2);
 
         sr1.unregister();
-        assertThat(importationLinker.getLinkedImporters()).containsOnly(importer2);
+        assertThat(importationLinkerIntrospection.getLinkedImporters()).containsOnly(importer2);
 
         sr2.unregister();
-        assertThat(importationLinker.getLinkedImporters()).isEmpty();
+        assertThat(importationLinkerIntrospection.getLinkedImporters()).isEmpty();
     }
 
     /**
@@ -182,7 +187,7 @@ public class DefaultImportationLinkerTest extends CommonTest {
     @Test
     public void testBindImporterServiceFilterDoesNotMatch() {
 
-        assertThat(importationLinker.getLinkedImporters()).isEmpty();
+        assertThat(importationLinkerIntrospection.getLinkedImporters()).isEmpty();
 
         Dictionary<String, Object> props = new Hashtable<String, Object>();
         props.put("no.instance.name", "importer1-instance");
@@ -193,7 +198,7 @@ public class DefaultImportationLinkerTest extends CommonTest {
         ImporterService is = osgiHelper.waitForService(ImporterService.class, "(no.instance.name=importer1-instance)", 0);
         assertThat(is).isNotNull();
 
-        assertThat(importationLinker.getLinkedImporters()).isEmpty();
+        assertThat(importationLinkerIntrospection.getLinkedImporters()).isEmpty();
 
         sr1.unregister();
     }
@@ -226,10 +231,10 @@ public class DefaultImportationLinkerTest extends CommonTest {
 
         iDReg.unregister();
         verify(importer1).removeImportDeclaration(iD);
-        assertThat(importationLinker.getImportDeclarations()).isEmpty();
+        assertThat(importationLinkerIntrospection.getImportDeclarations()).isEmpty();
 
         sr.unregister();
-        assertThat(importationLinker.getLinkedImporters()).isEmpty();
+        assertThat(importationLinkerIntrospection.getLinkedImporters()).isEmpty();
     }
 
     /**
@@ -260,10 +265,10 @@ public class DefaultImportationLinkerTest extends CommonTest {
 
         iDReg.unregister();
         verify(importer1, never()).removeImportDeclaration(iD);
-        assertThat(importationLinker.getImportDeclarations()).isEmpty();
+        assertThat(importationLinkerIntrospection.getImportDeclarations()).isEmpty();
 
         sr.unregister();
-        assertThat(importationLinker.getLinkedImporters()).isEmpty();
+        assertThat(importationLinkerIntrospection.getLinkedImporters()).isEmpty();
     }
 
 
@@ -298,10 +303,10 @@ public class DefaultImportationLinkerTest extends CommonTest {
 
         iDReg.unregister();
         assertThat(iD.getStatus().getServiceReferences()).doesNotContain(sr.getReference());
-        assertThat(importationLinker.getImportDeclarations()).isEmpty();
+        assertThat(importationLinkerIntrospection.getImportDeclarations()).isEmpty();
 
         sr.unregister();
-        assertThat(importationLinker.getLinkedImporters()).isEmpty();
+        assertThat(importationLinkerIntrospection.getLinkedImporters()).isEmpty();
     }
 
     /**
@@ -336,8 +341,8 @@ public class DefaultImportationLinkerTest extends CommonTest {
         assertThat(iD.getStatus().getServiceReferences()).isEmpty();
 
         iDReg.unregister();
-        assertThat(importationLinker.getImportDeclarations()).isEmpty();
-        assertThat(importationLinker.getLinkedImporters()).isEmpty();
+        assertThat(importationLinkerIntrospection.getImportDeclarations()).isEmpty();
+        assertThat(importationLinkerIntrospection.getLinkedImporters()).isEmpty();
     }
 
     /**
@@ -360,7 +365,7 @@ public class DefaultImportationLinkerTest extends CommonTest {
         ImporterService is = osgiHelper.waitForService(ImporterService.class, "(" + INSTANCE_NAME_PROPERTY + "=importer1-instance)", 0);
         assertThat(is).isNotNull();
 
-        assertThat(importationLinker.getLinkedImporters()).containsOnly(importer1);
+        assertThat(importationLinkerIntrospection.getLinkedImporters()).containsOnly(importer1);
 
         Dictionary<String, Object> props2 = new Hashtable<String, Object>();
         props2.put(INSTANCE_NAME_PROPERTY, "importer2-instance");
@@ -393,10 +398,10 @@ public class DefaultImportationLinkerTest extends CommonTest {
 
         iDReg.unregister();
         assertThat(iD.getStatus().getServiceReferences()).isEmpty();
-        assertThat(importationLinker.getImportDeclarations()).isEmpty();
+        assertThat(importationLinkerIntrospection.getImportDeclarations()).isEmpty();
 
         sr1.unregister();
         sr2.unregister();
-        assertThat(importationLinker.getLinkedImporters()).isEmpty();
+        assertThat(importationLinkerIntrospection.getLinkedImporters()).isEmpty();
     }
 }

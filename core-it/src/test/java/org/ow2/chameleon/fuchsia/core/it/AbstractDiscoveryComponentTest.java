@@ -14,6 +14,7 @@ import org.ow2.chameleon.fuchsia.testing.CommonTest;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -75,14 +76,20 @@ public class AbstractDiscoveryComponentTest extends CommonTest {
         List<ImportDeclaration> iDecs = osgiHelper.getServiceObjects(ImportDeclaration.class);
         assertThat(iDecs).contains(iDec);
 
+        assertThat(simpleDiscovery.getImportDeclarations()).containsOnly(iDec);
+
         simpleDiscovery.unbind(iDec);
         iDecs = osgiHelper.getServiceObjects(ImportDeclaration.class);
         assertThat(iDecs).doesNotContain(iDec);
+
+        assertThat(simpleDiscovery.getImportDeclarations()).isEmpty();
     }
 
     @Test
     public void testMultiplesImportDeclarationPublication() {
         List<ImportDeclaration> iDecs;
+        Set<ImportDeclaration> iDecs2;
+
         ImportDeclaration iDec1, iDec2, iDec3, iDec4;
         iDec1 = ImportDeclarationBuilder.empty().key("id").value("1").build();
         iDec2 = ImportDeclarationBuilder.empty().key("id").value("2").build();
@@ -92,34 +99,40 @@ public class AbstractDiscoveryComponentTest extends CommonTest {
         simpleDiscovery.bind(iDec1);
         simpleDiscovery.bind(iDec2);
         iDecs = osgiHelper.getServiceObjects(ImportDeclaration.class);
-        assertThat(iDecs).contains(iDec1, iDec2);
-        assertThat(iDecs).doesNotContain(iDec3, iDec4);
+        iDecs2 = simpleDiscovery.getImportDeclarations();
+        assertThat(iDecs).containsOnly(iDec1, iDec2);
+        assertThat(iDecs2).containsOnly(iDec1, iDec2);
 
         simpleDiscovery.bind(iDec3);
         iDecs = osgiHelper.getServiceObjects(ImportDeclaration.class);
-        assertThat(iDecs).contains(iDec1, iDec2, iDec3);
-        assertThat(iDecs).doesNotContain(iDec4);
+        iDecs2 = simpleDiscovery.getImportDeclarations();
+        assertThat(iDecs).containsOnly(iDec1, iDec2, iDec3);
+        assertThat(iDecs2).containsOnly(iDec1, iDec2, iDec3);
 
         simpleDiscovery.unbind(iDec1);
         iDecs = osgiHelper.getServiceObjects(ImportDeclaration.class);
-        assertThat(iDecs).contains(iDec2, iDec3);
-        assertThat(iDecs).doesNotContain(iDec1, iDec4);
+        iDecs2 = simpleDiscovery.getImportDeclarations();
+        assertThat(iDecs).containsOnly(iDec2, iDec3);
+        assertThat(iDecs2).containsOnly(iDec2, iDec3);
 
         simpleDiscovery.bind(iDec4);
         iDecs = osgiHelper.getServiceObjects(ImportDeclaration.class);
-        assertThat(iDecs).contains(iDec2, iDec3, iDec4);
-        assertThat(iDecs).doesNotContain(iDec1);
+        iDecs2 = simpleDiscovery.getImportDeclarations();
+        assertThat(iDecs).containsOnly(iDec2, iDec3, iDec4);
+        assertThat(iDecs2).containsOnly(iDec2, iDec3, iDec4);
 
         simpleDiscovery.unbind(iDec2);
         simpleDiscovery.unbind(iDec4);
         iDecs = osgiHelper.getServiceObjects(ImportDeclaration.class);
-        assertThat(iDecs).contains(iDec3);
-        assertThat(iDecs).doesNotContain(iDec1, iDec2, iDec4);
-
+        iDecs2 = simpleDiscovery.getImportDeclarations();
+        assertThat(iDecs).containsOnly(iDec3);
+        assertThat(iDecs2).containsOnly(iDec3);
 
         simpleDiscovery.unbind(iDec3);
         iDecs = osgiHelper.getServiceObjects(ImportDeclaration.class);
-        assertThat(iDecs).doesNotContain(iDec1, iDec2, iDec3, iDec4);
+        iDecs2 = simpleDiscovery.getImportDeclarations();
+        assertThat(iDecs).isEmpty();
+        assertThat(iDecs2).isEmpty();
     }
 
     @Test
@@ -130,6 +143,7 @@ public class AbstractDiscoveryComponentTest extends CommonTest {
 
         List<ImportDeclaration> iDecs = osgiHelper.getServiceObjects(ImportDeclaration.class);
         assertThat(iDecs).contains(iDec);
+        assertThat(simpleDiscovery.getImportDeclarations()).contains(iDec);
 
         testedCI.dispose();
 

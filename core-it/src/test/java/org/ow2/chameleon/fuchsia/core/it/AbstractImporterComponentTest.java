@@ -74,9 +74,11 @@ public class AbstractImporterComponentTest extends CommonTest {
     public void testImportDeclarationAddAndRemove() throws BadImportRegistration {
         ImportDeclaration iDec = ImportDeclarationBuilder.empty().key("id").value("1").build();
         spySimpleImporter.addImportDeclaration(iDec);
+        assertThat(simpleImporter.getImportDeclarations()).containsOnly(iDec);
         verify(spySimpleImporter).createProxy(iDec);
 
         spySimpleImporter.removeImportDeclaration(iDec);
+        assertThat(simpleImporter.getImportDeclarations()).isEmpty();
         verify(spySimpleImporter).destroyProxy(iDec);
     }
 
@@ -84,10 +86,12 @@ public class AbstractImporterComponentTest extends CommonTest {
     public void testImportDeclarationAddAndStopServiceImporter() throws BadImportRegistration {
         ImportDeclaration iDec = ImportDeclarationBuilder.empty().key("id").value("1").build();
         spySimpleImporter.addImportDeclaration(iDec);
+        assertThat(simpleImporter.getImportDeclarations()).containsOnly(iDec);
         verify(spySimpleImporter).createProxy(iDec);
 
         spySimpleImporter.stop();
         verify(spySimpleImporter).destroyProxy(iDec);
+        assertThat(simpleImporter.getImportDeclarations()).isEmpty();
     }
 
 
