@@ -23,7 +23,6 @@ import java.util.Set;
 public abstract class AbstractDiscoveryComponent implements DiscoveryService, DiscoveryIntrospection {
 
     private final Map<ImportDeclaration, ServiceRegistration> importDeclarationsRegistered;
-
     private final BundleContext bundleContext;
 
 
@@ -54,7 +53,6 @@ public abstract class AbstractDiscoveryComponent implements DiscoveryService, Di
         }
     }
 
-
     /**
      * Utility method to register an ImportDeclaration has a Service in OSGi.
      * If you use it make sure to use unregisterImportDeclaration(...) to unregister the ImportDeclaration
@@ -62,15 +60,19 @@ public abstract class AbstractDiscoveryComponent implements DiscoveryService, Di
      * @param importDeclaration the ImportDeclaration to register
      */
     protected void registerImportDeclaration(ImportDeclaration importDeclaration) {
-        Dictionary<String, Object> props = new Hashtable<String, Object>();
-        String clazzes[] = new String[]{ImportDeclaration.class.getName()};
-        ServiceRegistration registration;
-        registration = bundleContext.registerService(clazzes, importDeclaration, props);
         synchronized (importDeclarationsRegistered) {
+            if (importDeclarationsRegistered.containsKey(importDeclaration)) {
+                throw new IllegalStateException("The given ImportDeclaration has already been registered.");
+            }
+
+            Dictionary<String, Object> props = new Hashtable<String, Object>();
+            String clazzes[] = new String[]{ImportDeclaration.class.getName()};
+            ServiceRegistration registration;
+            registration = bundleContext.registerService(clazzes, importDeclaration, props);
+
             importDeclarationsRegistered.put(importDeclaration, registration);
         }
     }
-
 
     /**
      * Utility method to unregister an ImportDeclaration of OSGi.
@@ -82,10 +84,12 @@ public abstract class AbstractDiscoveryComponent implements DiscoveryService, Di
         ServiceRegistration registration;
         synchronized (importDeclarationsRegistered) {
             registration = importDeclarationsRegistered.remove(importDeclaration);
+            if (registration == null) {
+                throw new IllegalStateException("The given ImportDeclaration has never been registered"
+                        + "or have already been unregistered.");
+            }
         }
-        if (registration != null) {
-            registration.unregister();
-        }
+        registration.unregister();
     }
 
     @Override
