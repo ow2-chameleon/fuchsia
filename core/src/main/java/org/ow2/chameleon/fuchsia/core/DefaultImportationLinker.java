@@ -47,7 +47,7 @@ import static org.ow2.chameleon.fuchsia.core.component.ImporterService.TARGET_FI
  */
 @Component(name = FuchsiaConstants.DEFAULT_IMPORTATION_LINKER_FACTORY_NAME)
 @Provides(specifications = ImportationLinker.class)
-public class DefaultImportationLinker implements ImportationLinker {
+public class DefaultImportationLinker implements ImportationLinker, ImportationLinkerIntrospection {
 
     @Controller
     private boolean state;
@@ -137,8 +137,8 @@ public class DefaultImportationLinker implements ImportationLinker {
     void bindImporterService(ImporterService importerService, ServiceReference serviceReference) {
         Map<String, Object> properties = new HashMap<String, Object>();
 
-        for(String key : serviceReference.getPropertyKeys()){
-            properties.put(key,serviceReference.getProperty(key));
+        for (String key : serviceReference.getPropertyKeys()) {
+            properties.put(key, serviceReference.getProperty(key));
         }
         if (!importerServiceFilter.matches(properties)) {
             return;
@@ -224,9 +224,8 @@ public class DefaultImportationLinker implements ImportationLinker {
      * Try to bind the importDeclaration with the importerService referenced by the ServiceReference,
      * return true if they have been bind together, false otherwise.
      *
-     * @param importDeclaration The ImportDeclaration
+     * @param importDeclaration        The ImportDeclaration
      * @param importerServiceReference The ServiceReference of the ImporterService
-     *
      * @return true if they have been bind together, false otherwise.
      */
     private boolean tryToBind(ImportDeclaration importDeclaration, ServiceReference importerServiceReference) {
@@ -261,9 +260,8 @@ public class DefaultImportationLinker implements ImportationLinker {
      * Try to unbind the importDeclaration from the importerService referenced by the ServiceReference,
      * return true if they have been cleanly unbind, false otherwise.
      *
-     * @param importDeclaration The ImportDeclaration
+     * @param importDeclaration        The ImportDeclaration
      * @param importerServiceReference The ServiceReference of the ImporterService
-     *
      * @return true if they have been cleanly unbind, false otherwise.
      */
     private boolean tryToUnbind(ImportDeclaration importDeclaration, ServiceReference importerServiceReference) {

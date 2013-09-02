@@ -14,7 +14,7 @@ import java.util.Set;
  * @author barjo
  * @author Morgan Martinet
  */
-public abstract class AbstractImporterComponent implements ImporterService {
+public abstract class AbstractImporterComponent implements ImporterService, ImporterIntrospection {
     private final Set<ImportDeclaration> importDeclarations;
 
     public AbstractImporterComponent() {
@@ -82,7 +82,6 @@ public abstract class AbstractImporterComponent implements ImporterService {
         }
     }
 
-
     /**
      * @param importDeclaration The {@link ImportDeclaration} of the service to stop to be imported.
      * @throws BadImportRegistration
@@ -91,6 +90,12 @@ public abstract class AbstractImporterComponent implements ImporterService {
         synchronized (importDeclarations) {
             destroyProxy(importDeclaration);
             importDeclarations.remove(importDeclaration);
+        }
+    }
+
+    public Set<ImportDeclaration> getImportDeclarations() {
+        synchronized (importDeclarations) {
+            return new HashSet<ImportDeclaration>(importDeclarations);
         }
     }
 

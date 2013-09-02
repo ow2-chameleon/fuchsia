@@ -11,9 +11,6 @@ import java.util.List;
  * @author barjo
  * @author Morgan Martinet
  */
-// TODO : Think to methods to :
-// TODO :  - return all the ImportDeclaration/ServiceRegistration or what else ;
-// TODO :  - get the linker(s) that the importerService is linked to.
 public interface ImporterService {
 
     String TARGET_FILTER_PROPERTY = "target";

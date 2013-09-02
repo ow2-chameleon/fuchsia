@@ -8,8 +8,10 @@ import org.slf4j.Logger;
 
 import java.util.Dictionary;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Abstract implementation of an discovery component which provides an {@link DiscoveryService}.
@@ -18,7 +20,7 @@ import java.util.Map;
  *
  * @author Morgan Martinet
  */
-public abstract class AbstractDiscoveryComponent implements DiscoveryService {
+public abstract class AbstractDiscoveryComponent implements DiscoveryService, DiscoveryIntrospection {
 
     private final Map<ImportDeclaration, ServiceRegistration> importDeclarationsRegistered;
 
@@ -89,6 +91,10 @@ public abstract class AbstractDiscoveryComponent implements DiscoveryService {
     @Override
     public String toString() {
         return getName();
+    }
+
+    public Set<ImportDeclaration> getImportDeclarations() {
+        return new HashSet<ImportDeclaration>(importDeclarationsRegistered.keySet());
     }
 
     protected BundleContext getBundleContext() {
