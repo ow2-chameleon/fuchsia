@@ -96,6 +96,7 @@ public class DefaultImportationLinker implements ImportationLinker {
     }
 
     @ServiceProperty(name = UNIQUE_IMPORTATION_PROPERTY, mandatory = false)
+    @Property(name = UNIQUE_IMPORTATION_PROPERTY, mandatory = false)
     private boolean uniqueImportationProperty = false;
 
     private final Object lock = new Object();
@@ -175,7 +176,7 @@ public class DefaultImportationLinker implements ImportationLinker {
         logger.debug(linker_name + " : Unbind the ImporterService " + importerService);
         synchronized (lock) {
             for (ImportDeclaration importDeclaration : importDeclarations) {
-                if (importDeclaration.getStatus().getServiceReferences().contains(importerService)) {
+                if (importDeclaration.getStatus().getServiceReferences().contains(serviceReference)) {
                     tryToUnbind(importDeclaration, serviceReference);
                 }
             }

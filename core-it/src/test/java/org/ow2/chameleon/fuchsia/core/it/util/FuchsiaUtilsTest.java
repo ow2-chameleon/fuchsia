@@ -1,25 +1,13 @@
 package org.ow2.chameleon.fuchsia.core.it.util;
 
 import org.junit.Test;
-import org.ops4j.pax.exam.Option;
 import org.ow2.chameleon.fuchsia.core.DefaultImportationLinker;
 import org.ow2.chameleon.fuchsia.core.FuchsiaUtils;
-import org.ow2.chameleon.testing.helpers.BaseTest;
+import org.ow2.chameleon.fuchsia.testing.CommonTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
-import static org.ops4j.pax.exam.CoreOptions.options;
-import static org.ops4j.pax.exam.CoreOptions.wrappedBundle;
 
-public class FuchsiaUtilsTest extends BaseTest {
-
-    @Override
-    protected Option[] getCustomOptions() {
-        return options(
-                mavenBundle("org.ow2.chameleon.fuchsia", "fuchsia-core").versionAsInProject(),
-                wrappedBundle(mavenBundle("org.assertj", "assertj-core").versionAsInProject())
-        );
-    }
+public class FuchsiaUtilsTest extends CommonTest {
 
     @Override
     public boolean deployTestBundle() {

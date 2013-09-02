@@ -29,6 +29,7 @@ import java.net.*;
  * }
  * </listing>
  *
+ * Modified by : jeremy.savonet@gmail.com
  */
 public class ZipCodeConverter {
 

@@ -9,7 +9,7 @@
         CONDITIONS OF ANY KIND, either express or implied. See the License for
         the specific language governing permissions and limitations under the
         License.
-    -->
+-->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
@@ -38,23 +38,11 @@
         <osgi-core.version>5.0.0</osgi-core.version>
         <osgi.version>4.3.1</osgi.version>
         <felix.framework.version>4.2.1</felix.framework.version>
+        <felix.configadmin.version>1.6.0</felix.configadmin.version>
         <slf4j.version>1.6.6</slf4j.version>
         <chameleon.version>1.0.0-SNAPSHOT</chameleon.version>
         <apacheCXF.version>1.3</apacheCXF.version>
         <site.path>snapshot</site.path>
-
-
-        <!--
-       The location where the chameleon distribution.xml is downloaded and expanded
-      -->
-        <chameleon.destination>${project.build.directory}/chameleon-distribution</chameleon.destination>
-
-        <!--
-         The base directory of the distribution.xml
-        -->
-        <distribution.baseDirectory>Distribution-Fuchsia-${project.version}</distribution.baseDirectory>
-
-
 
         <!-- Plugins versions -->
         <bundle.plugin.version>2.4.0</bundle.plugin.version>
@@ -62,21 +50,32 @@
         <javadoc.plugin.version>2.9.1</javadoc.plugin.version>
         <depends-maven-plugin.version>1.2</depends-maven-plugin.version>
 
-
         <!-- Test dependencies version -->
         <mockito.version>1.9.5</mockito.version>
         <junit.version>4.11</junit.version>
         <assertj-core.version>1.3.0</assertj-core.version>
         <osgi-helpers.version>0.6.1</osgi-helpers.version>
+        <pax-exam.version>3.0.1</pax-exam.version>
+        <pax-swissbox.version>1.3.2</pax-swissbox.version>
+        <ops4j.version>1.4.0</ops4j.version>
+        <tinybundles-ipojo.version>0.3.0</tinybundles-ipojo.version>
+        <TEST.slf4j-api.version>1.5.6</TEST.slf4j-api.version>
+        <TEST.logback-classic.version>0.9.6</TEST.logback-classic.version>
 
         <!-- Encoding -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
+        <!-- The location where the chameleon distribution.xml is downloaded and expanded -->
+        <chameleon.destination>${project.build.directory}/chameleon-distribution</chameleon.destination>
+
+        <!-- The base directory of the distribution.xml -->
+        <distribution.baseDirectory>Distribution-Fuchsia-${project.version}</distribution.baseDirectory>
+
         <!-- Website deploy -->
         <site.path>snapshot</site.path>
         <github.global.server>github</github.global.server>
-        <felix.configadmin.version>1.6.0</felix.configadmin.version>
     </properties>
+
 
     <!-- ======== -->
     <!-- PROFILES -->
@@ -89,12 +88,14 @@
             </activation>
             <modules>
                 <module>core</module>
-                <module>fool-components</module>
+                <module>testing</module>
+                <module>core-it</module>
                 <module>fake</module>
                 <module>upnp</module>
                 <module>jax-ws/cxf-config</module>
                 <module>jax-ws/cxf-importer</module>
                 <module>examples</module>
+                <module>json-rpc</module>
             </modules>
         </profile>
 
@@ -103,6 +104,8 @@
             <id>core</id>
             <modules>
                 <module>core</module>
+                <module>testing</module>
+                <module>core-it</module>
             </modules>
         </profile>
 
@@ -111,6 +114,7 @@
             <id>protocol</id>
             <modules>
                 <module>fake</module>
+                <module>json-rpc</module>
             </modules>
         </profile>
 
@@ -118,6 +122,7 @@
         <profile>
             <id>dist</id>
             <modules>
+                <module>distribution</module>
             </modules>
         </profile>
 
@@ -126,10 +131,18 @@
             <id>test</id>
             <modules>
                 <module>core</module>
+                <module>testing</module>
                 <module>core-it</module>
             </modules>
         </profile>
 
+        <!-- Profile used in order to build examples-->
+        <profile>
+            <id>examples</id>
+            <modules>
+                <module>examples</module>
+            </modules>
+        </profile>
     </profiles>
 
     <!-- === -->
@@ -146,10 +159,9 @@
     <!-- REPOSITORIES -->
     <!-- ============ -->
     <repositories>
-        <!-- OW2 Repo -->
         <repository>
-            <id>objectweb-public</id>
-            <name>ow2 Maven Repository</name>
+            <id>ow2-public</id>
+            <name>OW2 Maven Repository</name>
             <url>http://repository.ow2.org/nexus/content/repositories/public</url>
             <releases>
                 <enabled>true</enabled>
@@ -160,16 +172,20 @@
         </repository>
 
         <repository>
-            <id>chameleon</id>
+            <id>ow2-snapshots</id>
+            <name>OW2 Maven Snapshots Repository</name>
+            <url>http://repository.ow2.org/nexus/content/repositories/snapshots/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
-            <url>http://repository.ow2.org/nexus/content/repositories/snapshots/</url>
         </repository>
 
         <repository>
-            <id>objectweb-old-release</id>
-            <name>ow2 Maven Repository [OLD]</name>
+            <id>ow2-old-release</id>
+            <name>OW2 Maven Repository [OLD]</name>
             <url>http://maven.ow2.org/maven2</url>
             <releases>
                 <enabled>true</enabled>
@@ -193,42 +209,18 @@
 
         <!-- Java.net repo -->
         <repository>
-            <id>java.net-Public</id>
+            <id>java.net-public</id>
             <name>Maven Java Net Snapshots and Releases</name>
             <url>https://maven.java.net/content/groups/public</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
         </repository>
     </repositories>
 
-    <!-- ============ -->
-    <!-- DEPENDENCIES -->
-    <!-- ============ -->
-    <dependencies>
-        <!--TEST-->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-core</artifactId>
-            <version>${assertj-core.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <version>${mockito.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.ow2.chameleon.testing</groupId>
-            <artifactId>osgi-helpers</artifactId>
-            <version>${osgi-helpers.version}</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
 
     <!-- ===================== -->
     <!-- DEPENDENCY MANAGEMENT -->
@@ -292,6 +284,89 @@
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
                 <version>${slf4j.version}</version>
+            </dependency>
+
+            <!-- TESTS DEPENDENCIES -->
+            <dependency>
+                <groupId>org.osgi</groupId>
+                <artifactId>org.osgi.enterprise</artifactId>
+                <version>5.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.ow2.chameleon.testing</groupId>
+                <artifactId>osgi-helpers</artifactId>
+                <version>${osgi-helpers.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.ow2.chameleon.fuchsia.testing</groupId>
+                <artifactId>fuchsia-helpers</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-all</artifactId>
+                <version>${mockito.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+                <type>jar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.ops4j.pax.exam</groupId>
+                <artifactId>pax-exam</artifactId>
+                <version>${pax-exam.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.ops4j.pax.exam</groupId>
+                <artifactId>pax-exam-junit4</artifactId>
+                <version>${pax-exam.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.ops4j.pax.exam</groupId>
+                <artifactId>pax-exam-container-native</artifactId>
+                <version>${pax-exam.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.ops4j.pax.exam</groupId>
+                <artifactId>pax-exam-link-mvn</artifactId>
+                <version>${pax-exam.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.ops4j.pax.swissbox</groupId>
+                <artifactId>pax-swissbox-tinybundles</artifactId>
+                <version>${pax-swissbox.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.ops4j.pax.swissbox</groupId>
+                <artifactId>pax-swissbox-bnd</artifactId>
+                <version>${pax-swissbox.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.ops4j.base</groupId>
+                <artifactId>ops4j-base</artifactId>
+                <version>${ops4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.ow2.chameleon.testing</groupId>
+                <artifactId>tinybundles-ipojo</artifactId>
+                <version>${tinybundles-ipojo.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.assertj</groupId>
+                <artifactId>assertj-core</artifactId>
+                <version>${assertj-core.version}</version>
+            </dependency>
+            <!--<dependency>-->
+                <!--<groupId>org.slf4j</groupId>-->
+                <!--<artifactId>slf4j-api</artifactId>-->
+                <!--<version>${TEST.slf4j-api.version}</version>-->
+            <!--</dependency>-->
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${TEST.logback-classic.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -358,11 +433,11 @@
             </plugin>
 
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.0</version>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>1.5</source>
+                    <target>1.5</target>
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
