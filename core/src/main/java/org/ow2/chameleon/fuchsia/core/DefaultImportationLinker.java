@@ -13,8 +13,8 @@ import org.osgi.framework.Filter;
 import org.osgi.framework.ServiceReference;
 import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
+import org.ow2.chameleon.fuchsia.core.exceptions.ImporterException;
 import org.ow2.chameleon.fuchsia.core.exceptions.InvalidFilterException;
-import org.ow2.chameleon.fuchsia.core.exceptions.BadImportRegistration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -238,9 +238,9 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
         if (filter.matches(importDeclaration.getMetadata())) {
             try {
                 importerService.addImportDeclaration(importDeclaration);
-            } catch (BadImportRegistration bir) {
+            } catch (ImporterException e) {
                 logger.debug(importerService + " throw an exception when giving to it the ImportDeclaration "
-                        + importDeclaration, bir);
+                        + importDeclaration, e);
                 return false;
             } catch (Exception e) {
                 logger.debug(importerService + " throw an exception with giving to it the ImportDeclaration "
@@ -269,9 +269,9 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
         importDeclaration.unbind(importerServiceReference);
         try {
             importerService.removeImportDeclaration(importDeclaration);
-        } catch (BadImportRegistration bir) {
+        } catch (ImporterException e) {
             logger.debug(importerService + " throw an exception when removing of it the ImportDeclaration "
-                    + importDeclaration, bir);
+                    + importDeclaration, e);
             return false;
         } catch (Exception e) {
             logger.debug(importerService + " throw an exception with removing of it the ImportDeclaration "

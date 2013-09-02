@@ -18,7 +18,7 @@ import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 import org.ow2.chameleon.fuchsia.core.declaration.Constants;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclarationBuilder;
-import org.ow2.chameleon.fuchsia.core.exceptions.BadImportRegistration;
+import org.ow2.chameleon.fuchsia.core.exceptions.ImporterException;
 import org.ow2.chameleon.fuchsia.testing.CommonTest;
 
 import java.util.Dictionary;
@@ -53,7 +53,6 @@ public class DefaultImportationLinkerTest extends CommonTest {
 
     @Mock
     private AbstractImporterComponent importer2;
-
 
     @Before
     public void setUp() {
@@ -91,7 +90,6 @@ public class DefaultImportationLinkerTest extends CommonTest {
         Dictionary<String, Object> props = new Hashtable<String, Object>(importDeclaration.getMetadata());
         return context.registerService(ImportDeclaration.class, importDeclaration, props);
     }
-
 
     /**
      * Test that ImportDeclaration are binded  when filter match
@@ -143,7 +141,6 @@ public class DefaultImportationLinkerTest extends CommonTest {
 
         reg.unregister();
     }
-
 
     /**
      * Test that ImporterServices are binded when filter match
@@ -207,7 +204,7 @@ public class DefaultImportationLinkerTest extends CommonTest {
      * Test that ImportDeclaration are given to matching ImporterService when filter of ImporterService match
      */
     @Test
-    public void testImportDeclarationToImporterService() throws BadImportRegistration {
+    public void testImportDeclarationToImporterService() throws ImporterException {
         osgiHelper.waitForService(ImportationLinker.class, "(" + INSTANCE_NAME_PROPERTY + "=" + linkerInstanceName + ")", 0);
 
         Dictionary<String, Object> props = new Hashtable<String, Object>();
@@ -241,7 +238,7 @@ public class DefaultImportationLinkerTest extends CommonTest {
      * Test that ImportDeclaration are not given to matching ImporterService when filter of ImporterService doesn't match
      */
     @Test
-    public void testImportDeclarationToImporterServiceDoesNotMatch() throws BadImportRegistration {
+    public void testImportDeclarationToImporterServiceDoesNotMatch() throws ImporterException {
         osgiHelper.waitForService(ImportationLinker.class, "(" + INSTANCE_NAME_PROPERTY + "=" + linkerInstanceName + ")", 0);
 
         Dictionary<String, Object> props = new Hashtable<String, Object>();
@@ -271,15 +268,14 @@ public class DefaultImportationLinkerTest extends CommonTest {
         assertThat(importationLinkerIntrospection.getLinkedImporters()).isEmpty();
     }
 
-
     /**
      * Test that bind() method is called when DefaultImportationLinker bind it with an ImporterService and
      * that unbind() is called when DefaultImportationLinker unbind it from an ImporterService.
      *
-     * @throws BadImportRegistration
+     * @throws ImporterException
      */
     @Test
-    public void testBindOnImportDeclaration() throws BadImportRegistration {
+    public void testBindOnImportDeclaration() throws ImporterException {
         osgiHelper.waitForService(ImportationLinker.class, "(" + INSTANCE_NAME_PROPERTY + "=" + linkerInstanceName + ")", 0);
 
         Dictionary<String, Object> props = new Hashtable<String, Object>();
@@ -314,7 +310,7 @@ public class DefaultImportationLinkerTest extends CommonTest {
      * ImporterService leave.
      */
     @Test
-    public void testRemoveImporterServiceBeforeImportDeclaration() throws BadImportRegistration {
+    public void testRemoveImporterServiceBeforeImportDeclaration() throws ImporterException {
         osgiHelper.waitForService(ImportationLinker.class, "(" + INSTANCE_NAME_PROPERTY + "=" + linkerInstanceName + ")", 0);
 
         Dictionary<String, Object> props = new Hashtable<String, Object>();
@@ -349,7 +345,7 @@ public class DefaultImportationLinkerTest extends CommonTest {
      * Test unique importation
      */
     @Test
-    public void testUniqueImportation() throws BadImportRegistration {
+    public void testUniqueImportation() throws ImporterException {
         osgiHelper.waitForService(ImportationLinker.class, "(" + INSTANCE_NAME_PROPERTY + "=" + linkerInstanceName + ")", 0);
 
         Dictionary<String, Object> linkerProps = new Hashtable<String, Object>();

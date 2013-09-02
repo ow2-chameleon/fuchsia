@@ -1,7 +1,7 @@
 package org.ow2.chameleon.fuchsia.core.component;
 
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
-import org.ow2.chameleon.fuchsia.core.exceptions.BadImportRegistration;
+import org.ow2.chameleon.fuchsia.core.exceptions.ImporterException;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -24,15 +24,14 @@ public abstract class AbstractImporterComponent implements ImporterService, Impo
     /**
      * Abstract method, is called when the sub class must create the proxy or do other stuff, like APAM things... dun know
      * <p/>
-     * TODO : Does it should be able to throw an exception if there's problem ? which one ?
      */
-    protected abstract void createProxy(final ImportDeclaration importDeclaration);
+    protected abstract void createProxy(final ImportDeclaration importDeclaration) throws ImporterException;
 
     /**
      * Abstract method, is called when the sub class must destroy the proxy.
      * Do not forget to unregister the proxy, call: <code>proxy.unregister()</code>
      */
-    protected abstract void destroyProxy(final ImportDeclaration importDeclaration);
+    protected abstract void destroyProxy(final ImportDeclaration importDeclaration) throws ImporterException;
 
     /**
      * Stop the proxy-creator, iPOJO Invalidate instance callback.
@@ -43,7 +42,11 @@ public abstract class AbstractImporterComponent implements ImporterService, Impo
         synchronized (importDeclarations) {
             // destroy all the proxies
             for (ImportDeclaration importDeclaration : importDeclarations) {
-                destroyProxy(importDeclaration);
+                try {
+                    destroyProxy(importDeclaration);
+                } catch (ImporterException e) {
+                    e.printStackTrace();
+                }
             }
             // Clear the map
             importDeclarations.clear();
@@ -65,32 +68,34 @@ public abstract class AbstractImporterComponent implements ImporterService, Impo
 
     /**
      * @param importDeclaration The {@link ImportDeclaration} of the service to be imported.
-     * @throws BadImportRegistration
+     * @throws ImporterException
      */
-    public void addImportDeclaration(ImportDeclaration importDeclaration) throws BadImportRegistration {
+    public void addImportDeclaration(final ImportDeclaration importDeclaration) throws ImporterException {
         synchronized (importDeclarations) {
             if (importDeclarations.contains(importDeclaration)) {
                 // Already register
-                // FIXME :  Clone Registration ??
-                throw new UnsupportedOperationException("Duplicate ImportDeclaration are for the moment " +
-                        "not supported by the AbstractImporterComponent");
-            } else {
-                //First registration, create the proxy
-                createProxy(importDeclaration);
-                importDeclarations.add(importDeclaration);
+                throw new IllegalStateException("Duplicate ImportDeclaration : " +
+                        "this ImportDeclaration has already been treated.");
             }
+            //First registration, create the proxy
+            createProxy(importDeclaration);
+            importDeclarations.add(importDeclaration);
         }
     }
 
     /**
      * @param importDeclaration The {@link ImportDeclaration} of the service to stop to be imported.
-     * @throws BadImportRegistration
+     * @throws ImporterException
      */
-    public void removeImportDeclaration(ImportDeclaration importDeclaration) throws BadImportRegistration {
+    public void removeImportDeclaration(final ImportDeclaration importDeclaration) throws ImporterException {
         synchronized (importDeclarations) {
-            destroyProxy(importDeclaration);
+            if (!importDeclarations.contains(importDeclaration)) {
+                throw new IllegalStateException("The given ImportDeclaration has never been added"
+                        + "or have already been removed.");
+            }
             importDeclarations.remove(importDeclaration);
         }
+        destroyProxy(importDeclaration);
     }
 
     public Set<ImportDeclaration> getImportDeclarations() {

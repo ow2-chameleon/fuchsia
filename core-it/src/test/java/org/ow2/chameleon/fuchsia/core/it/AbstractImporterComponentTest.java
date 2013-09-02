@@ -8,7 +8,7 @@ import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
 import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclarationBuilder;
-import org.ow2.chameleon.fuchsia.core.exceptions.BadImportRegistration;
+import org.ow2.chameleon.fuchsia.core.exceptions.ImporterException;
 import org.ow2.chameleon.fuchsia.core.it.components.SimpleImporter;
 import org.ow2.chameleon.fuchsia.testing.CommonTest;
 
@@ -71,7 +71,7 @@ public class AbstractImporterComponentTest extends CommonTest {
 
 
     @Test
-    public void testImportDeclarationAddAndRemove() throws BadImportRegistration {
+    public void testImportDeclarationAddAndRemove() throws ImporterException {
         ImportDeclaration iDec = ImportDeclarationBuilder.empty().key("id").value("1").build();
         spySimpleImporter.addImportDeclaration(iDec);
         assertThat(simpleImporter.getImportDeclarations()).containsOnly(iDec);
@@ -83,7 +83,7 @@ public class AbstractImporterComponentTest extends CommonTest {
     }
 
     @Test
-    public void testImportDeclarationAddAndStopServiceImporter() throws BadImportRegistration {
+    public void testImportDeclarationAddAndStopServiceImporter() throws ImporterException {
         ImportDeclaration iDec = ImportDeclarationBuilder.empty().key("id").value("1").build();
         spySimpleImporter.addImportDeclaration(iDec);
         assertThat(simpleImporter.getImportDeclarations()).containsOnly(iDec);
