@@ -18,20 +18,20 @@ import java.util.HashMap;
 import java.util.List;
 
 @Component(name = "Fuchsia-UPnPImporter-Factory")
-@Provides(specifications = ImporterService.class)
-@Instantiate(name = "FuchsiaUPnPImporter")
+@Provides(specifications = {ImporterService.class,UPnPFuchsiaImporterImpl.class })
+//@Instantiate(name = "FuchsiaUPnPImporter")
 public class UPnPFuchsiaImporterImpl extends AbstractImporterComponent {
 
     private final BundleContext m_bundleContext;
 
-    private HashMap<String, GenericDevice> listOfCreatedProxies;
+    private HashMap<ImportDeclaration, GenericDevice> listOfCreatedProxies;
     /**
      * Constructor in order to have the bundle context injected
      * @param bundleContext
      */
     public UPnPFuchsiaImporterImpl(BundleContext bundleContext) {
         m_bundleContext = bundleContext;
-        listOfCreatedProxies = new HashMap<String, GenericDevice>();
+        listOfCreatedProxies = new HashMap<ImportDeclaration, GenericDevice>();
     }
 
     /**
@@ -79,8 +79,12 @@ public class UPnPFuchsiaImporterImpl extends AbstractImporterComponent {
         logger.debug("FakeImporter create a proxy for " + importDeclaration);
 
         GenericDevice proxy = (GenericDevice) Proxy.newProxyInstance(DelegationProxy.class.getClassLoader(), new Class[]{GenericDevice.class}, new DelegationProxy(genericDevice));
-        listOfCreatedProxies.put(proxy.getSerialNumber(),proxy);
+        listOfCreatedProxies.put(importDeclaration,proxy);
         logger.debug(proxy.getSerialNumber());
+    }
+
+    public synchronized GenericDevice getObjectProxy(ImportDeclaration iDec) {
+         return listOfCreatedProxies.get(iDec);
     }
 
     /**
@@ -90,7 +94,7 @@ public class UPnPFuchsiaImporterImpl extends AbstractImporterComponent {
     @Override
     protected void destroyProxy(ImportDeclaration importDeclaration) {
         logger.debug("FakeImporter destroy a proxy for " + importDeclaration);
-        GenericDevice toBeRemovedProxy = listOfCreatedProxies.get(importDeclaration.getMetadata().get("id"));
+        GenericDevice toBeRemovedProxy = listOfCreatedProxies.get(importDeclaration);
         logger.debug("Removed proxy :" +toBeRemovedProxy.getSerialNumber());
     }
 

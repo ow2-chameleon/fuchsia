@@ -452,6 +452,11 @@
             <id>upnp</id>
             <dependencies>
                 <dependency>
+                    <groupId>${project.parent.groupId}.examples</groupId>
+                    <artifactId>fuchsia-upnp-components</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+                <dependency>
                     <groupId>${project.parent.groupId}</groupId>
                     <artifactId>fuchsia-core</artifactId>
                     <version>${project.parent.version}</version>

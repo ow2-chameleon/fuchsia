@@ -10,10 +10,9 @@ import static org.ow2.chameleon.fuchsia.core.ImportationLinker.*;
 @Configuration
 public class UPnPInitializer {
 
-    Instance roseMachineInstance = instance()
+    Instance defaultLinker = instance()
             .of(FuchsiaConstants.DEFAULT_IMPORTATION_LINKER_FACTORY_NAME)
             .named("DefaultLinkerUPnP")
             .with(FILTER_IMPORTDECLARATION_PROPERTY).setto("(id=*)")
             .with(FILTER_IMPORTERSERVICE_PROPERTY).setto("(instance.name=FuchsiaUPnPImporter)");
-
 }

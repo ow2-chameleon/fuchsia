@@ -29,7 +29,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
  */
 @Component(name = "Fuchsia-UPnPDiscovery-Factory")
 @Provides(specifications = {DiscoveryService.class,UPnPFuchsiaDiscoveryImpl.class})
-@Instantiate(name = "Fuchsia-UPnPDiscovery")
+//@Instantiate(name = "Fuchsia-UPnPDiscovery")
 public class UPnPFuchsiaDiscoveryImpl extends AbstractDiscoveryComponent implements ServiceTrackerCustomizer {
 
     @ServiceProperty(name = "instance.name")
@@ -40,13 +40,7 @@ public class UPnPFuchsiaDiscoveryImpl extends AbstractDiscoveryComponent impleme
 
     private EverestClient m_everestClient;
 
-    private final ScheduledThreadPoolExecutor pool_register = new ScheduledThreadPoolExecutor(1);
-    private final ScheduledThreadPoolExecutor pool_unregister = new ScheduledThreadPoolExecutor(1);
-
     private final HashMap<String,ImportDeclaration> importDeclarations = new HashMap<String, ImportDeclaration>();
-    private Integer index_importDeclaration_register;
-    private Integer index_importDeclaration_unregister;
-
     /**
      * logger
      */
@@ -90,11 +84,16 @@ public class UPnPFuchsiaDiscoveryImpl extends AbstractDiscoveryComponent impleme
     @Invalidate
     public void stop() {
         super.stop();
-        pool_unregister.shutdown();
-        pool_register.shutdown();
+        synchronized (this) {
+            for(ImportDeclaration importDeclaration : importDeclarations.values()) {
+                removeUPnPDevice((String) importDeclaration.getMetadata().get("id"));
+                unregisterImportDeclaration(importDeclaration);
+            }
+        }
         importDeclarations.clear();
         if (m_serviceTracker !=null)
             m_serviceTracker.close();
+
     }
 
     @Override
@@ -145,7 +144,7 @@ public class UPnPFuchsiaDiscoveryImpl extends AbstractDiscoveryComponent impleme
         props.put(RemoteConstants.SERVICE_IMPORTED_CONFIGS, "upnp");
         props.put("objectClass", new String[] { "someObject" });
         props.put("sensor.service.id", reference.getProperty(Constants.SERVICE_ID));
-        props.put(UPnPDevice.TYPE, reference.getProperty(UPnPDevice.TYPE));
+        props.put(UPnPDevice.UDN, reference.getProperty(UPnPDevice.UDN));
 
         EndpointDescription epd = new EndpointDescription(props);
         logger.debug("[DEBUG DISCOVERY] EndPoint : " + epd.toString());
@@ -157,14 +156,11 @@ public class UPnPFuchsiaDiscoveryImpl extends AbstractDiscoveryComponent impleme
         //publish an importDeclaration
         importDeclarations.put(deviceId, ImportDeclarationBuilder.fromMetadata(metadata).build());
         registerImportDeclaration(importDeclarations.get((String)metadata.get("id")));
-
-        index_importDeclaration_register = -1;
-        index_importDeclaration_unregister = -1;
-
-        pool_register.execute(new Registrator());
-        pool_unregister.execute(new Unregistrator());
     }
 
+    public HashMap<String, ImportDeclaration> getImportDeclarations() {
+        return importDeclarations;
+    }
 
     /**
      * Method to create an instance of Generic device through a factory name
@@ -176,12 +172,9 @@ public class UPnPFuchsiaDiscoveryImpl extends AbstractDiscoveryComponent impleme
      */
     public void createUPnPDevice(String factoryName, String deviceId, String deviceType, String deviceSubType, EndpointDescription epd) {
 
-        // Create the device
-        Dictionary<String, String> configProperties = new Hashtable<String, String>();
-
-       // Create the instance
+        // Create the instance
         try {
-            m_everestClient.create(Path.from("/ipojo/factory/" + factoryName + "/null").toString()).with("instance.name","GenericDeviceInst-"+deviceId).with("device.serialNumber",deviceId).doIt();
+            m_everestClient.create(Path.from("/ipojo/factory/" + factoryName + "/null").toString()).with("instance.name","GenericDeviceInst-"+deviceId).with("device.serialNumber",deviceType).doIt();
         } catch (ResourceNotFoundException e) {
             e.printStackTrace();
         } catch (IllegalActionOnResourceException e) {
@@ -189,49 +182,19 @@ public class UPnPFuchsiaDiscoveryImpl extends AbstractDiscoveryComponent impleme
         }
     }
 
+    /**
+     * Method to create an instance of Generic device through a factory name
+     */
+    public void removeUPnPDevice(String deviceId) {
 
-    protected class Registrator implements Runnable {
-
-        final Random random = new Random();
-
-        private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
-        public void run() {
-            while (index_importDeclaration_register < importDeclarations.size()) {
-                try {
-                    Thread.sleep((random.nextInt(5) + 1) * 3000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                logger.debug("Registrator : " + index_importDeclaration_register);
-                registerImportDeclaration(importDeclarations.get(index_importDeclaration_register + 1));
-                index_importDeclaration_register = index_importDeclaration_register + 1;
-            }
-
+        // Delete the instance
+        try {
+            m_everestClient.delete(Path.from("/ipojo/instance/GenericDeviceInst-" + deviceId).toString()).doIt();
+        } catch (ResourceNotFoundException e) {
+            e.printStackTrace();
+        } catch (IllegalActionOnResourceException e) {
+            e.printStackTrace();
         }
     }
 
-    protected class Unregistrator implements Runnable {
-
-        final Random random = new Random();
-
-        private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
-        public void run() {
-            while (index_importDeclaration_unregister < importDeclarations.size()) {
-                while (index_importDeclaration_unregister.equals(index_importDeclaration_register)) {
-                    try {
-                        Thread.sleep((random.nextInt(5) + 1) * 2000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-                logger.debug("Unregistrator : " + index_importDeclaration_unregister);
-
-                unregisterImportDeclaration(importDeclarations.get(index_importDeclaration_unregister + 1));
-                index_importDeclaration_unregister = index_importDeclaration_unregister + 1;
-            }
-
-        }
-    }
 }
