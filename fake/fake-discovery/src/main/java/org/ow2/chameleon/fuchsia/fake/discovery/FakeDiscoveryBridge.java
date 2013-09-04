@@ -41,12 +41,7 @@ public class FakeDiscoveryBridge extends AbstractDiscoveryComponent {
 
     private EverestClient m_everestClient;
 
-    private final ScheduledThreadPoolExecutor pool_register = new ScheduledThreadPoolExecutor(1);
-    private final ScheduledThreadPoolExecutor pool_unregister = new ScheduledThreadPoolExecutor(1);
-
     private final HashMap<String,ImportDeclaration> importDeclarations = new HashMap<String, ImportDeclaration>();
-    private Integer index_importDeclaration_register;
-    private Integer index_importDeclaration_unregister;
 
     /**
      * logger
@@ -69,9 +64,6 @@ public class FakeDiscoveryBridge extends AbstractDiscoveryComponent {
     @Invalidate
     public void stop() {
         super.stop();
-        pool_unregister.shutdown();
-        pool_register.shutdown();
-
         importDeclarations.clear();
     }
 
@@ -98,12 +90,6 @@ public class FakeDiscoveryBridge extends AbstractDiscoveryComponent {
         importDeclarations.put((String) metadata.get("id"), ImportDeclarationBuilder.fromMetadata(metadata).build());
 
         registerImportDeclaration(importDeclarations.get((String)metadata.get("id")));
-
-        index_importDeclaration_register = -1;
-        index_importDeclaration_unregister = -1;
-
-        pool_register.execute(new Registrator());
-        pool_unregister.execute(new Unregistrator());
     }
 
     /**
@@ -196,52 +182,6 @@ public class FakeDiscoveryBridge extends AbstractDiscoveryComponent {
             e.printStackTrace();
         } catch (IllegalActionOnResourceException e) {
             e.printStackTrace();
-        }
-    }
-
-
-    protected class Registrator implements Runnable {
-
-        final Random random = new Random();
-
-        private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
-        public void run() {
-            while (index_importDeclaration_register < importDeclarations.size()) {
-                try {
-                    Thread.sleep((random.nextInt(5) + 1) * 3000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                logger.debug("Registrator : " + index_importDeclaration_register);
-                registerImportDeclaration(importDeclarations.get(index_importDeclaration_register + 1));
-                index_importDeclaration_register = index_importDeclaration_register + 1;
-            }
-
-        }
-    }
-
-    protected class Unregistrator implements Runnable {
-
-        final Random random = new Random();
-
-        private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
-        public void run() {
-            while (index_importDeclaration_unregister < importDeclarations.size()) {
-                while (index_importDeclaration_unregister.equals(index_importDeclaration_register)) {
-                    try {
-                        Thread.sleep((random.nextInt(5) + 1) * 2000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-                logger.debug("Unregistrator : " + index_importDeclaration_unregister);
-
-                unregisterImportDeclaration(importDeclarations.get(index_importDeclaration_unregister + 1));
-                index_importDeclaration_unregister = index_importDeclaration_unregister + 1;
-            }
-
         }
     }
 }
