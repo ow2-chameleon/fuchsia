@@ -32,6 +32,7 @@ import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.ow2.chameleon.fuchsia.core.FuchsiaConstants.DEFAULT_IMPORTATION_LINKER_FACTORY_NAME;
@@ -350,6 +351,10 @@ public class DefaultImportationLinkerTest extends CommonTest {
 
         Dictionary<String, Object> linkerProps = new Hashtable<String, Object>();
         linkerProps.put(ImportationLinker.UNIQUE_IMPORTATION_PROPERTY, true);
+        linkerProps.put(ImportationLinker.FILTER_IMPORTDECLARATION_PROPERTY,
+                "(" + Constants.PROTOCOL_NAME + "=test)");
+        linkerProps.put(ImportationLinker.FILTER_IMPORTERSERVICE_PROPERTY,
+                "(" + INSTANCE_NAME_PROPERTY + "=*)");
         importationLinkerCI.reconfigure(linkerProps);
 
         Dictionary<String, Object> props = new Hashtable<String, Object>();
@@ -399,5 +404,272 @@ public class DefaultImportationLinkerTest extends CommonTest {
         sr1.unregister();
         sr2.unregister();
         assertThat(importationLinkerIntrospection.getLinkedImporters()).isEmpty();
+    }
+
+    @Test
+    public void testReconfigureIDecFilter() {
+        // begin with the filter  :  "(" + Constants.PROTOCOL_NAME + "=test)"
+
+        // create ImportDeclaration1
+        Map<String, Object> metadata1 = new HashMap<String, Object>();
+        metadata1.put(Constants.PROTOCOL_NAME, "test");
+        metadata1.put(Constants.ID, "test");
+        ImportDeclaration iD1 = ImportDeclarationBuilder.fromMetadata(metadata1).build();
+        ServiceRegistration iDReg1 = registerImportDeclaration(iD1);
+        assertThat(iDReg1).isNotNull();
+        assertThat(importationLinkerIntrospection.getImportDeclarations()).containsOnly(iD1);
+
+        // create ImportDeclaration2
+        Map<String, Object> metadata2 = new HashMap<String, Object>();
+        metadata2.put(Constants.PROTOCOL_NAME, "not-the-one-matching");
+        metadata2.put(Constants.ID, "test");
+        ImportDeclaration iD2 = ImportDeclarationBuilder.fromMetadata(metadata2).build();
+        ServiceRegistration iDReg2 = registerImportDeclaration(iD2);
+        assertThat(iDReg2).isNotNull();
+        assertThat(importationLinkerIntrospection.getImportDeclarations()).containsOnly(iD1);
+
+        // reconfigure the ImportDeclaration filter of the linker :
+        Dictionary<String, Object> linkerProps = new Hashtable<String, Object>();
+        linkerProps.put(ImportationLinker.FILTER_IMPORTDECLARATION_PROPERTY, "(" + Constants.PROTOCOL_NAME + "=not-the-one-matching)");
+        linkerProps.put(ImportationLinker.FILTER_IMPORTERSERVICE_PROPERTY, "(" + INSTANCE_NAME_PROPERTY + "=*)");
+        linkerProps.put(ImportationLinker.UNIQUE_IMPORTATION_PROPERTY, false);
+        importationLinkerCI.reconfigure(linkerProps);
+
+        assertThat(importationLinkerIntrospection.getImportDeclarations()).containsOnly(iD2);
+    }
+
+    @Test
+    public void testReconfigureIDecFilterWithImporter() throws ImporterException {
+        // begin with the filter  :  "(" + Constants.PROTOCOL_NAME + "=test)"
+
+        // create ImportDeclaration1
+        Map<String, Object> metadata1 = new HashMap<String, Object>();
+        metadata1.put(Constants.PROTOCOL_NAME, "test");
+        metadata1.put(Constants.ID, "test");
+        ImportDeclaration iD1 = ImportDeclarationBuilder.fromMetadata(metadata1).build();
+        ServiceRegistration iDReg1 = registerImportDeclaration(iD1);
+        assertThat(iDReg1).isNotNull();
+        assertThat(importationLinkerIntrospection.getImportDeclarations()).containsOnly(iD1);
+
+        // create ImportDeclaration2
+        Map<String, Object> metadata2 = new HashMap<String, Object>();
+        metadata2.put(Constants.PROTOCOL_NAME, "not-the-one-matching");
+        metadata2.put(Constants.ID, "test");
+        ImportDeclaration iD2 = ImportDeclarationBuilder.fromMetadata(metadata2).build();
+        ServiceRegistration iDReg2 = registerImportDeclaration(iD2);
+        assertThat(iDReg2).isNotNull();
+        assertThat(importationLinkerIntrospection.getImportDeclarations()).containsOnly(iD1);
+
+        // register the importer1
+        Dictionary<String, Object> props = new Hashtable<String, Object>();
+        props.put(INSTANCE_NAME_PROPERTY, "importer1-instance");
+        props.put(ImporterService.TARGET_FILTER_PROPERTY, "(" + Constants.ID + "=test)");
+        ServiceRegistration<ImporterService> sr1 = context.registerService(ImporterService.class, importer1, props);
+
+        ImporterService is1 = osgiHelper.waitForService(ImporterService.class, "(" + INSTANCE_NAME_PROPERTY + "=importer1-instance)", 0);
+        assertThat(is1).isNotNull();
+        verify(importer1).addImportDeclaration(iD1);
+
+        // reconfigure the ImportDeclaration filter of the linker :
+        Dictionary<String, Object> linkerProps = new Hashtable<String, Object>();
+        linkerProps.put(ImportationLinker.FILTER_IMPORTDECLARATION_PROPERTY, "(" + Constants.PROTOCOL_NAME + "=not-the-one-matching)");
+        linkerProps.put(ImportationLinker.FILTER_IMPORTERSERVICE_PROPERTY, "(" + INSTANCE_NAME_PROPERTY + "=*)");
+        linkerProps.put(ImportationLinker.UNIQUE_IMPORTATION_PROPERTY, false);
+        importationLinkerCI.reconfigure(linkerProps);
+
+        verify(importer1).removeImportDeclaration(iD1);
+        verify(importer1).addImportDeclaration(iD2);
+    }
+
+    @Test
+    public void testReconfigureImportersFilter() {
+        // begin with the filter  :  "(" + INSTANCE_NAME_PROPERTY + "=*)"
+
+        // register the importer1
+        Dictionary<String, Object> props = new Hashtable<String, Object>();
+        props.put(INSTANCE_NAME_PROPERTY, "importer1-instance");
+        props.put(ImporterService.TARGET_FILTER_PROPERTY, "(" + Constants.ID + "=test)");
+        ServiceRegistration<ImporterService> sr1 = context.registerService(ImporterService.class, importer1, props);
+
+        ImporterService is1 = osgiHelper.waitForService(ImporterService.class, "(" + INSTANCE_NAME_PROPERTY + "=importer1-instance)", 0);
+        assertThat(is1).isNotNull();
+
+        assertThat(importationLinkerIntrospection.getLinkedImporters()).containsOnly(importer1);
+
+        // register the importer2
+        Dictionary<String, Object> props2 = new Hashtable<String, Object>();
+        props2.put(INSTANCE_NAME_PROPERTY, "importer2-instance");
+        props2.put(ImporterService.TARGET_FILTER_PROPERTY, "(" + Constants.ID + "=test)");
+        ServiceRegistration<ImporterService> sr2 = context.registerService(ImporterService.class, importer2, props2);
+
+        ImporterService is2 = osgiHelper.waitForService(ImporterService.class, "(" + INSTANCE_NAME_PROPERTY + "=importer2-instance)", 0);
+        assertThat(is2).isNotNull();
+
+        assertThat(importationLinkerIntrospection.getLinkedImporters()).containsOnly(is1, is2);
+
+        // reconfigure the ImporterService filter of the linker :
+        Dictionary<String, Object> linkerProps = new Hashtable<String, Object>();
+        linkerProps.put(ImportationLinker.FILTER_IMPORTDECLARATION_PROPERTY, "(" + Constants.PROTOCOL_NAME + "=test)");
+        linkerProps.put(ImportationLinker.FILTER_IMPORTERSERVICE_PROPERTY, "(" + INSTANCE_NAME_PROPERTY + "=importer2-instance)");
+        linkerProps.put(ImportationLinker.UNIQUE_IMPORTATION_PROPERTY, false);
+        importationLinkerCI.reconfigure(linkerProps);
+
+        assertThat(importationLinkerIntrospection.getLinkedImporters()).containsOnly(is2);
+
+        // reconfigure the ImporterService filter of the linker :
+        linkerProps = new Hashtable<String, Object>();
+        linkerProps.put(ImportationLinker.FILTER_IMPORTDECLARATION_PROPERTY, "(" + Constants.PROTOCOL_NAME + "=test)");
+        linkerProps.put(ImportationLinker.FILTER_IMPORTERSERVICE_PROPERTY, "(" + INSTANCE_NAME_PROPERTY + "=this-instance)");
+        linkerProps.put(ImportationLinker.UNIQUE_IMPORTATION_PROPERTY, false);
+        importationLinkerCI.reconfigure(linkerProps);
+
+        assertThat(importationLinkerIntrospection.getLinkedImporters()).isEmpty();
+
+        // reconfigure the ImporterService filter of the linker :
+        linkerProps = new Hashtable<String, Object>();
+        linkerProps.put(ImportationLinker.FILTER_IMPORTDECLARATION_PROPERTY, "(" + Constants.PROTOCOL_NAME + "=test)");
+        linkerProps.put(ImportationLinker.FILTER_IMPORTERSERVICE_PROPERTY, "(" + INSTANCE_NAME_PROPERTY + "=*)");
+        linkerProps.put(ImportationLinker.UNIQUE_IMPORTATION_PROPERTY, false);
+        importationLinkerCI.reconfigure(linkerProps);
+
+        assertThat(importationLinkerIntrospection.getLinkedImporters()).containsOnly(is1, is2);
+    }
+
+
+    @Test
+    public void testReconfigureImportersFilterWithIDec() throws ImporterException {
+        // begin with the filter  :  "(" + Constants.PROTOCOL_NAME + "=test)"
+
+        // create ImportDeclaration1
+        Map<String, Object> metadata1 = new HashMap<String, Object>();
+        metadata1.put(Constants.PROTOCOL_NAME, "test");
+        metadata1.put(Constants.ID, "test");
+        ImportDeclaration iD1 = ImportDeclarationBuilder.fromMetadata(metadata1).build();
+        ServiceRegistration iDReg1 = registerImportDeclaration(iD1);
+        assertThat(iDReg1).isNotNull();
+        assertThat(importationLinkerIntrospection.getImportDeclarations()).containsOnly(iD1);
+
+        // register the importer1
+        Dictionary<String, Object> props = new Hashtable<String, Object>();
+        props.put(INSTANCE_NAME_PROPERTY, "importer1-instance");
+        props.put(ImporterService.TARGET_FILTER_PROPERTY, "(" + Constants.ID + "=test)");
+        ServiceRegistration<ImporterService> sr1 = context.registerService(ImporterService.class, importer1, props);
+
+        ImporterService is1 = osgiHelper.waitForService(ImporterService.class, "(" + INSTANCE_NAME_PROPERTY + "=importer1-instance)", 0);
+        assertThat(is1).isNotNull();
+        verify(importer1).addImportDeclaration(iD1);
+
+        // register the importer2
+        Dictionary<String, Object> props2 = new Hashtable<String, Object>();
+        props2.put(INSTANCE_NAME_PROPERTY, "importer2-instance");
+        props2.put(ImporterService.TARGET_FILTER_PROPERTY, "(" + Constants.ID + "=test)");
+        ServiceRegistration<ImporterService> sr2 = context.registerService(ImporterService.class, importer2, props2);
+
+        ImporterService is2 = osgiHelper.waitForService(ImporterService.class, "(" + INSTANCE_NAME_PROPERTY + "=importer2-instance)", 0);
+        assertThat(is2).isNotNull();
+        verify(importer2).addImportDeclaration(iD1);
+
+        assertThat(iD1.getStatus().getServiceReferences()).containsOnly(sr1.getReference(), sr2.getReference());
+
+        // reconfigure the ImporterService filter of the linker :
+        Dictionary<String, Object> linkerProps = new Hashtable<String, Object>();
+        linkerProps.put(ImportationLinker.FILTER_IMPORTDECLARATION_PROPERTY, "(" + Constants.PROTOCOL_NAME + "=test)");
+        linkerProps.put(ImportationLinker.FILTER_IMPORTERSERVICE_PROPERTY, "(" + INSTANCE_NAME_PROPERTY + "=importer1*)");
+        linkerProps.put(ImportationLinker.UNIQUE_IMPORTATION_PROPERTY, false);
+        importationLinkerCI.reconfigure(linkerProps);
+
+        verify(importer2).removeImportDeclaration(iD1);
+        assertThat(iD1.getStatus().getServiceReferences()).containsOnly(sr1.getReference());
+
+        // reconfigure the ImporterService filter of the linker :
+        linkerProps = new Hashtable<String, Object>();
+        linkerProps.put(ImportationLinker.FILTER_IMPORTDECLARATION_PROPERTY, "(" + Constants.PROTOCOL_NAME + "=test)");
+        linkerProps.put(ImportationLinker.FILTER_IMPORTERSERVICE_PROPERTY, "(" + INSTANCE_NAME_PROPERTY + "=importer2*)");
+        linkerProps.put(ImportationLinker.UNIQUE_IMPORTATION_PROPERTY, false);
+        importationLinkerCI.reconfigure(linkerProps);
+
+        verify(importer1).removeImportDeclaration(iD1);
+        verify(importer1).addImportDeclaration(iD1);
+        assertThat(iD1.getStatus().getServiceReferences()).containsOnly(sr2.getReference());
+    }
+
+
+    @Test
+    public void testReconfigureImporterTargetFilter() throws ImporterException {
+        // create ImportDeclaration1
+        Map<String, Object> metadata1 = new HashMap<String, Object>();
+        metadata1.put(Constants.PROTOCOL_NAME, "test");
+        metadata1.put(Constants.ID, "test1");
+        ImportDeclaration iD1 = ImportDeclarationBuilder.fromMetadata(metadata1).build();
+        ServiceRegistration iDReg1 = registerImportDeclaration(iD1);
+        assertThat(iDReg1).isNotNull();
+        assertThat(importationLinkerIntrospection.getImportDeclarations()).containsOnly(iD1);
+
+        // create ImportDeclaration2
+        Map<String, Object> metadata2 = new HashMap<String, Object>();
+        metadata2.put(Constants.PROTOCOL_NAME, "test");
+        metadata2.put(Constants.ID, "test2");
+        ImportDeclaration iD2 = ImportDeclarationBuilder.fromMetadata(metadata2).build();
+        ServiceRegistration iDReg2 = registerImportDeclaration(iD2);
+        assertThat(iDReg2).isNotNull();
+        assertThat(importationLinkerIntrospection.getImportDeclarations()).containsOnly(iD1, iD2);
+
+        // register the importer
+        Dictionary<String, Object> importerProps = new Hashtable<String, Object>();
+        importerProps.put(INSTANCE_NAME_PROPERTY, "importer1-instance");
+        importerProps.put(ImporterService.TARGET_FILTER_PROPERTY, "(" + Constants.ID + "=test*)");
+        ServiceRegistration<ImporterService> sr1 = context.registerService(ImporterService.class, importer1, importerProps);
+        ImporterService is1 = osgiHelper.waitForService(ImporterService.class, "(" + INSTANCE_NAME_PROPERTY + "=importer1-instance)", 0);
+        assertThat(is1).isNotNull();
+        verify(importer1).addImportDeclaration(iD1);
+        verify(importer1).addImportDeclaration(iD2);
+
+        // reconfigure the importer
+        importerProps = new Hashtable<String, Object>();
+        importerProps.put(INSTANCE_NAME_PROPERTY, "importer1-instance");
+        importerProps.put(ImporterService.TARGET_FILTER_PROPERTY, "(" + Constants.ID + "=test1)");
+        sr1.setProperties(importerProps);
+
+        verify(importer1).removeImportDeclaration(iD2);
+        verify(importer1, never()).removeImportDeclaration(iD1);
+        verify(importer1, times(1)).addImportDeclaration(iD1);
+
+        assertThat(iD1.getStatus().getServiceReferences()).containsOnly(sr1.getReference());
+        // reconfigure the importer
+        importerProps = new Hashtable<String, Object>();
+        importerProps.put(INSTANCE_NAME_PROPERTY, "importer1-instance");
+        importerProps.put(ImporterService.TARGET_FILTER_PROPERTY, "(" + Constants.ID + "=test2)");
+        sr1.setProperties(importerProps);
+
+        verify(importer1).removeImportDeclaration(iD1);
+        verify(importer1, times(2)).addImportDeclaration(iD2);
+    }
+
+    @Test
+    public void testWrongReconfigurationImporterFilter() {
+        // reconfigure the filter  :
+        Dictionary<String, Object> linkerProps = new Hashtable<String, Object>();
+        linkerProps.put(ImportationLinker.FILTER_IMPORTDECLARATION_PROPERTY, "(" + Constants.PROTOCOL_NAME + "=test)");
+        linkerProps.put(ImportationLinker.FILTER_IMPORTERSERVICE_PROPERTY, "(=");   // not a LDAP valid filter
+        linkerProps.put(ImportationLinker.UNIQUE_IMPORTATION_PROPERTY, false);
+        importationLinkerCI.reconfigure(linkerProps);
+
+        ServiceReference serviceReference = osgiHelper.waitForService(ImportationLinker.class.getName(), "(" + INSTANCE_NAME_PROPERTY + "=" + linkerInstanceName + ")", 1, false);
+
+        assertThat(serviceReference).isNull();
+    }
+
+    @Test
+    public void testWrongReconfigurationIDecFilter() {
+        // reconfigure the filter  :
+        Dictionary<String, Object> linkerProps = new Hashtable<String, Object>();
+        linkerProps.put(ImportationLinker.FILTER_IMPORTDECLARATION_PROPERTY, "a wrong filter"); // not a LDAP valid filter
+        linkerProps.put(ImportationLinker.FILTER_IMPORTERSERVICE_PROPERTY, "(" + INSTANCE_NAME_PROPERTY + "=*)");
+        linkerProps.put(ImportationLinker.UNIQUE_IMPORTATION_PROPERTY, false);
+        importationLinkerCI.reconfigure(linkerProps);
+
+        ServiceReference serviceReference = osgiHelper.waitForService(ImportationLinker.class.getName(), "(" + INSTANCE_NAME_PROPERTY + "=" + linkerInstanceName + ")", 1, false);
+
+        assertThat(serviceReference).isNull();
     }
 }
