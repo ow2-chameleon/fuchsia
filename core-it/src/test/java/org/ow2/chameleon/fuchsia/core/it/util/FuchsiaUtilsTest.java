@@ -103,7 +103,7 @@ public class FuchsiaUtilsTest extends CommonTest {
     @Test
     public void testGetFilterOtherObject() {
         try {
-            FuchsiaUtils.getFilter(new DefaultImportationLinker());
+            FuchsiaUtils.getFilter(new Object());
             failBecauseExceptionWasNotThrown(InvalidFilterException.class);
         } catch (Exception e) {
             assertThat(e).isInstanceOf(InvalidFilterException.class)
