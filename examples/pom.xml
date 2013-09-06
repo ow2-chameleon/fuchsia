@@ -30,7 +30,9 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>jax-ws</module>
         <module>fool-components</module>
+        <module>upnp-samples</module>
     </modules>
 </project>
 

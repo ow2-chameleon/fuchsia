@@ -64,7 +64,7 @@
                         <div class="span6">
                             <h4>Core</h4>
                             <p>The <code>Fuchsia Core</code> contains the core components of the framework.
-                            <p>Fuchsia allows you to simply build your own importers and discoveries components </p>
+                            Fuchsia allows you to simply build your own importers and discoveries components </p>
                             <div class="button"><a href="fuchsiaCore.html">Read more</a></div>
                         </div>
                         <div class="span6">

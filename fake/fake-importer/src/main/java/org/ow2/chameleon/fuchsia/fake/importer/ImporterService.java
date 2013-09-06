@@ -34,14 +34,14 @@ public class ImporterService extends AbstractImporterComponent {
 
     private final BundleContext m_bundleContext;
 
-    private HashMap<String, GenericDevice> listOfCreatedProxies;
+    private HashMap<ImportDeclaration, GenericDevice> listOfCreatedProxies;
     /**
      * Constructor in order to have the bundle context injected
      * @param bundleContext
      */
     public ImporterService(BundleContext bundleContext) {
         m_bundleContext = bundleContext;
-        listOfCreatedProxies = new HashMap<String, GenericDevice>();
+        listOfCreatedProxies = new HashMap<ImportDeclaration, GenericDevice>();
     }
 
     /**
@@ -61,6 +61,7 @@ public class ImporterService extends AbstractImporterComponent {
     protected void stop() {
         logger.info("STOP FAKE IMPORTER SERVICE");
         super.stop();
+        listOfCreatedProxies.clear();
     }
 
     @Override
@@ -90,7 +91,7 @@ public class ImporterService extends AbstractImporterComponent {
         logger.debug("FakeImporter create a proxy for " + importDeclaration);
 
         GenericDevice proxy = (GenericDevice) Proxy.newProxyInstance(DelegationProxy.class.getClassLoader(), new Class[] {GenericDevice.class}, new DelegationProxy(genericDevice));
-        listOfCreatedProxies.put(proxy.getSerialNumber(),proxy);
+        listOfCreatedProxies.put(importDeclaration,proxy);
         logger.debug(proxy.getSerialNumber());
     }
 
@@ -101,8 +102,7 @@ public class ImporterService extends AbstractImporterComponent {
     @Override
     protected void destroyProxy(ImportDeclaration importDeclaration) {
         logger.debug("FakeImporter destroy a proxy for " + importDeclaration);
-        GenericDevice toBeRemovedProxy = listOfCreatedProxies.get(importDeclaration.getMetadata().get("id"));
-        logger.debug("Removed proxy :" +toBeRemovedProxy.getSerialNumber());
+        listOfCreatedProxies.remove(listOfCreatedProxies.get(importDeclaration));
     }
 
     public List<String> getConfigPrefix() {
