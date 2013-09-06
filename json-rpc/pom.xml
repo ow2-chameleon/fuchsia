@@ -12,7 +12,7 @@
 
     <name>OW2 Chameleon - Fuchsia JSON-RPC</name>
     <artifactId>fuchsia-json-rpc</artifactId>
-    <groupId>org.ow2.chameleon.fuchsia</groupId>
+    <groupId>org.ow2.chameleon.fuchsia.jsonrpc</groupId>
     <packaging>pom</packaging>
 
     <dependencyManagement>
