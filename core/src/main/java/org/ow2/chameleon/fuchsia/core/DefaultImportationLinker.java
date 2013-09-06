@@ -68,6 +68,13 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
 
     private Filter importerServiceFilter;
 
+    /**
+     * Called by iPOJO when the configuration of the DefaultImportationLinker is updated.
+     * <p/>
+     * Get the filter ImporterServiceFilter and ImportDeclarationFilter from the properties, stop the instance if one of
+     * them is invalid.
+     * Compute and apply the changes in the links relatives to the changes in the filters.
+     */
     @Updated
     public void updated() {
         state = true;
@@ -121,11 +128,10 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
     }
 
     /**
-     * Bind all the {@link ImporterService} matching the importerServiceFilter.
+     * Bind the {@link ImporterService} matching the importerServiceFilter.
      * <p/>
-     * Foreach ImporterService, check all the already bound importDeclarations.
-     * If the metadata of the importDeclaration match the filter exposed by the importer
-     * bind the importDeclaration to the importer
+     * Check all the already bound {@link ImportDeclaration}s, if the metadata of the ImportDeclaration match the filter
+     * exposed by the ImporterService, link them together.
      */
     @Bind(id = "importerServices", specification = "org.ow2.chameleon.fuchsia.core.component.ImporterService", aggregate = true, optional = true)
     void bindImporterService(ServiceReference<ImporterService> serviceReference) {
@@ -149,6 +155,12 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
         }
     }
 
+    /**
+     * Update the Target Filter of the ImporterService.
+     * Apply the induce modifications on the links of the ImporterService
+     *
+     * @param serviceReference
+     */
     @Modified(id = "importerServices")
     void modifiedImporterService(ServiceReference<ImporterService> serviceReference) {
         try {
@@ -185,9 +197,10 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
     }
 
     /**
-     * Bind all the {@link ImportDeclaration} matching the filter importDeclarationFilter.
+     * Bind the {@link ImportDeclaration} matching the filter ImportDeclarationFilter.
      * <p/>
-     * Foreach ImportDeclaration, check if metadata match the filter given exposed by the importerServices bound.
+     * Check if metadata of the ImportDeclaration match the filter exposed by the {@link ImporterService}s bound.
+     * If the ImportDeclaration matches the ImporterService filter, link them together.
      */
     @Bind(id = "importDeclarations", specification = "org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration", aggregate = true, optional = true)
     void bindImportDeclaration(ServiceReference<ImportDeclaration> importDeclarationSRef) {
@@ -236,6 +249,13 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
         }
     }
 
+    /**
+     * Return true if the ImportDeclaration can be linked to the ImporterService
+     *
+     * @param importDeclaration   The ImportDeclaration
+     * @param importerServiceSRef The ServiceReference<ImporterService> of the ImporterService
+     * @return true if the ImportDeclaration can be linked to the ImporterService
+     */
     public boolean canBeLinked(ImportDeclaration importDeclaration, ServiceReference<ImporterService> importerServiceSRef) {
         // Evaluate the target filter of the ImporterService on the ImportDeclaration
         Filter filter = importersManager.getTargetFilter(importerServiceSRef);
@@ -247,7 +267,7 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
      * return true if they have been link together, false otherwise.
      *
      * @param importDeclaration   The ImportDeclaration
-     * @param importerServiceSRef The ServiceReference of the ImporterService
+     * @param importerServiceSRef The ServiceReference<ImporterService> of the ImporterService
      * @return true if they have been link together, false otherwise.
      */
     private boolean link(ImportDeclaration importDeclaration, ServiceReference<ImporterService> importerServiceSRef) {
@@ -308,7 +328,11 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
     }
 
     /**
-     * Internal class which handle the ImportDeclarations and provide some usefuls functions on
+     * Internal class which manages the ImportDeclarations binded to the DefaultImportationLinker.
+     * <p/>
+     * Provides methods to add/remove/retrieve informations/do operations on the ImportDeclarations
+     * <p/>
+     * This class doesn't use the ImportDeclaration objects but the ServiceReference of the ImportDeclaration.
      */
     class DeclarationsManager {
         private final Map<ServiceReference<ImportDeclaration>, Boolean> declarations;
@@ -317,30 +341,67 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
             declarations = new HashMap<ServiceReference<ImportDeclaration>, Boolean>();
         }
 
+        /**
+         * Add the importDeclarationSRef to the DeclarationsManager.
+         * Calculate the matching of the ImportDeclaration with the ImportDeclarationFilter of the
+         * DefaultImportationLinker.
+         *
+         * @param importDeclarationSRef the ServiceReference<ImportDeclaration> of the ImportDeclaration
+         */
         void add(ServiceReference<ImportDeclaration> importDeclarationSRef) {
             ImportDeclaration importDeclaration = getImportDeclaration(importDeclarationSRef);
             boolean matchFilter = importDeclarationFilter.matches(importDeclaration.getMetadata());
             declarations.put(importDeclarationSRef, matchFilter);
         }
 
+        /**
+         * Remove the importDeclarationSRef from the DeclarationsManager.
+         *
+         * @param importDeclarationSRef the ServiceReference<ImportDeclaration> of the ImportDeclaration
+         * @return
+         */
         void remove(ServiceReference<ImportDeclaration> importDeclarationSRef) {
             declarations.remove(importDeclarationSRef);
         }
 
+        /**
+         * Calculate the matching of the ImportDeclaration modified with the ImportDeclarationFilter of the
+         * DefaultImportationLinker.
+         *
+         * @param importDeclarationSRef the ServiceReference<ImportDeclaration> of the ImportDeclaration
+         */
         void modified(ServiceReference<ImportDeclaration> importDeclarationSRef) {
             ImportDeclaration importDeclaration = getImportDeclaration(importDeclarationSRef);
             boolean matchFilter = importDeclarationFilter.matches(importDeclaration.getMetadata());
             declarations.put(importDeclarationSRef, matchFilter);
         }
 
+        /**
+         * Return true if the ImportDeclaration match the ImportDeclarationFilter, false otherwise.
+         *
+         * @param importDeclarationSRef the ServiceReference<ImportDeclaration> of the ImportDeclaration
+         * @return true if the ImportDeclaration match the ImportDeclarationFilter, false otherwise.
+         */
         Boolean matched(ServiceReference<ImportDeclaration> importDeclarationSRef) {
             return declarations.get(importDeclarationSRef);
         }
 
+        /**
+         * Return the ImportDeclaration corresponding to the importDeclarationSRef
+         *
+         * @param importDeclarationSRef the ServiceReference<ImportDeclaration> of the ImportDeclaration
+         * @return the ImportDeclaration corresponding to the importDeclarationSRef
+         */
         ImportDeclaration getImportDeclaration(ServiceReference<ImportDeclaration> importDeclarationSRef) {
             return bundleContext.getService(importDeclarationSRef);
         }
 
+        /**
+         * Create all the links possible between the ImportDeclaration and all the ImporterService matching the
+         * ImporterServiceFilter of the DefaultImportationLinker.
+         *
+         * @param importDeclarationSRef the ServiceReference<ImportDeclaration> of the ImportDeclaration
+         */
         void createLinks(ServiceReference<ImportDeclaration> importDeclarationSRef) {
             ImportDeclaration importDeclaration = getImportDeclaration(importDeclarationSRef);
             for (ServiceReference<ImporterService> serviceReference : importersManager.getMatchedServiceReference()) {
@@ -350,6 +411,11 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
             }
         }
 
+        /**
+         * Remove all the existing links of the ImportDeclaration.
+         *
+         * @param importDeclarationSRef the ServiceReference<ImportDeclaration> of the ImportDeclaration
+         */
         void removeLinks(ServiceReference<ImportDeclaration> importDeclarationSRef) {
             ImportDeclaration importDeclaration = getImportDeclaration(importDeclarationSRef);
             for (ServiceReference serviceReference : importDeclaration.getStatus().getServiceReferences()) {
@@ -359,6 +425,13 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
             }
         }
 
+        /**
+         * Return a set of all the ImportDeclaration matching the ImportDeclarationFilter of the
+         * DefaultImportationLinker.
+         *
+         * @return a set of all the ImportDeclaration matching the ImportDeclarationFilter of the
+         *         DefaultImportationLinker.
+         */
         Set<ImportDeclaration> getMatchedImportDeclaration() {
             Set<ImportDeclaration> bindedSet = new HashSet<ImportDeclaration>();
             for (Map.Entry<ServiceReference<ImportDeclaration>, Boolean> e : declarations.entrySet()) {
@@ -369,6 +442,16 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
             return bindedSet;
         }
 
+
+        /**
+         * Compute and apply all the modifications bring by the modification of the ImportDeclarationFilter.
+         * <p/>
+         * Find all the ImportDeclaration that are now matching the filter and all that are no more matching the filter.
+         * <ul>
+         * <li>Remove all the links of the ones which are no more matching the ImportDeclarationFilter.</li>
+         * <li>Create the links of the ones which are now matching the ImportDeclarationFilter.</li>
+         * </ul>
+         */
         void applyFilterChanges() {
             Set<ServiceReference<ImportDeclaration>> added = new HashSet<ServiceReference<ImportDeclaration>>();
             Set<ServiceReference<ImportDeclaration>> removed = new HashSet<ServiceReference<ImportDeclaration>>();
@@ -392,7 +475,18 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
         }
     }
 
+    /**
+     * Internal class which manages the {@link ImporterService}s binded to the {@link DefaultImportationLinker}.
+     * <p/>
+     * Provides methods to add/remove/retrieve informations/do operations on the ImporterServices.
+     * <p/>
+     * This class doesn't use the ImporterService objects but the ServiceReference of the ImporterService.
+     */
     class ImportersManager {
+
+        /**
+         * Stock some informations processed/retrieved from the ImporterService
+         */
         private class ImporterDescriptor {
             Filter targetFilter;
             boolean match;
@@ -403,6 +497,13 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
                 update(serviceReference);
             }
 
+            /**
+             * Extract the information of the importerServiceSRef to update the ImporterDescriptor
+             * information.
+             *
+             * @param importerServiceSRef the ServiceReference<ImporterService> of the ImporterService
+             * @throws InvalidFilterException
+             */
             private void update(ServiceReference<ImporterService> importerServiceSRef) throws InvalidFilterException {
                 properties.clear();
                 for (String key : importerServiceSRef.getPropertyKeys()) {
@@ -419,31 +520,72 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
             importers = new HashMap<ServiceReference<ImporterService>, ImporterDescriptor>();
         }
 
+        /**
+         * Add the importerServiceSRef to the ImportersManager, create the corresponding
+         * ImporterDescriptor.
+         *
+         * @param importerServiceSRef the ServiceReference<ImporterService> of the ImporterService
+         * @throws InvalidFilterException
+         */
         void add(ServiceReference<ImporterService> importerServiceSRef) throws InvalidFilterException {
             ImporterDescriptor importerDescriptor = new ImporterDescriptor(importerServiceSRef);
             importers.put(importerServiceSRef, importerDescriptor);
         }
 
+        /**
+         * Remove the importerServiceSRef of the ImportersManager
+         *
+         * @param importerServiceSRef the ServiceReference<ImporterService> of the ImporterService
+         */
         void remove(ServiceReference<ImporterService> importerServiceSRef) {
             importers.remove(importerServiceSRef);
         }
 
+        /**
+         * Update the ImporterDescriptor of the  importerServiceSRef
+         *
+         * @param importerServiceSRef the ServiceReference<ImporterService> of the ImporterService
+         */
         void modified(ServiceReference<ImporterService> importerServiceSRef) throws InvalidFilterException {
             importers.get(importerServiceSRef).update(importerServiceSRef);
         }
 
+        /**
+         * Return true if the ImporterService has match the ImportDeclarationFilter or false other.
+         *
+         * @param importerServiceSRef the ServiceReference<ImporterService> of the ImporterService
+         * @return true if the ImporterService has match the ImportDeclarationFilter, false otherwise.
+         */
         Boolean matched(ServiceReference<ImporterService> importerServiceSRef) {
             return importers.get(importerServiceSRef).match;
         }
 
+        /**
+         * Return the ImporterService of the importerServiceSRef
+         *
+         * @param importerServiceSRef the ServiceReference<ImporterService> of the ImporterService
+         * @return the ImporterService of the importerServiceSRef
+         */
         ImporterService getImporterService(ServiceReference<ImporterService> importerServiceSRef) {
             return bundleContext.getService(importerServiceSRef);
         }
 
+        /**
+         * Return the Target Filter of the ImporterService
+         *
+         * @param importerServiceSRef the ServiceReference<ImporterService> of the ImporterService
+         * @return the Target Filter of the ImporterService.
+         */
         Filter getTargetFilter(ServiceReference<ImporterService> importerServiceSRef) {
             return importers.get(importerServiceSRef).targetFilter;
         }
 
+        /**
+         * Create all the links possible between the ImporterService and all the ImportDeclaration matching the
+         * ImportDeclarationFilter of the DefaultImportationLinker.
+         *
+         * @param importerServiceSRef the ServiceReference<ImporterService> of the ImporterService
+         */
         void createLinks(ServiceReference<ImporterService> importerServiceSRef) {
             for (ImportDeclaration importDeclaration : declarationsManager.getMatchedImportDeclaration()) {
                 if (canBeLinked(importDeclaration, importerServiceSRef)) {
@@ -452,6 +594,11 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
             }
         }
 
+        /**
+         * Remove all the existing links of the ImporterService.
+         *
+         * @param importerServiceSRef the ServiceReference<ImporterService> of the ImporterService
+         */
         void removeLinks(ServiceReference<ImporterService> importerServiceSRef) {
             for (ImportDeclaration importDeclaration : declarationsManager.getMatchedImportDeclaration()) {
                 if (importDeclaration.getStatus().getServiceReferences().contains(importerServiceSRef)) {
@@ -460,6 +607,11 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
             }
         }
 
+        /**
+         * Return a set of all ImporterService matching the ImporterServiceFilter of the DefaultImportationLinker.
+         *
+         * @return a Set of all ImporterService matching the ImporterServiceFilter of the DefaultImportationLinker.
+         */
         Set<ImporterService> getMatchedImporterService() {
             Set<ImporterService> bindedSet = new HashSet<ImporterService>();
             for (Map.Entry<ServiceReference<ImporterService>, ImporterDescriptor> e : importers.entrySet()) {
@@ -470,6 +622,13 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
             return bindedSet;
         }
 
+        /**
+         * Return a set of all ServiceReference<ImporterService> matching the ImporterServiceFilter of the
+         * DefaultImportationLinker.
+         *
+         * @return a Set of all ServiceReference<ImporterService> matching the ImporterServiceFilter of the
+         *         DefaultImportationLinker.
+         */
         Set<ServiceReference<ImporterService>> getMatchedServiceReference() {
             Set<ServiceReference<ImporterService>> bindedSet = new HashSet<ServiceReference<ImporterService>>();
             for (Map.Entry<ServiceReference<ImporterService>, ImporterDescriptor> e : importers.entrySet()) {
@@ -480,6 +639,15 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
             return bindedSet;
         }
 
+        /**
+         * Compute and apply all the modifications bring by the modification of the ImporterServiceFilter.
+         * <p/>
+         * Find all the ImporterService that are now matching the filter and all that are no more matching the filter.
+         * <ul>
+         * <li>Remove all the links of the ones which are no more matching the ImporterServiceFilter.</li>
+         * <li>Create the links of the ones which are now matching the ImporterServiceFilter.</li>
+         * </ul>
+         */
         void applyFilterChanges() {
             Set<ServiceReference<ImporterService>> added = new HashSet<ServiceReference<ImporterService>>();
             Set<ServiceReference<ImporterService>> removed = new HashSet<ServiceReference<ImporterService>>();
