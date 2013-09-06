@@ -1,11 +1,6 @@
 package org.ow2.chameleon.fuchsia.core;
 
 
-import org.ow2.chameleon.fuchsia.core.component.ImporterService;
-import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
-
-import java.util.Set;
-
 /**
  * The components providing this service are used by Fuchsia to make the link between the
  * {@link org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration} and the {@link org.ow2.chameleon.fuchsia.core.component.ImporterService}.
@@ -26,19 +21,5 @@ public interface ImportationLinker {
     final static String UNIQUE_IMPORTATION_PROPERTY = "fuchsia.linker.uniqueImportation";
 
     String getName();
-
-    /**
-     * Return the importerServices linked the ImportationLinker
-     *
-     * @return The importerServices linked to the ImportationLinker
-     */
-    Set<ImporterService> getLinkedImporters();
-
-    /**
-     * Return the importDeclarations bind by the ImportationLinker
-     *
-     * @return The importDeclarations bind by the ImportationLinker
-     */
-    Set<ImportDeclaration> getImportDeclarations();
 
 }

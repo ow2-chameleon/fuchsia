@@ -1,7 +1,7 @@
 package org.ow2.chameleon.fuchsia.core.component;
 
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
-import org.ow2.chameleon.fuchsia.core.exceptions.BadImportRegistration;
+import org.ow2.chameleon.fuchsia.core.exceptions.ImporterException;
 
 import java.util.List;
 
@@ -11,9 +11,6 @@ import java.util.List;
  * @author barjo
  * @author Morgan Martinet
  */
-// TODO : Think to methods to :
-// TODO :  - return all the ImportDeclaration/ServiceRegistration or what else ;
-// TODO :  - get the linker(s) that the importerService is linked to.
 public interface ImporterService {
 
     String TARGET_FILTER_PROPERTY = "target";
@@ -23,14 +20,14 @@ public interface ImporterService {
      *
      * @param importDeclaration The {@link ImportDeclaration} of the service to be imported.
      */
-    void addImportDeclaration(ImportDeclaration importDeclaration) throws BadImportRegistration;
+    void addImportDeclaration(final ImportDeclaration importDeclaration) throws ImporterException;
 
     /**
      * Stop the reification of the given importDeclaration
      *
      * @param importDeclaration The {@link ImportDeclaration} of the service to stop to be imported.
      */
-    void removeImportDeclaration(ImportDeclaration importDeclaration) throws BadImportRegistration;
+    void removeImportDeclaration(final ImportDeclaration importDeclaration) throws ImporterException;
 
     /**
      * @return The configuration prefix used or defined by this {@link ImporterService}.

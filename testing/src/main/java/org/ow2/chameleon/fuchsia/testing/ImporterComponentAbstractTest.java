@@ -9,7 +9,7 @@ import org.osgi.service.log.LogEntry;
 import org.osgi.service.log.LogService;
 import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
-import org.ow2.chameleon.fuchsia.core.exceptions.BadImportRegistration;
+import org.ow2.chameleon.fuchsia.core.exceptions.ImporterException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
@@ -89,8 +89,8 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
         //import the logService
         try {
             importer.addImportDeclaration(iDec);
-        } catch (BadImportRegistration badImportRegistration) {
-            badImportRegistration.printStackTrace();
+        } catch (ImporterException e) {
+            e.printStackTrace();
             fail();
         }
 
@@ -121,8 +121,8 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
         //import the logService
         try {
             importer.addImportDeclaration(iDec);
-        } catch (BadImportRegistration badImportRegistration) {
-            badImportRegistration.printStackTrace();
+        } catch (ImporterException e) {
+            e.printStackTrace();
             fail();
         }
 
@@ -156,8 +156,8 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
         //import the logService
         try {
             importer.addImportDeclaration(iDec);
-        } catch (BadImportRegistration badImportRegistration) {
-            badImportRegistration.printStackTrace();
+        } catch (ImporterException e) {
+            e.printStackTrace();
             fail();
         }
         //get the client
@@ -169,8 +169,8 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
         // un-import the logService
         try {
             importer.removeImportDeclaration(iDec);
-        } catch (BadImportRegistration badImportRegistration) {
-            badImportRegistration.printStackTrace();
+        } catch (ImporterException e) {
+            e.printStackTrace();
             fail();
         }
 
@@ -196,24 +196,24 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
         //import the logService
         try {
             importer.addImportDeclaration(iDec);
-        } catch (BadImportRegistration badImportRegistration) {
-            badImportRegistration.printStackTrace();
+        } catch (ImporterException e) {
+            e.printStackTrace();
             fail();
         }
 
         // un-import the logService
         try {
             importer.removeImportDeclaration(iDec);
-        } catch (BadImportRegistration badImportRegistration) {
-            badImportRegistration.printStackTrace();
+        } catch (ImporterException e) {
+            e.printStackTrace();
             fail();
         }
 
         // re import the logService
         try {
             importer.addImportDeclaration(iDec);
-        } catch (BadImportRegistration badImportRegistration) {
-            badImportRegistration.printStackTrace();
+        } catch (ImporterException e) {
+            e.printStackTrace();
             fail();
         }
 
