@@ -41,7 +41,7 @@
         <felix.configadmin.version>1.6.0</felix.configadmin.version>
         <slf4j.version>1.6.6</slf4j.version>
         <chameleon.version>1.0.0-SNAPSHOT</chameleon.version>
-        <apacheCXF.version>1.4.0</apacheCXF.version>
+        <apacheCXF.version>1.3</apacheCXF.version>
         <site.path>snapshot</site.path>
 
         <!-- Plugins versions -->
@@ -93,6 +93,7 @@
                 <module>fake</module>
                 <module>json-rpc</module>
                 <module>upnp</module>
+                <module>jax-ws</module>
             </modules>
         </profile>
 
