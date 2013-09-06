@@ -94,8 +94,10 @@
                 <module>upnp</module>
                 <module>jax-ws/cxf-config</module>
                 <module>jax-ws/cxf-importer</module>
+                <module>jax-ws/cxf-importer-it</module>
                 <module>examples</module>
                 <module>json-rpc</module>
+                <module>osgi-testing-helpers</module>
             </modules>
         </profile>
 
@@ -474,7 +476,7 @@
                 <!-- Deploy the web site -->
                 <groupId>com.github.github</groupId>
                 <artifactId>site-maven-plugin</artifactId>
-                <version>0.9-SNAPSHOT</version>
+                <version>0.8</version>
                 <executions>
                     <execution>
                         <goals>

@@ -10,7 +10,7 @@ import static org.ow2.chameleon.fuchsia.core.ImportationLinker.*;
 @Configuration
 public class JaxWSInitializer {
 
-    Instance roseMachineInstance = instance()
+    Instance jaxWSInstance = instance()
             .of(FuchsiaConstants.DEFAULT_IMPORTATION_LINKER_FACTORY_NAME)
             .named("DefaultLinkerJaxWS")
             .with(FILTER_IMPORTDECLARATION_PROPERTY).setto("(jax-ws.importer.interfaces=*)")

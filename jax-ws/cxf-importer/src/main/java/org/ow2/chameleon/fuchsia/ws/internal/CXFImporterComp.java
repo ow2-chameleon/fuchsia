@@ -24,13 +24,12 @@ import static org.ow2.chameleon.fuchsia.core.FuchsiaUtils.loadClass;
  * @Edited Jeremy.Savonet@gmail.com
  */
 @Component(name="Fuchsia_importer.cxf")
-@Provides(specifications = org.ow2.chameleon.fuchsia.core.component.ImporterService.class)
-@Instantiate (name="Fuchsia_importer_cxf")
+@Provides(specifications = {org.ow2.chameleon.fuchsia.core.component.ImporterService.class, CXFImporterComp.class})
+//@Instantiate (name="Fuchsia_importer_cxf")
 public class CXFImporterComp extends AbstractImporterComponent {
 
     public static final String ENDPOINT_URL = "endpoint.url"; //TODO FIXME
 
-    public static final String INTERFACES = "jax-ws.importer.interfaces";
     private static final String CLASSNAME = "className";
 
     private final Map<ImportDeclaration, ServiceRegistration> map;
@@ -67,10 +66,10 @@ public class CXFImporterComp extends AbstractImporterComponent {
         super.start();
     }
 
-    //TODO see with Morgan
     public List<String> getConfigPrefix() {
-        return null;
-    }
+        List<String> l = new ArrayList<String>();
+        l.add("JaxWS");
+        return l;    }
 
 
     /**
@@ -93,12 +92,11 @@ public class CXFImporterComp extends AbstractImporterComponent {
         Object objectProxy;
 
         //Try to load the class
-//        final List<Class<?>> klass = testClass;
         final Class<?> klass;
         try {
             klass = loadClass(context, (String) importDeclaration.getMetadata().get(CLASSNAME));
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
             return;
         }
 
@@ -132,7 +130,6 @@ public class CXFImporterComp extends AbstractImporterComponent {
 
             //create the proxy
             objectProxy = factory.create();
-//            HelloWorldWS newObject = (HelloWorldWS)objectProxy;
 
             //Publish object
             map.put(importDeclaration,registerProxy(objectProxy,klass));
@@ -160,7 +157,6 @@ public class CXFImporterComp extends AbstractImporterComponent {
     @Override
     protected void destroyProxy(ImportDeclaration importDeclaration) {
         logger.debug("CXFImporter destroy a proxy for " + importDeclaration);
-
         ServiceRegistration serviceRegistration = map.get(importDeclaration);
         serviceRegistration.unregister();
         map.remove(importDeclaration);
