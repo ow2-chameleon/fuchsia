@@ -157,8 +157,13 @@ public class UPnPFuchsiaDiscoveryImpl extends AbstractDiscoveryComponent impleme
         registerImportDeclaration(importDeclarations.get(metadata.get("id")));
     }
 
-    public HashMap<String, ImportDeclaration> getImportDeclarations() {
-        return importDeclarations;
+    public Set<ImportDeclaration> getImportDeclarations() {
+        Set<ImportDeclaration> idecs = new HashSet<ImportDeclaration>();
+        synchronized (this) {
+           for(ImportDeclaration idec : importDeclarations.values())
+               idecs.add(idec);
+        }
+        return idecs;
     }
 
     /**

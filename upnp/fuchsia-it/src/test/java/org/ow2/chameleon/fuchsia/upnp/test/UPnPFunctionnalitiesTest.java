@@ -16,6 +16,7 @@ import javax.inject.Inject;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Set;
 
 import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
 import static org.fest.assertions.Assertions.assertThat;
@@ -131,10 +132,10 @@ public class UPnPFunctionnalitiesTest extends BaseTest {
         assertThat(uPnPFuchsiaDiscovery).isNotNull();
         assertThat(uPnPFuchsiaImporter).isNotNull();
 
-        HashMap<String, ImportDeclaration> iDecs = uPnPFuchsiaDiscovery.getImportDeclarations();
+        Set<ImportDeclaration> iDecs = uPnPFuchsiaDiscovery.getImportDeclarations();
 
         synchronized (this) {
-            for(ImportDeclaration iDec : iDecs.values()) {
+            for(ImportDeclaration iDec : iDecs) {
 
                 GenericDevice deviceProxy = uPnPFuchsiaImporter.getObjectProxy(iDec);
                 assertThat(deviceProxy.getSerialNumber()).isNotNull();
