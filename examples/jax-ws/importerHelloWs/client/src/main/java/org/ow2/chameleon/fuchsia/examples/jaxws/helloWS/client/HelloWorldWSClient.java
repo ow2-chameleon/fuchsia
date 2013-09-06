@@ -48,5 +48,6 @@ public class HelloWorldWSClient {
 
     protected void useService(HelloWorldWS helloWS) {
         helloWS.sayHello("World !!!");
+        helloWS.sayGoodBye("World !!!");
     }
 }

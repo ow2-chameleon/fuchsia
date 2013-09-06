@@ -1,9 +1,6 @@
 package org.ow2.chameleon.fuchsia.examples.jaxws.helloWS.iDecCreator;
 
-import org.apache.felix.ipojo.annotations.Component;
-import org.apache.felix.ipojo.annotations.Instantiate;
-import org.apache.felix.ipojo.annotations.Invalidate;
-import org.apache.felix.ipojo.annotations.Validate;
+import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
@@ -19,7 +16,8 @@ import java.util.*;
  * Time: 14:01
  * To change this template use File | Settings | File Templates.
  */
-@Component
+@Component(name="HelloWSIDecCreator-Factory")
+@Provides(specifications = HelloWSIDecCreator.class)
 @Instantiate
 public class HelloWSIDecCreator {
 

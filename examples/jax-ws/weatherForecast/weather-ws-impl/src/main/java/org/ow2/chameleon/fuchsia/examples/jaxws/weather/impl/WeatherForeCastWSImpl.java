@@ -36,7 +36,6 @@ public class WeatherForeCastWSImpl implements WeatherForeCastWS{
 
     @Requires(optional=true,filter="(org.ow2.chameleon.syndication.feed.url=*)")
     private FeedReader reader;
-//    private EnumWeatherConditions condition = new EnumWeatherConditions();
 
     @ServiceProperty(name="service.exported.interfaces", value="*")
     private String exportedInterfaces;
@@ -54,7 +53,7 @@ public class WeatherForeCastWSImpl implements WeatherForeCastWS{
     public String getActualWeather(String location) {
 
         logger.info("Invoking: getActualWeather(" + location + ")");
-        location="38000";
+        location="38000"; //TODO FIX ME overide location
         String location1 = new ZipCodeConverter(location).getWoeid();
         // Create the instance
         try {
