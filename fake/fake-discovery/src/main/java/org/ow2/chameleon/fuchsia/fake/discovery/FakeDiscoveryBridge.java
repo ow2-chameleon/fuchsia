@@ -47,7 +47,6 @@ public class FakeDiscoveryBridge extends AbstractDiscoveryComponent {
      * logger
      */
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    private HashMap<String, Map<String,Object>> m_metadata;
 
     public FakeDiscoveryBridge(BundleContext bundleContext) throws ResourceNotFoundException, IllegalActionOnResourceException {
         super(bundleContext);
@@ -84,7 +83,7 @@ public class FakeDiscoveryBridge extends AbstractDiscoveryComponent {
 
         //Create the fake device => instantiate new generic device
         logger.info("Create the fake device : " + metadata.toString());
-        createFakeDevice("fuchsia.GenericFakeDevice",(String)metadata.get("id"),(String)metadata.get("type"),(String)metadata.get("subtype"));
+        createFakeDevice("fuchsia.GenericFakeDevice",(String)metadata.get("id"));
 
         //publish an importDeclaration
         importDeclarations.put((String) metadata.get("id"), ImportDeclarationBuilder.fromMetadata(metadata).build());
@@ -94,6 +93,7 @@ public class FakeDiscoveryBridge extends AbstractDiscoveryComponent {
 
     /**
      * Reconfigure an instance of a device through the factory and republish the Idec in order to create the proxy
+     * Note : Not use for the moment !
      * @param metadata
      */
     public synchronized void reconfigureFakeDeviceInstanceAndRePublishIDec(HashMap<String,Object> metadata) {
@@ -116,7 +116,7 @@ public class FakeDiscoveryBridge extends AbstractDiscoveryComponent {
 
         //Create the fake device => instantiate new generic device
         logger.info("Delete the fake device : " + (String)metadata.get("id").toString());
-        deleteFakeDevice("fuchsia.GenericFakeDevice", (String)metadata.get("id"), (String)metadata.get("type"), (String)metadata.get("subtype"));
+        deleteFakeDevice((String)metadata.get("id"));
 
         //remove the importDeclaration
         unregisterImportDeclaration(importDeclarations.get((String)metadata.get("id")));
@@ -128,16 +128,8 @@ public class FakeDiscoveryBridge extends AbstractDiscoveryComponent {
      * Method to create an instance of Generic device through a factory name
      * @param factoryName
      * @param deviceId
-     * @param deviceType
-     * @param deviceSubType
      */
-    public void createFakeDevice(String factoryName, String deviceId, String deviceType, String deviceSubType) {
-
-        // Create the device
-        Dictionary<String, String> configProperties = new Hashtable<String, String>();
-        configProperties.put(GenericDevice.DEVICE_SERIAL_NUMBER, deviceId);
-        configProperties.put(GenericDevice.DEVICE_TYPE, deviceType);
-        configProperties.put(GenericDevice.DEVICE_TYPE, deviceSubType);
+    public void createFakeDevice(String factoryName, String deviceId) {
 
         //Create the instance
         try {
@@ -150,11 +142,13 @@ public class FakeDiscoveryBridge extends AbstractDiscoveryComponent {
     }
 
     /**
-     * Method to create instance of Generic device through a factory name
+     * Method to update instance of Generic device through a factory name
      * @param factoryName
      * @param deviceId
      * @param deviceType
      * @param deviceSubType
+     *
+     * Note : Need to be implement if we allow instance reconfiguration
      */
     public void updateFakeDevice(String factoryName, String deviceId, String deviceType, String deviceSubType) {
          //TODO implements
@@ -162,18 +156,9 @@ public class FakeDiscoveryBridge extends AbstractDiscoveryComponent {
 
     /**
      * Method to delete the instance of Generic device through a factory name
-     * @param factoryName
      * @param deviceId
-     * @param deviceType
-     * @param deviceSubType
      */
-    public void deleteFakeDevice(String factoryName, String deviceId, String deviceType, String deviceSubType) {
-
-        // Create the device
-        Dictionary<String, String> configProperties = new Hashtable<String, String>();
-        configProperties.put(GenericDevice.DEVICE_SERIAL_NUMBER, deviceId);
-        configProperties.put(GenericDevice.DEVICE_TYPE, deviceType);
-        configProperties.put(GenericDevice.DEVICE_TYPE, deviceSubType);
+    public void deleteFakeDevice(String deviceId) {
 
         //delete the instance
         try {
