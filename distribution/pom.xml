@@ -189,23 +189,67 @@
         </profile>
 
         <profile>
-            <id>webservices</id>
+            <id>webservices-client</id>
             <dependencies>
+
                 <dependency>
                     <groupId>${project.parent.groupId}</groupId>
-                    <artifactId>cxf-importer</artifactId>
+                    <artifactId>fuchsia-core</artifactId>
                     <version>${project.parent.version}</version>
                 </dependency>
-                <!--dependency>
-                    <groupId>${project.parent.groupId}</groupId>
-                    <artifactId>cxf-exporter</artifactId>
+
+                <dependency>
+                    <groupId>org.ow2.chameleon.fuchsia.jaxrs</groupId>
+                    <artifactId>fuchsia-cxf-importer</artifactId>
                     <version>${project.parent.version}</version>
-                </dependency-->
-                <!--dependency>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.ow2.chameleon.fuchsia.examples</groupId>
+                    <artifactId>hello.ws.interface</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.ow2.chameleon.fuchsia.examples</groupId>
+                    <artifactId>hello.ws.client</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.ow2.chameleon.fuchsia.examples</groupId>
+                    <artifactId>hello.ws.iDec</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+
+                <dependency>
                     <groupId>org.apache.cxf.dosgi</groupId>
                     <artifactId>cxf-dosgi-ri-singlebundle-distribution</artifactId>
                     <version>${apacheCXF.version}</version>
-                </dependency-->
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>webservices-server</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.ow2.chameleon.fuchsia.examples</groupId>
+                    <artifactId>hello.ws.interface</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.ow2.chameleon.fuchsia.examples</groupId>
+                    <artifactId>hello.ws.impl</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.cxf.dosgi</groupId>
+                    <artifactId>cxf-dosgi-ri-singlebundle-distribution</artifactId>
+                    <version>${apacheCXF.version}</version>
+                </dependency>
 
             </dependencies>
         </profile>

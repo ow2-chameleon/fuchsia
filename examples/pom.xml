@@ -26,12 +26,12 @@
     <artifactId>fuchsia-examples</artifactId>
     <version>0.0.1</version>
 
-    <name>Fuchsia Examples</name>
+    <name>OW2 Chameleon - Fuchsia examples</name>
     <packaging>pom</packaging>
 
     <modules>
         <module>fool-components</module>
         <module>upnp-samples</module>
+        <module>jax-ws</module>
     </modules>
 </project>
-
