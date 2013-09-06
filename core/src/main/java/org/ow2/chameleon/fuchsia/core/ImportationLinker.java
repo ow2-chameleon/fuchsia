@@ -18,8 +18,6 @@ public interface ImportationLinker {
 
     final static String FILTER_IMPORTERSERVICE_PROPERTY = "fuchsia.linker.filter.importerService";
 
-    final static String UNIQUE_IMPORTATION_PROPERTY = "fuchsia.linker.uniqueImportation";
-
     String getName();
 
 }

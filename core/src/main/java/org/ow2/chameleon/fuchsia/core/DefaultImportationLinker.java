@@ -16,7 +16,6 @@ import org.osgi.framework.Filter;
 import org.osgi.framework.ServiceReference;
 import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
-import org.ow2.chameleon.fuchsia.core.declaration.Status;
 import org.ow2.chameleon.fuchsia.core.exceptions.ImporterException;
 import org.ow2.chameleon.fuchsia.core.exceptions.InvalidFilterException;
 import org.slf4j.Logger;
@@ -40,14 +39,6 @@ import static org.ow2.chameleon.fuchsia.core.component.ImporterService.TARGET_FI
  * {@link ImporterService} named {@literal {@link #FILTER_IMPORTERSERVICE_PROPERTY }}.
  * <p/>
  * The filters are String with the LDAP syntax OR {@link Filter}.
- * <p/>
- * An optional ServiceProperty {@literal {@link #UNIQUE_IMPORTATION_PROPERTY}} can disallow the DefaultImportationLinker
- * to give an ImportDeclaration to more than one ImporterService. This Property is set to False by default.
- * WARNING : this property is actually based on the number of ImporterService actually bind to the ImportDeclaration,
- * if an other ImportationLinker has already bind the ImportDeclaration to an ImporterService, the
- * DefaultImportationLinker will not give the ImportDeclaration to any of its ImporterService. The others
- * ImportationLinker can bind theirs ImportDeclaration to many ImporterService if they are not configured for an
- * unique import by ImportDeclaration.
  *
  * @author Morgan Martinet
  */
@@ -103,11 +94,6 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
             declarationsManager.applyFilterChanges();
         }
     }
-
-
-    @ServiceProperty(name = UNIQUE_IMPORTATION_PROPERTY, mandatory = false)
-    @Property(name = UNIQUE_IMPORTATION_PROPERTY, mandatory = false)
-    private boolean uniqueImportationProperty = false;
 
     private final Object lock = new Object();
 
@@ -251,12 +237,6 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
     }
 
     public boolean canBeLinked(ImportDeclaration importDeclaration, ServiceReference<ImporterService> importerServiceSRef) {
-        // if the uniqueImportationProperty is set to true, if the importDeclaration is already bind and
-        // the importerService is not one binded to the importDeclaration, return false.
-        Status status = importDeclaration.getStatus();
-        if (uniqueImportationProperty && status.isBound() && !status.getServiceReferences().contains(importerServiceSRef)) {
-            return false;
-        }
         // Evaluate the target filter of the ImporterService on the ImportDeclaration
         Filter filter = importersManager.getTargetFilter(importerServiceSRef);
         return filter.matches(importDeclaration.getMetadata());
