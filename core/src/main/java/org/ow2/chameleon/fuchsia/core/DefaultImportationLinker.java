@@ -203,15 +203,36 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
      * <p/>
      * Foreach ImportDeclaration, check if metadata match the filter given exposed by the importerServices bound.
      */
-    @Bind(id = "importDeclarations", aggregate = true, optional = true)
-    void bindImportDeclaration(ImportDeclaration importDeclaration) {
-        logger.debug(linker_name + " : Bind the ImportDeclaration " + importDeclaration);
+    @Bind(id = "importDeclarations", specification = "org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration", aggregate = true, optional = true)
+    void bindImportDeclaration(ServiceReference<ImportDeclaration> importDeclarationSRef) {
         synchronized (lock) {
-            declarationsManager.add(importDeclaration);
-            if (!declarationsManager.matched(importDeclaration)) {
+            declarationsManager.add(importDeclarationSRef);
+            logger.debug(linker_name + " : Bind the ImportDeclaration "
+                    + declarationsManager.getImportDeclaration(importDeclarationSRef));
+
+            if (!declarationsManager.matched(importDeclarationSRef)) {
                 return;
             }
-            declarationsManager.createLinks(importDeclaration);
+            declarationsManager.createLinks(importDeclarationSRef);
+        }
+    }
+
+
+    /**
+     * Unbind and bind the {@link ImportDeclaration}.
+     */
+    @Modified(id = "importDeclarations")
+    void modifiedImportDeclaration(ServiceReference<ImportDeclaration> importDeclarationSRef) {
+        logger.debug(linker_name + " : Modify the ImportDeclaration "
+                + declarationsManager.getImportDeclaration(importDeclarationSRef));
+
+        synchronized (lock) {
+            declarationsManager.removeLinks(importDeclarationSRef);
+            declarationsManager.modified(importDeclarationSRef);
+            if (!declarationsManager.matched(importDeclarationSRef)) {
+                return;
+            }
+            declarationsManager.createLinks(importDeclarationSRef);
         }
     }
 
@@ -219,11 +240,13 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
      * Unbind the {@link ImportDeclaration}.
      */
     @Unbind(id = "importDeclarations")
-    void unbindImportDeclaration(ImportDeclaration importDeclaration) {
-        logger.debug(linker_name + " : Unbind the ImportDeclaration " + importDeclaration);
+    void unbindImportDeclaration(ServiceReference<ImportDeclaration> importDeclarationSRef) {
+        logger.debug(linker_name + " : Unbind the ImportDeclaration "
+                + declarationsManager.getImportDeclaration(importDeclarationSRef));
+
         synchronized (lock) {
-            declarationsManager.removeLinks(importDeclaration);
-            declarationsManager.remove(importDeclaration);
+            declarationsManager.removeLinks(importDeclarationSRef);
+            declarationsManager.remove(importDeclarationSRef);
         }
     }
 
@@ -308,32 +331,38 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
      * Internal class which handle the ImportDeclarations and provide some usefuls functions on
      */
     class DeclarationsManager {
-        private final Map<ImportDeclaration, Boolean> declarations;
+        private final Map<ServiceReference<ImportDeclaration>, Boolean> declarations;
 
         DeclarationsManager() {
-            declarations = new HashMap<ImportDeclaration, Boolean>();
+            declarations = new HashMap<ServiceReference<ImportDeclaration>, Boolean>();
         }
 
-        void add(ImportDeclaration importDeclaration) {
+        void add(ServiceReference<ImportDeclaration> importDeclarationSRef) {
+            ImportDeclaration importDeclaration = getImportDeclaration(importDeclarationSRef);
             boolean matchFilter = importDeclarationFilter.matches(importDeclaration.getMetadata());
-            declarations.put(importDeclaration, matchFilter);
+            declarations.put(importDeclarationSRef, matchFilter);
         }
 
-        Boolean remove(ImportDeclaration importDeclaration) {
-            return declarations.remove(importDeclaration);
+        void remove(ServiceReference<ImportDeclaration> importDeclarationSRef) {
+            declarations.remove(importDeclarationSRef);
         }
 
-        Boolean matched(ImportDeclaration importDeclaration) {
-            return declarations.get(importDeclaration);
+        void modified(ServiceReference<ImportDeclaration> importDeclarationSRef) {
+            ImportDeclaration importDeclaration = getImportDeclaration(importDeclarationSRef);
+            boolean matchFilter = importDeclarationFilter.matches(importDeclaration.getMetadata());
+            declarations.put(importDeclarationSRef, matchFilter);
         }
 
-        void removeLinks(ImportDeclaration importDeclaration) {
-            for (ServiceReference serviceReference : importDeclaration.getStatus().getServiceReferences()) {
-                unlink(importDeclaration, serviceReference);
-            }
+        Boolean matched(ServiceReference<ImportDeclaration> importDeclarationSRef) {
+            return declarations.get(importDeclarationSRef);
         }
 
-        void createLinks(ImportDeclaration importDeclaration) {
+        ImportDeclaration getImportDeclaration(ServiceReference<ImportDeclaration> importDeclarationSRef) {
+            return bundleContext.getService(importDeclarationSRef);
+        }
+
+        void createLinks(ServiceReference<ImportDeclaration> importDeclarationSRef) {
+            ImportDeclaration importDeclaration = getImportDeclaration(importDeclarationSRef);
             for (ServiceReference<ImporterService> serviceReference : importersManager.getMatchedServiceReference()) {
                 if (canBeLinked(importDeclaration, serviceReference)) {
                     link(importDeclaration, serviceReference);
@@ -341,22 +370,32 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
             }
         }
 
+        void removeLinks(ServiceReference<ImportDeclaration> importDeclarationSRef) {
+            ImportDeclaration importDeclaration = getImportDeclaration(importDeclarationSRef);
+            for (ServiceReference serviceReference : importDeclaration.getStatus().getServiceReferences()) {
+                // FIXME : In case of multiples Linker, we will remove the link of all the ServiceReference
+                // FIXME : event the ones which dun know nothing about
+                unlink(importDeclaration, serviceReference);
+            }
+        }
+
         Set<ImportDeclaration> getMatchedImportDeclaration() {
             Set<ImportDeclaration> bindedSet = new HashSet<ImportDeclaration>();
-            for (Map.Entry<ImportDeclaration, Boolean> e : declarations.entrySet()) {
+            for (Map.Entry<ServiceReference<ImportDeclaration>, Boolean> e : declarations.entrySet()) {
                 if (e.getValue()) {
-                    bindedSet.add(e.getKey());
+                    bindedSet.add(getImportDeclaration(e.getKey()));
                 }
             }
             return bindedSet;
         }
 
         void applyFilterChanges() {
-            Set<ImportDeclaration> added = new HashSet<ImportDeclaration>();
-            Set<ImportDeclaration> removed = new HashSet<ImportDeclaration>();
+            Set<ServiceReference<ImportDeclaration>> added = new HashSet<ServiceReference<ImportDeclaration>>();
+            Set<ServiceReference<ImportDeclaration>> removed = new HashSet<ServiceReference<ImportDeclaration>>();
 
-            for (Map.Entry<ImportDeclaration, Boolean> e : declarations.entrySet()) {
-                boolean matchFilter = importDeclarationFilter.matches(e.getKey().getMetadata());
+            for (Map.Entry<ServiceReference<ImportDeclaration>, Boolean> e : declarations.entrySet()) {
+                Map<String, Object> metadata = getImportDeclaration(e.getKey()).getMetadata();
+                boolean matchFilter = importDeclarationFilter.matches(metadata);
                 if (matchFilter != e.getValue() && matchFilter) {
                     added.add(e.getKey());
                 } else if (matchFilter != e.getValue() && !matchFilter) {
@@ -364,11 +403,11 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
                 }
                 e.setValue(matchFilter);
             }
-            for (ImportDeclaration importDeclaration : removed) {
-                removeLinks(importDeclaration);
+            for (ServiceReference<ImportDeclaration> importDeclarationSRef : removed) {
+                removeLinks(importDeclarationSRef);
             }
-            for (ImportDeclaration importDeclaration : added) {
-                createLinks(importDeclaration);
+            for (ServiceReference<ImportDeclaration> importDeclarationSRef : added) {
+                createLinks(importDeclarationSRef);
             }
         }
     }
@@ -384,10 +423,10 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
                 update(serviceReference);
             }
 
-            private void update(ServiceReference<ImporterService> serviceReference) throws InvalidFilterException {
+            private void update(ServiceReference<ImporterService> importerServiceSRef) throws InvalidFilterException {
                 properties.clear();
-                for (String key : serviceReference.getPropertyKeys()) {
-                    properties.put(key, serviceReference.getProperty(key));
+                for (String key : importerServiceSRef.getPropertyKeys()) {
+                    properties.put(key, importerServiceSRef.getProperty(key));
                 }
                 match = importerServiceFilter.matches(properties);
                 targetFilter = getFilter(properties.get(TARGET_FILTER_PROPERTY));
@@ -400,39 +439,43 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
             importers = new HashMap<ServiceReference<ImporterService>, ImporterDescriptor>();
         }
 
-        void add(ServiceReference<ImporterService> serviceReference) throws InvalidFilterException {
-            ImporterDescriptor importerDescriptor = new ImporterDescriptor(serviceReference);
-            importers.put(serviceReference, importerDescriptor);
+        void add(ServiceReference<ImporterService> importerServiceSRef) throws InvalidFilterException {
+            ImporterDescriptor importerDescriptor = new ImporterDescriptor(importerServiceSRef);
+            importers.put(importerServiceSRef, importerDescriptor);
         }
 
-        ImporterDescriptor remove(ServiceReference<ImporterService> serviceReference) {
-            return importers.remove(serviceReference);
+        void remove(ServiceReference<ImporterService> importerServiceSRef) {
+            importers.remove(importerServiceSRef);
         }
 
-        Boolean matched(ServiceReference<ImporterService> serviceReference) {
-            return importers.get(serviceReference).match;
+        void modified(ServiceReference<ImporterService> importerServiceSRef) throws InvalidFilterException {
+            importers.get(importerServiceSRef).update(importerServiceSRef);
         }
 
-        ImporterService getImporterService(ServiceReference<ImporterService> serviceReference) {
-            return bundleContext.getService(serviceReference);
+        Boolean matched(ServiceReference<ImporterService> importerServiceSRef) {
+            return importers.get(importerServiceSRef).match;
         }
 
-        Filter getTargetFilter(ServiceReference<ImporterService> serviceReference) {
-            return importers.get(serviceReference).targetFilter;
+        ImporterService getImporterService(ServiceReference<ImporterService> importerServiceSRef) {
+            return bundleContext.getService(importerServiceSRef);
         }
 
-        void removeLinks(ServiceReference<ImporterService> serviceReference) {
+        Filter getTargetFilter(ServiceReference<ImporterService> importerServiceSRef) {
+            return importers.get(importerServiceSRef).targetFilter;
+        }
+
+        void createLinks(ServiceReference<ImporterService> importerServiceSRef) {
             for (ImportDeclaration importDeclaration : declarationsManager.getMatchedImportDeclaration()) {
-                if (importDeclaration.getStatus().getServiceReferences().contains(serviceReference)) {
-                    unlink(importDeclaration, serviceReference);
+                if (canBeLinked(importDeclaration, importerServiceSRef)) {
+                    link(importDeclaration, importerServiceSRef);
                 }
             }
         }
 
-        void createLinks(ServiceReference<ImporterService> serviceReference) {
+        void removeLinks(ServiceReference<ImporterService> importerServiceSRef) {
             for (ImportDeclaration importDeclaration : declarationsManager.getMatchedImportDeclaration()) {
-                if (canBeLinked(importDeclaration, serviceReference)) {
-                    link(importDeclaration, serviceReference);
+                if (importDeclaration.getStatus().getServiceReferences().contains(importerServiceSRef)) {
+                    unlink(importDeclaration, importerServiceSRef);
                 }
             }
         }
@@ -455,10 +498,6 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
                 }
             }
             return bindedSet;
-        }
-
-        void modified(ServiceReference<ImporterService> serviceReference) throws InvalidFilterException {
-            importers.get(serviceReference).update(serviceReference);
         }
 
         void applyFilterChanges() {
