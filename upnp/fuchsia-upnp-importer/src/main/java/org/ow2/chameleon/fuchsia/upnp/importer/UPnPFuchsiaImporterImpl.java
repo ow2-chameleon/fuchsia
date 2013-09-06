@@ -50,6 +50,7 @@ public class UPnPFuchsiaImporterImpl extends AbstractImporterComponent {
     protected void stop() {
         logger.info("STOP FAKE IMPORTER SERVICE");
         super.stop();
+        listOfCreatedProxies.clear();
     }
 
     @Override
@@ -94,8 +95,7 @@ public class UPnPFuchsiaImporterImpl extends AbstractImporterComponent {
     @Override
     protected void destroyProxy(ImportDeclaration importDeclaration) {
         logger.debug("FakeImporter destroy a proxy for " + importDeclaration);
-        GenericDevice toBeRemovedProxy = listOfCreatedProxies.get(importDeclaration);
-        logger.debug("Removed proxy :" +toBeRemovedProxy.getSerialNumber());
+        listOfCreatedProxies.remove(listOfCreatedProxies.get(importDeclaration));
     }
 
     public List<String> getConfigPrefix() {

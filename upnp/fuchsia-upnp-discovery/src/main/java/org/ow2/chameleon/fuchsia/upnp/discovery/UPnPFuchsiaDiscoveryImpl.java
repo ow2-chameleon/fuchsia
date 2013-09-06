@@ -75,7 +75,6 @@ public class UPnPFuchsiaDiscoveryImpl extends AbstractDiscoveryComponent impleme
             filter = m_context.createFilter(listenerFilter);
             m_serviceTracker = new ServiceTracker(m_context, filter, this);
             m_serviceTracker.open();
-            logger.debug("FILTER : " + filter.toString());
         } catch (InvalidSyntaxException e) {
             e.printStackTrace();
         }
@@ -116,12 +115,14 @@ public class UPnPFuchsiaDiscoveryImpl extends AbstractDiscoveryComponent impleme
         return m_context.getService(reference);
     }
 
+    //TODO implements
     public void modifiedService(ServiceReference reference, Object service) {
-        //To change body of implemented methods use File | Settings | File Templates.
+
     }
 
+    //TODO implements
     public void removedService(ServiceReference reference, Object service) {
-        String deviceID = (String)reference.getProperty(UPnPDevice.UDN);
+//        String deviceID = (String)reference.getProperty(UPnPDevice.UDN);
 //        roseMachine.removeRemote(deviceID);
     }
 
@@ -148,14 +149,12 @@ public class UPnPFuchsiaDiscoveryImpl extends AbstractDiscoveryComponent impleme
 
         EndpointDescription epd = new EndpointDescription(props);
         logger.debug("[DEBUG DISCOVERY] EndPoint : " + epd.toString());
-//        roseMachine.putRemote(deviceId, epd);
         metadata.put("endpoint",epd);
-        createUPnPDevice("fuchsia.GenericFakeDevice", deviceId, deviceType, deviceSubTYype, epd);
-
+        createUPnPDevice("fuchsia.GenericFakeDevice", deviceId, deviceType);
 
         //publish an importDeclaration
         importDeclarations.put(deviceId, ImportDeclarationBuilder.fromMetadata(metadata).build());
-        registerImportDeclaration(importDeclarations.get((String)metadata.get("id")));
+        registerImportDeclaration(importDeclarations.get(metadata.get("id")));
     }
 
     public HashMap<String, ImportDeclaration> getImportDeclarations() {
@@ -167,10 +166,8 @@ public class UPnPFuchsiaDiscoveryImpl extends AbstractDiscoveryComponent impleme
      * @param factoryName
      * @param deviceId
      * @param deviceType
-     * @param deviceSubType
-     * @param epd
      */
-    public void createUPnPDevice(String factoryName, String deviceId, String deviceType, String deviceSubType, EndpointDescription epd) {
+    public void createUPnPDevice(String factoryName, String deviceId, String deviceType) {
 
         // Create the instance
         try {
