@@ -33,7 +33,7 @@
         </dependency>
         <dependency>
             <groupId>org.ow2.chameleon.fuchsia.jaxws</groupId>
-            <artifactId>cxf-importer</artifactId>
+            <artifactId>fuchsia-cxf-importer</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>
