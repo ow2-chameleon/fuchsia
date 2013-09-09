@@ -9,6 +9,7 @@ import org.osgi.service.log.LogService;
 import org.ow2.chameleon.fuchsia.core.ImportationLinker;
 import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
+import org.ow2.chameleon.fuchsia.core.exceptions.ImporterException;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -43,31 +44,31 @@ public class AbstractImporterComponentTest {
     }
 
     @Test
-    public void testImportDeclaration() {
+    public void testImportDeclaration() throws ImporterException {
         ImportDeclaration idec = mock(ImportDeclaration.class);
-        testedClass.createProxy(idec);
+        testedClass.addImportDeclaration(idec);
 
         assertThat(testedClass.nbProxies()).isEqualTo(1); //Check that createProxy has been called
 
-        testedClass.destroyProxy(idec);
+        testedClass.removeImportDeclaration(idec);
 
         assertThat(testedClass.nbProxies()).isEqualTo(0); //Check that destroyProxy has been called
     }
 
     @Test
-    public void testMultiplesImportDeclaration() {
+    public void testMultiplesImportDeclaration() throws ImporterException {
         Collection<ImportDeclaration> decs = new HashSet<ImportDeclaration>();
 
         for (int i = 0; i < IMPORT_MAX; i++) {
             ImportDeclaration idec = mock(ImportDeclaration.class);
-            testedClass.createProxy(idec);
+            testedClass.addImportDeclaration(idec);
             assertThat(testedClass.nbProxies()).isEqualTo(i + 1); //Check that createProxy has been called
 
             decs.add(idec);
         }
 
         for (ImportDeclaration idec : decs) {
-            testedClass.destroyProxy(idec);
+            testedClass.removeImportDeclaration(idec);
         }
 
         assertThat(testedClass.nbProxies()).isEqualTo(0); //Check that destroyProxy has been called
