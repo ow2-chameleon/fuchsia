@@ -26,9 +26,9 @@ public class DiscoveryTest extends CommonTest {
 
         return options(
                 // iCasa bundles to test
-                mavenBundle("org.ow2.chameleon.fuchsia", "fuchsia-fake-device").versionAsInProject(),
-                mavenBundle("org.ow2.chameleon.fuchsia", "fuchsia-fake-discovery").versionAsInProject(),
-                mavenBundle("org.ow2.chameleon.fuchsia", "fuchsia-fake-importer").versionAsInProject()
+                mavenBundle("org.ow2.chameleon.fuchsia.fake", "fuchsia-fake-device").versionAsInProject(),
+                mavenBundle("org.ow2.chameleon.fuchsia.fake", "fuchsia-fake-discovery").versionAsInProject(),
+                mavenBundle("org.ow2.chameleon.fuchsia.fake", "fuchsia-fake-importer").versionAsInProject()
         );
     }
 

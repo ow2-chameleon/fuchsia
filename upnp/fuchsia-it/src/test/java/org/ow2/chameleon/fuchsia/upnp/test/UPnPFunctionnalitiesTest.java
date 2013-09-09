@@ -50,7 +50,7 @@ public class UPnPFunctionnalitiesTest extends BaseTest {
                 wrappedBundle(mavenBundle("org.osgi", "org.osgi.compendium").versionAsInProject()),
                 wrappedBundle(mavenBundle("org.ow2.chameleon.everest", "everest-ipojo").versionAsInProject()),
                 wrappedBundle(mavenBundle("org.ow2.chameleon.fuchsia", "fuchsia-core").versionAsInProject()),
-                wrappedBundle(mavenBundle("org.ow2.chameleon.fuchsia", "fuchsia-fake-device").versionAsInProject()),
+                wrappedBundle(mavenBundle("org.ow2.chameleon.fuchsia.fake", "fuchsia-fake-device").versionAsInProject()),
                 wrappedBundle(mavenBundle("org.ow2.chameleon.fuchsia.examples", "fuchsia-upnp-components").versionAsInProject()),
                 wrappedBundle(mavenBundle("org.ow2.chameleon.fuchsia", "fuchsia-upnp-config").versionAsInProject()),
                 wrappedBundle(mavenBundle("org.ow2.chameleon.fuchsia", "fuchsia-upnp-importer").versionAsInProject()),

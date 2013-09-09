@@ -107,19 +107,19 @@
                 </dependency>
 
                 <dependency>
-                    <groupId>${project.parent.groupId}</groupId>
+                    <groupId>org.ow2.chameleon.fuchsia.fake</groupId>
                     <artifactId>fuchsia-fake-device</artifactId>
                     <version>${project.parent.version}</version>
                 </dependency>
 
                 <dependency>
-                    <groupId>${project.parent.groupId}</groupId>
+                    <groupId>org.ow2.chameleon.fuchsia.fake</groupId>
                     <artifactId>fuchsia-fake-discovery</artifactId>
                     <version>${project.parent.version}</version>
                 </dependency>
 
                 <dependency>
-                    <groupId>${project.parent.groupId}</groupId>
+                    <groupId>org.ow2.chameleon.fuchsia.fake</groupId>
                     <artifactId>fuchsia-fake-importer</artifactId>
                     <version>${project.parent.version}</version>
                 </dependency>
@@ -199,7 +199,7 @@
                 </dependency>
 
                 <dependency>
-                    <groupId>org.ow2.chameleon.fuchsia.jaxrs</groupId>
+                    <groupId>org.ow2.chameleon.fuchsia.jaxws</groupId>
                     <artifactId>fuchsia-cxf-importer</artifactId>
                     <version>${project.parent.version}</version>
                 </dependency>
@@ -452,7 +452,7 @@
                 </dependency>
 
                 <dependency>
-                    <groupId>${project.parent.groupId}</groupId>
+                    <groupId>org.ow2.chameleon.fuchsia.fake</groupId>
                     <artifactId>fuchsia-fake-device</artifactId>
                     <version>${project.parent.version}</version>
                 </dependency>
