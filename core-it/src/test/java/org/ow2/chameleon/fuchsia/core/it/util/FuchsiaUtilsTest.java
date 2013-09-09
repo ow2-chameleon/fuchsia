@@ -95,7 +95,7 @@ public class FuchsiaUtilsTest extends CommonTest {
         } catch (Exception e) {
             assertThat(e).isInstanceOf(InvalidFilterException.class)
                     .hasNoCause()
-                    .hasMessageContaining("The given filter  must be a String using LDAP syntax or an" +
+                    .hasMessageContaining("The given filter must be a String using LDAP syntax or an" +
                             "object org.osgi.framework.Filter");
         }
     }
@@ -108,7 +108,7 @@ public class FuchsiaUtilsTest extends CommonTest {
         } catch (Exception e) {
             assertThat(e).isInstanceOf(InvalidFilterException.class)
                     .hasNoCause()
-                    .hasMessageContaining("The given filter  must be a String using LDAP syntax or an" +
+                    .hasMessageContaining("The given filter must be a String using LDAP syntax or an" +
                             "object org.osgi.framework.Filter");
         }
     }

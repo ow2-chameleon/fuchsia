@@ -9,9 +9,6 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
 import org.osgi.framework.wiring.BundleCapability;
 import org.osgi.framework.wiring.BundleRevision;
-import org.osgi.framework.wiring.BundleWire;
-import org.osgi.framework.wiring.BundleWiring;
-import org.osgi.framework.wiring.FrameworkWiring;
 import org.osgi.service.packageadmin.ExportedPackage;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.ow2.chameleon.fuchsia.core.exceptions.InvalidFilterException;
@@ -32,7 +29,7 @@ public class FuchsiaUtils {
         } else if (filterObject instanceof Filter) {
             filter = (Filter) filterObject;
         } else {
-            throw new InvalidFilterException("The given filter  must be a String using LDAP syntax or an" +
+            throw new InvalidFilterException("The given filter must be a String using LDAP syntax or an" +
                     "object org.osgi.framework.Filter");
         }
         return filter;
