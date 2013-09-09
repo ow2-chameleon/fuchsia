@@ -14,9 +14,9 @@ package org.ow2.chameleon.fuchsia.core;
  */
 public interface ImportationLinker {
 
-    final static String FILTER_IMPORTDECLARATION_PROPERTY = "fuchsia.linker.filter.importDeclaration";
+    String FILTER_IMPORTDECLARATION_PROPERTY = "fuchsia.linker.filter.importDeclaration";
 
-    final static String FILTER_IMPORTERSERVICE_PROPERTY = "fuchsia.linker.filter.importerService";
+    String FILTER_IMPORTERSERVICE_PROPERTY = "fuchsia.linker.filter.importerService";
 
     String getName();
 
