@@ -2,18 +2,17 @@ Contribute
 ===========
 
 The ${project.artifactId} is an open-source project and all contributions are welcome to assist with its development
-and
-maintenance.
+and maintenance.
 
-The Fuchsia project is part of the OW2 Chameleon project, and is licensed under the Apache License 2.0.
+The Fuchsia Framework is part of the OW2 Chameleon project, and is licensed under the Apache License 2.0.
 
 Issues (bug and feature tracker)
 --------------------------------
 
 Please report any bugs found, feature requests or other issues on Fuchsia GitHub tracker.
 
-When creating a new issue, try following <a href="http://github.com/necolas/issue-guidelines/#readme">necolas’s
-    guidelines</a>.
+When creating a new issue, try following
+<a href="http://github.com/necolas/issue-guidelines/#readme">necolas’s guidelines</a>.
 
 Fork, patch and contribute code
 -------------------------------
@@ -25,3 +24,4 @@ Support
 -------
 
 Support is done using the OW2 Chameleon mailing lists. Check the <a href="mail-lists.html">mailing list page</a>.
+

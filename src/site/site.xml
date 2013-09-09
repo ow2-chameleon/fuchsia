@@ -30,24 +30,26 @@
                 <href>index.html</href>
             </brand>
 
-            <slogan>A framework to import distant resources.</slogan>
+            <slogan>A framework to communicate with the wild outside world</slogan>
 
             <titleTemplate>%2$s | %1$s</titleTemplate>
             <!--
             <toc>sidebar</toc>
             <tocTopMax>6</tocTopMax>
-            <topNav>Documentation|Contribute</topNav>
+            -->
+            <topNav>Documentation|Examples|Contribute</topNav>
             <navbarInverse>true</navbarInverse>
-             -->
-            <bottomNav maxSpan="9" >
+
+            <bottomNav maxSpan="9">
                 <column>Main|Download</column>
                 <column>Contribute</column>
                 <column>Documentation</column>
+                <column>Examples</column>
             </bottomNav>
             <bottomDescription>
                 <![CDATA[
-          <span class="color-highlight">OW2 Chameleon</span> ~ fuchsia is a framework used to import distant resources.
-        ]]>
+                    <span class="color-highlight">OW2 Chameleon</span> ~ Fuchsia is a framework to communicate with the wild outside world
+                ]]>
             </bottomDescription>
 
             <breadcrumbs>false</breadcrumbs>
@@ -62,8 +64,8 @@
                     <toc>false</toc>
                     <markPageHeader>false</markPageHeader>
                     <sections>
-                        <body />
-                        <sidebar />
+                        <body/>
+                        <sidebar/>
                     </sections>
                 </index>
                 <contribute>
@@ -110,42 +112,46 @@
 
 
         <links>
-            <item name="Download" href="downloads.html" />
-            <item name="GitHub project" href="http://github.com/ow2-chameleon/fuchsia" />
+            <item name="Download" href="downloads.html"/>
+            <item name="GitHub project" href="http://github.com/ow2-chameleon/fuchsia"/>
         </links>
 
         <breadcrumbs>
-            <item name="fuchsia" href="/" />
+            <item name="fuchsia" href="/"/>
         </breadcrumbs>
 
         <menu name="Main">
-            <item name="Home" href="./" />
-            <item name="GitHub project" href="http://github.com/ow2-chameleon/fuchsia" />
-            <item name="Release notes" href="github-report.html" />
+            <item name="Release notes" href="github-report.html"/>
+            <item name="GitHub project" href="http://github.com/ow2-chameleon/fuchsia"/>
+            <item name="Release notes" href="github-report.html"/>
         </menu>
 
         <menu name="Documentation" inherit="bottom">
-            <item name="Fuchsia Core" href="measures.html"/>
-            <item name="Fuchsia Fool" href="quantities.html"/>
-            <item name="Fuchsia Fake" href="units.html"/>
-            <item name="Examples" href="systemsOfUnits.html">
-                <item name="JAX-WS" href="systemsOfUnits.html"/>
-                <item name="File Based" href="systemsOfUnits.html"/>
-            </item>
+            <item name="Fuchsia Core" href="core.html"/>
+            <item name="JSON-RPC" href="json-rpc.html"/>
+            <item name="JAX-WS" href="jax-ws.html"/>
+            <item name="Fake" href="fake.html"/>
+
         </menu>
 
+        <menu name="Examples" inherit="bottom">
+            <item name="Fool Components" href="examples-fools.html"/>
+            <item name="JAX-WS" href="examples-jax-ws.html"/>
+            <item name="Fake" href="examples-fake.html"/>
+        </menu>
 
         <menu name="Download" inherit="top">
-            <item name="Download" href="downloads.html" />
-            <item name="License" href="license.html" />
+            <item name="Download" href="downloads.html"/>
+            <item name="License" href="license.html"/>
         </menu>
 
         <menu name="Contribute" inherit="bottom">
-            <item name="Contribute" href="contribution.html" />
+            <item name="Contribute" href="contribution.html"/>
             <item name="Sources" href="source-repository.html"/>
-            <item name="Issues" href="http://github.com/ow2-chameleon/fuchsia/issues/" />
-            <item name="Fork on GitHub" href="http://github.com/ow2-chameleon/fuchsia" />
+            <item name="Issues" href="http://github.com/ow2-chameleon/fuchsia/issues/"/>
+            <item name="Fork on GitHub" href="http://github.com/ow2-chameleon/fuchsia"/>
         </menu>
 
     </body>
 </project>
+
