@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.ow2.chameleon.fuchsia</groupId>
+        <groupId>org.ow2.chameleon.fuchsia.upnp</groupId>
         <artifactId>fuchsia-upnp</artifactId>
         <version>0.0.1</version>
         <relativePath>../pom.xml</relativePath>
@@ -25,7 +25,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>${project.parent.groupId}.examples</groupId>
+            <groupId>org.ow2.chameleon.fuchsia.examples</groupId>
             <artifactId>fuchsia-upnp-components</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
@@ -59,19 +59,13 @@
         </dependency>
 
         <dependency>
-            <groupId>org.ow2.chameleon.fuchsia</groupId>
-            <artifactId>fuchsia-upnp-config</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.ow2.chameleon.fuchsia</groupId>
+            <groupId>org.ow2.chameleon.fuchsia.upnp</groupId>
             <artifactId>fuchsia-upnp-importer</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.ow2.chameleon.fuchsia</groupId>
+            <groupId>org.ow2.chameleon.fuchsia.upnp</groupId>
             <artifactId>fuchsia-upnp-discovery</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
@@ -197,12 +191,6 @@
         <dependency>
             <groupId>org.apache.felix</groupId>
             <artifactId>org.apache.felix.ipojo.manipulator</artifactId>
-            <version>${ipojoVersion}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.felix</groupId>
-            <artifactId>org.apache.felix.ipojo</artifactId>
             <version>${ipojoVersion}</version>
         </dependency>
 
