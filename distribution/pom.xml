@@ -11,7 +11,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <name>OW2 Chameleon - Fuchsia Distributution</name>
+    <name>OW2 Chameleon - Fuchsia Distribution</name>
     <artifactId>distribution</artifactId>
 
     <description>
