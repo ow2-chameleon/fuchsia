@@ -69,14 +69,10 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
     private Filter importerServiceFilter;
 
     /**
-     * Called by iPOJO when the configuration of the DefaultImportationLinker is updated.
-     * <p/>
-     * Get the filter ImporterServiceFilter and ImportDeclarationFilter from the properties, stop the instance if one of
+     * Get the filters ImporterServiceFilter and ImportDeclarationFilter from the properties, stop the instance if one of
      * them is invalid.
-     * Compute and apply the changes in the links relatives to the changes in the filters.
      */
-    @Updated
-    public void updated() {
+    public void processProperties() {
         state = true;
         try {
             importerServiceFilter = getFilter(importerServiceFilterProperty);
@@ -95,6 +91,17 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
             state = false;
             return;
         }
+    }
+
+    /**
+     * Called by iPOJO when the configuration of the DefaultImportationLinker is updated.
+     * <p/>
+     * Call #processProperties() to get the updated filters ImporterServiceFilter and ImportDeclarationFilter.
+     * Compute and apply the changes in the links relatives to the changes in the filters.
+     */
+    @Updated
+    public void updated() {
+        processProperties();
 
         synchronized (lock) {
             importersManager.applyFilterChanges();
@@ -125,6 +132,7 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
 
     public DefaultImportationLinker(BundleContext bundleContext) {
         this.bundleContext = bundleContext;
+        processProperties();
     }
 
     /**
