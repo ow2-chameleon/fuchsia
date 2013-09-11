@@ -32,6 +32,7 @@
     <modules>
         <module>fool-components</module>
         <module>upnp-samples</module>
+        <module>upnp-config</module>
         <module>jax-ws</module>
     </modules>
 </project>
