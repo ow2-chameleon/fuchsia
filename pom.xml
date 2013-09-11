@@ -232,7 +232,13 @@
             <dependency>
                 <groupId>org.ow2.chameleon.fuchsia</groupId>
                 <artifactId>fuchsia-core</artifactId>
-                <version>0.0.1</version>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.ow2.chameleon.fuchsia.upnp</groupId>
+                <artifactId>fuchsia-upnp-config</artifactId>
+                <version>${project.version}</version>
             </dependency>
 
             <!-- OSGi -->
