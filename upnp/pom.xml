@@ -18,5 +18,7 @@
     <modules>
         <module>fuchsia-upnp-discovery</module>
         <module>fuchsia-upnp-discovery-it</module>
+        <module>fuchsia-upnp-importer</module>
+        <module>fuchsia-upnp-it</module>
     </modules>
 </project>
