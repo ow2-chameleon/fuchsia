@@ -15,5 +15,7 @@ target
 *.iml
 *.iws
 
+# Ignore Unix backup copies of files
+*~
 
 /atlassian-ide-plugin.xml
