@@ -185,19 +185,7 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
-
-        <repository>
-            <id>ow2-old-release</id>
-            <name>OW2 Maven Repository [OLD]</name>
-            <url>http://maven.ow2.org/maven2</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-
+     
         <repository>
             <id>upnp-release</id>
             <name>ow2 Maven Repository [OLD]</name>
