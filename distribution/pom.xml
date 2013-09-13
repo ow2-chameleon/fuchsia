@@ -31,7 +31,11 @@
                     <artifactId>fuchsia-core</artifactId>
                     <version>${project.parent.version}</version>
                 </dependency>
-
+                <dependency>
+                    <groupId>${project.parent.groupId}.tools</groupId>
+                    <artifactId>fuchsia-gogo-shell</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
                 <dependency>
                     <groupId>org.apache.felix</groupId>
                     <artifactId>org.apache.felix.http.jetty</artifactId>
@@ -408,7 +412,11 @@
                     <artifactId>fuchsia-core</artifactId>
                     <version>${project.parent.version}</version>
                 </dependency>
-
+                <dependency>
+                    <groupId>${project.parent.groupId}.tools</groupId>
+                    <artifactId>fuchsia-gogo-shell</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
                 <dependency>
                     <groupId>org.ow2.chameleon.fuchsia.fake</groupId>
                     <artifactId>fuchsia-fake-device</artifactId>
