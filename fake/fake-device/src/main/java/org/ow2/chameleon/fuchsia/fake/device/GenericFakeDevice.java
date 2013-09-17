@@ -10,7 +10,6 @@ import org.osgi.framework.Constants;
  */
 @Component(name = "fuchsia.GenericFakeDevice")
 @Provides(specifications = GenericDevice.class, properties = {@StaticServiceProperty(type = "java.lang.String", name = Constants.SERVICE_DESCRIPTION)})
-//@Instantiate
 public class GenericFakeDevice implements GenericDevice {
 
     @ServiceProperty(name = DEVICE_SERIAL_NUMBER, mandatory = true)
