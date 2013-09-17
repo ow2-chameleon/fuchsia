@@ -17,6 +17,7 @@ import org.ow2.chameleon.fuchsia.core.ExportationLinker;
 import org.ow2.chameleon.fuchsia.core.ImportationLinker;
 import org.ow2.chameleon.fuchsia.core.component.DiscoveryService;
 import org.ow2.chameleon.fuchsia.core.declaration.Declaration;
+import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 
 import java.util.Collection;
 
@@ -35,7 +36,7 @@ public class FuchsiaGogoCommand {
     String m_scope;
 
     @ServiceProperty(name = "osgi.command.function", value = "{}")
-    String[] m_function = new String[]{"declarations", "linkers", "discovery"};
+    String[] m_function = new String[]{"declaration", "linker", "discovery"};
 
     private BundleContext m_context = null;
 
@@ -44,12 +45,12 @@ public class FuchsiaGogoCommand {
     }
 
     @Descriptor("Gets info about the importation declaration available")
-    public void declarations(@Descriptor("declarations [ID name]") String... parameters) {
+    public void declaration(@Descriptor("declaration [ID name]") String... parameters) {
 
         String filter = null;
 
         try {
-            ServiceReference[] importDeclarationsRef = m_context.getAllServiceReferences(Declaration.class.getName(), filter);
+            ServiceReference[] importDeclarationsRef = m_context.getAllServiceReferences(ImportDeclaration.class.getName(), filter);
 
             if (importDeclarationsRef != null) {
                 for (ServiceReference reference : importDeclarationsRef) {
@@ -69,8 +70,8 @@ public class FuchsiaGogoCommand {
 
     }
 
-    @Descriptor("Gets the importation linker available")
-    public void linkers(@Descriptor("linkers [-(import|export)] [ID name]") String... parameters) {
+    @Descriptor("Gets the importation/exportation linker available")
+    public void linker(@Descriptor("linker [-(import|export)] [ID name]") String... parameters) {
 
         String filter = null;
 
@@ -118,10 +119,6 @@ public class FuchsiaGogoCommand {
 
             if (discoveryRef != null) {
                 for (ServiceReference reference : discoveryRef) {
-
-                    String instanceName = (String) reference.getProperty("instance.name");
-
-                    Collection<ServiceReference<Architecture>> serviceReferences = m_context.getServiceReferences(Architecture.class, "(architecture.instance=" + instanceName + ")");
 
                     displayServiceInfo("Discovery", reference);
 
