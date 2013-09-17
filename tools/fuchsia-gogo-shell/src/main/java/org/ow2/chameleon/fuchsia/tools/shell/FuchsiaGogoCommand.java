@@ -20,6 +20,7 @@ import org.ow2.chameleon.fuchsia.core.declaration.Declaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 
 import java.util.Collection;
+import java.util.Map;
 
 @Component(immediate = true)
 @Instantiate
@@ -58,6 +59,21 @@ public class FuchsiaGogoCommand {
                     displayServiceInfo("Declaration",reference);
 
                     displayServiceProperties(reference);
+
+                    System.out.println("Metadata");
+
+                    ImportDeclaration declaration= (ImportDeclaration) m_context.getService(reference);
+
+
+                    Map<String, Object> metadata = declaration.getMetadata();
+
+                    for(Map.Entry<String,Object> entry:metadata.entrySet()){
+                        System.out.println(String.format("\t%s=%s",entry.getKey(),entry.getValue()));
+                    }
+
+                    if(metadata.entrySet().size()==0){
+                        System.out.println("\tEMPTY");
+                    }
 
                 }
             } else {
@@ -136,8 +152,13 @@ public class FuchsiaGogoCommand {
     }
 
     private void displayServiceProperties(ServiceReference reference){
+        System.out.println("Service properties:");
         for (String propertyKey : reference.getPropertyKeys()) {
             System.out.println(String.format("\t%s = %s", propertyKey, reference.getProperty(propertyKey)));
+        }
+
+        if (reference.getPropertyKeys().length==0){
+            System.out.println("\t EMPTY");
         }
     }
 
