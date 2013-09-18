@@ -22,28 +22,26 @@ public abstract class AbstractImporterComponent implements ImporterService, Impo
     }
 
     /**
-     * Abstract method, is called when the sub class must create the proxy or do other stuff, like APAM things... dun know
-     * <p/>
+     * Abstract method, called when a ImportDeclaration can be used by the implementation class.
      */
-    protected abstract void createProxy(final ImportDeclaration importDeclaration) throws ImporterException;
+    protected abstract void useImportDeclaration(final ImportDeclaration importDeclaration) throws ImporterException;
 
     /**
-     * Abstract method, is called when the sub class must destroy the proxy.
-     * Do not forget to unregister the proxy, call: <code>proxy.unregister()</code>
+     * Abstract method, is called when the implementation class must stop to use an ImportDeclaration.
      */
-    protected abstract void destroyProxy(final ImportDeclaration importDeclaration) throws ImporterException;
+    protected abstract void denyImportDeclaration(final ImportDeclaration importDeclaration) throws ImporterException;
 
     /**
-     * Stop the proxy-creator, iPOJO Invalidate instance callback.
+     * Stop the Importer component, iPOJO Invalidate instance callback.
      * Must be override !
      */
     protected void stop() {
 
         synchronized (importDeclarations) {
-            // destroy all the proxies
+            // deny all the ImportDeclarations
             for (ImportDeclaration importDeclaration : importDeclarations) {
                 try {
-                    destroyProxy(importDeclaration);
+                    denyImportDeclaration(importDeclaration);
                 } catch (ImporterException e) {
                     e.printStackTrace();
                 }
@@ -77,8 +75,8 @@ public abstract class AbstractImporterComponent implements ImporterService, Impo
                 throw new IllegalStateException("Duplicate ImportDeclaration : " +
                         "this ImportDeclaration has already been treated.");
             }
-            //First registration, create the proxy
-            createProxy(importDeclaration);
+            // First registration, give it to the implementation class and keep it in memory
+            useImportDeclaration(importDeclaration);
             importDeclarations.add(importDeclaration);
         }
     }
@@ -95,7 +93,7 @@ public abstract class AbstractImporterComponent implements ImporterService, Impo
             }
             importDeclarations.remove(importDeclaration);
         }
-        destroyProxy(importDeclaration);
+        denyImportDeclaration(importDeclaration);
     }
 
     public Set<ImportDeclaration> getImportDeclarations() {

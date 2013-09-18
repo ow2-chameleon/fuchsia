@@ -12,12 +12,12 @@ import java.util.List;
 @Provides(specifications = {ImporterService.class})
 public class SimpleImporter extends AbstractImporterComponent {
     @Override
-    public void createProxy(ImportDeclaration importDeclaration) {
+    public void useImportDeclaration(ImportDeclaration importDeclaration) {
         //
     }
 
     @Override
-    public void destroyProxy(ImportDeclaration importDeclaration) {
+    public void denyImportDeclaration(ImportDeclaration importDeclaration) {
         //
     }
 

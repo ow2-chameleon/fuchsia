@@ -85,7 +85,7 @@ public class CXFImporterComp extends AbstractImporterComponent {
 	 *--------------------------*/
 
     @Override
-    protected void createProxy(ImportDeclaration importDeclaration) {
+    protected void useImportDeclaration(ImportDeclaration importDeclaration) {
         logger.debug("Create proxy" + importDeclaration.getMetadata());
         ClientProxyFactoryBean factory;
         String endPointURL;
@@ -155,7 +155,7 @@ public class CXFImporterComp extends AbstractImporterComponent {
      * @param importDeclaration
      */
     @Override
-    protected void destroyProxy(ImportDeclaration importDeclaration) {
+    protected void denyImportDeclaration(ImportDeclaration importDeclaration) {
         logger.debug("CXFImporter destroy a proxy for " + importDeclaration);
         ServiceRegistration serviceRegistration = map.get(importDeclaration);
         serviceRegistration.unregister();

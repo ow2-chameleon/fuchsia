@@ -64,7 +64,7 @@ public class UPnPFuchsiaImporterImpl extends AbstractImporterComponent {
      * @param importDeclaration : the matching import declaration
      */
     @Override
-    protected void createProxy(ImportDeclaration importDeclaration) {
+    protected void useImportDeclaration(ImportDeclaration importDeclaration) {
 
         String id = (String) importDeclaration.getMetadata().get("id");
 
@@ -92,7 +92,7 @@ public class UPnPFuchsiaImporterImpl extends AbstractImporterComponent {
      * @param importDeclaration : the leaving import declaration
      */
     @Override
-    protected void destroyProxy(ImportDeclaration importDeclaration) {
+    protected void denyImportDeclaration(ImportDeclaration importDeclaration) {
         logger.debug("FakeImporter destroy a proxy for " + importDeclaration);
         listOfCreatedProxies.remove(listOfCreatedProxies.get(importDeclaration));
     }

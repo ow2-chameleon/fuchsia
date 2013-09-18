@@ -48,11 +48,11 @@ public class AbstractImporterComponentTest {
         ImportDeclaration idec = mock(ImportDeclaration.class);
         testedClass.addImportDeclaration(idec);
 
-        assertThat(testedClass.nbProxies()).isEqualTo(1); //Check that createProxy has been called
+        assertThat(testedClass.nbProxies()).isEqualTo(1); //Check that useImportDeclaration has been called
 
         testedClass.removeImportDeclaration(idec);
 
-        assertThat(testedClass.nbProxies()).isEqualTo(0); //Check that destroyProxy has been called
+        assertThat(testedClass.nbProxies()).isEqualTo(0); //Check that denyImportDeclaration has been called
     }
 
     @Test
@@ -62,7 +62,7 @@ public class AbstractImporterComponentTest {
         for (int i = 0; i < IMPORT_MAX; i++) {
             ImportDeclaration idec = mock(ImportDeclaration.class);
             testedClass.addImportDeclaration(idec);
-            assertThat(testedClass.nbProxies()).isEqualTo(i + 1); //Check that createProxy has been called
+            assertThat(testedClass.nbProxies()).isEqualTo(i + 1); //Check that useImportDeclaration has been called
 
             decs.add(idec);
         }
@@ -71,7 +71,7 @@ public class AbstractImporterComponentTest {
             testedClass.removeImportDeclaration(idec);
         }
 
-        assertThat(testedClass.nbProxies()).isEqualTo(0); //Check that destroyProxy has been called
+        assertThat(testedClass.nbProxies()).isEqualTo(0); //Check that denyImportDeclaration has been called
     }
 
     public class TestedClass extends AbstractImporterComponent {
@@ -79,12 +79,12 @@ public class AbstractImporterComponentTest {
         private final Collection<ImportDeclaration> decs = new HashSet<ImportDeclaration>();
 
         @Override
-        protected void createProxy(ImportDeclaration importDeclaration) {
+        protected void useImportDeclaration(ImportDeclaration importDeclaration) {
             decs.add(importDeclaration);
         }
 
         @Override
-        protected void destroyProxy(ImportDeclaration importDeclaration) {
+        protected void denyImportDeclaration(ImportDeclaration importDeclaration) {
             decs.remove(importDeclaration);
         }
 

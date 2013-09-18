@@ -60,7 +60,7 @@ public class JSONRPCImporter extends AbstractImporterComponent {
     }
 
     @Override
-    public void createProxy(ImportDeclaration importDeclaration) {
+    public void useImportDeclaration(ImportDeclaration importDeclaration) {
         final Object proxy;
         final Client client;
 
@@ -108,7 +108,7 @@ public class JSONRPCImporter extends AbstractImporterComponent {
     }
 
     @Override
-    public void destroyProxy(ImportDeclaration importDeclaration) {
+    public void denyImportDeclaration(ImportDeclaration importDeclaration) {
         String id = (String) importDeclaration.getMetadata().get(ID);
         if (proxies.containsKey(id)) {
             // Unregister the proxy
