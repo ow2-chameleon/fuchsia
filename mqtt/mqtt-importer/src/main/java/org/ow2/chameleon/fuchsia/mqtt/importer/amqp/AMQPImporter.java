@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
-@Component
+@Component(name="AMQPImporter")
 @Provides
 @Instantiate
 public class AMQPImporter extends AbstractImporterComponent {
