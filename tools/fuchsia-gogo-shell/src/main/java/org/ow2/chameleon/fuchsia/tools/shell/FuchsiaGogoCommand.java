@@ -16,6 +16,7 @@ import org.osgi.framework.ServiceReference;
 import org.ow2.chameleon.fuchsia.core.ExportationLinker;
 import org.ow2.chameleon.fuchsia.core.ImportationLinker;
 import org.ow2.chameleon.fuchsia.core.component.DiscoveryService;
+import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 import org.ow2.chameleon.fuchsia.core.declaration.Declaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 
@@ -37,7 +38,7 @@ public class FuchsiaGogoCommand {
     String m_scope;
 
     @ServiceProperty(name = "osgi.command.function", value = "{}")
-    String[] m_function = new String[]{"declaration", "linker", "discovery"};
+    String[] m_function = new String[]{"declaration", "linker", "discovery","importer"};
 
     private BundleContext m_context = null;
 
@@ -143,6 +144,32 @@ public class FuchsiaGogoCommand {
                 }
             } else {
                 System.out.println("No discovery available.");
+            }
+
+        } catch (InvalidSyntaxException e) {
+            System.out.println("failed to execute the command with the message: " + e.getMessage());
+        }
+
+    }
+
+    @Descriptor("Gets the discovery available in the platform")
+    public void importer(@Descriptor("importer [importer name]") String... parameters) {
+
+        String filter = null;
+
+        try {
+            ServiceReference[] discoveryRef = m_context.getAllServiceReferences(ImporterService.class.getName(), filter);
+
+            if (discoveryRef != null) {
+                for (ServiceReference reference : discoveryRef) {
+
+                    displayServiceInfo("Importer", reference);
+
+                    displayServiceProperties(reference);
+
+                }
+            } else {
+                System.out.println("No importers available.");
             }
 
         } catch (InvalidSyntaxException e) {
