@@ -24,7 +24,7 @@ public class FuchsiaUtils {
             try {
                 filter = FrameworkUtil.createFilter((String) filterObject);
             } catch (InvalidSyntaxException e) {
-                throw new InvalidFilterException("The String given has filter doesn't respect the LDAP syntax", e);
+                throw new InvalidFilterException("The String given has filter doesn't respect the LDAP syntax: "+e.getMessage(), e);
             }
         } else if (filterObject instanceof Filter) {
             filter = (Filter) filterObject;
