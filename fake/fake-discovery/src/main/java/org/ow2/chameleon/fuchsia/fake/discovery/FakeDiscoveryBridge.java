@@ -167,7 +167,14 @@ public class FakeDiscoveryBridge extends AbstractDiscoveryComponent implements D
 
             HashMap<String, Object> metadata = new HashMap<String, Object>();
             metadata.put(Constants.DEVICE_ID, deviceId);
-            metadata.put(Factory.INSTANCE_NAME_PROPERTY, deviceId);
+
+            for(Map.Entry<Object,Object> element:deviceReificationProperties.entrySet()){
+                Object replacedObject=metadata.put(element.getKey().toString(), element.getValue());
+
+                if(replacedObject!=null){
+                    getLogger().warn("ImportationDeclaration: replacing metadata key {}, that contained the value {} by the new value {}",new Object[]{element.getKey(),replacedObject,element.getValue()});
+                }
+            }
 
             ImportDeclaration declaration=createAndRegisterImportDeclaration(metadata);
 
