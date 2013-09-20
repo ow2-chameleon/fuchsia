@@ -99,6 +99,7 @@
                 <module>fake</module>
                 <module>json-rpc</module>
                 <module>upnp</module>
+                <module>mqtt</module>
                 <module>jax-ws</module>
             </modules>
         </profile>
