@@ -63,7 +63,7 @@ class DeclarationImpl implements Declaration, ImportDeclaration, ExportDeclarati
     }
 
     public String toString() {
-        // FIXME
-        return metadata.values().toArray()[0].toString();
+        //TODO Implement this for debug purposes
+        return super.toString();
     }
 }
