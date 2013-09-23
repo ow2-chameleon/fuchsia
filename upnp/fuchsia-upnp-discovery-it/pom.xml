@@ -24,6 +24,11 @@
 
 
     <dependencies>
+        <dependency>
+            <groupId>org.ow2.chameleon.fuchsia.examples</groupId>
+            <artifactId>fuchsia-upnp-components</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.apache.felix</groupId>
@@ -55,6 +60,21 @@
 
         <dependency>
             <groupId>org.ow2.chameleon.fuchsia.upnp</groupId>
+<<<<<<< HEAD:upnp/fuchsia-upnp-discovery-it/pom.xml
+=======
+            <artifactId>fuchsia-upnp-config</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.ow2.chameleon.fuchsia.upnp</groupId>
+            <artifactId>fuchsia-upnp-importer</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.ow2.chameleon.fuchsia.upnp</groupId>
+>>>>>>> 364f3178bd4bb7941ef63acf3bf4e2e5d4165daf:upnp/fuchsia-upnp-it/pom.xml
             <artifactId>fuchsia-upnp-discovery</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
