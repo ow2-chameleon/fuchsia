@@ -24,6 +24,11 @@
 
 
     <dependencies>
+        <dependency>
+            <groupId>org.ow2.chameleon.fuchsia.examples</groupId>
+            <artifactId>fuchsia-upnp-components</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.apache.felix</groupId>

@@ -30,7 +30,11 @@
                     <artifactId>fuchsia-core</artifactId>
                     <version>${project.parent.version}</version>
                 </dependency>
-
+                <dependency>
+                    <groupId>${project.parent.groupId}.tools</groupId>
+                    <artifactId>fuchsia-gogo-shell</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
                 <dependency>
                     <groupId>org.apache.felix</groupId>
                     <artifactId>org.apache.felix.http.jetty</artifactId>
@@ -153,6 +157,34 @@
 
             </dependencies>
         </profile>
+
+        <profile>
+            <id>mqtt</id>
+            <dependencies>
+
+            <dependency>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>org.apache.felix.eventadmin</artifactId>
+            </dependency>
+
+	        <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+		    </dependency>
+
+            <dependency>
+                <groupId>com.rabbitmq</groupId>
+                <artifactId>amqp-client</artifactId>
+            </dependency>
+
+            <dependency>
+                <groupId>org.ow2.chameleon.fuchsia.mqtt</groupId>
+                <artifactId>fuchsia-mqtt-importer</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+	    </dependencies>
+	</profile>
 
         <profile>
             <id>webservices-client</id>
