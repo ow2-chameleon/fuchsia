@@ -17,7 +17,6 @@ import org.ow2.chameleon.fuchsia.core.ExportationLinker;
 import org.ow2.chameleon.fuchsia.core.ImportationLinker;
 import org.ow2.chameleon.fuchsia.core.component.DiscoveryService;
 import org.ow2.chameleon.fuchsia.core.component.ImporterService;
-import org.ow2.chameleon.fuchsia.core.declaration.Declaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 
 import java.util.Collection;
