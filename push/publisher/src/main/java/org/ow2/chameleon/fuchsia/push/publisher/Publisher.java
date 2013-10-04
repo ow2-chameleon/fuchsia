@@ -55,6 +55,8 @@ public class Publisher extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+        Thread.currentThread().setContextClassLoader(SyndFeed.class.getClassLoader());
+
         SyndFeed feed = new SyndFeedImpl();
         feed.setFeedType("atom_1.0");
         feed.setTitle("Sample Feed (created with ROME)");
