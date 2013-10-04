@@ -21,6 +21,187 @@ License
 Fuchsia is licensed under the Apache License 2.0.
 
 
+Module hierarchy and naming conventions !Draft!
+-----------------------------------------------
+
+### Bases modules
+
+A base is a module which manage dependencies for a protocol. It uses Maven DependencyManagement but can also contains sub-modules which are providing shared bundles in between the fuchsia components of the protocol.
+
+Directory :
+
+    bases/{protocol}
+
+Maven configuration :
+
+```XML
+<groupId>org.ow2.chameleon.fuchsia.bases</groupId>
+<artifactId>{protocol}</artifactId>
+<name>OW2 Chameleon - Fuchsia Base {Protocol}</name>
+
+<parent>
+    <groupId>org.ow2.chameleon.fuchsia.bases</groupId>
+    <artifactId>FIXME</artifactId>
+    <version>{}</version>
+    <relativePath>../pom.xml</relativePath>
+</parent>
+```
+
+#### Base sub-modules
+
+Directory :
+
+    bases/{protocol}/{sub-module_name}
+
+Maven configuration :
+
+```XML
+<groupId>org.ow2.chameleon.fuchsia.bases</groupId>
+<artifactId>FIXME</artifactId>
+<name>OW2 Chameleon - Fuchsia Base {Protocol} FIXME</name>
+
+<parent>
+    <groupId>org.ow2.chameleon.fuchsia.bases</groupId>
+    <artifactId>{protocol}</artifactId>
+    <version>{}</version>
+    <relativePath>../pom.xml</relativePath>
+</parent>
+```
+
+### Importers modules
+
+#### Importer implementation 
+
+Directory :
+
+    importers/{protocol}
+
+Maven configuration :
+
+```XML
+<groupId>org.ow2.chameleon.fuchsia.importers</groupId>
+<artifactId>{protocol}</artifactId>
+<name>OW2 Chameleon - Fuchsia Importer {Protocol}</name>
+
+<parent>
+    <groupId>org.ow2.chameleon.fuchsia.importers</groupId>
+    <artifactId>{protocol}</artifactId>
+    <version>{}</version>
+    <relativePath>../../bases/{protocol}/pom.xml</relativePath>
+</parent>
+```
+
+#### Importer integration tests
+
+Directory :
+
+    importers/{protocol}-it
+
+Maven configuration :
+
+```XML
+<groupId>org.ow2.chameleon.fuchsia.importers</groupId>
+<artifactId>{protocol}.it</artifactId>
+<name>OW2 Chameleon - Fuchsia Importer {Protocol} [IntegrationTests]</name>
+
+<parent>
+    <groupId>org.ow2.chameleon.fuchsia.importers</groupId>
+    <artifactId>{protocol}</artifactId>
+    <version>{}</version>
+    <relativePath>../../bases/{protocol}/pom.xml</relativePath>
+</parent>
+```
+
+### Discoveries modules
+
+#### Discovery implementation 
+
+Directory :
+
+    discoveries/{protocol}
+
+Maven configuration :
+
+```XML
+<groupId>org.ow2.chameleon.fuchsia.discoveries</groupId>
+<artifactId>{protocol}</artifactId>
+<name>OW2 Chameleon - Fuchsia Discovery {Protocol}</name>
+
+<parent>
+    <groupId>org.ow2.chameleon.fuchsia.discoveries</groupId>
+    <artifactId>{protocol}</artifactId>
+    <version>{}</version>
+    <relativePath>../../bases/{protocol}/pom.xml</relativePath>
+</parent>
+```
+
+#### Discovery integration tests
+
+Directory :
+
+    discoveries/{protocol}-it
+
+Maven configuration :
+
+```XML
+<groupId>org.ow2.chameleon.fuchsia.discoveries</groupId>
+<artifactId>{protocol}.it</artifactId>
+<name>OW2 Chameleon - Fuchsia Discovery {Protocol} [IntegrationTests]</name>
+
+<parent>
+    <groupId>org.ow2.chameleon.fuchsia.discoveries</groupId>
+    <artifactId>{protocol}</artifactId>
+    <version>{}</version>
+    <relativePath>../../bases/{protocol}/pom.xml</relativePath>
+</parent>
+```
+
+### Examples modules
+
+TODO
+
+### Tools modules
+
+#### Tool implementation
+Directory :
+
+    tools/{tool}
+
+Maven configuration :
+
+```XML
+<groupId>org.ow2.chameleon.fuchsia.tools</groupId>
+<artifactId>{tool}</artifactId>
+<name>OW2 Chameleon - Fuchsia {Tool}</name>
+
+<parent>
+    <groupId>org.ow2.chameleon.fuchsia.tools</groupId>
+    <artifactId>{tool}</artifactId>
+    <version>{}</version>
+    <relativePath>../pom.xml</relativePath>
+</parent>
+```
+
+#### Tool integration tests
+Directory :
+
+    tools/{tool}-it
+
+Maven configuration :
+
+```XML
+<groupId>org.ow2.chameleon.fuchsia.tools</groupId>
+<artifactId>{tool}.it</artifactId>
+<name>OW2 Chameleon - Fuchsia {Tool} [IntegrationTests]</name>
+
+<parent>
+    <groupId>org.ow2.chameleon.fuchsia.tools</groupId>
+    <artifactId>{tool}</artifactId>
+    <version>{}</version>
+    <relativePath>../pom.xml</relativePath>
+</parent>
+```
+
 Commits convention
 ------------------
 
