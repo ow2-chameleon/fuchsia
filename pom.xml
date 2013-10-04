@@ -16,9 +16,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>ow2</artifactId>
-        <groupId>org.ow2</groupId>
-        <version>1.5</version>
+        <artifactId>parent-pom</artifactId>
+        <groupId>org.ow2.chameleon</groupId>
+        <version>0.3.2</version>
     </parent>
 
     <groupId>org.ow2.chameleon.fuchsia</groupId>
