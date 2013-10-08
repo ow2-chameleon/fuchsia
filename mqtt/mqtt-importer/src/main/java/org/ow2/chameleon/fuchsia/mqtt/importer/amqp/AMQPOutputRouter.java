@@ -6,17 +6,19 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.QueueingConsumer;
 import org.apache.felix.ipojo.annotations.*;
+import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
-import org.ow2.chameleon.fuchsia.mqtt.importer.amqp.adaptors.AMQPMessageCoat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Dictionary;
+import java.util.Hashtable;
 
 @Component(name = "AMQPJointFactory")
 @Provides
-public class AMQPAndEventAdminJoint implements Joint, Runnable {
+public class AMQPOutputRouter implements Runnable {
 
     @Requires
     EventAdmin eventAdmin;
@@ -40,7 +42,7 @@ public class AMQPAndEventAdminJoint implements Joint, Runnable {
         channel = connection.createChannel();
         channel.queueDeclare(queue, false, false, false, null);
 
-        eventArrivalMonitor =new Thread(this);
+        eventArrivalMonitor = new Thread(this);
         eventArrivalMonitor.start();
 
         isMonitoringArrivals =true;
@@ -71,9 +73,9 @@ public class AMQPAndEventAdminJoint implements Joint, Runnable {
 
                 getLogger().info("Forwarding ..");
 
-                eventAdmin.sendEvent(new AMQPMessageCoat(delivery).asEventAdminMessage());
+                eventAdmin.sendEvent(getEventAdminMessage(new Hashtable()));
 
-                getLogger().info("EventAdmin: message '{}' sent,", message);
+                getLogger().info("EventAdmin: message '{}' queue '{}' sent", message,queue);
 
             }
 
@@ -82,6 +84,14 @@ public class AMQPAndEventAdminJoint implements Joint, Runnable {
             getLogger().error("Failed to monitor AMPQ Queue named '{}' duo to {}", queue,e.getMessage());
 
         }
+
+    }
+
+    private Event getEventAdminMessage(Dictionary properties) {
+
+        Event eventAdminMessage = new Event(queue, properties);
+
+        return eventAdminMessage;
 
     }
 

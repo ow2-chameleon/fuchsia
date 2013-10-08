@@ -77,7 +77,7 @@ public class AMQPImporter extends AbstractImporterComponent {
     }
 
     public List<String> getConfigPrefix() {
-        return new ArrayList<String>(){{add("fuchsia.amqp");}};
+        return null;
     }
 
     public String getName() {
