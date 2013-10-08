@@ -329,6 +329,33 @@
         </profile>
 
         <profile>
+            <id>dnssd</id>
+            <dependencies>
+		<dependency>
+			<groupId>javax.jmdns</groupId>
+			<artifactId>jmdns</artifactId>
+			<version>3.4.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.ow2.chameleon.fuchsia.dnssd</groupId>
+			<artifactId>fuchsia-mdns-discovery</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>dnssd-config</id>
+            <dependencies>
+		<dependency>
+	        	<groupId>org.ow2.chameleon.fuchsia.examples</groupId>
+			<artifactId>dnssd-config</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
             <id>webservices-client</id>
             <dependencies>
 
