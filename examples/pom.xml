@@ -34,6 +34,7 @@
         <module>upnp-samples</module>
         <module>upnp-config</module>
         <module>push-config</module>
+        <module>dnssd-config</module>
         <module>mqtt-config</module>
         <module>jax-ws</module>
     </modules>
