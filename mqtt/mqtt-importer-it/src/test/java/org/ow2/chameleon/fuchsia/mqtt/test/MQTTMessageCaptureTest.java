@@ -115,6 +115,10 @@ public class MQTTMessageCaptureTest extends RabbitMQTestSuite {
         verify(htmock,times(1)).handleEvent(any(Event.class));
     }
 
+    /**
+     * Seinding message ot type MQTT do not work properly with version 3.1.5 of RabbitMQ, See https://github.com/rabbitmq/rabbitmq-mqtt/issues/5
+     * @throws Exception
+     */
     private void sendSampleMQTTMessage() throws Exception {
 
         final String topic="public";
