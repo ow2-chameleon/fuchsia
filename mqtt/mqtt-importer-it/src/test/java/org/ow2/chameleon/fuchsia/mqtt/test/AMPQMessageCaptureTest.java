@@ -130,6 +130,36 @@ public class AMPQMessageCaptureTest extends RabbitMQTestSuite {
     }
 
     @Test
+    public void ConsumeMultipleMessageEventAdmin() throws IOException {
+
+        Dictionary handlerProperties = new Hashtable();
+        handlerProperties.put(EventConstants.EVENT_TOPIC, "public");
+
+        MessageHandler ht=new MessageHandler();
+
+        MessageHandler htmock=spy(ht);
+
+        bundleContext.registerService(EventHandler.class.getName(),htmock,handlerProperties);
+
+        HashMap<String, Object> metadata = new HashMap<String, Object>();
+        metadata.put(Constants.DEVICE_ID, "00000000-54b3-e7c7-0000-000046bffd97");
+        metadata.put("mqtt.queue","public");
+
+        ImportDeclaration declaration=createImportationDeclaration("importDeclaration",metadata);
+
+        assertThat(declaration).isNotNull();
+
+        final int TOTAL=10;
+
+        for(int counter=0;counter<TOTAL;counter++){
+            sendSampleAMPQMessage();
+        }
+
+        verify(htmock,times(TOTAL)).handleEvent(any(Event.class));
+
+    }
+
+    @Test
     public void MessageSentWithRightArgument() throws IOException {
 
         final String queue="public";
