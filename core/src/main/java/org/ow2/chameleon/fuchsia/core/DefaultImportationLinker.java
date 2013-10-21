@@ -43,7 +43,7 @@ import static org.ow2.chameleon.fuchsia.core.component.ImporterService.TARGET_FI
  * @author Morgan Martinet
  */
 @Component(name = FuchsiaConstants.DEFAULT_IMPORTATION_LINKER_FACTORY_NAME)
-@Provides(specifications = ImportationLinker.class)
+@Provides(specifications = {ImportationLinker.class,ImportationLinkerIntrospection.class})
 public class DefaultImportationLinker implements ImportationLinker, ImportationLinkerIntrospection {
 
     // The OSGi BundleContext, injected by OSGi in the constructor
