@@ -17,6 +17,7 @@
 
     <modules>
         <module>fuchsia-gogo-shell</module>
+        <module>fuchsia-grid</module>
     </modules>
 
 </project>

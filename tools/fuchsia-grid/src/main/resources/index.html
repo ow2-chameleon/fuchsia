@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="description" content="Display fuchsia components as a graph" />
+<meta charset=utf-8 />
+<title>Fuchsia Grid WebView</title>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script src="http://cytoscape.github.io/cytoscape.js/api/cytoscape.js-latest/cytoscape.min.js"></script>
+<script>
+
+	function launchgraph(){
+
+		$('#cy').cytoscape({
+		  style: cytoscape.stylesheet()
+		    .selector('node')
+		      .css({
+			'content': 'data(name)',
+			'text-valign': 'center',
+			'color': 'white',
+			'text-outline-width': 2,
+			'text-outline-color': '#888'
+		      })
+		    .selector('edge')
+		      .css({
+			'target-arrow-shape': 'triangle'
+		      })
+		    .selector(':selected')
+		      .css({
+			'background-color': 'black',
+			'line-color': 'black',
+			'target-arrow-color': 'black',
+			'source-arrow-color': 'black'
+		      })
+		    .selector('.faded')
+		      .css({
+			'opacity': 0.25,
+			'text-opacity': 0
+		      }),
+
+
+		elements: {
+		    nodes: [
+			<#if nodes??>		
+			<#list nodes as node>
+						      { data: { id: '${node.id}', name: '${node.label}' } },
+					</#list>
+			</#if>
+						  
+						    ],  
+					    edges: [
+			<#if edges??>		
+					<#list edges as edge>
+					      { data: { source:'${edge.source}', target: '${edge.target}' } },
+					</#list>
+			</#if>
+		    ]
+		  },
+		  
+		  ready: function(){
+		    window.cy = this;
+		    
+		    cy.elements().unselectify();
+		    
+		    cy.on('tap', 'node', function(e){
+		      var node = e.cyTarget; 
+		      var neighborhood = node.neighborhood().add(node);
+		      
+		      cy.elements().addClass('faded');
+		      neighborhood.removeClass('faded');
+		    });
+		    
+		    cy.on('tap', function(e){
+		      if( e.cyTarget === cy ){
+			cy.elements().removeClass('faded');
+		      }
+		    });
+		  }
+		});
+	}
+</script>
+<style>
+body { 
+  font: 14px helvetica neue, helvetica, arial, sans-serif;
+}
+#cy {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+</style>
+</head>
+
+<body onload="launchgraph()">
+  <div id="cy"></div>
+</body>
+</html>
