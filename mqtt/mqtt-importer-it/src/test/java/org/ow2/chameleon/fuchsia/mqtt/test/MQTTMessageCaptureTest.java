@@ -42,8 +42,6 @@ import static org.ow2.chameleon.fuchsia.core.ImportationLinker.FILTER_IMPORTERSE
  */
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerMethod.class)
-//@RunWith(PaxExam.class)
-//@ExamReactorStrategy(PerMethod.class)
 public class MQTTMessageCaptureTest extends RabbitMQTestSuite {
 
     @Inject

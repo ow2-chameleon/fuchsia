@@ -4,14 +4,9 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import org.apache.felix.ipojo.Factory;
 import org.junit.internal.AssumptionViolatedException;
-import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.Option;
-import org.ops4j.pax.exam.junit.PaxExam;
 import org.ops4j.pax.exam.options.CompositeOption;
 import org.ops4j.pax.exam.options.DefaultCompositeOption;
-import org.ops4j.pax.exam.spi.reactors.ExamReactorStrategy;
-import org.ops4j.pax.exam.spi.reactors.PerClass;
-import org.ops4j.pax.exam.spi.reactors.PerMethod;
 import org.osgi.framework.BundleContext;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclarationBuilder;
@@ -27,8 +22,6 @@ import java.util.Hashtable;
 
 import static org.ops4j.pax.exam.CoreOptions.*;
 
-@RunWith(PaxExam.class)
-@ExamReactorStrategy(PerMethod.class)
 public class RabbitMQTestSuite extends BaseTest {
 
     @Inject
@@ -41,13 +34,14 @@ public class RabbitMQTestSuite extends BaseTest {
                 packLog(),
                 packMockito(),
                 packMQTTClient(),
+                packConsole(),
                 // fuchsia bundles to test
-                wrappedBundle(mavenBundle("com.rabbitmq", "amqp-client").versionAsInProject()),
-                wrappedBundle(mavenBundle("org.ow2.chameleon.fuchsia", "fuchsia-core").versionAsInProject()),
+                mavenBundle("com.rabbitmq", "amqp-client").versionAsInProject(),
                 wrappedBundle(mavenBundle("org.easytesting", "fest-util").versionAsInProject()),
                 wrappedBundle(mavenBundle("org.easytesting", "fest-assert").versionAsInProject()),
-                wrappedBundle(mavenBundle("org.ow2.chameleon.fuchsia.mqtt", "fuchsia-mqtt-importer").versionAsInProject()),
-                wrappedBundle(mavenBundle("org.ow2.chameleon.fuchsia.tools", "fuchsia-gogo-shell").versionAsInProject())
+                mavenBundle("org.ow2.chameleon.fuchsia", "fuchsia-core").versionAsInProject(),
+                mavenBundle("org.ow2.chameleon.fuchsia.mqtt", "fuchsia-mqtt-importer").versionAsInProject(),
+                mavenBundle("org.ow2.chameleon.fuchsia.tools", "fuchsia-gogo-shell").versionAsInProject()
         );
     }
 
@@ -56,11 +50,31 @@ public class RabbitMQTestSuite extends BaseTest {
         return false;
     }
 
+    /**
+     * This pack enable the access to the console while debugging in Eclipse (doesnt work in IntelliJ)
+     * @return
+     */
+    protected CompositeOption packConsole() {
+        CompositeOption logConfig = new DefaultCompositeOption(
+                mavenBundle("org.apache.felix",
+                        "org.apache.felix.gogo.command").versionAsInProject(),
+                mavenBundle("org.apache.felix",
+                        "org.apache.felix.gogo.runtime").versionAsInProject(),
+                mavenBundle("org.apache.felix",
+                        "org.apache.felix.gogo.shell").versionAsInProject(),
+                mavenBundle("org.apache.felix",
+                        "org.apache.felix.ipojo.arch.gogo").versionAsInProject()
+        );
+
+        return logConfig;
+    }
+
     protected CompositeOption packMockito(){
 
         return new DefaultCompositeOption(
                 mavenBundle("org.mockito", "mockito-core").versionAsInProject(),
-                wrappedBundle(mavenBundle("org.objenesis", "objenesis").versionAsInProject()),
+                mavenBundle("org.objenesis", "objenesis").versionAsInProject(),
+                mavenBundle("org.hamcrest", "hamcrest-core").versionAsInProject(),
                 frameworkProperty("felix.bootdelegation.implicit").value("false") //this is a bug fix due to a mockito miss usage of java classloader
         );
 
@@ -69,13 +83,14 @@ public class RabbitMQTestSuite extends BaseTest {
     protected CompositeOption packLog(){
 
         return new DefaultCompositeOption(
-                wrappedBundle(mavenBundle("org.apache.felix", "org.apache.felix.eventadmin").versionAsInProject()),
-                wrappedBundle(mavenBundle("org.apache.felix", "org.apache.felix.gogo.runtime").versionAsInProject()),
-                wrappedBundle(mavenBundle("org.apache.felix", "org.apache.felix.log").versionAsInProject()),
-                wrappedBundle(mavenBundle("org.ow2.bundles", "ow2-util-log").versionAsInProject()),
-                wrappedBundle(mavenBundle("org.ow2.util", "util-log").versionAsInProject()),
-                wrappedBundle(mavenBundle("ch.qos.logback", "logback-classic").versionAsInProject()),
+                mavenBundle("org.apache.felix", "org.apache.felix.eventadmin").versionAsInProject(),
+                mavenBundle("org.apache.felix", "org.apache.felix.gogo.runtime").versionAsInProject(),
+                mavenBundle("org.apache.felix", "org.apache.felix.log").versionAsInProject(),
+                mavenBundle("org.ow2.bundles", "ow2-util-log").versionAsInProject(),
+                mavenBundle("org.ow2.util", "util-log").versionAsInProject(),
+                mavenBundle("ch.qos.logback", "logback-classic").versionAsInProject(),
                 wrappedBundle(mavenBundle("org.ow2.util", "util-i18n").versionAsInProject())
+
         );
 
     }

@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.InOrder;
 import org.ops4j.pax.exam.junit.PaxExam;
 import org.ops4j.pax.exam.spi.reactors.ExamReactorStrategy;
 import org.ops4j.pax.exam.spi.reactors.PerMethod;
@@ -34,14 +35,12 @@ import static org.ow2.chameleon.fuchsia.core.ImportationLinker.FILTER_IMPORTDECL
 import static org.ow2.chameleon.fuchsia.core.ImportationLinker.FILTER_IMPORTERSERVICE_PROPERTY;
 
 /**
- * Test class MQTT
+ * Test class AMQP (low level) message receiving
  *
  * @author botelho@imag.fr
  */
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerMethod.class)
-//@RunWith(PaxExam.class)
-//@ExamReactorStrategy(PerMethod.class)
 public class AMPQMessageCaptureTest extends RabbitMQTestSuite {
 
     @Inject
@@ -54,7 +53,6 @@ public class AMPQMessageCaptureTest extends RabbitMQTestSuite {
     ComponentInstance importerComponentInstance;
 
     protected IPOJOHelper ipojoHelper;
-
 
     @Before
     public void instantiateAMPQPlaform(){
@@ -86,28 +84,33 @@ public class AMPQMessageCaptureTest extends RabbitMQTestSuite {
     }
 
     @Test
-    public void testLinkerImporterCreated()  {
+    public void LinkerImporterCreated()  {
 
         ComponentInstance linkerInstance = ipojoHelper.getInstanceByName("MQTTLinker");
 
         assertThat(linkerInstance).isNotNull();
+        assertThat(linkerInstance.getState()).isEqualTo(ComponentInstance.VALID);
+
 
     }
 
     @Test
-    public void testImporterCreated()  {
+    public void ImporterCreated()  {
 
         ComponentInstance importerInstance = ipojoHelper.getInstanceByName("AMQPImporter");
 
         assertThat(importerInstance).isNotNull();
+        assertThat(importerInstance.getState()).isEqualTo(ComponentInstance.VALID);
 
     }
 
     @Test
     public void ConsumeSingleMessageEventAdmin() throws IOException {
 
+        final String queue="public";
+
         Dictionary handlerProperties = new Hashtable();
-        handlerProperties.put(EventConstants.EVENT_TOPIC, "public");
+        handlerProperties.put(EventConstants.EVENT_TOPIC, queue);
 
         MessageHandler ht=new MessageHandler();
 
@@ -117,10 +120,9 @@ public class AMPQMessageCaptureTest extends RabbitMQTestSuite {
 
         HashMap<String, Object> metadata = new HashMap<String, Object>();
         metadata.put(Constants.DEVICE_ID, "00000000-54b3-e7c7-0000-000046bffd97");
-        metadata.put("mqtt.queue","public");
+        metadata.put("mqtt.queue",queue);
 
         ImportDeclaration declaration=createImportationDeclaration("importDeclaration",metadata);
-
         assertThat(declaration).isNotNull();
 
         sendSampleAMPQMessage();
@@ -132,8 +134,10 @@ public class AMPQMessageCaptureTest extends RabbitMQTestSuite {
     @Test
     public void ConsumeMultipleMessageEventAdmin() throws IOException {
 
+        final String queue="public";
+
         Dictionary handlerProperties = new Hashtable();
-        handlerProperties.put(EventConstants.EVENT_TOPIC, "public");
+        handlerProperties.put(EventConstants.EVENT_TOPIC, queue);
 
         MessageHandler ht=new MessageHandler();
 
@@ -143,7 +147,7 @@ public class AMPQMessageCaptureTest extends RabbitMQTestSuite {
 
         HashMap<String, Object> metadata = new HashMap<String, Object>();
         metadata.put(Constants.DEVICE_ID, "00000000-54b3-e7c7-0000-000046bffd97");
-        metadata.put("mqtt.queue","public");
+        metadata.put("mqtt.queue",queue);
 
         ImportDeclaration declaration=createImportationDeclaration("importDeclaration",metadata);
 
