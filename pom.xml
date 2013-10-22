@@ -99,10 +99,11 @@
                 <module>fake</module>
                 <module>json-rpc</module>
                 <module>upnp</module>
-		<module>dnssd</module>
+		        <module>dnssd</module>
                 <module>mqtt</module>
-		<module>push</module>
+		        <module>push</module>
                 <module>jax-ws</module>
+                <module>tools</module>
             </modules>
         </profile>
 
