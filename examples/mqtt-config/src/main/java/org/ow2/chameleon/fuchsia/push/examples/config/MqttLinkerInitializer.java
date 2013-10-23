@@ -14,12 +14,12 @@ public class MqttLinkerInitializer {
     Instance pushLinker = instance()
             .of(FuchsiaConstants.DEFAULT_IMPORTATION_LINKER_FACTORY_NAME)
             .named("MQTTLinker")
-            .with(FILTER_IMPORTDECLARATION_PROPERTY).setto("(id=*)")
+            .with(FILTER_IMPORTDECLARATION_PROPERTY).setto("(&(id=*)(mqtt.queue=*))")
             .with(FILTER_IMPORTERSERVICE_PROPERTY).setto("(instance.name=AMQPImporter)");
 
     Instance pushSubscriber = instance()
             .of("AMQPImporterFactory")
             .named("AMQPImporter")
-            .with("target").setto("(id=*)");
+            .with("target").setto("(&(id=*)(mqtt.queue=*))");
 
 }
