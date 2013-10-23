@@ -68,6 +68,9 @@ public class GridWebView {
 
             linkers=new ArrayList<ImportationLinkerIntrospection>();
 
+            ServiceReference[] references=bundleContext.getServiceReferences(ImportationLinkerIntrospection.class.getName(),null);
+
+            if(references!=null)
             for(ServiceReference sr:bundleContext.getServiceReferences(ImportationLinkerIntrospection.class.getName(),null)){
 
                 linkers.add((ImportationLinkerIntrospection) bundleContext.getService(sr));
