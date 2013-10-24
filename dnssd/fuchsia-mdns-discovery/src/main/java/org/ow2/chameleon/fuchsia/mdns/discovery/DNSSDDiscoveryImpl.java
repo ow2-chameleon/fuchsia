@@ -85,6 +85,7 @@ public class DNSSDDiscoveryImpl extends AbstractDiscoveryComponent implements Ne
     private synchronized void createImportationDeclaration(ServiceEvent event) {
 
         HashMap<String, Object> metadata = new HashMap<String, Object>();
+        metadata.put("id", event.getName());
         metadata.put("discovery.mdns.device.name", event.getName());
 
         ImportDeclaration declaration = ImportDeclarationBuilder.fromMetadata(metadata).build();
