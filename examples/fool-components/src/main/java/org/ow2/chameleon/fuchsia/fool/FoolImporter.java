@@ -9,6 +9,7 @@ import org.apache.felix.ipojo.annotations.Validate;
 import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
 import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
+import org.ow2.chameleon.fuchsia.core.exceptions.ImporterException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,6 +35,16 @@ public class FoolImporter extends AbstractImporterComponent {
     private String name;
 
     @Override
+    protected void useImportDeclaration(ImportDeclaration importDeclaration) throws ImporterException {
+        logger.debug("FoolImporter create a proxy for " + importDeclaration);
+    }
+
+    @Override
+    protected void denyImportDeclaration(ImportDeclaration importDeclaration) throws ImporterException {
+        logger.debug("FoolImporter destroy a proxy for " + importDeclaration);
+    }
+
+    @Override
     @Validate
     protected void stop() {
         super.stop();
@@ -43,16 +54,6 @@ public class FoolImporter extends AbstractImporterComponent {
     @Invalidate
     protected void start() {
         super.start();
-    }
-
-    @Override
-    protected void createProxy(ImportDeclaration importDeclaration) {
-        logger.debug("FoolImporter create a proxy for " + importDeclaration);
-    }
-
-    @Override
-    protected void destroyProxy(ImportDeclaration importDeclaration) {
-        logger.debug("FoolImporter destroy a proxy for " + importDeclaration);
     }
 
     public List<String> getConfigPrefix() {
