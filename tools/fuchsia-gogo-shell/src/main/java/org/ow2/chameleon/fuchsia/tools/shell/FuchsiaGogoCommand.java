@@ -164,6 +164,10 @@ public class FuchsiaGogoCommand {
 
                     displayServiceInfo("Importer", reference);
 
+                    ImporterService is=(ImporterService)m_context.getService(reference);
+
+                    System.out.println(String.format("\t*importer name = %s", is.getName()));
+
                     displayServiceProperties(reference);
 
                 }
@@ -178,13 +182,13 @@ public class FuchsiaGogoCommand {
     }
 
     private void displayServiceProperties(ServiceReference reference){
-        System.out.println("Service properties:");
+        System.out.println("\tService properties:");
         for (String propertyKey : reference.getPropertyKeys()) {
-            System.out.println(String.format("\t%s = %s", propertyKey, reference.getProperty(propertyKey)));
+            System.out.println(String.format("\t\t%s = %s", propertyKey, reference.getProperty(propertyKey)));
         }
 
         if (reference.getPropertyKeys().length==0){
-            System.out.println("\t EMPTY");
+            System.out.println("\t\t EMPTY");
         }
     }
 
