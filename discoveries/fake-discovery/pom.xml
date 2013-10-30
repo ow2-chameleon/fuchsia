@@ -37,7 +37,7 @@
         </dependency>
 
         <dependency>
-            <groupId>org.ow2.chameleon.fuchsia.fake</groupId>
+            <groupId>org.ow2.chameleon.fuchsia.base</groupId>
             <artifactId>fuchsia-fake-device</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
