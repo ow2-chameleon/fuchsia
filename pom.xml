@@ -83,77 +83,36 @@
     </properties>
 
 
+
     <!-- ======== -->
     <!-- PROFILES -->
     <!-- ======== -->
-    <profiles>
+    <profiles> <!---->
         <profile>
-            <id>all</id>
+            <id>default</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
-            <modules>
-                <module>core</module>
-                <module>testing</module>
-                <module>core-it</module>
-                <module>fake</module>
-                <module>json-rpc</module>
-                <module>upnp</module>
-		        <module>dnssd</module>
-                <module>mqtt</module>
-		        <module>push</module>
-                <module>jax-ws</module>
-                <module>tools</module>
-            </modules>
-        </profile>
+	    <modules>
+		<module>core</module>
+		<module>bases</module>
+		<module>importers</module>
+		<module>exporters</module>
+		<module>discoveries</module>
+		<module>tools</module>
+		<module>examples</module>
+	    </modules>
+        </profile> 
 
-        <!-- Profile used to build core bundles -->
         <profile>
             <id>core</id>
             <modules>
                 <module>core</module>
                 <module>testing</module>
-                <module>core-it</module>
             </modules>
         </profile>
 
-        <!-- Profile used to build protocol bundles -->
-        <profile>
-            <id>protocol</id>
-            <modules>
-                <module>fake</module>
-                <module>json-rpc</module>
-                <module>upnp</module>
-                <module>jax-ws</module>
-            </modules>
-        </profile>
-
-        <!-- Profile used to build distribution -->
-        <profile>
-            <id>dist</id>
-            <modules>
-                <module>distribution</module>
-            </modules>
-        </profile>
-
-        <!-- Profile used in order to run the integration tests -->
-        <profile>
-            <id>test</id>
-            <modules>
-                <module>core</module>
-                <module>testing</module>
-                <module>core-it</module>
-            </modules>
-        </profile>
-
-        <!-- Profile used in order to build examples-->
-        <profile>
-            <id>examples</id>
-            <modules>
-                <module>examples</module>
-            </modules>
-        </profile>
-    </profiles>
+    </profiles> 
 
     <!-- === -->
     <!-- SCM -->
@@ -372,13 +331,6 @@
                 <artifactId>assertj-core</artifactId>
                 <version>${assertj-core.version}</version>
             </dependency>
-            <!--
-            <dependency>
-                 <groupId>org.slf4j</groupId>
-                 <artifactId>slf4j-api</artifactId>
-                 <version>${TEST.slf4j-api.version}</version>
-             </dependency>
-             -->
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>

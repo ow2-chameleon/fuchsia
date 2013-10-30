@@ -10,10 +10,11 @@ This folder contains the code source of the OW2 Chameleon Fuchsia project.
 - distribution: This project help to build Chameleon distributions for Fuchsia.
 - examples: This project contains some examples to show how to use Fuchsia.
 - fake: This project contains the Fuchsia components providing a way to work with fake device (text file based).
-- jaxws: This project contains the Fuchsia components working with the JAX-WS API.
-- jsonrpc: This project contains the Fuchsia components working with the JSON-RPC protocol.
+- importers: Fuchsia importers, responsible to be linked with an import declaration (ID) and convert it to a proxy, or use the ID to provide a service.
+- exporters: Fuchsia exporters, in addition to what is done by the importer, the proxy are available outside the OSGi platform.
+- discoveries: Fuchsia discoveries, responsible for publishing the import declaration.
 - testing: This project contains the Fuchsia testing helpers.
-- upnp: This project contains the Fuchsia components working with the UPnP protocol.
+- tools: any adicional features developed to facilitate the fuchsia usage. e.g. a shell, pluging, etc.
 
 License
 ------------------
