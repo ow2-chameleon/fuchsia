@@ -11,8 +11,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <name>OW2 Chameleon - Fuchsia MQTT</name>
-    <artifactId>fuchsia-mqtt</artifactId>
-    <groupId>org.ow2.chameleon.fuchsia.mqtt</groupId>
+    <artifactId>mqtt</artifactId>
     <packaging>pom</packaging>
 
     <dependencyManagement>

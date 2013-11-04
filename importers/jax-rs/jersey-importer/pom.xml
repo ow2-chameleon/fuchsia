@@ -5,15 +5,15 @@
 
     <!-- Project's parent -->
     <parent>
-        <groupId>org.ow2.chameleon.fuchsia</groupId>
-        <artifactId>fuchsia-jax-rs</artifactId>
+        <groupId>org.ow2.chameleon.fuchsia.importer</groupId>
+        <artifactId>jax-rs</artifactId>
         <version>0.0.1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
 
-    <groupId>org.ow2.chameleon.fuchsia.jaxrpc</groupId>
-    <artifactId>fuchsia-jersey-importer</artifactId>
+    <groupId>${parent.groupId}.jaxrpc</groupId>
+    <artifactId>jersey-importer</artifactId>
     <version>0.0.1</version>
 
     <modelVersion>4.0.0</modelVersion>

@@ -11,8 +11,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <name>OW2 Chameleon - Fuchsia JSON-RPC</name>
-    <artifactId>fuchsia-json-rpc</artifactId>
-    <groupId>org.ow2.chameleon.fuchsia.jsonrpc</groupId>
+    <artifactId>json-rpc</artifactId>
     <packaging>pom</packaging>
 
     <dependencyManagement>

@@ -5,13 +5,13 @@
 
     <!-- Project's parent -->
     <parent>
-	<artifactId>fuchsia-mqtt</artifactId>
-	<groupId>org.ow2.chameleon.fuchsia.mqtt</groupId>
+	<groupId>org.ow2.chameleon.fuchsia.importer</groupId>
+	<artifactId>mqtt</artifactId>
         <version>0.0.1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>fuchsia-mqtt-importer</artifactId>
+    <artifactId>mqtt-importer</artifactId>
     <version>0.0.1</version>
 
     <modelVersion>4.0.0</modelVersion>

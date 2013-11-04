@@ -5,14 +5,14 @@
 
     <!-- Project's parent -->
     <parent>
-        <groupId>org.ow2.chameleon.fuchsia.jsonrpc</groupId>
-        <artifactId>fuchsia-json-rpc</artifactId>
+        <groupId>org.ow2.chameleon.fuchsia.importer</groupId>
+        <artifactId>json-rpc</artifactId>
         <version>0.0.1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
 
-    <artifactId>fuchsia-jabsorb-importer</artifactId>
+    <artifactId>jabsorb-importer</artifactId>
     <version>0.0.1</version>
 
     <modelVersion>4.0.0</modelVersion>

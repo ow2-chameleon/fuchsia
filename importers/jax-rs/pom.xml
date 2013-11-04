@@ -11,8 +11,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <name>OW2 Chameleon - Fuchsia JAX-RS</name>
-    <artifactId>fuchsia-jax-rs</artifactId>
-    <groupId>org.ow2.chameleon.fuchsia</groupId>
+    <artifactId>jax-rs</artifactId>
+
     <packaging>pom</packaging>
 
     <dependencyManagement>

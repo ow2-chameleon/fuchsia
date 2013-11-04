@@ -12,7 +12,7 @@
     </parent>
 
 
-    <artifactId>fuchsia-fake-importer</artifactId>
+    <artifactId>fake-importer</artifactId>
     <name>OW2 Chameleon - Fuchsia Fake Importer</name>
     <packaging>bundle</packaging>
 

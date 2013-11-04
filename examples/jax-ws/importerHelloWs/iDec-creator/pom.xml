@@ -32,8 +32,8 @@
             <version>${parent.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.ow2.chameleon.fuchsia.jaxws</groupId>
-            <artifactId>fuchsia-cxf-importer</artifactId>
+            <groupId>org.ow2.chameleon.fuchsia.importer.jaxws</groupId>
+            <artifactId>cxf-importer</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>
