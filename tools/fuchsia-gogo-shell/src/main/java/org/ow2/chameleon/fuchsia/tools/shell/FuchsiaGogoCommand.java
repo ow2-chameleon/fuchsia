@@ -7,6 +7,7 @@ import org.apache.felix.ipojo.annotations.Provides;
 import org.apache.felix.ipojo.annotations.ServiceProperty;
 import org.apache.felix.ipojo.architecture.Architecture;
 import org.apache.felix.ipojo.architecture.HandlerDescription;
+import org.apache.felix.ipojo.extender.Declaration;
 import org.apache.felix.ipojo.handlers.dependency.DependencyDescription;
 import org.apache.felix.ipojo.handlers.dependency.DependencyHandlerDescription;
 import org.apache.felix.service.command.Descriptor;
@@ -16,7 +17,9 @@ import org.osgi.framework.ServiceReference;
 import org.ow2.chameleon.fuchsia.core.ExportationLinker;
 import org.ow2.chameleon.fuchsia.core.ImportationLinker;
 import org.ow2.chameleon.fuchsia.core.component.DiscoveryService;
+import org.ow2.chameleon.fuchsia.core.component.ExporterService;
 import org.ow2.chameleon.fuchsia.core.component.ImporterService;
+import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 
 import java.util.Collection;
@@ -37,7 +40,7 @@ public class FuchsiaGogoCommand {
     String m_scope;
 
     @ServiceProperty(name = "osgi.command.function", value = "{}")
-    String[] m_function = new String[]{"declaration", "linker", "discovery","importer"};
+    String[] m_function = new String[]{"declaration", "linker", "discovery","importer","exporter"};
 
     private BundleContext m_context = null;
 
@@ -56,16 +59,13 @@ public class FuchsiaGogoCommand {
             if (importDeclarationsRef != null) {
                 for (ServiceReference reference : importDeclarationsRef) {
 
-                    displayServiceInfo("Declaration",reference);
+                    ImportDeclaration declaration= (ImportDeclaration) m_context.getService(reference);
+
+                    Map<String, Object> metadata = declaration.getMetadata();
 
                     displayServiceProperties(reference);
 
                     System.out.println("Metadata");
-
-                    ImportDeclaration declaration= (ImportDeclaration) m_context.getService(reference);
-
-
-                    Map<String, Object> metadata = declaration.getMetadata();
 
                     for(Map.Entry<String,Object> entry:metadata.entrySet()){
                         System.out.println(String.format("\t%s=%s",entry.getKey(),entry.getValue()));
@@ -151,7 +151,7 @@ public class FuchsiaGogoCommand {
 
     }
 
-    @Descriptor("Gets the discovery available in the platform")
+    @Descriptor("Gets the importer available in the platform")
     public void importer(@Descriptor("importer [importer name]") String... parameters) {
 
         String filter = null;
@@ -173,6 +173,36 @@ public class FuchsiaGogoCommand {
                 }
             } else {
                 System.out.println("No importers available.");
+            }
+
+        } catch (InvalidSyntaxException e) {
+            System.out.println("failed to execute the command with the message: " + e.getMessage());
+        }
+
+    }
+
+    @Descriptor("Gets the exporter available in the platform")
+    public void exporter(@Descriptor("exporter [exporter name]") String... parameters) {
+
+        String filter = null;
+
+        try {
+            ServiceReference[] discoveryRef = m_context.getAllServiceReferences(ExporterService.class.getName(), filter);
+
+            if (discoveryRef != null) {
+                for (ServiceReference reference : discoveryRef) {
+
+                    displayServiceInfo("Exporter", reference);
+
+                    ExporterService es=(ExporterService)m_context.getService(reference);
+
+                    System.out.println(String.format("\t*exporter name = %s", es.getName()));
+
+                    displayServiceProperties(reference);
+
+                }
+            } else {
+                System.out.println("No exporter available.");
             }
 
         } catch (InvalidSyntaxException e) {
