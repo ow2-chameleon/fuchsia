@@ -16,7 +16,7 @@ public class CXFExporterInitializer {
             .of("CxfExporterFactory")
             .with("target").setto("(fuchsia.export.cxf.instance=*)");
 
-    Instance cxflinker = instance()
+    Instance cxfexporterlinker = instance()
             .of(FuchsiaConstants.DEFAULT_EXPORTATION_LINKER_FACTORY_NAME)
             .with(ExportationLinker.FILTER_EXPORTDECLARATION_PROPERTY).setto("(fuchsia.export.cxf.instance=*)")
             .with(ExportationLinker.FILTER_EXPORTERSERVICE_PROPERTY).setto("(instance.name=cxfexporter)");
