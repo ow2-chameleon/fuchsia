@@ -16,7 +16,7 @@
     <packaging>pom</packaging>
 
     <modules>
-	<module>cxf-exporter</module>
+	<module>jaxws</module>
     </modules>
 
 </project>
