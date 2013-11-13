@@ -1,5 +1,7 @@
 package org.ow2.chameleon.fuchsia.core;
 
+import org.apache.felix.ipojo.ComponentInstance;
+import org.apache.felix.ipojo.InstanceManager;
 import org.apache.felix.ipojo.annotations.Bind;
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Controller;
@@ -9,18 +11,18 @@ import org.apache.felix.ipojo.annotations.Provides;
 import org.apache.felix.ipojo.annotations.ServiceProperty;
 import org.apache.felix.ipojo.annotations.Unbind;
 import org.apache.felix.ipojo.annotations.Validate;
+import org.apache.felix.ipojo.configuration.Instance;
+import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
 import org.osgi.framework.ServiceReference;
 import org.ow2.chameleon.fuchsia.core.component.ExporterService;
+import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
 import org.ow2.chameleon.fuchsia.core.exceptions.InvalidFilterException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
 import static org.ow2.chameleon.fuchsia.core.FuchsiaUtils.getFilter;
@@ -51,7 +53,7 @@ import static org.ow2.chameleon.fuchsia.core.FuchsiaUtils.getFilter;
 @Provides(specifications = ExportationLinker.class)
 public class DefaultExportationLinker implements ExportationLinker {
 
-    @Controller
+    //@Controller
     private boolean state;
 
     @ServiceProperty(name = INSTANCE_NAME_PROPERTY)
@@ -60,7 +62,18 @@ public class DefaultExportationLinker implements ExportationLinker {
     @ServiceProperty(name = FILTER_EXPORTDECLARATION_PROPERTY, mandatory = true)
     private Object exportDeclarationFilterProperty;
 
+    @ServiceProperty(name = FILTER_EXPORTERSERVICE_PROPERTY, mandatory = true)
+    private Object exporterServiceFilterProperty;
+
+    @ServiceProperty(name = FILTER_EXPORTERSERVICE_PROPERTY, mandatory = true)
+    private String exporterServiceFilter;
+
+    @ServiceProperty(name = UNIQUE_EXPORTATION_PROPERTY, mandatory = false)
+    private boolean uniqueExportationProperty = false;
+
     private Filter exportDeclarationFilter;
+
+    private final BundleContext bundleContext;
 
     @Property(name = FILTER_EXPORTDECLARATION_PROPERTY, mandatory = true)
     public void computeExportDeclarationFilter(Object filterProperty) {
@@ -77,16 +90,12 @@ public class DefaultExportationLinker implements ExportationLinker {
         }
     }
 
-    @ServiceProperty(name = FILTER_EXPORTERSERVICE_PROPERTY, mandatory = true)
-    private Object exporterServiceFilterProperty;
-
-    private Filter exporterServiceFilter;
-
-    @Property(name = FILTER_EXPORTERSERVICE_PROPERTY, mandatory = true)
     public void computeExporterServiceFilter(Object filterProperty) {
+
         if (!state) {
             return;
         }
+        /*
         try {
             exporterServiceFilter = getFilter(filterProperty);
             state = true;
@@ -94,11 +103,8 @@ public class DefaultExportationLinker implements ExportationLinker {
             logger.debug("The value of the Property " + FILTER_EXPORTERSERVICE_PROPERTY + " is invalid,"
                     + " the recuperation of the Filter has failed. The instance gonna stop.", invalidFilterException);
             state = false;
-        }
+        }*/
     }
-
-    @ServiceProperty(name = UNIQUE_EXPORTATION_PROPERTY, mandatory = false)
-    private boolean uniqueExportationProperty = false;
 
     private final Object lock = new Object();
 
@@ -123,8 +129,8 @@ public class DefaultExportationLinker implements ExportationLinker {
         logger.debug(linker_name + " stopping");
     }
 
-    public DefaultExportationLinker() {
-        //
+    public DefaultExportationLinker(BundleContext context) {
+        this.bundleContext=context;
     }
 
     /**
@@ -134,12 +140,21 @@ public class DefaultExportationLinker implements ExportationLinker {
      * If the metadata of the {@link ExportDeclaration} match the filter exposed by the exporter
      * bind the {@link ExportDeclaration}  to the exporter
      */
-    @Bind(id = "exporterServices", aggregate = true, optional = true)
-    void bindExporterService(ExporterService exporterService,
-                             Map<String, Object> properties, ServiceReference serviceReference) {
-        if (!exporterServiceFilter.matches(properties)) {
+    @Bind(id = "exporterServices", specification = "org.ow2.chameleon.fuchsia.core.component.ExporterService", optional = true, aggregate = true)
+    void bindExporterService(ServiceReference<ExporterService> serviceReference) throws InvalidFilterException {
+
+        ExporterService exporterService=bundleContext.getService(serviceReference);
+
+        Map<String,Object> properties=new HashMap<String, Object>();
+
+        for(String property:serviceReference.getPropertyKeys()){
+            properties.put(property,serviceReference.getProperty(property));
+        }
+
+        if (!getFilter(exporterServiceFilter).matches(properties)) {
             return;
         }
+
         logger.debug(linker_name + " : Bind the ExporterService " + exporterService);
 
         Filter filter = null;
@@ -168,7 +183,11 @@ public class DefaultExportationLinker implements ExportationLinker {
      * Unbind the {@link ExporterService}.
      */
     @Unbind(id = "exporterServices")
-    void unbindExporterService(ExporterService exporterService, ServiceReference serviceReference) {
+    void unbindExporterService(ServiceReference serviceReference) {
+
+
+        ExporterService exporterService=(ExporterService)bundleContext.getService(serviceReference);
+
         logger.debug(linker_name + " : Unbind the ExporterService " + exporterService);
         synchronized (lock) {
             for (ExportDeclaration exportDeclaration : exportDeclarations) {
@@ -187,8 +206,11 @@ public class DefaultExportationLinker implements ExportationLinker {
      * Foreach {@link ExportDeclaration}, check if metadata match the filter given exposed by the
      * {@link ExporterService} bound.
      */
-    @Bind(id = "exportDeclarations", aggregate = true, optional = true)
-    void bindExportDeclaration(ExportDeclaration exportDeclaration) {
+    @Bind(id = "exportDeclarations", specification = "org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration", aggregate = true, optional = true)
+    void bindExportDeclaration(ExportDeclaration exportDeclaration) throws InvalidFilterException {
+
+        exportDeclarationFilter = getFilter(exportDeclarationFilterProperty);
+
         if (!exportDeclarationFilter.matches(exportDeclaration.getMetadata())) {
             return;
         }
