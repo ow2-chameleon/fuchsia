@@ -25,9 +25,8 @@
     </parent>
 
     <!-- Description of the project -->
-    <groupId>org.ow2.chameleon.fuchsia.exporter.cxf</groupId>
-    <artifactId>fuchsia-cxf-exporter</artifactId>
-    <name>OW2 Chameleon - Fuchsia CXF Exporter</name>
+    <artifactId>jaxws</artifactId>
+    <name>OW2 Chameleon - Fuchsia Exporter JAX-WS</name>
     <packaging>bundle</packaging>
 
     <properties>

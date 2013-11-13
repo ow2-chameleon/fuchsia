@@ -682,8 +682,8 @@
 			<version>1.6.2</version>
 		</dependency>
   		<dependency>
-			<groupId>org.ow2.chameleon.fuchsia.exporter.cxf</groupId>
-			<artifactId>fuchsia-cxf-exporter</artifactId>
+			<groupId>org.ow2.chameleon.fuchsia.exporter</groupId>
+			<artifactId>jaxws</artifactId>
 			<version>${project.version}</version>
 		</dependency> 
 	    </dependencies>
