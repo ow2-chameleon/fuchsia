@@ -62,7 +62,7 @@ public class ImporterTest extends ImporterComponentAbstractTest {
                 CoreOptions.mavenBundle().groupId("org.jabsorb").artifactId("org.ow2.chameleon.commons.jabsorb").versionAsInProject(),
                 CoreOptions.mavenBundle().groupId("org.apache.httpcomponents").artifactId("httpcore-osgi").versionAsInProject(),
                 CoreOptions.mavenBundle().groupId("org.apache.httpcomponents").artifactId("httpclient-osgi").versionAsInProject(),
-                CoreOptions.mavenBundle().groupId("org.ow2.chameleon.fuchsia.jsonrpc").artifactId("fuchsia-jabsorb-importer").versionAsInProject()
+                CoreOptions.mavenBundle().groupId("org.ow2.chameleon.fuchsia.importer").artifactId("jabsorb-importer").versionAsInProject()
         );
     }
 
