@@ -34,7 +34,7 @@
         <module>upnp-samples</module>
         <module>upnp-config</module>
         <module>push-config</module>
-        <module>dnssd-config</module>
+        <module>mdns-config</module>
         <module>mqtt-config</module>
 	<module>cxf-base</module>
 	<module>cxf-client</module>

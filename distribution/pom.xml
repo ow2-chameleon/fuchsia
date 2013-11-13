@@ -344,7 +344,7 @@
         </profile>
 
         <profile>
-            <id>dnssd</id>
+            <id>mdns</id>
             <dependencies>
 		<dependency>
 			<groupId>javax.jmdns</groupId>
@@ -353,18 +353,18 @@
 		</dependency>
 		<dependency>
 			<groupId>org.ow2.chameleon.fuchsia.discovery</groupId>
-			<artifactId>fuchsia-mdns-discovery</artifactId>
+			<artifactId>mdns</artifactId>
 			<version>${project.version}</version>
 		</dependency>
             </dependencies>
         </profile>
 
         <profile>
-            <id>dnssd-config</id>
+            <id>mdns-config</id>
             <dependencies>
 		<dependency>
 	        	<groupId>org.ow2.chameleon.fuchsia.examples</groupId>
-			<artifactId>dnssd-config</artifactId>
+			<artifactId>mdns-config</artifactId>
 			<version>${project.version}</version>
 		</dependency>
             </dependencies>

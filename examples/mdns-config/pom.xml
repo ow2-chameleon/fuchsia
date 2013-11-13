@@ -12,7 +12,7 @@
     </parent>
 
 
-    <artifactId>dnssd-config</artifactId>
+    <artifactId>mdns-config</artifactId>
     <name>OW2 Chameleon - Fuchsia DNS-SD Configuration</name>
     <packaging>bundle</packaging>
 

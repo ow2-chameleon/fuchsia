@@ -12,8 +12,8 @@
     </parent>
 
 
-    <artifactId>fuchsia-mdns-discovery</artifactId>
-    <name>OW2 Chameleon - Fuchsia mDNS Discovery</name>
+    <artifactId>mdns</artifactId>
+    <name>OW2 Chameleon - Fuchsia Discovery mDNS</name>
     <packaging>bundle</packaging>
 
     <dependencies>
