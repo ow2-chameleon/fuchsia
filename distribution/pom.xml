@@ -352,7 +352,7 @@
 			<version>3.4.1</version>
 		</dependency>
 		<dependency>
-			<groupId>org.ow2.chameleon.fuchsia.dnssd</groupId>
+			<groupId>org.ow2.chameleon.fuchsia.discovery</groupId>
 			<artifactId>fuchsia-mdns-discovery</artifactId>
 			<version>${project.version}</version>
 		</dependency>
