@@ -276,31 +276,26 @@
                     <artifactId>fuchsia-upnp-importer</artifactId>
                     <version>${project.parent.version}</version>
                 </dependency>
-
                 <dependency>
-                    <groupId>org.ow2.chameleon.fuchsia.upnp</groupId>
-                    <artifactId>fuchsia-upnp-discovery</artifactId>
+                    <groupId>org.ow2.chameleon.fuchsia.discovery</groupId>
+                    <artifactId>upnp</artifactId>
                     <version>${project.parent.version}</version>
                 </dependency>
-
                 <dependency>
                     <groupId>org.osgi</groupId>
                     <artifactId>org.osgi.compendium</artifactId>
                     <version>4.3.1</version>
                 </dependency>
-
                 <dependency>
                     <groupId>org.apache.felix</groupId>
                     <artifactId>org.apache.felix.upnp.basedriver</artifactId>
                     <version>0.8.0</version>
                 </dependency>
-
                 <dependency>
                     <groupId>org.apache.felix</groupId>
                     <artifactId>org.apache.felix.upnp.extra</artifactId>
                     <version>0.4.0</version>
                 </dependency>
-
             </dependencies>
         </profile>
 

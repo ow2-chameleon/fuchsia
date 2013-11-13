@@ -12,8 +12,8 @@
     </parent>
 
 
-    <artifactId>fuchsia-upnp-discovery</artifactId>
-    <name>OW2 Chameleon - Fuchsia UPnP Discovery</name>
+    <artifactId>upnp</artifactId>
+    <name>OW2 Chameleon - Fuchsia Discovery UPnP</name>
     <packaging>bundle</packaging>
 
     <dependencies>

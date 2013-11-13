@@ -12,8 +12,8 @@
     </parent>
 
 
-    <artifactId>fuchsia-upnp-discovery-it</artifactId>
-    <name>OW2 Chameleon - Fuchsia UPnP Discovery [IntegrationTest]</name>
+    <artifactId>upnp.it</artifactId>
+    <name>OW2 Chameleon - Fuchsia Discovery UPnP [IntegrationTests]</name>
     <packaging>bundle</packaging>
 
     <properties>
@@ -55,7 +55,7 @@
 
         <dependency>
             <groupId>org.ow2.chameleon.fuchsia.discovery</groupId>
-            <artifactId>fuchsia-upnp-discovery</artifactId>
+            <artifactId>upnp</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 
