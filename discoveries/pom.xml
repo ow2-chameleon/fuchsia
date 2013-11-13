@@ -17,8 +17,8 @@
 
     <modules>
         <module>fake-discovery</module>
-        <module>fuchsia-mdns-discovery</module>
-        <module>fuchsia-upnp-discovery</module>
-        <module>fuchsia-upnp-discovery-it</module>
+        <module>mdns</module>
+        <module>upnp</module>
+        <module>upnp.it</module>
     </modules>
 </project>

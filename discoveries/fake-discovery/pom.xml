@@ -13,7 +13,7 @@
 
 
     <artifactId>fuchsia-fake-discovery</artifactId>
-    <name>OW2 Chameleon - Fuchsia Fake Discovery</name>
+    <name>OW2 Chameleon - Fuchsia Discovery Fake</name>
     <packaging>bundle</packaging>
 
     <dependencies>
