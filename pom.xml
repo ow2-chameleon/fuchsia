@@ -101,15 +101,13 @@
 		<module>discoveries</module>
 		<module>tools</module>
 		<module>testing</module>
-		<module>examples</module>
 	    </modules>
         </profile> 
 
         <profile>
-            <id>core</id>
+            <id>examples</id>
             <modules>
-                <module>core</module>
-                <module>testing</module>
+		<module>examples</module>
             </modules>
         </profile>
 
