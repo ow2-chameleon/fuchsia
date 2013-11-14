@@ -8,7 +8,7 @@
     <parent>
         <groupId>org.ow2.chameleon.fuchsia.importer</groupId>
         <artifactId>json-rpc</artifactId>
-        <version>0.0.1</version>
+        <version>0.0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -37,7 +37,7 @@
         <dependency>
             <groupId>org.ow2.chameleon.fuchsia.importer</groupId>
             <artifactId>jabsorb-importer</artifactId>
-            <version>0.0.1</version>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>

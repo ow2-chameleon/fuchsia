@@ -23,7 +23,7 @@
 
     <groupId>org.ow2.chameleon.fuchsia</groupId>
     <artifactId>fuchsia-parent</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.1-SNAPSHOT</version>
 
     <name>Fuchsia Parent</name>
     <packaging>pom</packaging>

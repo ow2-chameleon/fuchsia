@@ -20,7 +20,7 @@
     <parent>
 	<artifactId>fuchsia-exporters</artifactId>
 	<groupId>org.ow2.chameleon.fuchsia.exporter</groupId>
-        <version>0.0.1</version>
+        <version>0.0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
