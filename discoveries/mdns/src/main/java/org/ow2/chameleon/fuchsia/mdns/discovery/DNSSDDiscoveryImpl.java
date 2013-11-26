@@ -3,6 +3,7 @@ package org.ow2.chameleon.fuchsia.mdns.discovery;
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
 import org.ow2.chameleon.fuchsia.core.component.AbstractDiscoveryComponent;
+import org.ow2.chameleon.fuchsia.core.component.DiscoveryService;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclarationBuilder;
 import org.ow2.chameleon.fuchsia.mdns.discovery.MDNSConstants;
@@ -17,6 +18,7 @@ import java.util.HashMap;
 
 
 @Component(name = "DNSSDDiscoveryFactory")
+@Provides(specifications = DiscoveryService.class)
 public class DNSSDDiscoveryImpl extends AbstractDiscoveryComponent implements NetworkTopologyDiscovery.Factory.ClassDelegate, ServiceListener {
 
     private final HashMap<String, ImportDeclaration> importDeclarations = new HashMap<String, ImportDeclaration>();
