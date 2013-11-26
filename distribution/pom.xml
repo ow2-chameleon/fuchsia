@@ -6,7 +6,7 @@
     <parent>
         <artifactId>fuchsia-parent</artifactId>
         <groupId>org.ow2.chameleon.fuchsia</groupId>
-        <version>0.0.1</version>
+        <version>0.0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -109,13 +109,13 @@
             <dependencies>
 
                 <dependency>
-                    <groupId>org.ow2.chameleon.fuchsia.fake</groupId>
+                    <groupId>org.ow2.chameleon.fuchsia.base</groupId>
                     <artifactId>fuchsia-fake-device</artifactId>
                     <version>${project.parent.version}</version>
                 </dependency>
 
                 <dependency>
-                    <groupId>org.ow2.chameleon.fuchsia.fake</groupId>
+                    <groupId>org.ow2.chameleon.fuchsia.discovery</groupId>
                     <artifactId>fuchsia-fake-discovery</artifactId>
                     <version>${project.parent.version}</version>
                 </dependency>
@@ -262,7 +262,7 @@
             <id>upnp</id>
             <dependencies>
                 <dependency>
-                    <groupId>org.ow2.chameleon.fuchsia.fake</groupId>
+                    <groupId>org.ow2.chameleon.fuchsia.base</groupId>
                     <artifactId>fuchsia-fake-device</artifactId>
                     <version>${project.parent.version}</version>
                 </dependency>
@@ -270,12 +270,12 @@
                     <groupId>${project.parent.groupId}.examples</groupId>
                     <artifactId>fuchsia-upnp-components</artifactId>
                     <version>${project.parent.version}</version>
-                </dependency>
+                </dependency> <!--
                 <dependency>
                     <groupId>org.ow2.chameleon.fuchsia.upnp</groupId>
                     <artifactId>fuchsia-upnp-importer</artifactId>
                     <version>${project.parent.version}</version>
-                </dependency>
+                </dependency> -->
                 <dependency>
                     <groupId>org.ow2.chameleon.fuchsia.discovery</groupId>
                     <artifactId>upnp</artifactId>
@@ -776,6 +776,21 @@
 		</dependency> 
 	    </dependencies>
 	</profile>
+
+        <profile>
+            <id>ard</id>
+           <dependencies>
+                    <dependency>
+                        <groupId>org.apache.felix</groupId>
+                        <artifactId>org.apache.felix.eventadmin</artifactId>
+                    </dependency>
+                 <dependency>
+                        <groupId>org.ow2.chameleon.fuchsia.extra.ard</groupId>
+                        <artifactId>ard-importer</artifactId>
+                        <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
 
     </profiles>
 
