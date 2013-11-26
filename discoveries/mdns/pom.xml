@@ -83,7 +83,7 @@
                             ${project.artifactId}
                         </Bundle-SymbolicName>
                         <Export-Package>
-                            org.ow2.chameleon.fuchsia.upnp.discovery
+                            org.ow2.chameleon.fuchsia.mdns.discovery
                         </Export-Package>
                         <Import-Package>
                             *
