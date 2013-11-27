@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="generator" content="Asciidoctor 0.1.3">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fuchsia core</title>
+<link rel="stylesheet" href="./stylesheets/asciidoc.css">
+</head>
+<body class="article">
+<div id="header">
+</div>
+<div id="content">
+<div class="paragraph">
+<p>In order to generate a Fuchsia distribution there is only one mandatory profile the <strong>core</strong>, all the other modules are optional and can be included in the distribution by adding the apropriate maven profile ( <strong>mvn -P parameter</strong> ). The maven profile and its contents are specified right below.</p>
+</div>
+<div class="sect2">
+<h3 id="_fuchsia_core">Fuchsia core</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>core - This module contains all the basic Fuchsia types, fuchsia shell tool is installed automatically in this profile as well, even though its not part of the bundle core</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_discoveries">Discoveries</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="http://jmdns.sourceforge.net/">mdns</a> - the implementation os dnssd/mdns discovery protocol</p>
+</li>
+<li>
+<p>upnp</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_importers">Importers</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>importer-cxf</p>
+</li>
+<li>
+<p><a href="http://mqtt.org/">mqtt</a></p>
+</li>
+<li>
+<p><a href="https://code.google.com/p/pubsubhubbub/">push</a></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_exporters">Exporters</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>exporter-cxf</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_tools">Tools</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>grid</p>
+</li>
+<li>
+<p>fake</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_config_profiles">Config profiles</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>discoveries:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>mdns-config</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>importers:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>importer-cxf-config</p>
+</li>
+<li>
+<p>mqtt-config</p>
+</li>
+<li>
+<p>push-config</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>exporters:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>exporter-cxf-config</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Thus, in order to compile Fuchsia with the <strong>grid</strong>, <strong>exporter-cxf</strong> and <strong>mqtt</strong>, would be enough to:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>go to the <strong>distribution</strong> directory</p>
+</li>
+<li>
+<p>type <strong>mvn -Pcore,grid,exporter-cxf,mqtt</strong></p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>After the compilation process is finished, your Fuchsia distribution is ready to use:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>go to the <strong>distribution/target/chameleon-distribution/</strong></p>
+</li>
+<li>
+<p>type <strong>./chameleon.sh --interactive</strong> (or the apropriate script according to your OS)</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2013-11-25 15:05:43 CET
+</div>
+</div>
+</body>
+</html>

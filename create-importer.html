@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="generator" content="Asciidoctor 0.1.3">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Importers</title>
+<link rel="stylesheet" href="./stylesheets/asciidoc.css">
+</head>
+<body class="article">
+<div id="header">
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_importers">Importers</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>As seen in [Fuchsia 101](Fuchsia-101), importers use <strong>import declaration</strong> as input. The information contained in the <strong>import declaration</strong> must be enough in order that the processor execute its role properly.</p>
+</div>
+<div class="sect2">
+<h3 id="_fake_importer">Fake importer</h3>
+<div class="paragraph">
+<p>As soon as this <strong>importer</strong> is connected to an <strong>import declaration</strong> it generates an instance of Fuchsia <strong>GenericDevice</strong>, and this instance is published as a service inside OSGi platform.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_jax_ws_importer">JAX-WS importer</h3>
+<div class="ulist">
+<div class="title">External Requirement:</div>
+<ul>
+<li>
+<p>JAX-WS service published</p>
+</li>
+<li>
+<p>Interface(a') that represents the WSDL available in the OSGi platform that will import the service</p>
+</li>
+</ul>
+</div>
+<div class="ulist">
+<div class="title">Import Declaration information required:</div>
+<ul>
+<li>
+<p>jax-ws.importer.interfaces</p>
+</li>
+<li>
+<p>className</p>
+</li>
+<li>
+<p>endpoint.url</p>
+</li>
+</ul>
+</div>
+<div class="ulist">
+<div class="title">Output:</div>
+<ul>
+<li>
+<p>OSGi service registered with a' representing the JAX-WS (Remote service)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Detailed Description</strong></p>
+</div>
+<div class="paragraph">
+<p>Today to import the JAX-WS service Fushsia uses <a href="http://cxf.apache.org/">CXF</a>. CXF is used in order to reduce the complexity in creating the connection and handling with different issues that may be raised.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_mqtt_importer">MQTT importer</h3>
+<div class="ulist">
+<div class="title">External Requirement:</div>
+<ul>
+<li>
+<p>MQTT server with the address known</p>
+</li>
+<li>
+<p>EventAdmin service configured in the machine that will import this service</p>
+</li>
+</ul>
+</div>
+<div class="ulist">
+<div class="title">Import Declaration information required:</div>
+<ul>
+<li>
+<p>id</p>
+</li>
+<li>
+<p>mqtt.queue</p>
+</li>
+</ul>
+</div>
+<div class="ulist">
+<div class="title">Output:</div>
+<ul>
+<li>
+<p>A message will be published in EventAdmin in the queue $mqtt.queue, meaning that it will use the same name of <strong>queue</strong> as MQTT</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Detailed Description</strong></p>
+</div>
+<div class="paragraph">
+<p><a href="http://mqtt.org/">MQTT</a> is a protocol <a href="http://openiot.eu/">largely diffused</a> protocole for message exchange due to its good performance. The implementation used by Fuchsia to support MQTT was <a href="http://www.rabbitmq.com/">RabbitMQ</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_pubsubhubbub_importer">PubSubHubBub importer</h3>
+<div class="paragraph">
+<p><a href="http://code.google.com/p/pubsubhubbub/">PubSubHubBub</a>, or simply <strong>PuSH</strong>, is a publish/subscribe protocol created by google and used by some of its <a href="http://code.google.com/p/pubsubhubbub/wiki/HubbubAtGoogle">tools</a>.</p>
+</div>
+<div class="ulist">
+<div class="title">External Requirement:</div>
+<ul>
+<li>
+<p>PuSh server address</p>
+</li>
+</ul>
+</div>
+<div class="ulist">
+<div class="title">Import Declaration information required:</div>
+<ul>
+<li>
+<p>push.hub.url</p>
+</li>
+<li>
+<p>push.hub.topic</p>
+</li>
+<li>
+<p>push.subscriber.callback</p>
+</li>
+<li>
+<p>push.eventAdmin.queue</p>
+</li>
+</ul>
+</div>
+<div class="ulist">
+<div class="title">Output:</div>
+<ul>
+<li>
+<p>A message will be published in EventAdmin in the queue $push.eventAdmin.queue, meaning that it will use the same name of <strong>queue</strong> as PuSH</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_detailed_description">Detailed Description</h3>
+<div class="paragraph">
+<p>There are no well known and portable PuSH implementations, Fuchsia implemented partially <a href="https://pubsubhubbub.googlecode.com/git/pubsubhubbub-core-0.4.html">PuSH specification</a></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2013-11-25 14:24:17 CET
+</div>
+</div>
+</body>
+</html>

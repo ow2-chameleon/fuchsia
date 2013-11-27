@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="generator" content="Asciidoctor 0.1.3">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What is Fuchsia?</title>
+<link rel="stylesheet" href="./stylesheets/asciidoc.css">
+</head>
+<body class="article">
+<div id="header">
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_what_is_fuchsia">What is Fuchsia?</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><span class="image"><a class="image" href="diagram/importer01.svg"><img src="diagram/importer01.svg" alt="Fuchsia" width="1024"></a></span></p>
+</div>
+<div class="paragraph">
+<p>Fuchsia is an extensible tool for integrating external communication protocols inside an OSGi platform. It provides a common interface for creating and managing external connections.</p>
+</div>
+<div class="paragraph">
+<p>As most of modern applications require multiple sources of information such as web services, databases or ubiquitous devices. The integration of those different services become a major issue when dealing with multitude of them.</p>
+</div>
+<div class="paragraph">
+<p>In ubiquitous applications this kind of integration if even more important since the dynamic and the multitude of protocol grows as the devices supported by the application.</p>
+</div>
+<div class="paragraph">
+<p>So, developers are suddenly facing the challenge of mastering several protocol, and their respective tools for debugging, dependency managing, native calls, etc. That is where Fuchsia plays the main role, by providing the same way of dealing with different protocols, creating a single entrypoint for all supported protocols.</p>
+</div>
+<div class="paragraph">
+<p>You can administrate and monitor all the exchange of your OSGi platform with externals protocols through an unique control panel.</p>
+</div>
+<div class="ulist">
+<div class="title">There exist essentially 4 types of entities inside fuchsia that you need to understand before go hands-on the code:</div>
+<ul>
+<li>
+<p>Declaration, it is the metadata that describes a device or a service</p>
+</li>
+<li>
+<p>Discovery, responsible for the detection of a device/service, in Fuchsia that means create a <strong>Declaration</strong> and adding it to the osgi registry</p>
+</li>
+<li>
+<p>Processors, it represents the task itself.</p>
+</li>
+<li>
+<p>Linkers, connects a declaration to a processor, evaluate the constraints to be respected in order to connect those two.</p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="_declarations">Declarations</h3>
+<div class="paragraph">
+<p>Think in <strong>Declaration</strong> as a property file, although that it is not a file, it is an service registered in an OSGi platform, as long as this service is registered with the proper platform, <strong>Fuchsia</strong> will recognize it.</p>
+</div>
+<div class="paragraph">
+<p>Its function is to indicate that a given device/service is available with certain properties, and is the role of an Importer/Exporter (explained later) to receive those information as inputs and create a bridge between the osgi platform and this device (all by using the properties given by the <strong>Declaration</strong>), allowing other services to access this device without knowing its protocol.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_discoveries">Discoveries</h3>
+<div class="paragraph">
+<p>As seen before, the way that we inform the Fuchsia platform the existence of a device/service is through a declaration <strong>Declaration</strong>, that can be registered manually of course (since its a service registered in OSGi platform with the interface <strong>org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration</strong>), but this can be done by fuchsia discoveries, that use specialized discovery protocols to extract all the relevant information of a given service/device and publish in OSGi platform a <strong>Declaration</strong> containing all those informations.</p>
+</div>
+<div class="ulist">
+<div class="title">Available discovery implementations:</div>
+<ul>
+<li>
+<p>Fake discovery</p>
+</li>
+<li>
+<p>mDNS/DNSsd</p>
+</li>
+<li>
+<p>uPnP</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_processors">Processors</h3>
+<div class="sect3">
+<h4 id="_importers">Importers</h4>
+<div class="paragraph">
+<p>In order to trigger <strong>importers</strong> to perform their job, they must to receive an <strong>import declaration</strong> which is configuration (think of it as a key value mapping, just like java properties). The <strong>importation declaration</strong> will recognized by <strong>Fuchsia</strong> as long as they are registered in OSGi with the proper Fuchsia interface (for an importer for example must be <strong>org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration</strong> )</p>
+</div>
+<div class="ulist">
+<div class="title">Available implementations:</div>
+<ul>
+<li>
+<p>Fake importer</p>
+</li>
+<li>
+<p>JAX-RS</p>
+</li>
+<li>
+<p>JAX-WS</p>
+</li>
+<li>
+<p>JSON-RPC</p>
+</li>
+<li>
+<p>MQTT</p>
+</li>
+<li>
+<p>PUbSubHubBub</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_exporters">Exporters</h4>
+<div class="paragraph">
+<p>Analogue to the <strong>importers</strong>, the <strong>exporters</strong> must to receive a <strong>declaration</strong>, but in this case an <strong>export declaration</strong>. But its role is to provide an external access (by external meaning externally to the OSGi platform) to the services available in the current OSGi platform, for instance by publishing a WS.</p>
+</div>
+<div class="ulist">
+<div class="title">Available implementations:</div>
+<ul>
+<li>
+<p>JAX-WS</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_linkers">Linkers</h3>
+<div class="paragraph">
+<p>The existence of a <strong>declaration</strong> and a <strong>processor</strong> is not enough to trigger a connection is established between them, in order to do so there exist the <strong>linkers</strong>.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2013-11-27 17:53:49 CET
+</div>
+</div>
+</body>
+</html>
