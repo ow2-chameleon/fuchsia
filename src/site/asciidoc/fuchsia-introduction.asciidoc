@@ -1,0 +1,66 @@
+What is Fuchsia?
+----------------
+
+image:diagram/importer01.svg["Fuchsia",width=1024,link="diagram/importer01.svg"]
+
+Fuchsia is an extensible tool for integrating external communication protocols inside an OSGi platform. It provides a common interface for creating and managing external connections.
+
+As most of modern applications require multiple sources of information such as web services, databases or ubiquitous devices. The integration of those different services become a major issue when dealing with multitude of them.
+
+In ubiquitous applications this kind of integration if even more important since the dynamic and the multitude of protocol grows as the devices supported by the application.
+
+So, developers are suddenly facing the challenge of mastering several protocol, and their respective tools for debugging, dependency managing, native calls, etc. That is where Fuchsia plays the main role, by providing the same way of dealing with different protocols, creating a single entrypoint for all supported protocols.
+
+You can administrate and monitor all the exchange of your OSGi platform with externals protocols through an unique control panel.
+
+.There exist essentially 4 types of entities inside fuchsia that you need to understand before go hands-on the code:
+* Declaration, it is the metadata that describes a device or a service
+* Discovery, responsible for the detection of a device/service, in Fuchsia that means create a *Declaration* and adding it to the osgi registry
+* Processors, it represents the task itself.
+* Linkers, connects a declaration to a processor, evaluate the constraints to be respected in order to connect those two.
+
+Declarations
+~~~~~~~~~~~~
+
+Think in **Declaration** as a property file, although that it is not a file, it is an service registered in an OSGi platform, as long as this service is registered with the proper platform, *Fuchsia* will recognize it. 
+
+Its function is to indicate that a given device/service is available with certain properties, and is the role of an Importer/Exporter (explained later) to receive those information as inputs and create a bridge between the osgi platform and this device (all by using the properties given by the **Declaration**), allowing other services to access this device without knowing its protocol.
+
+Discoveries
+~~~~~~~~~~~
+
+As seen before, the way that we inform the Fuchsia platform the existence of a device/service is through a declaration **Declaration**, that can be registered manually of course (since its a service registered in OSGi platform with the interface *org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration*), but this can be done by fuchsia discoveries, that use specialized discovery protocols to extract all the relevant information of a given service/device and publish in OSGi platform a **Declaration** containing all those informations. 
+
+.Available discovery implementations:
+* Fake discovery
+* mDNS/DNSsd
+* uPnP
+
+Processors
+~~~~~~~~~~
+
+Importers
+^^^^^^^^^
+
+In order to trigger **importers** to perform their job, they must to receive an *import declaration* which is configuration (think of it as a key value mapping, just like java properties). The *importation declaration* will recognized by *Fuchsia* as long as they are registered in OSGi with the proper Fuchsia interface (for an importer for example must be *org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration* )
+
+.Available implementations:
+* Fake importer
+* JAX-RS
+* JAX-WS
+* JSON-RPC
+* MQTT
+* PUbSubHubBub
+
+Exporters
+^^^^^^^^^
+
+Analogue to the *importers*, the *exporters* must to receive a *declaration*, but in this case an *export declaration*. But its role is to provide an external access (by external meaning externally to the OSGi platform) to the services available in the current OSGi platform, for instance by publishing a WS.
+
+.Available implementations:
+* JAX-WS
+
+Linkers
+~~~~~~~
+
+The existence of a **declaration** and a **processor** is not enough to trigger a connection is established between them, in order to do so there exist the **linkers**.

@@ -1,0 +1,68 @@
+Importers
+---------
+
+As seen in [Fuchsia 101](Fuchsia-101), importers use **import declaration** as input. The information contained in the **import declaration** must be enough in order that the processor execute its role properly.
+
+Fake importer
+~~~~~~~~~~~~~
+
+As soon as this **importer** is connected to an **import declaration** it generates an instance of Fuchsia *GenericDevice*, and this instance is published as a service inside OSGi platform.
+
+JAX-WS importer
+~~~~~~~~~~~~~~~
+
+.External Requirement:
+* JAX-WS service published
+* Interface(a') that represents the WSDL available in the OSGi platform that will import the service
+
+.Import Declaration information required: 
+
+* jax-ws.importer.interfaces
+* className
+* endpoint.url
+
+.Output:
+* OSGi service registered with a' representing the JAX-WS (Remote service)
+
+*Detailed Description*
+
+Today to import the JAX-WS service Fushsia uses http://cxf.apache.org/[CXF]. CXF is used in order to reduce the complexity in creating the connection and handling with different issues that may be raised.
+
+MQTT importer
+~~~~~~~~~~~~~
+
+.External Requirement:
+* MQTT server with the address known
+* EventAdmin service configured in the machine that will import this service
+
+.Import Declaration information required: 
+* id
+* mqtt.queue
+
+.Output:
+* A message will be published in EventAdmin in the queue $mqtt.queue, meaning that it will use the same name of *queue* as MQTT
+
+*Detailed Description*
+
+http://mqtt.org/[MQTT] is a protocol http://openiot.eu/[largely diffused] protocole for message exchange due to its good performance. The implementation used by Fuchsia to support MQTT was http://www.rabbitmq.com/[RabbitMQ]
+
+PubSubHubBub importer
+~~~~~~~~~~~~~~~~~~~~~
+
+http://code.google.com/p/pubsubhubbub/[PubSubHubBub], or simply **PuSH**, is a publish/subscribe protocol created by google and used by some of its http://code.google.com/p/pubsubhubbub/wiki/HubbubAtGoogle[tools].
+
+.External Requirement:
+* PuSh server address
+
+.Import Declaration information required: 
+* push.hub.url
+* push.hub.topic
+* push.subscriber.callback
+* push.eventAdmin.queue
+
+.Output:
+* A message will be published in EventAdmin in the queue $push.eventAdmin.queue, meaning that it will use the same name of *queue* as PuSH
+
+### Detailed Description
+
+There are no well known and portable PuSH implementations, Fuchsia implemented partially https://pubsubhubbub.googlecode.com/git/pubsubhubbub-core-0.4.html[PuSH specification] 

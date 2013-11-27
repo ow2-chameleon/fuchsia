@@ -1,0 +1,55 @@
+In order to generate a Fuchsia distribution there is only one mandatory profile the **core**, all the other modules are optional and can be included in the distribution by adding the apropriate maven profile ( *mvn -P parameter* ). The maven profile and its contents are specified right below.
+
+Fuchsia core
+~~~~~~~~~~~~
+
+* core - This module contains all the basic Fuchsia types, fuchsia shell tool is installed automatically in this profile as well, even though its not part of the bundle core
+
+Discoveries
+~~~~~~~~~~~
+
+* http://jmdns.sourceforge.net/[mdns] - the implementation os dnssd/mdns discovery protocol
+* upnp
+
+Importers
+~~~~~~~~~
+
+* importer-cxf
+* http://mqtt.org/[mqtt]
+* https://code.google.com/p/pubsubhubbub/[push]
+
+
+Exporters
+~~~~~~~~~
+
+* exporter-cxf
+
+Tools
+~~~~~
+
+* grid
+* fake
+
+Config profiles
+~~~~~~~~~~~~~~~
+
+* discoveries:
+** mdns-config
+* importers:
+** importer-cxf-config
+** mqtt-config
+** push-config
+* exporters:
+** exporter-cxf-config
+
+
+Thus, in order to compile Fuchsia with the *grid*, *exporter-cxf* and *mqtt*, would be enough to:
+
+1. go to the **distribution** directory
+2. type *mvn -Pcore,grid,exporter-cxf,mqtt*
+
+After the compilation process is finished, your Fuchsia distribution is ready to use:
+
+1. go to the **distribution/target/chameleon-distribution/**
+2. type **./chameleon.sh --interactive** (or the apropriate script according to your OS)
+
