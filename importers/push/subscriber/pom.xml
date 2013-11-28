@@ -82,12 +82,6 @@
             <version>1.0</version>
         </dependency>
 
-        <dependency>
-            <groupId>jdom</groupId>
-            <artifactId>org.ow2.chameleon.commons.jdom</artifactId>
-            <version>1.0.0-0001-SNAPSHOT</version>
-        </dependency>
-
     </dependencies>
     <build>
         <plugins>
