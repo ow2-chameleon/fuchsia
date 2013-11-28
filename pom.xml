@@ -22,7 +22,7 @@
 
     <groupId>org.ow2.chameleon.fuchsia</groupId>
     <artifactId>fuchsia-parent</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2-SNAPSHOT</version>
 
     <name>Fuchsia Parent</name>
     <packaging>pom</packaging>
@@ -122,7 +122,7 @@
         <connection>scm:git:git@github.com:ow2-chameleon/fuchsia.git</connection>
         <url>scm:git:git@github.com:ow2-chameleon/fuchsia.git</url>
         <developerConnection>scm:git:git@github.com:ow2-chameleon/fuchsia.git</developerConnection>
-        <tag>fuchsia-parent-0.0.1</tag>
+        <tag>0.0.1</tag>
     </scm>
 
     <!-- ============ -->
