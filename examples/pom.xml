@@ -40,6 +40,8 @@
 	<module>cxf-client</module>
         <module>cxf-exporter-config</module>
         <module>cxf-importer-config</module>
+<!--
         <module>jax-ws</module>
+-->
     </modules>
 </project>
