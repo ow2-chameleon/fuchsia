@@ -35,9 +35,9 @@
     </dependencyManagement>
 
     <modules>
-        <!--<module>jabsorb-exporter</module>-->
-        <!--<module>jabsorb-exporter-it</module>-->
         <module>jabsorb-importer</module>
+<!--
         <module>jabsorb-importer-it</module>
+-->
     </modules>
 </project>
