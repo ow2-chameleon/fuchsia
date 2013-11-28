@@ -401,7 +401,8 @@
                 <version>${release.plugin.version}</version>
                 <configuration>
                     <useReleaseProfile>false</useReleaseProfile>
-                    <arguments>-Pall</arguments>
+                    <arguments>-Pcore,examples</arguments>
+                    <arguments>-DskipTests</arguments>
                     <goals>deploy</goals>
                 </configuration>
             </plugin>
