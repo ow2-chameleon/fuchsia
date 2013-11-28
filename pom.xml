@@ -474,6 +474,13 @@
 		  <executions>
 		    <execution>
 		      <id>render-asciidoc</id>
+		      <phase>generate-resources</phase>
+		      <goals>
+			<goal>process-asciidoc</goal>
+		      </goals>
+		    </execution>
+		    <execution>
+		      <id>render-asciidoc-site</id>
 		      <phase>site</phase>
 		      <goals>
 			<goal>process-asciidoc</goal>
