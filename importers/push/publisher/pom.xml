@@ -78,12 +78,6 @@
         </dependency>
 
         <dependency>
-            <groupId>jdom</groupId>
-            <artifactId>org.ow2.chameleon.commons.jdom</artifactId>
-            <version>1.0.0-0001-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
             <artifactId>fuchsia-push-hub</artifactId>
             <groupId>org.ow2.chameleon.fuchsia.push</groupId>
             <version>${project.version}</version>
