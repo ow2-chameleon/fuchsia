@@ -5,7 +5,7 @@
     <parent>
  	<artifactId>fuchsia-base</artifactId>
     	<groupId>org.ow2.chameleon.fuchsia.base</groupId>
-        <version>0.0.1</version>
+        <version>0.0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 

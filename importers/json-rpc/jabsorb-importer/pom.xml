@@ -6,13 +6,13 @@
     <parent>
         <groupId>org.ow2.chameleon.fuchsia.importer</groupId>
         <artifactId>json-rpc</artifactId>
-        <version>0.0.1</version>
+        <version>0.0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
 
     <artifactId>jabsorb-importer</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.1-SNAPSHOT</version>
 
     <modelVersion>4.0.0</modelVersion>
     <packaging>bundle</packaging>
