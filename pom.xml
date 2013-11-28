@@ -11,7 +11,8 @@
         License.
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -22,7 +23,7 @@
 
     <groupId>org.ow2.chameleon.fuchsia</groupId>
     <artifactId>fuchsia-parent</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.1-SNAPSHOT</version>
 
     <name>Fuchsia Parent</name>
     <packaging>pom</packaging>
@@ -89,7 +90,7 @@
     <!-- ======== -->
     <!-- PROFILES -->
     <!-- ======== -->
-    <profiles> 
+    <profiles> <!---->
         <profile>
             <id>default</id>
             <activation>
@@ -122,7 +123,7 @@
         <connection>scm:git:git@github.com:ow2-chameleon/fuchsia.git</connection>
         <url>scm:git:git@github.com:ow2-chameleon/fuchsia.git</url>
         <developerConnection>scm:git:git@github.com:ow2-chameleon/fuchsia.git</developerConnection>
-        <tag>fuchsia-parent-0.0.1</tag>
+        <tag>0.0.1</tag>
     </scm>
 
     <!-- ============ -->
@@ -400,7 +401,7 @@
                 <version>${release.plugin.version}</version>
                 <configuration>
                     <useReleaseProfile>false</useReleaseProfile>
-                    <arguments>-Pcore,examples</arguments>
+                    <arguments>-Pall</arguments>
                     <goals>deploy</goals>
                 </configuration>
             </plugin>
@@ -507,7 +508,7 @@
                         <phase>site</phase>
                         <configuration>
                             <message>Building site for ${project.version}</message>
-                            <path />
+                            <path></path>
                             <merge>true</merge>
                         </configuration>
                     </execution>
