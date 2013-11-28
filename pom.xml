@@ -96,6 +96,7 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
 	    <modules>
+		<module>distribution</module>
 		<module>core</module>
 		<module>bases</module>
 		<module>importers</module>
