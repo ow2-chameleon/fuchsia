@@ -125,8 +125,8 @@ public class DNSSDInitializer {
 This instance can be created in any fashion, as long as it is an http://www.ipojo.org[iPOJO] instance. 
 =====
 
-Importer
-~~~~~~~~
+//Importer
+//~~~~~~~~
 
 
 
