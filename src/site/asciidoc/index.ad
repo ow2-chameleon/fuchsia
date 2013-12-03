@@ -1,28 +1,42 @@
 Fuchsia
 =======
-:toc: true
+:toc2: right
 :theme: volnitsky
 :icons: true
 
 :Date:      {date}
 :Revision:  {docVersion} version
 
-include::fuchsia-introduction.asciidoc[]
 
-Creating a fuchsia distribution
--------------------------------
+What can Fuchsia do for me?
+---------------------------
 
-include::fuchsia-distribution.asciidoc[]
+include::fuchsia-doanddonts.ad[]
 
-Advanced, how to instantiate an importer
-----------------------------------------
+What is Fuchsia?
+----------------
 
-include::create-importer.asciidoc[]
+include::fuchsia-introduction.ad[]
+
+Creating a fuchsia modules
+--------------------------
+
+include::fuchsia-distribution.ad[]
+
+Basic
+-----
+
+include::fuchsia-basic.ad[]
+
+Advanced
+--------
+
+include::create-importer.ad[]
 
 Examples
 --------
 
-//include::ex-importer-jax-rs.asciidoc[]
+include::ex-importer-jax-rs.ad[]
 
 Discovery
 ~~~~~~~~~

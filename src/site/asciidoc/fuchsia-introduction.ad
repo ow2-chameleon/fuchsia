@@ -1,6 +1,3 @@
-What is Fuchsia?
-----------------
-
 image:diagram/importer01.svg["Fuchsia",width=1024,link="diagram/importer01.svg"]
 
 Fuchsia is an extensible tool for integrating external communication protocols inside an OSGi platform. It provides a common interface for creating and managing external connections.
