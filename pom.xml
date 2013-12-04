@@ -89,32 +89,31 @@
     <!-- ======== -->
     <!-- PROFILES -->
     <!-- ======== -->
-    <profiles> 
+    <profiles>
         <profile>
             <id>default</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
-	    <modules>
-		<module>distribution</module>
-		<module>core</module>
-		<module>bases</module>
-		<module>importers</module>
-		<module>exporters</module>
-		<module>discoveries</module>
-		<module>tools</module>
-		<module>testing</module>
-	    </modules>
-        </profile> 
+            <modules>
+                <module>distribution</module>
+                <module>core</module>
+                <module>bases</module>
+                <module>importers</module>
+                <module>exporters</module>
+                <module>discoveries</module>
+                <module>tools</module>
+                <module>testing</module>
+            </modules>
+        </profile>
 
         <profile>
             <id>examples</id>
             <modules>
-		<module>examples</module>
+                <module>examples</module>
             </modules>
         </profile>
-
-    </profiles> 
+    </profiles>
 
     <!-- === -->
     <!-- SCM -->
@@ -468,64 +467,64 @@
                 </dependencies>
             </plugin>
 -->
-		<plugin>
-		  <groupId>org.asciidoctor</groupId>
-		  <artifactId>asciidoctor-maven-plugin</artifactId>
-		  <version>${asciidoctor.version}</version>
-		  <executions>
-		    <execution>
-		      <id>render-asciidoc</id>
-		      <phase>generate-resources</phase>
-		      <goals>
-			<goal>process-asciidoc</goal>
-		      </goals>
-		    </execution>
-		    <execution>
-		      <id>render-asciidoc-site</id>
-		      <phase>site</phase>
-		      <goals>
-			<goal>process-asciidoc</goal>
-		      </goals>
-		    </execution>
-		  </executions>
-		  <configuration>
-			<sourceDirectory>src/site/asciidoc</sourceDirectory>
-			<outputDirectory>${project.build.directory}/site/</outputDirectory>
-			<backend>html</backend>
-			<compact>true</compact>
-			<attributes>
-			    <docVersion>${project.version}</docVersion>
-		            <theme>volnitsky</theme>
-			    <stylesheet>stylesheets/asciidoc.css</stylesheet>
-			</attributes>
-		  </configuration>
-		</plugin>
+            <plugin>
+                <groupId>org.asciidoctor</groupId>
+                <artifactId>asciidoctor-maven-plugin</artifactId>
+                <version>${asciidoctor.version}</version>
+                <executions>
+                    <execution>
+                        <id>render-asciidoc</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>process-asciidoc</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>render-asciidoc-site</id>
+                        <phase>site</phase>
+                        <goals>
+                            <goal>process-asciidoc</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <sourceDirectory>src/site/asciidoc</sourceDirectory>
+                    <outputDirectory>${project.build.directory}/site/</outputDirectory>
+                    <backend>html</backend>
+                    <compact>true</compact>
+                    <attributes>
+                        <docVersion>${project.version}</docVersion>
+                        <theme>volnitsky</theme>
+                        <stylesheet>stylesheets/asciidoc.css</stylesheet>
+                    </attributes>
+                </configuration>
+            </plugin>
 
 
- <plugin>
-        <artifactId>maven-resources-plugin</artifactId>
-        <version>2.6</version>
-        <executions>
-          <execution>
-            <id>copy-resources</id>
-            <phase>validate</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${basedir}/target/site/</outputDirectory>
-              <resources>          
-                <resource>
-                  <directory>src/site/resources</directory>
-                  <filtering>false</filtering>
-                </resource>
-              </resources>              
-            </configuration>            
-          </execution>
-        </executions>
-      </plugin>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/site/</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/site/resources</directory>
+                                    <filtering>false</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 
-	<!-- Deploy the web site -->
+            <!-- Deploy the web site -->
             <plugin>
                 <groupId>com.github.github</groupId>
                 <artifactId>site-maven-plugin</artifactId>
@@ -539,13 +538,13 @@
                         <configuration>
                             <message>Building site for ${project.version}</message>
                             <merge>true</merge>
-			    <repositoryName>fuchsia</repositoryName>
-			    <repositoryOwner>ow2-chameleon</repositoryOwner>
+                            <repositoryName>fuchsia</repositoryName>
+                            <repositoryOwner>ow2-chameleon</repositoryOwner>
                         </configuration>
                     </execution>
                 </executions>
-            </plugin> 
-        </plugins> 
+            </plugin>
+        </plugins>
 
         <extensions>
             <extension>
