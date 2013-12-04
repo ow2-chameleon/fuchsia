@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
- 	<artifactId>fuchsia-base</artifactId>
+ 	    <artifactId>fuchsia-base</artifactId>
     	<groupId>org.ow2.chameleon.fuchsia.base</groupId>
         <version>0.0.2-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
@@ -11,7 +11,7 @@
 
 
     <artifactId>fuchsia-fake-device</artifactId>
-    <name>OW2 Chameleon - Fuchsia Fake Device</name>
+    <name>OW2 Chameleon - Fuchsia Base Fake Device</name>
     <packaging>bundle</packaging>
 
     <dependencies>

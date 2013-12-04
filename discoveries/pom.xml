@@ -8,7 +8,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <name>OW2 Chameleon - Fuchsia Base</name>
+    <name>OW2 Chameleon - Fuchsia Discoveries</name>
     <artifactId>fuchsia-discoveries</artifactId>
     <groupId>org.ow2.chameleon.fuchsia.discovery</groupId>
     <packaging>pom</packaging>
