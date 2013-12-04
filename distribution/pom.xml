@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <parent>
         <artifactId>fuchsia-parent</artifactId>
@@ -60,11 +61,11 @@
                     <version>${project.parent.version}</version>
                 </dependency>
 
-		<dependency>
-		    <groupId>org.apache.felix</groupId>
-		    <artifactId>org.apache.felix.shell</artifactId>
-		    <version>1.4.3</version>
-		</dependency>
+                <dependency>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>org.apache.felix.shell</artifactId>
+                    <version>1.4.3</version>
+                </dependency>
 
                 <dependency>
                     <groupId>org.apache.felix</groupId>
@@ -84,23 +85,23 @@
                     <artifactId>org.apache.felix.http.jetty</artifactId>
                     <version>2.2.0</version>
                 </dependency>
-		<dependency>
-		    <groupId>org.mortbay.jetty</groupId>
-		    <artifactId>servlet-api-2.5</artifactId>
-		    <version>6.1H.14.1</version>
-		</dependency>
-		<dependency>
-		    <groupId>org.ow2.chameleon.fuchsia.tools</groupId>
-		    <artifactId>fuchsia-grid</artifactId>
-		    <version>${project.version}</version>
-		</dependency>
-        <dependency>
-            <groupId>org.freemarker</groupId>
-            <artifactId>freemarker</artifactId>
-            <version>2.3.20</version>
-        </dependency>
+                <dependency>
+                    <groupId>org.mortbay.jetty</groupId>
+                    <artifactId>servlet-api-2.5</artifactId>
+                    <version>6.1H.14.1</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.ow2.chameleon.fuchsia.tools</groupId>
+                    <artifactId>fuchsia-grid</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.freemarker</groupId>
+                    <artifactId>freemarker</artifactId>
+                    <version>2.3.20</version>
+                </dependency>
             </dependencies>
-	</profile>
+        </profile>
 
         <profile>
             <id>fake</id>
@@ -182,7 +183,7 @@
                     <groupId>rome</groupId>
                     <artifactId>rome</artifactId>
                     <version>1.0</version>
-		<!--<version>1.00325</version> -->
+                    <!--<version>1.00325</version> -->
                 </dependency>
 
                 <dependency>
@@ -225,7 +226,7 @@
                     <version>1.1.3</version>
                 </dependency>
 
-		<dependency>
+                <dependency>
                     <groupId>org.apache.felix</groupId>
                     <artifactId>org.apache.felix.eventadmin</artifactId>
                 </dependency>
@@ -256,12 +257,14 @@
                     <groupId>${project.parent.groupId}.examples</groupId>
                     <artifactId>fuchsia-upnp-components</artifactId>
                     <version>${project.parent.version}</version>
-                </dependency> <!--
+                </dependency>
+                <!--
                 <dependency>
                     <groupId>org.ow2.chameleon.fuchsia.upnp</groupId>
                     <artifactId>fuchsia-upnp-importer</artifactId>
                     <version>${project.parent.version}</version>
-                </dependency> -->
+                </dependency>
+                -->
                 <dependency>
                     <groupId>org.ow2.chameleon.fuchsia.discovery</groupId>
                     <artifactId>upnp</artifactId>
@@ -289,29 +292,29 @@
             <id>mqtt</id>
             <dependencies>
 
-            <dependency>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>org.apache.felix.eventadmin</artifactId>
-            </dependency>
+                <dependency>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>org.apache.felix.eventadmin</artifactId>
+                </dependency>
 
-	        <dependency>
-                <groupId>commons-io</groupId>
-                <artifactId>commons-io</artifactId>
-		    </dependency>
+                <dependency>
+                    <groupId>commons-io</groupId>
+                    <artifactId>commons-io</artifactId>
+                </dependency>
 
-            <dependency>
-                <groupId>com.rabbitmq</groupId>
-                <artifactId>amqp-client</artifactId>
-            </dependency>
+                <dependency>
+                    <groupId>com.rabbitmq</groupId>
+                    <artifactId>amqp-client</artifactId>
+                </dependency>
 
-            <dependency>
-                <groupId>org.ow2.chameleon.fuchsia.importer</groupId>
-                <artifactId>mqtt-importer</artifactId>
-                <version>${project.version}</version>
-            </dependency>
+                <dependency>
+                    <groupId>org.ow2.chameleon.fuchsia.importer</groupId>
+                    <artifactId>mqtt-importer</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
 
-	    </dependencies>
-	</profile>
+            </dependencies>
+        </profile>
 
         <profile>
             <id>mqtt-config</id>
@@ -327,27 +330,27 @@
         <profile>
             <id>mdns</id>
             <dependencies>
-		<dependency>
-			<groupId>javax.jmdns</groupId>
-			<artifactId>jmdns</artifactId>
-			<version>3.4.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.ow2.chameleon.fuchsia.discovery</groupId>
-			<artifactId>mdns</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+                <dependency>
+                    <groupId>javax.jmdns</groupId>
+                    <artifactId>jmdns</artifactId>
+                    <version>3.4.1</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.ow2.chameleon.fuchsia.discovery</groupId>
+                    <artifactId>mdns</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
             </dependencies>
         </profile>
 
         <profile>
             <id>mdns-config</id>
             <dependencies>
-		<dependency>
-	        	<groupId>org.ow2.chameleon.fuchsia.examples</groupId>
-			<artifactId>mdns-config</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+                <dependency>
+                    <groupId>org.ow2.chameleon.fuchsia.examples</groupId>
+                    <artifactId>mdns-config</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
             </dependencies>
         </profile>
 
@@ -437,21 +440,23 @@
 
             </dependencies>
         </profile>
-	<profile>
+
+        <profile>
             <id>webconsole</id>
-        	<dependencies>
-			<dependency>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>org.apache.felix.webconsole</artifactId>
-				<version>4.2.0</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>org.apache.felix.webconsole.plugins.event</artifactId>
-				<version>1.1.0</version>
-			</dependency>
-		</dependencies>
-	</profile>
+            <dependencies>
+                <dependency>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>org.apache.felix.webconsole</artifactId>
+                    <version>4.2.0</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>org.apache.felix.webconsole.plugins.event</artifactId>
+                    <version>1.1.0</version>
+                </dependency>
+            </dependencies>
+        </profile>
+
         <profile>
             <id>webservices-server</id>
             <dependencies>
@@ -558,222 +563,222 @@
         <profile>
             <id>importer-cxf-config</id>
             <dependencies>
-		<dependency>
-		    <artifactId>cxf-base</artifactId>
-		    <groupId>org.ow2.chameleon.fuchsia.examples</groupId>
-		    <version>${project.version}</version>
-		</dependency>
                 <dependency>
-        		<groupId>org.ow2.chameleon.fuchsia.examples</groupId>
-    			<artifactId>cxf-importer-config</artifactId>
-    			<version>${project.version}</version>
+                    <artifactId>cxf-base</artifactId>
+                    <groupId>org.ow2.chameleon.fuchsia.examples</groupId>
+                    <version>${project.version}</version>
                 </dependency>
-	    </dependencies>
-	</profile>
+                <dependency>
+                    <groupId>org.ow2.chameleon.fuchsia.examples</groupId>
+                    <artifactId>cxf-importer-config</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
 
         <profile>
             <id>exporter-cxf-config</id>
             <dependencies>
-		<dependency>
-		    <artifactId>cxf-base</artifactId>
-		    <groupId>org.ow2.chameleon.fuchsia.examples</groupId>
-		    <version>${project.version}</version>
-		</dependency>
                 <dependency>
-        		<groupId>org.ow2.chameleon.fuchsia.examples</groupId>
-    			<artifactId>cxf-exporter-config</artifactId>
-    			<version>${project.version}</version>
+                    <artifactId>cxf-base</artifactId>
+                    <groupId>org.ow2.chameleon.fuchsia.examples</groupId>
+                    <version>${project.version}</version>
                 </dependency>
-	    </dependencies>
-	</profile>
+                <dependency>
+                    <groupId>org.ow2.chameleon.fuchsia.examples</groupId>
+                    <artifactId>cxf-exporter-config</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
 
         <profile>
             <id>exporter-cxf</id>
             <dependencies>
-		<dependency>
-			<groupId>javax.jmdns</groupId>
-			<artifactId>jmdns</artifactId>
-			<version>3.4.1</version>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>2.5</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.cxf</groupId>
-			<artifactId>cxf-bundle-minimal</artifactId>
-			<version>2.5.2</version>
-		</dependency>
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>13.0.1</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.json</groupId>
-			<artifactId>json</artifactId>
-			<version>20090911</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-mapper-asl</artifactId>
-			<version>1.9.12</version>
-		</dependency>
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-core-asl</artifactId>
-			<version>1.9.12</version>
-		</dependency>
-		<dependency>
-			<groupId>javax.mail</groupId>
-			<artifactId>mail</artifactId>
-			<version>1.4.3</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.servicemix.bundles</groupId>
-			<artifactId>org.apache.servicemix.bundles.wsdl4j</artifactId>
-			<version>1.6.2_6</version>
-		</dependency>
                 <dependency>
-			<groupId>commons-logging</groupId>
-			<artifactId>commons-logging</artifactId>
-			<version>1.1.3</version>
-		</dependency>
-            	<dependency>
-			<groupId>org.apache.neethi</groupId>
-			<artifactId>neethi</artifactId>
-			<version>3.0.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.ws.xmlschema</groupId>
-			<artifactId>xmlschema-core</artifactId>
-			<version>2.0.3</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.xml</groupId>
-			<artifactId>com.springsource.org.apache.xml.resolver</artifactId>
-			<version>1.2.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.servicemix.bundles</groupId>
-			<artifactId>org.apache.servicemix.bundles.opensaml</artifactId>
-			<version>2.4.1_1</version>
-		</dependency>
- 		<dependency>
-			<groupId>joda-time</groupId>
-			<artifactId>joda-time</artifactId>
-			<version>1.6.2</version>
-		</dependency>
-  		<dependency>
-			<groupId>org.ow2.chameleon.fuchsia.exporter</groupId>
-			<artifactId>jaxws</artifactId>
-			<version>${project.version}</version>
-		</dependency> 
-	    </dependencies>
-	</profile>
+                    <groupId>javax.jmdns</groupId>
+                    <artifactId>jmdns</artifactId>
+                    <version>3.4.1</version>
+                </dependency>
+                <dependency>
+                    <groupId>javax.servlet</groupId>
+                    <artifactId>servlet-api</artifactId>
+                    <version>2.5</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.cxf</groupId>
+                    <artifactId>cxf-bundle-minimal</artifactId>
+                    <version>2.5.2</version>
+                </dependency>
+                <dependency>
+                    <groupId>com.google.guava</groupId>
+                    <artifactId>guava</artifactId>
+                    <version>13.0.1</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.json</groupId>
+                    <artifactId>json</artifactId>
+                    <version>20090911</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.codehaus.jackson</groupId>
+                    <artifactId>jackson-mapper-asl</artifactId>
+                    <version>1.9.12</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.codehaus.jackson</groupId>
+                    <artifactId>jackson-core-asl</artifactId>
+                    <version>1.9.12</version>
+                </dependency>
+                <dependency>
+                    <groupId>javax.mail</groupId>
+                    <artifactId>mail</artifactId>
+                    <version>1.4.3</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.servicemix.bundles</groupId>
+                    <artifactId>org.apache.servicemix.bundles.wsdl4j</artifactId>
+                    <version>1.6.2_6</version>
+                </dependency>
+                <dependency>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                    <version>1.1.3</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.neethi</groupId>
+                    <artifactId>neethi</artifactId>
+                    <version>3.0.2</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.ws.xmlschema</groupId>
+                    <artifactId>xmlschema-core</artifactId>
+                    <version>2.0.3</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.xml</groupId>
+                    <artifactId>com.springsource.org.apache.xml.resolver</artifactId>
+                    <version>1.2.0</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.servicemix.bundles</groupId>
+                    <artifactId>org.apache.servicemix.bundles.opensaml</artifactId>
+                    <version>2.4.1_1</version>
+                </dependency>
+                <dependency>
+                    <groupId>joda-time</groupId>
+                    <artifactId>joda-time</artifactId>
+                    <version>1.6.2</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.ow2.chameleon.fuchsia.exporter</groupId>
+                    <artifactId>jaxws</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
 
         <profile>
             <id>importer-cxf</id>
             <dependencies>
-		<dependency>
-			<groupId>javax.jmdns</groupId>
-			<artifactId>jmdns</artifactId>
-			<version>3.4.1</version>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>2.5</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.cxf</groupId>
-			<artifactId>cxf-bundle-minimal</artifactId>
-			<version>2.5.2</version>
-		</dependency>
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>13.0.1</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.json</groupId>
-			<artifactId>json</artifactId>
-			<version>20090911</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-mapper-asl</artifactId>
-			<version>1.9.12</version>
-		</dependency>
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-core-asl</artifactId>
-			<version>1.9.12</version>
-		</dependency>
-		<dependency>
-			<groupId>javax.mail</groupId>
-			<artifactId>mail</artifactId>
-			<version>1.4.3</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.servicemix.bundles</groupId>
-			<artifactId>org.apache.servicemix.bundles.wsdl4j</artifactId>
-			<version>1.6.2_6</version>
-		</dependency>
                 <dependency>
-			<groupId>commons-logging</groupId>
-			<artifactId>commons-logging</artifactId>
-			<version>1.1.3</version>
-		</dependency>
-            	<dependency>
-			<groupId>org.apache.neethi</groupId>
-			<artifactId>neethi</artifactId>
-			<version>3.0.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.ws.xmlschema</groupId>
-			<artifactId>xmlschema-core</artifactId>
-			<version>2.0.3</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.xml</groupId>
-			<artifactId>com.springsource.org.apache.xml.resolver</artifactId>
-			<version>1.2.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.servicemix.bundles</groupId>
-			<artifactId>org.apache.servicemix.bundles.opensaml</artifactId>
-			<version>2.4.1_1</version>
-		</dependency>
- 		<dependency>
-			<groupId>joda-time</groupId>
-			<artifactId>joda-time</artifactId>
-			<version>1.6.2</version>
-		</dependency>
-  		<dependency>
-			<groupId>org.ow2.chameleon.fuchsia.importer.jaxws</groupId>
-			<artifactId>cxf-importer</artifactId>
-			<version>${project.version}</version>
-		</dependency> 
-	    </dependencies>
-	</profile>
+                    <groupId>javax.jmdns</groupId>
+                    <artifactId>jmdns</artifactId>
+                    <version>3.4.1</version>
+                </dependency>
+                <dependency>
+                    <groupId>javax.servlet</groupId>
+                    <artifactId>servlet-api</artifactId>
+                    <version>2.5</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.cxf</groupId>
+                    <artifactId>cxf-bundle-minimal</artifactId>
+                    <version>2.5.2</version>
+                </dependency>
+                <dependency>
+                    <groupId>com.google.guava</groupId>
+                    <artifactId>guava</artifactId>
+                    <version>13.0.1</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.json</groupId>
+                    <artifactId>json</artifactId>
+                    <version>20090911</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.codehaus.jackson</groupId>
+                    <artifactId>jackson-mapper-asl</artifactId>
+                    <version>1.9.12</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.codehaus.jackson</groupId>
+                    <artifactId>jackson-core-asl</artifactId>
+                    <version>1.9.12</version>
+                </dependency>
+                <dependency>
+                    <groupId>javax.mail</groupId>
+                    <artifactId>mail</artifactId>
+                    <version>1.4.3</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.servicemix.bundles</groupId>
+                    <artifactId>org.apache.servicemix.bundles.wsdl4j</artifactId>
+                    <version>1.6.2_6</version>
+                </dependency>
+                <dependency>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                    <version>1.1.3</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.neethi</groupId>
+                    <artifactId>neethi</artifactId>
+                    <version>3.0.2</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.ws.xmlschema</groupId>
+                    <artifactId>xmlschema-core</artifactId>
+                    <version>2.0.3</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.xml</groupId>
+                    <artifactId>com.springsource.org.apache.xml.resolver</artifactId>
+                    <version>1.2.0</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.servicemix.bundles</groupId>
+                    <artifactId>org.apache.servicemix.bundles.opensaml</artifactId>
+                    <version>2.4.1_1</version>
+                </dependency>
+                <dependency>
+                    <groupId>joda-time</groupId>
+                    <artifactId>joda-time</artifactId>
+                    <version>1.6.2</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.ow2.chameleon.fuchsia.importer.jaxws</groupId>
+                    <artifactId>cxf-importer</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
 
         <profile>
             <id>ard</id>
-           <dependencies>
-                    <dependency>
-                        <groupId>org.apache.felix</groupId>
-                        <artifactId>org.apache.felix.eventadmin</artifactId>
-                    </dependency>
-                 <dependency>
-                        <groupId>org.ow2.chameleon.fuchsia.extra.ard</groupId>
-                        <artifactId>ard-importer</artifactId>
-                        <version>${project.version}</version>
+            <dependencies>
+                <dependency>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>org.apache.felix.eventadmin</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.ow2.chameleon.fuchsia.extra.ard</groupId>
+                    <artifactId>ard-importer</artifactId>
+                    <version>${project.version}</version>
                 </dependency>
             </dependencies>
         </profile>
@@ -782,7 +787,6 @@
 
     <build>
         <plugins>
-
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>2.6</version>
@@ -843,6 +847,7 @@
                     </execution>
                 </executions>
             </plugin>
+
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>2.4</version>
