@@ -35,10 +35,11 @@
         <module>push-config</module>
         <module>mdns-config</module>
         <module>mqtt-config</module>
-	<module>cxf-base</module>
-	<module>cxf-client</module>
+        <module>cxf-base</module>
+        <module>cxf-client</module>
         <module>cxf-exporter-config</module>
         <module>cxf-importer-config</module>
+        <module>fake-importer-config</module>
 <!--
         <module>jax-ws</module>
 -->

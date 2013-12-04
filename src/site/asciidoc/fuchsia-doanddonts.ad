@@ -13,6 +13,6 @@ The second type is the **Exporter**, this type enables us to turn an OSGi servic
 
 * JAX-WS, based in an OSGi service instance, publishes a WebService to be accessed remotely. You can use http://cxf.apache.org/[Apache CXF] to instante the exported service or Fuchsia itself.
 
-Of course those processors (what we call an importer or exporter, depending on the direction of the materialization) are available without needing to code a single line. 
+Of course those processors (importers or exporters) are available without needing to code a single line. 
 
-Albeit, Fuchsia provided many processors, we are aware that most of application use their own protocol or adopt their protocol specific device, knowing that Fuchsia was build to be extended, meant to plug customized processors, implemented by the application developer in order to attends its specific needs.
+Albeit, Fuchsia has builtin processors, we are aware that most of application use their own protocol or adopt their protocol specific device, knowing that Fuchsia was build to be extensible, implementing and deploying a customized processor is quite straight forward.

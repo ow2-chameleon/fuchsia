@@ -96,6 +96,7 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <modules>
+<!--	
                 <module>core</module>
                 <module>core-it</module>
                 <module>bases</module>
@@ -104,13 +105,16 @@
                 <module>discoveries</module>
                 <module>tools</module>
                 <module>testing</module>
+-->
             </modules>
         </profile>
 
         <profile>
             <id>examples</id>
             <modules>
+<!--
                 <module>examples</module>
+-->
             </modules>
         </profile>
 
@@ -510,6 +514,7 @@
                 <configuration>
                     <sourceDirectory>src/site/asciidoc</sourceDirectory>
                     <outputDirectory>${project.build.directory}/site/</outputDirectory>
+			<templateDir>src/site/resources/themes</templateDir>
                     <backend>html</backend>
                     <compact>true</compact>
                     <attributes>

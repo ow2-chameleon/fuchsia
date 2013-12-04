@@ -3,6 +3,7 @@ Fuchsia
 :toc2: right
 :theme: volnitsky
 :icons: true
+:toctitle: Section
 
 :Date:      {date}
 :Revision:  {docVersion} version
@@ -18,8 +19,8 @@ What is Fuchsia?
 
 include::fuchsia-introduction.ad[]
 
-Creating a fuchsia modules
---------------------------
+Fuchsia modules
+---------------
 
 include::fuchsia-distribution.ad[]
 
@@ -36,111 +37,6 @@ include::create-importer.ad[]
 Examples
 --------
 
-include::ex-importer-jax-rs.ad[]
-
-Discovery
-~~~~~~~~~
-
-First things first, in order to have an discovery we need to create a fuchsia distribution that embbeds it, or to use an already existing distribution and add the modules required. Below we ll show you how to use couples of discoveries that are available in the platform.
-
-Fake Discovery
-^^^^^^^^^^^^^^
-
-As seen in the introduction the fundamental task of a discovery is to create an instance of Declaration which represents the availability of a service/device, and the intrinsic information of such service/device are contained inside **Declaration** as properties (stored in a Map).
-
-The idea behind having a fake discovery, is in infact be able to deploy a file (property file style, containing key value mapping).
-
-In order to activate the fake discovery its enough to compile the distribution with the profile **fake** (meaning mvn clean install -Pcore,fake), from the moment you compile a distribution with this parameter and you launch this distribution a directory called **load** will be created in the root of the chameleon distribution ($FUCHSIA/distribution/target/chameleon-distribution), this directory will be used to deploy your files that contain the key-value that you need to be instantiated in the platform.
-
-An example of such file is this one:
-
-----
-id=mqtt-dispatch-event-admin
-exporter.id=camera-exporter
-
-deviceType=camera
-deviceSubType=another
-
-mqtt.queue=public
-----
-
-If you type **declaration** in the console you should see:
-
-----
-Service properties:
-		objectClass = [Ljava.lang.String;@26f6a1
-		service.id = 319
-Metadata
-	id=mqtt-dispatch-event-admin
-	deviceType=camera
-	deviceSubType=another
-	exporter.id=camera-exporter
-	mqtt.queue=public
-----
-
-This indicated that the file that you have just deployed have been read and turned into a declaration. 
-
-mDNS
-^^^^
-
-mDNS is a discovery protocol based on the previous Bonjour(c), from Apple. To perform a simple test of such protocol, its enough to compile a fuchsia distribution with the following parameters:
-
-'mvn clean install -Pcore,mdns,mdns-config'
-
-core and mdns are the modules that we need, in this case, the fuchsia core types and the discovery module itself. The 3td element 'mdns-config' is the element responsible to configure the discovery. Even though the **mdns** module is available with the -Pmdns profile, it is necessary to create an instance of it, shaping it as we wish. We will explain in few paragraphs how to do that manually, but for now we will use an configuration example that setup the discovery to findout all the printers available in the local network, for that we add the profile -Pmdns-config.
-
-To verify that the discovery works properly you can use the console.
-
-If you type **declaration** on the console you should see an output similar to this:
-
-You should see all your printers in form of:
-
----- 
-Metadata
-	id=hp LaserJet 2300 (scribe missions)
-	discovery.mdns.device.name=hp LaserJet 2300 (scribe missions)
-Metadata
-	id=HP LaserJet 600 M602 [2F0B40]
-	discovery.mdns.device.name=HP LaserJet 600 M602 [2F0B40]
-	Service properties:
-		objectClass = [Ljava.lang.String;@fcc720
-		service.id = 312
-...
-----
-
-And if you type **discovery** in the console you should see:
-
----- 
-Discovery [DNSSDDiscovery] provided by bundle mdns (19)
-	Service properties:
-		dnssd.service.type = _printer._tcp.local.
-		factory.name = DNSSDDiscoveryFactory
-		instance.name = DNSSDDiscovery
-		objectClass = [Ljava.lang.String;@1db4108
-		service.id = 301
-----
-
-In this approach we used a configuration that was available in Fuchsia. But that is not usually the case; most of the time we are required to instantiate the discovery ourselves configure the filter in a way that is the application need it.
-
-The following configuration that makes available to import all the printers on the local network inside the platform with requiring any other information than the type of the device that interest us.
-
-----
-@Configuration
-public class DNSSDInitializer {
-    Instance dnssdDiscovery = instance()
-            .of("DNSSDDiscoveryFactory")
-            .named("DNSSDDiscovery")
-            .with("dnssd.service.type").setto("_printer._tcp.local.");
-
-}
-----
-[TIP]
-=====
-This instance can be created in any fashion, as long as it is an http://www.ipojo.org[iPOJO] instance. 
-=====
-
-//Importer
-//~~~~~~~~
-
+include::examples.ad[]
 
 
