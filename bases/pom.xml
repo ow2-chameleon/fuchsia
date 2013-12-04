@@ -15,5 +15,6 @@
 
     <modules>
         <module>fake-device</module>
+        <module>bluetooth</module>
     </modules>
 </project>
