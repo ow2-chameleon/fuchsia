@@ -72,8 +72,6 @@
                     <artifactId>org.apache.felix.log</artifactId>
                     <version>1.0.1</version>
                 </dependency>
-
-
             </dependencies>
         </profile>
 
@@ -106,7 +104,6 @@
         <profile>
             <id>fake</id>
             <dependencies>
-
                 <dependency>
                     <groupId>org.ow2.chameleon.fuchsia.base</groupId>
                     <artifactId>fuchsia-fake-device</artifactId>
@@ -147,14 +144,12 @@
                     <artifactId>commons-io</artifactId>
                     <version>2.4</version>
                 </dependency>
-
             </dependencies>
         </profile>
 
         <profile>
             <id>push</id>
             <dependencies>
-
                 <dependency>
                     <groupId>org.osgi</groupId>
                     <artifactId>org.osgi.compendium</artifactId>
@@ -230,18 +225,6 @@
                     <groupId>org.apache.felix</groupId>
                     <artifactId>org.apache.felix.eventadmin</artifactId>
                 </dependency>
-
-            </dependencies>
-        </profile>
-
-        <profile>
-            <id>push-config</id>
-            <dependencies>
-                <dependency>
-                    <groupId>org.ow2.chameleon.fuchsia.examples</groupId>
-                    <artifactId>push-config</artifactId>
-                    <version>${project.version}</version>
-                </dependency>
             </dependencies>
         </profile>
 
@@ -316,16 +299,6 @@
             </dependencies>
         </profile>
 
-        <profile>
-            <id>mqtt-config</id>
-            <dependencies>
-                <dependency>
-                    <groupId>org.ow2.chameleon.fuchsia.examples</groupId>
-                    <artifactId>mqtt-config</artifactId>
-                    <version>${project.version}</version>
-                </dependency>
-            </dependencies>
-        </profile>
 
         <profile>
             <id>mdns</id>
@@ -343,16 +316,6 @@
             </dependencies>
         </profile>
 
-        <profile>
-            <id>mdns-config</id>
-            <dependencies>
-                <dependency>
-                    <groupId>org.ow2.chameleon.fuchsia.examples</groupId>
-                    <artifactId>mdns-config</artifactId>
-                    <version>${project.version}</version>
-                </dependency>
-            </dependencies>
-        </profile>
 
         <profile>
             <id>webconsole</id>
@@ -370,37 +333,6 @@
             </dependencies>
         </profile>
 
-        <profile>
-            <id>importer-cxf-config</id>
-            <dependencies>
-                <dependency>
-                    <artifactId>cxf-base</artifactId>
-                    <groupId>org.ow2.chameleon.fuchsia.examples</groupId>
-                    <version>${project.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.ow2.chameleon.fuchsia.examples</groupId>
-                    <artifactId>cxf-importer-config</artifactId>
-                    <version>${project.version}</version>
-                </dependency>
-            </dependencies>
-        </profile>
-
-        <profile>
-            <id>exporter-cxf-config</id>
-            <dependencies>
-                <dependency>
-                    <artifactId>cxf-base</artifactId>
-                    <groupId>org.ow2.chameleon.fuchsia.examples</groupId>
-                    <version>${project.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.ow2.chameleon.fuchsia.examples</groupId>
-                    <artifactId>cxf-exporter-config</artifactId>
-                    <version>${project.version}</version>
-                </dependency>
-            </dependencies>
-        </profile>
 
         <profile>
             <id>exporter-cxf</id>
