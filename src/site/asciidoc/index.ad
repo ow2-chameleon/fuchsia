@@ -4,6 +4,7 @@ Fuchsia
 :theme: volnitsky
 :icons: true
 :toctitle: Section
+:source-highlighter: highlightjs
 
 :Date:      {date}
 :Revision:  {docVersion} version

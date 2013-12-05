@@ -1,0 +1,154 @@
+Creating a bundle
+~~~~~~~~~~~~~~~~~
+
+We can use maven plugin to create an iPOJO artifact.
+
+[source]
+--
+mvn org.apache.maven.plugins:maven-archetype-plugin:generate \
+-DinteractiveMode=false \
+-DarchetypeArtifactId=maven-ipojo-plugin \
+-DarchetypeGroupId=org.apache.felix \
+-DarchetypeVersion=1.11.0 \
+-DartifactId=config \
+-DgroupId=org.adele \
+-Dpackage=org.adele \
+-Dversion=0.0.1-EXAMPLE
+--
+
+Make sure to add *Fuchsia* dependency:
+
+[source,xml]
+--
+<dependency>
+    <groupId>org.ow2.chameleon.fuchsia</groupId>
+    <artifactId>fuchsia-core</artifactId>
+    <version>0.0.1</version>
+</dependency>
+--
+
+That is it, now you are ready to add your custom code.
+
+[WARNING]
+====
+Make sure to replace the version *0.0.1* of Fuchsia, by the version that you are using
+====
+
+Import a JAX-WS service
+~~~~~~~~~~~~~~~~~~~~~~~
+
+After create your project, we have couple tasks to accomplish before be able to use the imported JAX-WS service:
+
+.Prepare the environment
+- [ ] Instantiate the importer
+- [ ] Instantiate the linker
+
+.As result of fuchsia
+- [ ] Inform fuchsia the JAX-WS info
+- [ ] Fetch your local instance
+
+Preparation
+^^^^^^^^^^^
+
+One step at a time, so lets first instantiate our importer, we first need to find out the name of our importer JAX-WS, which is _Fuchsia_importer.cxf_, with that in mind we can instantiate it indicating what are the *Declarations* that he should consider as a declaration that concerns it. 
+
+In our case we may say that, any declaration containing a value for the key *endpoint.url*, is a valid declaration to be processed by this importer, thus this give us:
+
+[source]
+--
+    Instance cxfimporter = Instance.instance()
+            .of("Fuchsia_importer.cxf")
+            .with("target").setto("(endpoint.url=*)");
+--
+
+With this we can check our first task *Instantiate the importer*. Following our list we have instantiated the *Linker*.
+
+The *Linkers* job is to evaluate if a given *Declaration* and a *Service* match together, so essentially he impose the condition in order to connect this two entities. We can instantiate our linker in following manner:
+
+[source]
+--
+    Instance cxfimporterlinker = instance()
+            .of("FuchsiaDefaultImportationLinkerFactory")
+            .with("fuchsia.linker.filter.importDeclaration").setto("(endpoint.url=*)")
+            .with("fuchsia.linker.filter.importerService").setto("(instance.name=cxfimporterlinker)");
+--
+
+In this linker we are saying "if a declaration constains _endpoint.url_ than connect it with the importer in which the instance is called _cxfimporterlinker_".
+
+In order to _Inform fuchsia the JAX-WS info_, we have several options, either we can publish a service that follows the interface _org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration_, or we can use the Fake-Discovery, which translate files deployed in the folder named _load_ into a ImportDeclaration.
+
+You can check that everything is up and running by typing *importer* on the console, you should see at least:
+
+[source]
+--
+Importer [cxfimporter] provided by bundle cxf-importer (46)
+	*importer name = cxfimporter
+	Service properties:
+		factory.name = Fuchsia_importer.cxf
+		instance.name = cxfimporter
+		objectClass = [Ljava.lang.String;@191c428
+		service.id = 335
+		target = (endpoint.url=*)
+--
+
+And check that the FakeDiscovery is running as well by typing *discovery* and you will see:
+
+[source]
+--
+Discovery [Fuchsia-FakeDiscovery] provided by bundle fuchsia-fake-discovery (37)
+	Service properties:
+		factory.name = Fuchsia-FakeDiscovery-Factory
+		fuchsia.system.fake.discovery.directory = load
+		fuchsia.system.fake.discovery.polling = 2000
+		instance.name = Fuchsia-FakeDiscovery
+		objectClass = [Ljava.lang.String;@20e9c6
+		service.id = 321
+
+--
+
+Result
+^^^^^^
+
+So far we've our checklist look like this:
+
+- [*] Instantiate the importer
+- [*] Instantiate the linker
+- [ ] Inform fuchsia the JAX-WS info
+- [ ] Use the remote instance
+
+The last two steps consist in, informing the Fuchsia the address of our JAX-WS service. For that its enough to deploy a file in the folder _load_ with the following content:
+
+[source]
+--
+id=virtual-camera
+className=org.ow2.chameleon.fuchsia.exporter.cxf.examples.base.PojoSampleToBeExportedIface
+jax-ws.importer.interfaces=[org.ow2.chameleon.fuchsia.exporter.cxf.examples.base.PojoSampleToBeExportedIface]
+endpoint.url=http://localhost:8080/cxf/service/PojoSampleToBeExportedIface
+
+deviceType=camera
+deviceSubType=another
+device.serialNumber=virtual-camera
+--
+
+Then, just request our service as a regular dependency (as shown below), then you ll see your dependency being injected and ready for use without much troubleshooting.
+
+[source,java]
+--
+@Component
+@Instantiate
+public class Client {
+
+    @Requires
+    PojoSampleToBeExportedIface myRemoteService;
+
+    @Validate
+    public void validate(){
+
+        System.out.println("---->"+myRemoteService.getMessage2());
+
+    }
+
+}
+--
+
+

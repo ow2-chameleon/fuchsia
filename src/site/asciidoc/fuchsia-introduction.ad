@@ -62,4 +62,4 @@ Analogue to the *importers*, the *exporters* must to receive a *declaration*, bu
 Linkers
 ~~~~~~~
 
-The existence of a **declaration** and a **processor** is not enough to trigger a connection is established between them, in order to do so there exist the **linkers**.
+The existence of a **declaration** and a **processor** is not enough to trigger a connection between them, there has to exist a **linker**. This _linker_ is resposible to check the condition on both sides (processor and declaration) see if they _match_, and just then establish a connection between them.

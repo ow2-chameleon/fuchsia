@@ -1,0 +1,170 @@
+Testing a Discovery
+~~~~~~~~~~~~~~~~~~~
+
+First things first, in order to have an discovery we need to create a fuchsia distribution that embbeds it, or to use an already existing distribution and add the modules required. Below we ll show you how to use couples of discoveries that are available in the platform.
+
+Fake Discovery
+^^^^^^^^^^^^^^
+
+As seen in the introduction the fundamental task of a discovery is to create an instance of Declaration which represents the availability of a service/device, and the intrinsic information of such service/device are contained inside **Declaration** as properties (stored in a Map).
+
+The idea behind having a fake discovery, is in infact be able to deploy a file (property file style, containing key value mapping).
+
+In order to activate the fake discovery its enough to compile the distribution with the profile **fake** (meaning mvn clean install -Pcore,fake), from the moment you compile a distribution with this parameter and you launch this distribution a directory called **load** will be created in the root of the chameleon distribution ($FUCHSIA/distribution/target/chameleon-distribution), this directory will be used to deploy your files that contain the key-value that you need to be instantiated in the platform.
+
+An example of such file is this one:
+
+----
+id=mqtt-dispatch-event-admin
+exporter.id=camera-exporter
+
+deviceType=camera
+deviceSubType=another
+
+mqtt.queue=public
+----
+
+If you type **declaration** in the console you should see:
+
+----
+Service properties:
+		objectClass = [Ljava.lang.String;@26f6a1
+		service.id = 319
+Metadata
+	id=mqtt-dispatch-event-admin
+	deviceType=camera
+	deviceSubType=another
+	exporter.id=camera-exporter
+	mqtt.queue=public
+----
+
+This indicated that the file that you have just deployed have been read and turned into a declaration. 
+
+mDNS
+^^^^
+
+mDNS is a discovery protocol based on the previous Bonjour(c), from Apple. To perform a simple test of such protocol, its enough to compile a fuchsia distribution with the following parameters:
+
+'mvn clean install -Pcore,mdns,mdns-config'
+
+core and mdns are the modules that we need, in this case, the fuchsia core types and the discovery module itself. The 3td element 'mdns-config' is the element responsible to configure the discovery. Even though the **mdns** module is available with the -Pmdns profile, it is necessary to create an instance of it, shaping it as we wish. We will explain in few paragraphs how to do that manually, but for now we will use an configuration example that setup the discovery to findout all the printers available in the local network, for that we add the profile -Pmdns-config.
+
+To verify that the discovery works properly you can use the console.
+
+If you type **declaration** on the console you should see an output similar to this:
+
+You should see all your printers in form of:
+
+---- 
+Metadata
+	id=hp LaserJet 2300 (scribe missions)
+	discovery.mdns.device.name=hp LaserJet 2300 (scribe missions)
+Metadata
+	id=HP LaserJet 600 M602 [2F0B40]
+	discovery.mdns.device.name=HP LaserJet 600 M602 [2F0B40]
+	Service properties:
+		objectClass = [Ljava.lang.String;@fcc720
+		service.id = 312
+...
+----
+
+And if you type **discovery** in the console you should see:
+
+---- 
+Discovery [DNSSDDiscovery] provided by bundle mdns (19)
+	Service properties:
+		dnssd.service.type = _printer._tcp.local.
+		factory.name = DNSSDDiscoveryFactory
+		instance.name = DNSSDDiscovery
+		objectClass = [Ljava.lang.String;@1db4108
+		service.id = 301
+----
+
+In this approach we used a configuration that was available in Fuchsia. But that is not usually the case; most of the time we are required to instantiate the discovery ourselves configure the filter in a way that is the application need it.
+
+The following configuration that makes available to import all the printers on the local network inside the platform with requiring any other information than the type of the device that interest us.
+
+----
+@Configuration
+public class DNSSDInitializer {
+    Instance dnssdDiscovery = instance()
+            .of("DNSSDDiscoveryFactory")
+            .named("DNSSDDiscovery")
+            .with("dnssd.service.type").setto("_printer._tcp.local.");
+
+}
+----
+[TIP]
+=====
+This instance can be created in any fashion, as long as it is an http://www.ipojo.org[iPOJO] instance. 
+=====
+
+Testing a Importer
+~~~~~~~~~~~~~~~~~~
+
+To start, we are going to use _fake-importer_, which create an instance of a GenericDevice interface based on a description that will be added into a file. This file must to be published in a specific folder of the framework (_load_ folder by default).
+
+[source]
+----
+mvn clean install -Pcore,fake
+----
+
+After launching the platform and type *instances* you will see something like
+
+[source]
+----
+Instance org.ow2.shelbie.core.internal.registry.DefaultCommandRegistry-0 -> valid
+Instance org.ow2.shelbie.core.internal.prompt.DefaultPromptService-0 -> valid
+Instance org.ow2.shelbie.commands.builtin.internal.HistoryAction-0 -> valid
+Instance org.ow2.shelbie.core.internal.registry.supplier.gogo.GogoInfoSupplier-0 -> valid
+Instance org.ow2.shelbie.core.internal.converter.ServiceReferenceConverter-0 -> valid
+Instance org.ow2.shelbie.core.internal.converter.FunctionConverter-0 -> valid
+Instance org.ow2.shelbie.core.internal.handler.completer.CommandsCompleter-0 -> valid
+Instance org.ow2.shelbie.commands.ipojo.internal.completer.ComponentInstanceCompleter-0 -> valid
+Instance org.ow2.shelbie.commands.builtin.internal.EchoAction-0 -> valid
+Instance org.ow2.shelbie.core.internal.converter.NumberConverter-0 -> valid
+Instance org.ow2.shelbie.core.internal.converter.BundleConverter-0 -> valid
+Instance org.ow2.shelbie.core.console.startup.ConsoleStartupComponent-0 -> valid
+Instance org.ow2.shelbie.commands.builtin.internal.EachAction-0 -> valid
+Instance org.ow2.shelbie.core.console.AnsiUsagePrinter-0 -> valid
+Instance org.ow2.shelbie.commands.builtin.internal.ShutdownAction-0 -> valid
+Instance org.ow2.shelbie.commands.builtin.internal.UnsetAction-0 -> valid
+Instance org.ow2.shelbie.commands.builtin.internal.GrepAction-0 -> valid
+Instance org.ow2.shelbie.core.internal.history.DefaultHistoryFileProvider-0 -> valid
+Instance org.ow2.shelbie.commands.builtin.internal.gogo.GogoShellCommands-0 -> valid
+Instance org.apache.felix.ipojo.arch.gogo.Arch-0 -> valid
+Instance org.ow2.shelbie.commands.ipojo.internal.InstancesAction-0 -> valid
+Instance org.ow2.shelbie.commands.builtin.internal.ClearAction-0 -> valid
+Instance org.ow2.shelbie.core.internal.system.DefaultSystemService-0 -> valid
+Instance org.ow2.shelbie.core.internal.converter.manager.ConverterManagerImpl-0 -> valid
+Instance org.ow2.shelbie.core.internal.converter.DateConverter-0 -> valid
+Instance org.ow2.shelbie.commands.ipojo.internal.completer.ComponentFactoryCompleter-0 -> valid
+Instance org.ow2.shelbie.core.internal.history.DefaultIdentityProvider-0 -> valid
+Instance org.ow2.shelbie.core.internal.converter.InputStreamConverter-0 -> valid
+Instance org.ow2.shelbie.commands.ipojo.internal.FactoriesAction-0 -> valid
+Instance org.ow2.shelbie.core.internal.handler.GogoPreparator-0 -> valid
+Instance org.ow2.shelbie.commands.builtin.internal.ExitAction-0 -> valid
+Instance org.ow2.shelbie.commands.ipojo.internal.InstanceAction-0 -> valid
+Instance org.ow2.shelbie.core.internal.converter.CollectionConverter-0 -> valid
+Instance org.ow2.shelbie.commands.ipojo.internal.FactoryAction-0 -> valid
+Instance org.ow2.shelbie.core.internal.converter.BasicTypesConverter-0 -> valid
+Instance org.ow2.shelbie.commands.builtin.internal.completer.CommandNameCompleter-0 -> valid
+Instance org.ow2.shelbie.commands.ipojo.internal.HandlersAction-0 -> valid
+Instance org.ow2.shelbie.commands.builtin.internal.HelpAction-0 -> valid
+Instance org.ow2.chameleon.fuchsia.tools.shell.FuchsiaGogoCommand-0 -> valid
+Instance Fuchsia-FakeDiscovery -> valid
+Instance org.apache.felix.ipojo.webconsole.IPOJOPlugin-0 -> valid
+----
+
+None of those instances concern us, since they all come from shelbie. If you type *declaration* you will see that there are no declarations available.
+
+Now lets create a text file with the content below:
+
+[source]
+----
+id=virtual-camera
+deviceType=camera
+deviceSubType=sony-dhc
+device.serialNumber=virtual-camera
+----
+

@@ -1,18 +1,19 @@
 
 Fuchsia can materialize an OSGi outcast service (not visible in the platform) into the OSGi platform. Natively fuchsia can can materialize:
 
-* service that have been published with (mDNS/DNSSD or UPNP protocol), bringing up the provider's IP and the service provided. This allows you to connect directly to the service without having to implement the discovery
-* JAX-WS service, creating an instance of the service in the local platform (the interfaces must be available in the local platform)
-* JSON-RPC service, makes available into the platform a service for this remote instance, as expected it is mandatory to have the interfaces in order to create the local instance
+* mDNS/DNSSD, bringing up the provider's IP and the service type. This allows you to connect directly to the service without having to implement the discovery
+* UPnP services published on the network
+* JAX-WS endpoint, creating an instance of the service in OSGi platform (the interfaces must be available in the platform)
+* JSON-RPC endpoint, makes available into the platform a service for this remote instance, as expected it is mandatory to have the interfaces in order to create the OSGi instance of the endpoint
 * PuSH (PUbSubHubbub) hub, if you have a feed that uses PuSH as hub, all updates are sent via eventAdmin. Thus, avoiding you to implement the protocol
-* MQTT lightweight messaging transport, so you can receive your messages locally (via EventAdmin) without having to implement the subscriber for this protocol
+* MQTT provider, so you can receive your MQTT messages locally (via EventAdmin) without having to implement the subscriber for this protocol
 
-All those are already builtin funcionalities. Services that can be materialized in OSGi platform, this is one of the two specific types of processor: **Importer**. 
+All those are already builtin features, the materialization of an external service into OSGi platform, this processor is called: *Importer*. 
 
-The second type is the **Exporter**, this type enables us to turn an OSGi service instance into a service that can be access outside of OSGi, exposed as a web service for instance. The builtin exporters available are:
+The second type of processor is called *Exporter*, this type enables us to turn an OSGi service instance into a service that can be access outside of OSGi, exposed as a web service for instance. The builtin exporters are:
 
 * JAX-WS, based in an OSGi service instance, publishes a WebService to be accessed remotely. You can use http://cxf.apache.org/[Apache CXF] to instante the exported service or Fuchsia itself.
 
-Of course those processors (importers or exporters) are available without needing to code a single line. 
+Of course those processors (*importers* or *exporters*) are available without needing to code a single line. 
 
-Albeit, Fuchsia has builtin processors, we are aware that most of application use their own protocol or adopt their protocol specific device, knowing that Fuchsia was build to be extensible, implementing and deploying a customized processor is quite straight forward.
+Albeit, Fuchsia has builtin processors, we are aware that most of applications use their own protocol or adopt their protocol specific device, knowing that Fuchsia was build to be extensible, thus implementing and deploying a customized processor is quite straight forward.
