@@ -45,7 +45,7 @@ public class CxfExporterFactory extends AbstractExporterComponent {
     @Override
     public void useExportDeclaration(ExportDeclaration exportDeclaration) {
 
-        System.out.println("trying to export");
+        logger.info("exporting {}",exportDeclaration.getMetadata());
 
         final String classname = (String) exportDeclaration.getMetadata().get(Constants.CXF_EXPORT_TYPE);
         final String webcontext = (String) exportDeclaration.getMetadata().get(Constants.CXF_EXPORT_WEB_CONTEXT);
@@ -60,8 +60,6 @@ public class CxfExporterFactory extends AbstractExporterComponent {
             ServerFactoryBean srvFactory = new ServerFactoryBean();
 
             Class ref = FuchsiaUtils.loadClass(this.context,classname);
-
-            //Class ref = Class.forName(classname);
 
             srvFactory.setServiceClass(ref);
 
@@ -90,7 +88,8 @@ public class CxfExporterFactory extends AbstractExporterComponent {
 
     @Override
     protected void denyExportDeclaration(ExportDeclaration exportDeclaration) {
-        System.out.println("trying to unexport");
+
+        logger.info("destroying exportation {}",exportDeclaration.getMetadata());
 
         final String webcontext = (String) exportDeclaration.getMetadata().get(Constants.CXF_EXPORT_WEB_CONTEXT);
 
@@ -117,7 +116,6 @@ public class CxfExporterFactory extends AbstractExporterComponent {
         CXFNonSpringServlet cxfServlet = new CXFNonSpringServlet();
 
         try {
-
             http.registerServlet(Constants.CXF_SERVLET, cxfServlet, null, null);
 
         } catch (ServletException e) {
