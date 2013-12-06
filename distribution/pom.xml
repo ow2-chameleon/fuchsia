@@ -104,17 +104,21 @@
         <profile>
             <id>fake</id>
             <dependencies>
+		<!--
                 <dependency>
                     <groupId>org.ow2.chameleon.fuchsia.importer</groupId>
                     <artifactId>fake-importer</artifactId>
                     <version>${project.parent.version}</version>
                 </dependency>
+		-->
 
+		<!--
                 <dependency>
 		    <groupId>org.ow2.chameleon.fuchsia.examples</groupId>
 		    <artifactId>fake-importer-config</artifactId>
                     <version>${project.parent.version}</version>
                 </dependency>
+		-->
 
                 <dependency>
                     <groupId>org.ow2.chameleon.fuchsia.base</groupId>
@@ -185,6 +189,12 @@
                     <artifactId>httpclient</artifactId>
                     <version>4.3</version>
                 </dependency>
+
+		<dependency>
+		    <groupId>jdom</groupId>
+		    <artifactId>org.ow2.chameleon.commons.jdom</artifactId>
+		    <version>1.0.0-0001-SNAPSHOT</version>
+		</dependency>
 
                 <dependency>
                     <groupId>rome</groupId>
