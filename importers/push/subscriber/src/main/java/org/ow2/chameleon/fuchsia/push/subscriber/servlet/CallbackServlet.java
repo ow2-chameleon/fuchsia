@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.ClassLoader;
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -107,6 +108,9 @@ public class CallbackServlet extends HttpServlet implements SubscriberInput
         ArrayList<String> approvedActions;
         MessageStatus stsMessage = MessageStatus.ERROR;
 
+        ClassLoader cl=Thread.currentThread().getContextClassLoader();
+        Thread.currentThread().setContextClassLoader(SyndFeedInput.class.getClassLoader());
+
         if (request.getContentType().contains("application/atom+xml") || request.getContentType().contains("application/rss+xml")){
 
             InputStream in= request.getInputStream();
@@ -131,7 +135,11 @@ public class CallbackServlet extends HttpServlet implements SubscriberInput
                 TopicUpdated(hubtopic, feed);
             } catch (FeedException e) {
                 e.printStackTrace();
+            } finally {
+                Thread.currentThread().setContextClassLoader(cl);
             }
+
+
             stsMessage = MessageStatus.OK;
         }
 
