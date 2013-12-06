@@ -30,10 +30,9 @@ Basic
 
 include::fuchsia-basic.ad[]
 
-Advanced
---------
-
-include::create-importer.ad[]
+//Advanced
+//--------
+//include::create-importer.ad[]
 
 Examples
 --------

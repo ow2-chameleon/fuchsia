@@ -3,7 +3,7 @@ Creating a bundle
 
 We can use maven plugin to create an iPOJO artifact.
 
-[source]
+[source,bash]
 --
 mvn org.apache.maven.plugins:maven-archetype-plugin:generate \
 -DinteractiveMode=false \
@@ -116,7 +116,7 @@ So far we've our checklist look like this:
 - [ ] Inform fuchsia the JAX-WS info
 - [ ] Use the remote instance
 
-The last two steps consist in, informing the Fuchsia the address of our JAX-WS service. For that its enough to deploy a file in the folder _load_ with the following content:
+The last two steps consist in informing the Fuchsia the address of our JAX-WS service. For that its enough to deploy a file in the folder _load_ (thanks to the Fake-Discovery) with the following content:
 
 [source]
 --
@@ -130,7 +130,7 @@ deviceSubType=another
 device.serialNumber=virtual-camera
 --
 
-Then, just request our service as a regular dependency (as shown below), then you ll see your dependency being injected and ready for use without much troubleshooting.
+Then, just request your service as a regular dependency (as shown below), then you ll see your dependency being injected and ready for use without much trouble.
 
 [source,java]
 --
@@ -152,3 +152,66 @@ public class Client {
 --
 
 
+Import a PuSH service
+~~~~~~~~~~~~~~~~~~~~~
+
+PubSubHubbub (PuSH) is a google protocol create to be fast, in fact it is a publish / subscribe mechanism that avoids the polling technique. A small diagram can show you the idea behind the protocol
+
+image:diagram/push01.svg["PuSH",width=800]
+
+Prepare
+^^^^^^^
+
+So we are going to need, we are assuming that the publisher and hub addresses are well known.
+
+- [*] know the address of the publisher
+- [*] know the address of the hub
+- [ ] Instantiate the Importer
+- [ ] Instantiate the linker
+- [ ] Inform fuchsia the Hub and Publisher addresses
+- [ ] Visualize the messages
+
+The first two steps you have to know already those addresses, the next two steps can be done by using maven profile. Meaning that we can generate a chameleon distribution with all our fuchsia dependencies, linker and importer instantiated just by typing into the project repository:
+
+[source,bash]
+--
+mvn clean install -f distribution/pom.xml -Pcore,push,push-config,fake && \
+cd distribution/target/chameleon-distribution/ && \
+sh chameleon.sh --interactive
+--
+
+Now lets verify our checklist:
+
+- [*] know the address of the publisher
+- [*] know the address of the hub
+- [*] Instantiate the Importer
+- [*] Instantiate the linker
+- [*] Inform fuchsia the Hub and Publisher addresses
+- [ ] Visualize the messages
+
+The next step is done by add a file with all the information we already have about the PuSH server (example of the file below)
+
+[source,bash]
+--
+id=push-dispatch-event-admin
+deviceType=camera
+deviceSubType=another
+
+push.hub.topic=http://blogname.blogspot.com/feeds/posts/default
+push.hub.url=http://localhost:8080/hub/subscribe
+push.subscriber.callback=http://localhost:8080/push
+push.eventAdmin.queue=public
+
+device.serialNumber=push-dispatch-event-admin
+--
+
+[WARNING]
+====
+The client must be accessible from the hub, since the hub is the one that pushes the change into clients callback
+====
+
+So we are able to see the redirection (from PuSH into Event admin) we install http://www.interior-dsgn.com/apache//felix/org.apache.felix.webconsole.plugins.event-1.1.0.jar[Web Console Event Admin Plugin].
+
+By default fuchsia distribution will install the _felix webconsole_, that can be access in the URL http://localhost:8080/system/console/events.
+
+Now when you receive an update from the _Hub_ it will be automatically redirected to eventAdmin message bus.
