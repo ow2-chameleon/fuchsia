@@ -95,26 +95,23 @@
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
-            <modules>
-<!--	
-                <module>core</module>
-                <module>core-it</module>
-                <module>bases</module>
-                <module>importers</module>
-                <module>exporters</module>
-                <module>discoveries</module>
-                <module>tools</module>
-                <module>testing</module>
--->
-            </modules>
-        </profile>
+
+	    <modules>
+		<module>distribution</module>
+		<module>core</module>
+		<module>bases</module>
+		<module>importers</module>
+		<module>exporters</module>
+		<module>discoveries</module>
+		<module>tools</module>
+		<module>testing</module>
+	    </modules>
+        </profile> 
 
         <profile>
             <id>examples</id>
             <modules>
-<!--
-                <module>examples</module>
--->
+		<module>examples</module>
             </modules>
         </profile>
 
