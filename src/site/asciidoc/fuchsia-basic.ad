@@ -215,3 +215,51 @@ So we are able to see the redirection (from PuSH into Event admin) we install ht
 By default fuchsia distribution will install the _felix webconsole_, that can be access in the URL http://localhost:8080/system/console/events.
 
 Now when you receive an update from the _Hub_ it will be automatically redirected to eventAdmin message bus.
+
+Import a MQTT service
+~~~~~~~~~~~~~~~~~~~~~
+
+As MQTT is an efficient message exchange protocole, Fuchsia has builtin a *MQTT* importer that receives and forward messages from MQTT bus into EventAdmin bus. 
+
+The address of the MQTT server is supposely known, and the next two steps (importer and linker instantiation) can be done with the maven profile, according to the command below.
+
+[source,bash]
+--
+mvn clean install -f distribution/pom.xml -Pcore,mqtt,mqtt-config,fake && \
+cd distribution/target/chameleon-distribution/ && \
+sh chameleon.sh --interactive
+--  
+
+So lets verify how are we in relation to our checklist:
+
+Lets create our checklist:
+
+- [*] know the address of the MQTT server
+- [*] Instantiate the Importer
+- [*] Instantiate the linker
+- [ ] Inform fuchsia about the MQTT server address
+- [ ] Visualize the messages
+
+We tell Fuchsia which MQTT server (and other parameters) by deploying a file into the _load_ directory containing those info (with the content below):
+
+[source,bash]
+--
+id=mqtt-dispatch-event-admin
+deviceType=camera
+deviceSubType=another
+
+mqtt.queue=public
+mqtt.server.host=localhost
+mqtt.server.port=5672
+-- 
+
+You can use http://localhost:8080/system/console/event[WebConsole] to see all the messages that come from MQTT and redirected to *EventAdmin*. The information *mqtt.server.host* and *mqtt.server.port* are optional, in case those informations are not available it will use the information defined as default by *RabbitMQ*.
+
+So, after installing your MQTT server (in our case RabbitMQ) make sure its running 
+
+[source,bash]
+--
+sudo /etc/init.d/rabbitmq-server status
+--
+
+

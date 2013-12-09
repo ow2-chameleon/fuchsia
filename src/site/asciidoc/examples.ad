@@ -113,26 +113,7 @@ After launching the platform and type *instances* you will see something like
 
 [source]
 ----
-Instance org.ow2.shelbie.core.internal.registry.DefaultCommandRegistry-0 -> valid
-Instance org.ow2.shelbie.core.internal.prompt.DefaultPromptService-0 -> valid
-Instance org.ow2.shelbie.commands.builtin.internal.HistoryAction-0 -> valid
-Instance org.ow2.shelbie.core.internal.registry.supplier.gogo.GogoInfoSupplier-0 -> valid
-Instance org.ow2.shelbie.core.internal.converter.ServiceReferenceConverter-0 -> valid
-Instance org.ow2.shelbie.core.internal.converter.FunctionConverter-0 -> valid
-Instance org.ow2.shelbie.core.internal.handler.completer.CommandsCompleter-0 -> valid
-Instance org.ow2.shelbie.commands.ipojo.internal.completer.ComponentInstanceCompleter-0 -> valid
-Instance org.ow2.shelbie.commands.builtin.internal.EchoAction-0 -> valid
-Instance org.ow2.shelbie.core.internal.converter.NumberConverter-0 -> valid
-Instance org.ow2.shelbie.core.internal.converter.BundleConverter-0 -> valid
-Instance org.ow2.shelbie.core.console.startup.ConsoleStartupComponent-0 -> valid
-Instance org.ow2.shelbie.commands.builtin.internal.EachAction-0 -> valid
-Instance org.ow2.shelbie.core.console.AnsiUsagePrinter-0 -> valid
-Instance org.ow2.shelbie.commands.builtin.internal.ShutdownAction-0 -> valid
-Instance org.ow2.shelbie.commands.builtin.internal.UnsetAction-0 -> valid
-Instance org.ow2.shelbie.commands.builtin.internal.GrepAction-0 -> valid
-Instance org.ow2.shelbie.core.internal.history.DefaultHistoryFileProvider-0 -> valid
-Instance org.ow2.shelbie.commands.builtin.internal.gogo.GogoShellCommands-0 -> valid
-Instance org.apache.felix.ipojo.arch.gogo.Arch-0 -> valid
+...
 Instance org.ow2.shelbie.commands.ipojo.internal.InstancesAction-0 -> valid
 Instance org.ow2.shelbie.commands.builtin.internal.ClearAction-0 -> valid
 Instance org.ow2.shelbie.core.internal.system.DefaultSystemService-0 -> valid
