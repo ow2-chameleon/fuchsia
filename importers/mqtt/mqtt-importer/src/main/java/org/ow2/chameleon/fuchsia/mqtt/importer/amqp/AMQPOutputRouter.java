@@ -1,10 +1,7 @@
 package org.ow2.chameleon.fuchsia.mqtt.importer.amqp;
 
 
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.QueueingConsumer;
+import com.rabbitmq.client.*;
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
@@ -31,6 +28,12 @@ public class AMQPOutputRouter implements Runnable {
 
     private Thread eventArrivalMonitor;
 
+    @Property(name = "mqtt.server.host",value = ConnectionFactory.DEFAULT_HOST)
+    private String serverHost;
+
+    @Property(name = "mqtt.server.port",value = ConnectionFactory.DEFAULT_AMQP_PORT+"")
+    private int serverPort;
+
     @Property(name = "mqtt.queue")
     String queue;
 
@@ -38,7 +41,7 @@ public class AMQPOutputRouter implements Runnable {
     public void start() throws IOException {
 
         ConnectionFactory factory = new ConnectionFactory();
-        connection = factory.newConnection();
+        connection = factory.newConnection(new Address[]{new Address(serverHost,serverPort)});
         channel = connection.createChannel();
         channel.queueDeclare(queue, false, false, false, null);
 
@@ -73,7 +76,10 @@ public class AMQPOutputRouter implements Runnable {
 
                 getLogger().info("Forwarding ..");
 
-                eventAdmin.sendEvent(getEventAdminMessage(new Hashtable()));
+                Hashtable metatable=new Hashtable();
+                metatable.put("content", message);
+
+                eventAdmin.sendEvent(getEventAdminMessage(metatable));
 
                 getLogger().info("EventAdmin: message '{}' queue '{}' sent", message,queue);
 
