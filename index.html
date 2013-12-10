@@ -379,10 +379,20 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <li><a href="#_linkers">Linkers</a></li>
 </ul>
 </li>
-<li><a href="#_fuchsia_modules">Fuchsia modules</a></li>
+<li><a href="#_instalation">Instalation</a></li>
 <li>
 <ul class="sectlevel2">
-<li><a href="#_configuration_profiles">Configuration profiles</a></li>
+<li><a href="#_using_as_maven_dependency">Using as maven dependency</a></li>
+<li><a href="#_compiling_a_distribution">Compiling a distribution</a></li>
+</ul>
+</li>
+<li><a href="#_input_output_of_processors">Input-Output of processors</a></li>
+<li>
+<ul class="sectlevel2">
+<li><a href="#_fake_importer">Fake importer</a></li>
+<li><a href="#_jax_ws_importer">JAX-WS importer</a></li>
+<li><a href="#_mqtt_importer">MQTT importer</a></li>
+<li><a href="#_pubsubhubbub_importer">PubSubHubBub importer</a></li>
 </ul>
 </li>
 <li><a href="#_basic">Basic</a></li>
@@ -391,13 +401,9 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <li><a href="#_creating_a_bundle">Creating a bundle</a></li>
 <li><a href="#_import_a_jax_ws_service">Import a JAX-WS service</a></li>
 <li><a href="#_import_a_push_service">Import a PuSH service</a></li>
-</ul>
-</li>
-<li><a href="#_examples">Examples</a></li>
-<li>
-<ul class="sectlevel2">
-<li><a href="#_testing_a_discovery">Testing a Discovery</a></li>
-<li><a href="#_testing_a_importer">Testing a Importer</a></li>
+<li><a href="#_import_a_mqtt_service">Import a MQTT service</a></li>
+<li><a href="#_fake_discovery">Fake-Discovery</a></li>
+<li><a href="#_fake_importer_2">Fake-Importer</a></li>
 </ul>
 </li>
 </ul>
@@ -578,8 +584,66 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 </div>
 </div>
 <div class="sect1">
-<h2 id="_fuchsia_modules">Fuchsia modules</h2>
+<h2 id="_instalation">Instalation</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="_using_as_maven_dependency">Using as maven dependency</h3>
+<div class="paragraph">
+<p>Adopting Fuchsia is a straightforward task if you are used to Maven. First we need to add the OW2 maven repository to our list of repositories (as below).</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="xml language-xml">&lt;project ... &gt;
+...
+&lt;repositories&gt;
+	&lt;repository&gt;
+		&lt;id&gt;ow2-release&lt;/id&gt;
+		&lt;name&gt;OW2-Release&lt;/name&gt;
+		&lt;url&gt;http://repository.ow2.org/nexus/content/groups/public/&lt;/url&gt;
+	&lt;/repository&gt;
+	&lt;repository&gt;
+		&lt;id&gt;ow2-snapshot&lt;/id&gt;
+		&lt;name&gt;OW2-Snapshot&lt;/name&gt;
+		&lt;url&gt;http://repository.ow2.org/nexus/content/repositories/snapshots/&lt;/url&gt;
+	&lt;/repository&gt;
+&lt;/repositories&gt;
+...
+&lt;/project&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now, we have to declare one or more Fuchsia module <strong>as a maven dependency</strong> of your project.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="xml language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.ow2.chameleon.fuchsia&lt;/groupId&gt;
+    &lt;artifactId&gt;fuchsia-core&lt;/artifactId&gt;
+    &lt;version&gt;0.0.1&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here we reference the version <strong>0.0.1</strong> of Fuchsia, but of course you can update that version for the version you are willing to use.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<img src="./images/icons/note.png" alt="Note">
+</td>
+<td class="content">
+<div class="title">The catch</div>
+<div class="paragraph">
+<p>This method is quick and fast to integrate for compilation, although, depending on the importer adopted, it may require 3td party dependencies, that will have to be installed in your runtime platform manually. In order to not worry in finding all the dependencies for the importer adopted, you can use <strong>Fuchsia</strong> compilation profiles to gather all the dependencies needed according to your importers.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_compiling_a_distribution">Compiling a distribution</h3>
 <div class="paragraph">
 <p>In order to generate a Fuchsia distribution there is only one mandatory profile the <strong>core</strong>, all the other modules are optional and can be included in the distribution by adding the apropriate maven profile ( <strong>mvn -P parameter</strong> ). The maven profile and its contents are specified right below.</p>
 </div>
@@ -642,8 +706,8 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 </li>
 </ul>
 </div>
-<div class="sect2">
-<h3 id="_configuration_profiles">Configuration profiles</h3>
+<div class="sect3">
+<h4 id="_configuration_profiles">Configuration profiles</h4>
 <div class="paragraph">
 <p>Config profiles are the instantiation of the <em>linker</em> and the <em>processor</em>. Those two tend to be customized, since the filter adopted in the default instantiation of the linker might not be valid for for case</p>
 </div>
@@ -712,6 +776,147 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <p>type <strong>./chameleon.sh --interactive</strong> (or the apropriate script according to your OS)</p>
 </li>
 </ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_input_output_of_processors">Input-Output of processors</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>As seen in [Fuchsia 101](Fuchsia-101), importers use <strong>import declaration</strong> as input. The information contained in the <strong>import declaration</strong> must be enough in order that the processor execute its role properly.</p>
+</div>
+<div class="sect2">
+<h3 id="_fake_importer">Fake importer</h3>
+<div class="paragraph">
+<p>As soon as this <strong>importer</strong> is connected to an <strong>import declaration</strong> it generates an instance of Fuchsia <strong>GenericDevice</strong>, and this instance is published as a service inside OSGi platform.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_jax_ws_importer">JAX-WS importer</h3>
+<div class="ulist">
+<div class="title">External Requirement:</div>
+<ul>
+<li>
+<p>JAX-WS service published</p>
+</li>
+<li>
+<p>Interface(a') that represents the WSDL available in the OSGi platform that will import the service</p>
+</li>
+</ul>
+</div>
+<div class="ulist">
+<div class="title">Import Declaration information required:</div>
+<ul>
+<li>
+<p>jax-ws.importer.interfaces</p>
+</li>
+<li>
+<p>className</p>
+</li>
+<li>
+<p>endpoint.url</p>
+</li>
+</ul>
+</div>
+<div class="ulist">
+<div class="title">Output:</div>
+<ul>
+<li>
+<p>OSGi service registered with a' representing the JAX-WS (Remote service)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Detailed Description</strong></p>
+</div>
+<div class="paragraph">
+<p>Today to import the JAX-WS service Fushsia uses <a href="http://cxf.apache.org/">CXF</a>. CXF is used in order to reduce the complexity in creating the connection and handling with different issues that may be raised.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_mqtt_importer">MQTT importer</h3>
+<div class="ulist">
+<div class="title">External Requirement:</div>
+<ul>
+<li>
+<p>MQTT server with the address known</p>
+</li>
+<li>
+<p>EventAdmin service configured in the machine that will import this service</p>
+</li>
+</ul>
+</div>
+<div class="ulist">
+<div class="title">Import Declaration information required:</div>
+<ul>
+<li>
+<p>id</p>
+</li>
+<li>
+<p>mqtt.queue</p>
+</li>
+</ul>
+</div>
+<div class="ulist">
+<div class="title">Output:</div>
+<ul>
+<li>
+<p>A message will be published in EventAdmin in the queue $mqtt.queue, meaning that it will use the same name of <strong>queue</strong> as MQTT</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Detailed Description</strong></p>
+</div>
+<div class="paragraph">
+<p><a href="http://mqtt.org/">MQTT</a> is a protocol <a href="http://openiot.eu/">largely diffused</a> protocole for message exchange due to its good performance. The implementation used by Fuchsia to support MQTT was <a href="http://www.rabbitmq.com/">RabbitMQ</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_pubsubhubbub_importer">PubSubHubBub importer</h3>
+<div class="paragraph">
+<p><a href="http://code.google.com/p/pubsubhubbub/">PubSubHubBub</a>, or simply <strong>PuSH</strong>, is a publish/subscribe protocol created by google and used by some of its <a href="http://code.google.com/p/pubsubhubbub/wiki/HubbubAtGoogle">tools</a>.</p>
+</div>
+<div class="ulist">
+<div class="title">External Requirement:</div>
+<ul>
+<li>
+<p>PuSh server address</p>
+</li>
+</ul>
+</div>
+<div class="ulist">
+<div class="title">Import Declaration information required:</div>
+<ul>
+<li>
+<p>push.hub.url</p>
+</li>
+<li>
+<p>push.hub.topic</p>
+</li>
+<li>
+<p>push.subscriber.callback</p>
+</li>
+<li>
+<p>push.eventAdmin.queue</p>
+</li>
+</ul>
+</div>
+<div class="ulist">
+<div class="title">Output:</div>
+<ul>
+<li>
+<p>A message will be published in EventAdmin in the queue $push.eventAdmin.queue, meaning that it will use the same name of <strong>queue</strong> as PuSH</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Detailed Description</strong></p>
+</div>
+<div class="paragraph">
+<p>There are no well known and portable PuSH implementations, Fuchsia implemented partially <a href="https://pubsubhubbub.googlecode.com/git/pubsubhubbub-core-0.4.html">PuSH specification</a></p>
 </div>
 </div>
 </div>
@@ -1033,18 +1238,79 @@ device.serialNumber=push-dispatch-event-admin</code></pre>
 </div>
 </div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_examples">Examples</h2>
-<div class="sectionbody">
 <div class="sect2">
-<h3 id="_testing_a_discovery">Testing a Discovery</h3>
+<h3 id="_import_a_mqtt_service">Import a MQTT service</h3>
+<div class="paragraph">
+<p>As MQTT is an efficient message exchange protocole, Fuchsia has builtin a <strong>MQTT</strong> importer that receives and forward messages from MQTT bus into EventAdmin bus.</p>
+</div>
+<div class="paragraph">
+<p>The address of the MQTT server is supposely known, and the next two steps (importer and linker instantiation) can be done with the maven profile, according to the command below.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="bash language-bash">mvn clean install -f distribution/pom.xml -Pcore,mqtt,mqtt-config,fake &amp;&amp; \
+cd distribution/target/chameleon-distribution/ &amp;&amp; \
+sh chameleon.sh --interactive</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>So lets verify how are we in relation to our checklist:</p>
+</div>
+<div class="paragraph">
+<p>Lets create our checklist:</p>
+</div>
+<div class="ulist checklist">
+<ul class="checklist">
+<li>
+<p><input type="checkbox" data-item-complete="1" checked disabled> know the address of the MQTT server</p>
+</li>
+<li>
+<p><input type="checkbox" data-item-complete="1" checked disabled> Instantiate the Importer</p>
+</li>
+<li>
+<p><input type="checkbox" data-item-complete="1" checked disabled> Instantiate the linker</p>
+</li>
+<li>
+<p><input type="checkbox" data-item-complete="0" disabled> Inform fuchsia about the MQTT server address</p>
+</li>
+<li>
+<p><input type="checkbox" data-item-complete="0" disabled> Visualize the messages</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>We tell Fuchsia which MQTT server (and other parameters) by deploying a file into the <em>load</em> directory containing those info (with the content below):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="bash language-bash">id=mqtt-dispatch-event-admin
+deviceType=camera
+deviceSubType=another
+
+mqtt.queue=public
+mqtt.server.host=localhost
+mqtt.server.port=5672</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can use <a href="http://localhost:8080/system/console/event">WebConsole</a> to see all the messages that come from MQTT and redirected to <strong>EventAdmin</strong>. The information <strong>mqtt.server.host</strong> and <strong>mqtt.server.port</strong> are optional, in case those informations are not available it will use the information defined as default by <strong>RabbitMQ</strong>.</p>
+</div>
+<div class="paragraph">
+<p>So, after installing your MQTT server (in our case RabbitMQ) make sure its running</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="bash language-bash">sudo /etc/init.d/rabbitmq-server status</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_fake_discovery">Fake-Discovery</h3>
 <div class="paragraph">
 <p>First things first, in order to have an discovery we need to create a fuchsia distribution that embbeds it, or to use an already existing distribution and add the modules required. Below we ll show you how to use couples of discoveries that are available in the platform.</p>
 </div>
 <div class="sect3">
-<h4 id="_fake_discovery">Fake Discovery</h4>
+<h4 id="_what_it_does">What it does?!</h4>
 <div class="paragraph">
 <p>As seen in the introduction the fundamental task of a discovery is to create an instance of Declaration which represents the availability of a service/device, and the intrinsic information of such service/device are contained inside <strong>Declaration</strong> as properties (stored in a Map).</p>
 </div>
@@ -1059,13 +1325,13 @@ device.serialNumber=push-dispatch-event-admin</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>id=mqtt-dispatch-event-admin
+<pre class="highlight"><code>id=mqtt-dispatch-event-admin
 exporter.id=camera-exporter
 
 deviceType=camera
 deviceSubType=another
 
-mqtt.queue=public</pre>
+mqtt.queue=public</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1073,7 +1339,7 @@ mqtt.queue=public</pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>Service properties:
+<pre class="highlight"><code>Service properties:
 		objectClass = [Ljava.lang.String;@26f6a1
 		service.id = 319
 Metadata
@@ -1081,7 +1347,7 @@ Metadata
 	deviceType=camera
 	deviceSubType=another
 	exporter.id=camera-exporter
-	mqtt.queue=public</pre>
+	mqtt.queue=public</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1110,7 +1376,7 @@ Metadata
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>Metadata
+<pre class="highlight"><code>Metadata
 	id=hp LaserJet 2300 (scribe missions)
 	discovery.mdns.device.name=hp LaserJet 2300 (scribe missions)
 Metadata
@@ -1119,7 +1385,7 @@ Metadata
 	Service properties:
 		objectClass = [Ljava.lang.String;@fcc720
 		service.id = 312
-...</pre>
+...</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1127,13 +1393,13 @@ Metadata
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>Discovery [DNSSDDiscovery] provided by bundle mdns (19)
+<pre class="highlight"><code>Discovery [DNSSDDiscovery] provided by bundle mdns (19)
 	Service properties:
 		dnssd.service.type = _printer._tcp.local.
 		factory.name = DNSSDDiscoveryFactory
 		instance.name = DNSSDDiscovery
 		objectClass = [Ljava.lang.String;@1db4108
-		service.id = 301</pre>
+		service.id = 301</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1144,14 +1410,14 @@ Metadata
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>@Configuration
+<pre class="highlight"><code class="java language-java">@Configuration
 public class DNSSDInitializer {
     Instance dnssdDiscovery = instance()
             .of("DNSSDDiscoveryFactory")
             .named("DNSSDDiscovery")
             .with("dnssd.service.type").setto("_printer._tcp.local.");
 
-}</pre>
+}</code></pre>
 </div>
 </div>
 <div class="admonitionblock tip">
@@ -1171,7 +1437,7 @@ public class DNSSDInitializer {
 </div>
 </div>
 <div class="sect2">
-<h3 id="_testing_a_importer">Testing a Importer</h3>
+<h3 id="_fake_importer_2">Fake-Importer</h3>
 <div class="paragraph">
 <p>To start, we are going to use <em>fake-importer</em>, which create an instance of a GenericDevice interface based on a description that will be added into a file. This file must to be published in a specific folder of the framework (<em>load</em> folder by default).</p>
 </div>
@@ -1185,54 +1451,17 @@ public class DNSSDInitializer {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>Instance org.ow2.shelbie.core.internal.registry.DefaultCommandRegistry-0 -&gt; valid
-Instance org.ow2.shelbie.core.internal.prompt.DefaultPromptService-0 -&gt; valid
-Instance org.ow2.shelbie.commands.builtin.internal.HistoryAction-0 -&gt; valid
-Instance org.ow2.shelbie.core.internal.registry.supplier.gogo.GogoInfoSupplier-0 -&gt; valid
-Instance org.ow2.shelbie.core.internal.converter.ServiceReferenceConverter-0 -&gt; valid
-Instance org.ow2.shelbie.core.internal.converter.FunctionConverter-0 -&gt; valid
-Instance org.ow2.shelbie.core.internal.handler.completer.CommandsCompleter-0 -&gt; valid
-Instance org.ow2.shelbie.commands.ipojo.internal.completer.ComponentInstanceCompleter-0 -&gt; valid
-Instance org.ow2.shelbie.commands.builtin.internal.EchoAction-0 -&gt; valid
-Instance org.ow2.shelbie.core.internal.converter.NumberConverter-0 -&gt; valid
-Instance org.ow2.shelbie.core.internal.converter.BundleConverter-0 -&gt; valid
-Instance org.ow2.shelbie.core.console.startup.ConsoleStartupComponent-0 -&gt; valid
-Instance org.ow2.shelbie.commands.builtin.internal.EachAction-0 -&gt; valid
-Instance org.ow2.shelbie.core.console.AnsiUsagePrinter-0 -&gt; valid
-Instance org.ow2.shelbie.commands.builtin.internal.ShutdownAction-0 -&gt; valid
-Instance org.ow2.shelbie.commands.builtin.internal.UnsetAction-0 -&gt; valid
-Instance org.ow2.shelbie.commands.builtin.internal.GrepAction-0 -&gt; valid
-Instance org.ow2.shelbie.core.internal.history.DefaultHistoryFileProvider-0 -&gt; valid
-Instance org.ow2.shelbie.commands.builtin.internal.gogo.GogoShellCommands-0 -&gt; valid
-Instance org.apache.felix.ipojo.arch.gogo.Arch-0 -&gt; valid
-Instance org.ow2.shelbie.commands.ipojo.internal.InstancesAction-0 -&gt; valid
-Instance org.ow2.shelbie.commands.builtin.internal.ClearAction-0 -&gt; valid
-Instance org.ow2.shelbie.core.internal.system.DefaultSystemService-0 -&gt; valid
-Instance org.ow2.shelbie.core.internal.converter.manager.ConverterManagerImpl-0 -&gt; valid
-Instance org.ow2.shelbie.core.internal.converter.DateConverter-0 -&gt; valid
-Instance org.ow2.shelbie.commands.ipojo.internal.completer.ComponentFactoryCompleter-0 -&gt; valid
-Instance org.ow2.shelbie.core.internal.history.DefaultIdentityProvider-0 -&gt; valid
-Instance org.ow2.shelbie.core.internal.converter.InputStreamConverter-0 -&gt; valid
-Instance org.ow2.shelbie.commands.ipojo.internal.FactoriesAction-0 -&gt; valid
-Instance org.ow2.shelbie.core.internal.handler.GogoPreparator-0 -&gt; valid
-Instance org.ow2.shelbie.commands.builtin.internal.ExitAction-0 -&gt; valid
-Instance org.ow2.shelbie.commands.ipojo.internal.InstanceAction-0 -&gt; valid
-Instance org.ow2.shelbie.core.internal.converter.CollectionConverter-0 -&gt; valid
-Instance org.ow2.shelbie.commands.ipojo.internal.FactoryAction-0 -&gt; valid
-Instance org.ow2.shelbie.core.internal.converter.BasicTypesConverter-0 -&gt; valid
-Instance org.ow2.shelbie.commands.builtin.internal.completer.CommandNameCompleter-0 -&gt; valid
-Instance org.ow2.shelbie.commands.ipojo.internal.HandlersAction-0 -&gt; valid
-Instance org.ow2.shelbie.commands.builtin.internal.HelpAction-0 -&gt; valid
+<pre class="highlight"><code>...
 Instance org.ow2.chameleon.fuchsia.tools.shell.FuchsiaGogoCommand-0 -&gt; valid
 Instance Fuchsia-FakeDiscovery -&gt; valid
-Instance org.apache.felix.ipojo.webconsole.IPOJOPlugin-0 -&gt; valid</code></pre>
+...</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>None of those instances concern us, since they all come from shelbie. If you type <strong>declaration</strong> you will see that there are no declarations available.</p>
+<p>If you type <strong>declaration</strong> you will see that there are no declarations available.</p>
 </div>
 <div class="paragraph">
-<p>Now lets create a text file with the content below:</p>
+<p>Now lets create a text file with the following content:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1242,13 +1471,43 @@ deviceSubType=sony-dhc
 device.serialNumber=virtual-camera</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>Copy this file for to the folder <em>load</em> (located inside chameleon directory), after that you can type the command <em>declaration</em> and you should see:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>Service properties:
+		objectClass = [Ljava.lang.String;@19d8f01
+		service.id = 316
+Metadata
+	id=virtual-camera
+	deviceType=camera
+	deviceSubType=sony-dhc
+	device.serialNumber=virtual-camera</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A declaration with the exactly the same properties values as the file that you just deployed.</p>
+</div>
+<div class="paragraph">
+<p>If  you install the fuchsia bundle <strong>Fake-Importer</strong>, you can type <strong>instances</strong>, and you should see:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>...
+Instance GenericDeviceInst-virtual-camera -&gt; valid</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As we can see, the fake importer created an instance name <strong>GenericDeviceInst-virtual-camera</strong> (our <strong>id</strong> preceed by <em>GenericDeviceInst-</em>)</p>
+</div>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2013-12-06 11:44:14 CET
+Last updated 2013-12-10 09:09:58 CET
 </div>
 </div>
 </body>
