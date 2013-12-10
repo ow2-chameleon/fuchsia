@@ -114,32 +114,14 @@ After launching the platform and type *instances* you will see something like
 [source]
 ----
 ...
-Instance org.ow2.shelbie.commands.ipojo.internal.InstancesAction-0 -> valid
-Instance org.ow2.shelbie.commands.builtin.internal.ClearAction-0 -> valid
-Instance org.ow2.shelbie.core.internal.system.DefaultSystemService-0 -> valid
-Instance org.ow2.shelbie.core.internal.converter.manager.ConverterManagerImpl-0 -> valid
-Instance org.ow2.shelbie.core.internal.converter.DateConverter-0 -> valid
-Instance org.ow2.shelbie.commands.ipojo.internal.completer.ComponentFactoryCompleter-0 -> valid
-Instance org.ow2.shelbie.core.internal.history.DefaultIdentityProvider-0 -> valid
-Instance org.ow2.shelbie.core.internal.converter.InputStreamConverter-0 -> valid
-Instance org.ow2.shelbie.commands.ipojo.internal.FactoriesAction-0 -> valid
-Instance org.ow2.shelbie.core.internal.handler.GogoPreparator-0 -> valid
-Instance org.ow2.shelbie.commands.builtin.internal.ExitAction-0 -> valid
-Instance org.ow2.shelbie.commands.ipojo.internal.InstanceAction-0 -> valid
-Instance org.ow2.shelbie.core.internal.converter.CollectionConverter-0 -> valid
-Instance org.ow2.shelbie.commands.ipojo.internal.FactoryAction-0 -> valid
-Instance org.ow2.shelbie.core.internal.converter.BasicTypesConverter-0 -> valid
-Instance org.ow2.shelbie.commands.builtin.internal.completer.CommandNameCompleter-0 -> valid
-Instance org.ow2.shelbie.commands.ipojo.internal.HandlersAction-0 -> valid
-Instance org.ow2.shelbie.commands.builtin.internal.HelpAction-0 -> valid
 Instance org.ow2.chameleon.fuchsia.tools.shell.FuchsiaGogoCommand-0 -> valid
 Instance Fuchsia-FakeDiscovery -> valid
-Instance org.apache.felix.ipojo.webconsole.IPOJOPlugin-0 -> valid
+...
 ----
 
-None of those instances concern us, since they all come from shelbie. If you type *declaration* you will see that there are no declarations available.
+If you type *declaration* you will see that there are no declarations available.
 
-Now lets create a text file with the content below:
+Now lets create a text file with the following content:
 
 [source]
 ----
@@ -148,4 +130,32 @@ deviceType=camera
 deviceSubType=sony-dhc
 device.serialNumber=virtual-camera
 ----
+
+Copy this file for to the folder _load_ (located inside chameleon directory), after that you can type the command _declaration_ and you should see:
+
+[source]
+----
+Service properties:
+		objectClass = [Ljava.lang.String;@19d8f01
+		service.id = 316
+Metadata
+	id=virtual-camera
+	deviceType=camera
+	deviceSubType=sony-dhc
+	device.serialNumber=virtual-camera
+----
+
+A declaration with the exactly the same properties values as the file that you just deployed.
+
+If  you install the fuchsia bundle *Fake-Importer*, you can type *instances*, and you should see:
+
+[source]
+----
+...
+Instance GenericDeviceInst-virtual-camera -> valid
+----
+
+As we can see, the fake importer created an instance name *GenericDeviceInst-virtual-camera* (our *id* preceed by 'GenericDeviceInst-')
+
+
 

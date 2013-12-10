@@ -1,3 +1,44 @@
+Using as maven dependency
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Adopting Fuchsia is a straightforward task if you are used to Maven. First we need to add the OW2 maven repository to our list of repositories (as below).
+
+[source,xml]
+----
+<project ... >
+...
+<repositories>
+	<repository>
+		<id>ow2-release</id>
+		<name>OW2-Release</name>
+		<url>http://repository.ow2.org/nexus/content/groups/public/</url>
+	</repository>
+	<repository>
+		<id>ow2-snapshot</id>
+		<name>OW2-Snapshot</name>
+		<url>http://repository.ow2.org/nexus/content/repositories/snapshots/</url>
+	</repository>
+</repositories>
+...
+</project>
+----
+
+Now, we have to declare one or more Fuchsia module *as a maven dependency* of your project.
+
+[source,xml]
+----
+<dependency>
+    <groupId>org.ow2.chameleon.fuchsia</groupId>
+    <artifactId>fuchsia-core</artifactId>
+    <version>0.0.1</version>
+</dependency>
+----
+
+Here we reference the version *0.0.1* of Fuchsia, but of course you can update that version for the version you are willing to use.
+
+Compiling a distribution
+~~~~~~~~~~~~~~~~~~~~~~~~
+
 In order to generate a Fuchsia distribution there is only one mandatory profile the **core**, all the other modules are optional and can be included in the distribution by adding the apropriate maven profile ( *mvn -P parameter* ). The maven profile and its contents are specified right below.
 
 * core - This module contains all the basic Fuchsia types, fuchsia shell tool is installed automatically in this profile as well, even though its not part of the bundle core
@@ -15,7 +56,7 @@ In order to generate a Fuchsia distribution there is only one mandatory profile 
 ** fake
 
 Configuration profiles
-~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^
 
 Config profiles are the instantiation of the _linker_ and the _processor_. Those two tend to be customized, since the filter adopted in the default instantiation of the linker might not be valid for for case
 
