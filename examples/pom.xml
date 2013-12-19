@@ -40,6 +40,8 @@
         <module>cxf-exporter-config</module>
         <module>cxf-importer-config</module>
         <module>fake-importer-config</module>
+        <module>proto-class</module>
+        <module>proto-client</module>
 <!--
         <module>jax-ws</module>
 -->

@@ -1,0 +1,36 @@
+package tutorial;
+option java_package = "com.example.tutorial";
+option java_outer_classname = "AddressBookProtos";
+service AddressBookService {
+    rpc addPerson (tutorial.Person) returns (tutorial.AddressBookSize);
+    rpc listPeople (tutorial.NamePattern) returns (tutorial.AddressBook);
+}
+message Person {
+    required string name = 1;
+    required int32 id = 2;
+    optional string email = 3;
+    repeated tutorial.Person.PhoneNumber phone = 4;
+    message PhoneNumber {
+        required string number = 1;
+        optional tutorial.Person.PhoneType type = 2 [default = HOME];
+    }
+    enum PhoneType {
+        MOBILE = 0;
+        HOME = 1;
+        WORK = 2;
+    }
+}
+message AddressBook {
+    repeated tutorial.Person person = 1;
+}
+// This is the message you can send to this service (wrapper message):
+message AddressBookServiceMessage {
+    optional tutorial.Person addPerson = 1;
+    optional tutorial.NamePattern listPeople = 2;
+}
+message AddressBookSize {
+    optional int32 size = 1;
+}
+message NamePattern {
+    optional string pattern = 1;
+}

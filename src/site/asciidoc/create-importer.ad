@@ -1,5 +1,4 @@
-Importers
----------
+
 
 As seen in [Fuchsia 101](Fuchsia-101), importers use **import declaration** as input. The information contained in the **import declaration** must be enough in order that the processor execute its role properly.
 
@@ -63,6 +62,6 @@ http://code.google.com/p/pubsubhubbub/[PubSubHubBub], or simply **PuSH**, is a p
 .Output:
 * A message will be published in EventAdmin in the queue $push.eventAdmin.queue, meaning that it will use the same name of *queue* as PuSH
 
-### Detailed Description
+*Detailed Description*
 
 There are no well known and portable PuSH implementations, Fuchsia implemented partially https://pubsubhubbub.googlecode.com/git/pubsubhubbub-core-0.4.html[PuSH specification] 

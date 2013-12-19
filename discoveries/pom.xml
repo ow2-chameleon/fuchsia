@@ -18,6 +18,6 @@
         <module>mdns</module>
         <module>upnp</module>
         <module>upnp.it</module>
-        <module>bluetooth</module>
+<!--        <module>bluetooth</module> -->
     </modules>
 </project>

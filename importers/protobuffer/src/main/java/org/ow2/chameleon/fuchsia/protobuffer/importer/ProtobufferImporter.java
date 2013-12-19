@@ -1,8 +1,12 @@
 package org.ow2.chameleon.fuchsia.protobuffer.importer;
 
+import com.google.code.cxf.protobuf.binding.ProtobufBindingFactory;
 import com.google.code.cxf.protobuf.client.SimpleRpcChannel;
 import com.google.protobuf.Message;
 import com.google.protobuf.RpcChannel;
+import org.apache.cxf.Bus;
+import org.apache.cxf.BusFactory;
+import org.apache.cxf.binding.BindingFactoryManager;
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Provides;
 import org.apache.felix.ipojo.annotations.ServiceProperty;
@@ -56,6 +60,10 @@ public class ProtobufferImporter extends AbstractImporterComponent {
 
         try {
 
+            Bus cxfbus = BusFactory.getThreadDefaultBus();
+            BindingFactoryManager mgr = cxfbus.getExtension(BindingFactoryManager.class);
+            mgr.registerBindingFactory(ProtobufBindingFactory.PROTOBUF_BINDING_ID,new ProtobufBindingFactory(cxfbus));
+
             Class<?> bufferService=FuchsiaUtils.loadClass(context,String.format("%s$%s",protoclass,protoservice));
 
             Class<?> bufferMessage = FuchsiaUtils.loadClass(context, String.format("%s$%s", protoclass, protomessage));
@@ -69,6 +77,7 @@ public class ProtobufferImporter extends AbstractImporterComponent {
             Object service=method.invoke(bufferService, channel);
 
             Dictionary<String, Object> serviceProperties = new Hashtable<String, Object>();
+            serviceProperties.put("fuchsia.importer.id",id);
 
             ServiceRegistration registrationTicket=context.registerService(bufferService.getName(),service,serviceProperties);
 

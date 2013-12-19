@@ -15,6 +15,7 @@
 
     <modules>
         <module>fake-device</module>
+        <module>cxf-protobuf</module>
         <module>bluetooth</module>
     </modules>
 </project>

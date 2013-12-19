@@ -1,9 +1,9 @@
-Testing a Discovery
-~~~~~~~~~~~~~~~~~~~
+Fake-Discovery
+~~~~~~~~~~~~~~
 
 First things first, in order to have an discovery we need to create a fuchsia distribution that embbeds it, or to use an already existing distribution and add the modules required. Below we ll show you how to use couples of discoveries that are available in the platform.
 
-Fake Discovery
+What it does?!
 ^^^^^^^^^^^^^^
 
 As seen in the introduction the fundamental task of a discovery is to create an instance of Declaration which represents the availability of a service/device, and the intrinsic information of such service/device are contained inside **Declaration** as properties (stored in a Map).
@@ -14,6 +14,7 @@ In order to activate the fake discovery its enough to compile the distribution w
 
 An example of such file is this one:
 
+[source]
 ----
 id=mqtt-dispatch-event-admin
 exporter.id=camera-exporter
@@ -26,6 +27,7 @@ mqtt.queue=public
 
 If you type **declaration** in the console you should see:
 
+[source]
 ----
 Service properties:
 		objectClass = [Ljava.lang.String;@26f6a1
@@ -55,7 +57,8 @@ If you type **declaration** on the console you should see an output similar to t
 
 You should see all your printers in form of:
 
----- 
+[source]
+----
 Metadata
 	id=hp LaserJet 2300 (scribe missions)
 	discovery.mdns.device.name=hp LaserJet 2300 (scribe missions)
@@ -70,7 +73,8 @@ Metadata
 
 And if you type **discovery** in the console you should see:
 
----- 
+[source]
+----
 Discovery [DNSSDDiscovery] provided by bundle mdns (19)
 	Service properties:
 		dnssd.service.type = _printer._tcp.local.
@@ -84,6 +88,7 @@ In this approach we used a configuration that was available in Fuchsia. But that
 
 The following configuration that makes available to import all the printers on the local network inside the platform with requiring any other information than the type of the device that interest us.
 
+[source,java]
 ----
 @Configuration
 public class DNSSDInitializer {
@@ -94,13 +99,14 @@ public class DNSSDInitializer {
 
 }
 ----
+
 [TIP]
 =====
 This instance can be created in any fashion, as long as it is an http://www.ipojo.org[iPOJO] instance. 
 =====
 
-Testing a Importer
-~~~~~~~~~~~~~~~~~~
+Fake-Importer
+~~~~~~~~~~~~~
 
 To start, we are going to use _fake-importer_, which create an instance of a GenericDevice interface based on a description that will be added into a file. This file must to be published in a specific folder of the framework (_load_ folder by default).
 

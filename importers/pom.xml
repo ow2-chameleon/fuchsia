@@ -17,6 +17,7 @@
         <module>fake</module>
         <module>mqtt</module>
         <module>push</module>
+        <module>protobuffer</module>
         <module>jax-ws</module>
         <module>json-rpc</module>
     </modules>

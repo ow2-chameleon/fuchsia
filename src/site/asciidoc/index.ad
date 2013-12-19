@@ -25,18 +25,21 @@ Instalation
 
 include::fuchsia-distribution.ad[]
 
+Input-Output of processors
+--------------------------
+include::create-importer.ad[]
+
 Basic
 -----
 
 include::fuchsia-basic.ad[]
 
-//Advanced
-//--------
-//include::create-importer.ad[]
-
-Examples
---------
-
 include::examples.ad[]
+
+
+
+
+
+
 
 

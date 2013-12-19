@@ -14,7 +14,8 @@
     <packaging>pom</packaging>
 
     <modules>
-	<module>jaxws</module>
+        <module>jaxws</module>
+        <module>protobuffer</module>
     </modules>
 
 </project>

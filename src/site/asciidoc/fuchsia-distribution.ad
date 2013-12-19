@@ -36,6 +36,12 @@ Now, we have to declare one or more Fuchsia module *as a maven dependency* of yo
 
 Here we reference the version *0.0.1* of Fuchsia, but of course you can update that version for the version you are willing to use.
 
+.The catch
+[NOTE]
+====
+This method is quick and fast to integrate for compilation, although, depending on the importer adopted, it may require 3td party dependencies to be installed in your runtime platform manually. In order to not worry in finding all the dependencies for the importer adopted, you can use *Fuchsia* compilation profiles to gather all the dependencies needed according to your importers.
+====
+
 Compiling a distribution
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
