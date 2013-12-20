@@ -403,6 +403,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <li><a href="#_import_a_push_service">Import a PuSH service</a></li>
 <li><a href="#_import_a_mqtt_service">Import a MQTT service</a></li>
 <li><a href="#_exporting_protobuffer_rpc_service">Exporting Protobuffer RPC service</a></li>
+<li><a href="#_importing_protobuffer_rpc_service">Importing Protobuffer RPC service</a></li>
 <li><a href="#_fake_discovery">Fake-Discovery</a></li>
 <li><a href="#_fake_importer_2">Fake-Importer</a></li>
 </ul>
@@ -1333,6 +1334,9 @@ mqtt.server.port=5672</code></pre>
 <li>
 <p><input type="checkbox" data-item-complete="0" disabled> Declare the exportation (Step 5)</p>
 </li>
+<li>
+<p><input type="checkbox" data-item-complete="0" disabled> Create the runtime platform (Step 6)</p>
+</li>
 </ul>
 </div>
 <div class="admonitionblock warning">
@@ -1575,6 +1579,149 @@ public class ExportDeclaration {
 
 }</code></pre>
 </div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_step_6">Step 6</h4>
+<div class="paragraph">
+<p>Assuming that you have compiled fuchsia (in previous sections), you can use <strong>distribution</strong> module to generate a distribution with dependencies needed.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="java language-java">mvn clean install -Pcore,fake,protobuffer &amp;&amp; cd target/chameleon-distribution &amp;&amp; \
+sh chameleon.sh --interactive</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To verify that everything was published properly, it is enough to access the url <a href="http://localhost:8889/AddressBookService?proto">http://localhost:8889/AddressBookService?proto</a> (pay attention that the base url is the same URL we declared in out metadata file)</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_importing_protobuffer_rpc_service">Importing Protobuffer RPC service</h3>
+<div class="paragraph">
+<p>Here, we can see the similatity in the importation process, if a given protocol is supported by Fuchsia the processors are used similarly independently of the protocol.</p>
+</div>
+<div class="ulist checklist">
+<div class="title">Prepare the environment</div>
+<ul class="checklist">
+<li>
+<p><input type="checkbox" data-item-complete="0" disabled> Instantiate the importer &amp; linker (Step 1)</p>
+</li>
+<li>
+<p><input type="checkbox" data-item-complete="0" disabled> Publish your intention, in fuchsia the <strong>declaration</strong> (Step 2)</p>
+</li>
+<li>
+<p><input type="checkbox" data-item-complete="0" disabled> Fetch your local instance (Step 3)</p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="_step_1_2">Step 1</h4>
+<div class="paragraph">
+<p>This step is mandatory for use of <strong>processors</strong> (importer, exporter). From the moment you instantiate one processor, it is usually required for you to create a <strong>linker</strong> otherwise your service cannot be notified in case of a <strong>declaration</strong> appeareance.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="java language-java">@Configuration
+public class ProtobufferImporterConfig {
+	    Instance ProtobufferRPCImporter = instance()
+		    .of("ProtobufferImporterFactory")
+		    .with("target").setto("(&amp;(rpc.server.address=*)(rpc.proto.class=*)(rpc.proto.service=*)(rpc.proto.message=*))");
+
+	    Instance ProtobufferRPCLinker = instance()
+		    .of(FuchsiaConstants.DEFAULT_IMPORTATION_LINKER_FACTORY_NAME)
+		    .with(ImportationLinker.FILTER_IMPORTDECLARATION_PROPERTY).setto("(&amp;(rpc.server.address=*)(rpc.proto.class=*)(rpc.proto.service=*)(rpc.proto.message=*))")
+		    .with(ImportationLinker.FILTER_IMPORTERSERVICE_PROPERTY).setto("(instance.name=ProtobufferRPCImporter)");
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_step_2_2">Step 2</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="java language-java">id=cxf-protobuffer-importer
+
+deviceType=camera
+deviceSubType=another
+device.serialNumber=virtual-camera
+
+rpc.server.address=http://localhost:8889/AddressBookService
+rpc.proto.class=org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos
+rpc.proto.service=AddressBookService
+rpc.proto.message=AddressBookServiceMessage</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_step_3_2">Step 3</h4>
+<div class="paragraph">
+<p>Now, you are ready to go, the only thing you have to do now is to annotate your dependency as usual, and enjoy it.</p>
+</div>
+<div class="paragraph">
+<p>As always here is it the example we put to work:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="java language-java">@Component
+@Instantiate
+public class BookClient {
+
+    private BundleContext context;
+
+    @Requires (filter = "(fuchsia.importer.id=cxf-protobuffer-importer)")
+    AddressBookProtos.AddressBookService addressBook;
+
+    public BookClient(BundleContext context){
+        this.context=context;
+    }
+
+
+    @Validate
+    public void validate(){
+
+        SimpleRpcController controller = new SimpleRpcController();
+
+        AddressBookProtos.Person.Builder person = AddressBookProtos.Person.newBuilder();
+
+        person.setId(1);
+        person.setName("Alice");
+        AddressBookProtos.Person alice = person.build();
+
+        addressBook.addPerson(controller, alice, new RpcCallback&lt;AddressBookProtos.AddressBookSize&gt;() {
+            public void run(AddressBookProtos.AddressBookSize size) {
+                System.out.println("\nThere are " + size.getSize()
+                        + " person(s) in the address book now.");
+            }
+        });
+
+        controller.reset();
+
+        System.out.println("\nSearching for people with 'A' in their name.");
+        addressBook.listPeople(controller, AddressBookProtos.NamePattern.newBuilder().setPattern("A")
+                .build(), new RpcCallback&lt;AddressBookProtos.AddressBook&gt;() {
+            public void run(AddressBookProtos.AddressBook response) {
+
+                System.out.println("\nList of people found: \n");
+
+                for (AddressBookProtos.Person person : response.getPersonList()) {
+
+                    System.out.println("--&gt;" + person.getName());
+
+                }
+
+
+            }
+        });
+
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The only reason we added the filter in <strong>@Required</strong> was to make sure that the remote instance (created by imported) is injected. So this is not mandatory in regular cases.</p>
 </div>
 </div>
 </div>
