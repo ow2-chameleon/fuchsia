@@ -2,7 +2,6 @@ package org.ow2.chameleon.fuchsia.protobuffer.protoclient;
 
 import com.google.code.cxf.protobuf.client.SimpleRpcController;
 import com.google.protobuf.RpcCallback;
-import com.google.protobuf.Service;
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Requires;
@@ -16,8 +15,8 @@ public class BookClient {
 
     private BundleContext context;
 
-    @Requires (filter = "(fuchsia.importer.id=virtual-camera)",proxy = false)
-    AddressBookProtos.AddressBookService serviceRaw;
+    @Requires (filter = "(fuchsia.importer.id=cxf-protobuffer-importer)")
+    AddressBookProtos.AddressBookService addressBook;
 
     public BookClient(BundleContext context){
         this.context=context;
@@ -36,7 +35,7 @@ public class BookClient {
         person.setName("Alice");
         AddressBookProtos.Person alice = person.build();
 
-        serviceRaw.addPerson(controller, alice, new RpcCallback<AddressBookProtos.AddressBookSize>() {
+        addressBook.addPerson(controller, alice, new RpcCallback<AddressBookProtos.AddressBookSize>() {
             public void run(AddressBookProtos.AddressBookSize size) {
                 System.out.println("\nThere are " + size.getSize()
                         + " person(s) in the address book now.");
@@ -46,15 +45,15 @@ public class BookClient {
         controller.reset();
 
         System.out.println("\nSearching for people with 'A' in their name.");
-        serviceRaw.listPeople(controller, AddressBookProtos.NamePattern.newBuilder().setPattern("A")
+        addressBook.listPeople(controller, AddressBookProtos.NamePattern.newBuilder().setPattern("A")
                 .build(), new RpcCallback<AddressBookProtos.AddressBook>() {
             public void run(AddressBookProtos.AddressBook response) {
 
                 System.out.println("\nList of people found: \n");
 
-                for(AddressBookProtos.Person person:response.getPersonList()){
+                for (AddressBookProtos.Person person : response.getPersonList()) {
 
-                    System.out.println("-->"+person.getName());
+                    System.out.println("-->" + person.getName());
 
                 }
 
