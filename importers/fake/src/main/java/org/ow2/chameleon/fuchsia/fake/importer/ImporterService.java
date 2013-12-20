@@ -31,7 +31,6 @@ import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
 @Instantiate(name = "Fuchsia-FakeImporter")
 public class ImporterService extends AbstractImporterComponent {
 
-
     private final BundleContext m_bundleContext;
 
     private HashMap<ImportDeclaration, GenericDevice> listOfCreatedProxies;
@@ -50,7 +49,6 @@ public class ImporterService extends AbstractImporterComponent {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @ServiceProperty(name = TARGET_FILTER_PROPERTY, value = "(id=*)")
-
     private String filter;
 
     @ServiceProperty(name = INSTANCE_NAME_PROPERTY)

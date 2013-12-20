@@ -14,7 +14,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>fake-importer</module>
+        <module>fake</module>
         <module>mqtt</module>
         <module>push</module>
         <module>jax-ws</module>

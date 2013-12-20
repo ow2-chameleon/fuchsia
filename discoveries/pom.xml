@@ -14,7 +14,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>fake-discovery</module>
+        <module>fake</module>
         <module>mdns</module>
         <module>upnp</module>
         <module>upnp.it</module>

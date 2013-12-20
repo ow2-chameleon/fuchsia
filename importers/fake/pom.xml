@@ -3,15 +3,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>fuchsia-discoveries</artifactId>
-        <groupId>org.ow2.chameleon.fuchsia.discovery</groupId>
+    	<artifactId>fuchsia-importers</artifactId>
+    	<groupId>org.ow2.chameleon.fuchsia.importer</groupId>
         <version>0.0.2-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
 
-    <artifactId>fuchsia-fake-discovery</artifactId>
-    <name>OW2 Chameleon - Fuchsia Discovery Fake</name>
+    <artifactId>fake</artifactId>
+    <name>OW2 Chameleon - Fuchsia Fake Importer</name>
     <packaging>bundle</packaging>
 
     <dependencies>
@@ -23,7 +23,6 @@
             <groupId>org.apache.felix</groupId>
             <artifactId>org.apache.felix.ipojo.annotations</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.ow2.chameleon.fuchsia</groupId>
             <artifactId>fuchsia-core</artifactId>
@@ -39,13 +38,6 @@
             <artifactId>fuchsia-fake-device</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.4</version>
-        </dependency>
-
     </dependencies>
 
     <!-- Build configuration -->
@@ -61,7 +53,7 @@
                             ${project.artifactId}
                         </Bundle-SymbolicName>
                         <Export-Package>
-                            org.ow2.chameleon.fuchsia.fake.discovery
+                            org.ow2.chameleon.fuchsia.fake.importer
                         </Export-Package>
                         <Import-Package>
                             *
@@ -91,5 +83,5 @@
         </plugins>
     </build>
 
-    
+
 </project>
