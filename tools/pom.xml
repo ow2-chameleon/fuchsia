@@ -14,8 +14,8 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>fuchsia-gogo-shell</module>
-        <module>fuchsia-grid</module>
+        <module>gogo-shell</module>
+        <module>grid</module>
     </modules>
 
 </project>
