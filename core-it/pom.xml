@@ -13,7 +13,7 @@
 
     <!-- Description of the project -->
     <artifactId>fuchsia-core-it</artifactId>
-    <name>OW2 Chameleon - Fuchsia Core - IT</name>
+    <name>OW2 Chameleon - Fuchsia Core [IntegrationTests]</name>
 
     <!-- Project dependencies -->
     <dependencies>
