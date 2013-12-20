@@ -1,31 +1,28 @@
-Fuchsia
-=======
+# Fuchsia
 
-If you want to have more informations about fuchsia, visit our [website](http://ow2-chameleon.github.io/fuchsia/)
 
-Source Organization
-------------------
+If you want to have more information about fuchsia, visit our [website](http://ow2-chameleon.github.io/fuchsia/).
+
+## Source Organization
 
 This folder contains the code source of the OW2 Chameleon Fuchsia project.
-- core: This project contains the Fuchsia API and core component.
-- core-it: This project contains the integrations tests of the Fuchsia core project.
-- distribution: This project help to build Chameleon distributions for Fuchsia.
-- examples: This project contains some examples to show how to use Fuchsia.
-- fake: This project contains the Fuchsia components providing a way to work with fake device (text file based).
+- core: Fuchsia API and core component.
+- core-it: Integrations tests of the Fuchsia core project.
+- distribution: Help to build Chameleon distributions for Fuchsia.
+- examples: Some examples to show how to use Fuchsia.
+- bases: Commons modules and dependencies for each protocol used in Fuchsia components.
 - importers: Fuchsia importers, responsible to be linked with an import declaration (ID) and convert it to a proxy, or use the ID to provide a service.
 - exporters: Fuchsia exporters, in addition to what is done by the importer, the proxy are available outside the OSGi platform.
 - discoveries: Fuchsia discoveries, responsible for publishing the import declaration.
-- testing: This project contains the Fuchsia testing helpers.
-- tools: any adicional features developed to facilitate the fuchsia usage. e.g. a shell, pluging, etc.
+- testing: Fuchsia testing helpers.
+- tools: Additional tools to facilitate the fuchsia usage. e.g. a shell, plugging, etc.
 
-License
-------------------
+## License
 
 Fuchsia is licensed under the Apache License 2.0.
 
 
-Module hierarchy and naming conventions !Draft!
------------------------------------------------
+## Module hierarchy and naming conventions !Draft!
 
 ### Bases modules
 
@@ -60,8 +57,8 @@ Maven configuration :
 
 ```XML
 <groupId>org.ow2.chameleon.fuchsia.bases</groupId>
-<artifactId>FIXME</artifactId>
-<name>OW2 Chameleon - Fuchsia Base {Protocol} FIXME</name>
+<artifactId>{protocol}.{sub-module_name}</artifactId>
+<name>OW2 Chameleon - Fuchsia Base {Protocol} {sub-module_name}</name>
 
 <parent>
     <groupId>org.ow2.chameleon.fuchsia.bases</groupId>
@@ -205,8 +202,7 @@ Maven configuration :
 </parent>
 ```
 
-Commits convention
-------------------
+## Commits convention
 
 - Make commits of logical units.
     A commit should be one (and just one) logical unit. It should be something that someone might want to patch or revert in its entirety, and never piecewise. If it could be useful in pieces, make separate commits. This will result in short, clear, and concise commit messages. Non-atomic commits make for awful run-on commit messages.
