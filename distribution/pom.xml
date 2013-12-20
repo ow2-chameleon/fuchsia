@@ -253,65 +253,26 @@
         <profile>
             <id>protobuffer</id>
             <dependencies>
-
 		<dependency>
 			<groupId>org.ow2.chameleon.fuchsia.examples</groupId>    
 			<artifactId>proto-class</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
-        <dependency>
-            <groupId>org.ow2.chameleon.fuchsia.base</groupId>
-            <artifactId>cxf-protobuf</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
+		<dependency>
+		    <groupId>org.ow2.chameleon.fuchsia.base</groupId>
+		    <artifactId>cxf-protobuf</artifactId>
+		    <version>${project.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>com.google.protobuf</groupId>
 			<artifactId>protobuf-java</artifactId>
 			<version>2.5.0</version>
 		</dependency>
-
-<!-- dependencies CXF -->
-
-<dependency>
-	<groupId>org.eclipse.jetty</groupId>
-	<artifactId>jetty-util</artifactId>
-	<version>7.5.4.v20111024</version>
-</dependency>
-          
-<dependency>
-	<groupId>org.eclipse.jetty</groupId>
-	<artifactId>jetty-server</artifactId>
-	<version>7.5.4.v20111024</version>
-</dependency>
-            
-<dependency>
-	<groupId>org.eclipse.jetty</groupId>
-	<artifactId>jetty-continuation</artifactId>
-	<version>7.5.4.v20111024</version>
-</dependency>
-              
-
- <dependency>
-	<groupId>org.eclipse.jetty</groupId>
-	<artifactId>jetty-http</artifactId>
-	<version>7.5.4.v20111024</version>
-</dependency>
-                       
- 
-<dependency>
-	<groupId>org.eclipse.jetty</groupId>
-	<artifactId>jetty-io</artifactId>
-	<version>7.5.4.v20111024</version>
-</dependency>
-                       
 		<dependency>
 			<groupId>javax.annotation</groupId>
 			<artifactId>javax.annotation-api</artifactId>
 			<version>1.2</version>
 		</dependency>
-
                <dependency>
                     <groupId>javax.jmdns</groupId>
                     <artifactId>jmdns</artifactId>
@@ -322,25 +283,21 @@
                     <artifactId>servlet-api</artifactId>
                     <version>2.5</version>
                 </dependency>
-
                 <dependency>
                     <groupId>org.apache.cxf</groupId>
                     <artifactId>cxf-bundle-minimal</artifactId>
                     <version>2.5.2</version>
                 </dependency>
-
                 <dependency>
                     <groupId>com.google.guava</groupId>
                     <artifactId>guava</artifactId>
                     <version>13.0.1</version>
                 </dependency>
-
                 <dependency>
                     <groupId>org.json</groupId>
                     <artifactId>json</artifactId>
                     <version>20090911</version>
                 </dependency>
-
                 <dependency>
                     <groupId>org.codehaus.jackson</groupId>
                     <artifactId>jackson-mapper-asl</artifactId>
@@ -392,19 +349,41 @@
                     <version>1.6.2</version>
                 </dependency>
 
+		<!-- dependencies CXF -->
 
-<!-- dependencies CXF -->
-
-
-
-
-<!--
 		<dependency>
-			<groupId>org.ow2.chameleon.fuchsia.importer</groupId>
-			<artifactId>protobuffer-importer</artifactId>
-			<version>${project.version}</version>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-util</artifactId>
+			<version>7.5.4.v20111024</version>
 		</dependency>
--->
+			  
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-server</artifactId>
+			<version>7.5.4.v20111024</version>
+		</dependency>
+			    
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-continuation</artifactId>
+			<version>7.5.4.v20111024</version>
+		</dependency>
+			      
+
+		 <dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-http</artifactId>
+			<version>7.5.4.v20111024</version>
+		</dependency>
+				       
+		 
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-io</artifactId>
+			<version>7.5.4.v20111024</version>
+		</dependency>
+
+		<!-- /dependencies CXF -->
 
            </dependencies>
         </profile>

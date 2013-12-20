@@ -6,14 +6,7 @@
 
     <name>cxf-protobuf</name>
 
-    <!--
-    <groupId>cxf-protobuf</groupId>
-    -->
     <artifactId>cxf-protobuf</artifactId>
-
-    <!--
-    <version>1.0-SNAPSHOT</version>
-    -->
 
     <packaging>bundle</packaging>
 
@@ -40,6 +33,9 @@
                         <Export-Package>
                             {local-packages}
                         </Export-Package>
+                        <Bundle-Classpath>
+                            .
+                        </Bundle-Classpath>
                     </instructions>
                 </configuration>
             </plugin>
@@ -69,6 +65,9 @@
         <resources>
         <resource>
             <directory>${basedir}/src/main/java</directory>
+        </resource>
+        <resource>
+            <directory>${basedir}/src/main/resources</directory>
         </resource>
         </resources>
     </build>

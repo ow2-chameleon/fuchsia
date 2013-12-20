@@ -33,8 +33,6 @@ public class ExportDeclaration {
         metadata.put("rpc.export.class","org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos$AddressBookService");
         metadata.put("rpc.export.message","org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos$AddressBookServiceMessage");
 
-
-
         org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration declaration = ExportDeclarationBuilder.fromMetadata(metadata).build();
 
         Dictionary<String, Object> props = new Hashtable<String, Object>();

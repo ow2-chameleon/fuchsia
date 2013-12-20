@@ -33,6 +33,4 @@ public class AddressBookServiceImpl extends AddressBookProtos.AddressBookService
                 records.size()).build());
     }
 
-
-
 }
