@@ -402,6 +402,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <li><a href="#_import_a_jax_ws_service">Import a JAX-WS service</a></li>
 <li><a href="#_import_a_push_service">Import a PuSH service</a></li>
 <li><a href="#_import_a_mqtt_service">Import a MQTT service</a></li>
+<li><a href="#_exporting_protobuffer_rpc_service">Exporting Protobuffer RPC service</a></li>
 <li><a href="#_fake_discovery">Fake-Discovery</a></li>
 <li><a href="#_fake_importer_2">Fake-Importer</a></li>
 </ul>
@@ -557,6 +558,9 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <li>
 <p>PUbSubHubBub</p>
 </li>
+<li>
+<p>Protobuffer RPC</p>
+</li>
 </ul>
 </div>
 </div>
@@ -570,6 +574,9 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <ul>
 <li>
 <p>JAX-WS</p>
+</li>
+<li>
+<p>Protobuffer RPC</p>
 </li>
 </ul>
 </div>
@@ -1301,6 +1308,273 @@ mqtt.server.port=5672</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="bash language-bash">sudo /etc/init.d/rabbitmq-server status</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_exporting_protobuffer_rpc_service">Exporting Protobuffer RPC service</h3>
+<div class="paragraph">
+<p>In order to be able to export your <a href="https://code.google.com/p/protobuf/">Protobuffer</a> Service, feel things need to be done:</p>
+</div>
+<div class="ulist checklist">
+<ul class="checklist">
+<li>
+<p><input type="checkbox" data-item-complete="0" disabled> Protobuffer class generated (Step 1)</p>
+</li>
+<li>
+<p><input type="checkbox" data-item-complete="0" disabled> Implement the service methods for the Protobuffer generated class (Step 2)</p>
+</li>
+<li>
+<p><input type="checkbox" data-item-complete="0" disabled> Protobuffer class instante added to OSGi Registry (Step 3)</p>
+</li>
+<li>
+<p><input type="checkbox" data-item-complete="0" disabled> Instantiate the exporter and the linker (Step 4)</p>
+</li>
+<li>
+<p><input type="checkbox" data-item-complete="0" disabled> Declare the exportation (Step 5)</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<img src="./images/icons/warning.png" alt="Warning">
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Protobuffer <strong>version 2.5.0</strong> must be used, any version other than that may produce errors in the remote call</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_step_1">Step 1</h4>
+<div class="paragraph">
+<p>Follow the instalation procedure in <a href="https://code.google.com/p/protobuf/">Protobuffer</a> website to get the command for compile <em>.proto</em> file.</p>
+</div>
+<div class="paragraph">
+<p>Here it is an example of a proto file that can be used for a first glance at the functionality.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="bash language-bash">
+package tutorial;
+
+option java_package = "com.google.code.cxf.protobuf.addressbook";
+option java_outer_classname = "AddressBookProtos";
+
+message Person {
+  required string name = 1;
+  required int32 id = 2;        // Unique ID number for this person.
+  optional string email = 3;
+
+  enum PhoneType {
+    MOBILE = 0;
+    HOME = 1;
+    WORK = 2;
+  }
+
+  message PhoneNumber {
+    required string number = 1;
+    optional PhoneType type = 2 [default = HOME];
+  }
+
+  repeated PhoneNumber phone = 4;
+}
+
+message AddressBook {
+  repeated Person person = 1;
+}
+
+service AddressBookService {
+  rpc addPerson(Person) returns(AddressBookSize);
+  rpc listPeople(NamePattern) returns(AddressBook);
+}
+
+message AddressBookServiceMessage {
+  optional Person addPerson = 1;
+  optional NamePattern listPeople = 2;
+}
+
+message AddressBookSize {
+  optional int32 size = 1;
+}
+
+message NamePattern {
+  optional string pattern = 1;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>From this file you can generate your classe by invoking</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="bash language-bash">protoc --java_out=src/main/java/ addressbook.proto</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_step_2">Step 2</h4>
+<div class="paragraph">
+<p>When <em>rpc service</em> is declared in the <em>proto</em> file, this will generate an interface that <strong>must</strong> to be implemented in order that this rpc service can be called. Since the <em>proto</em> file is not a language, we cannot define what the method should to at this point, it is pretty logic, right?</p>
+</div>
+<div class="paragraph">
+<p>So in our case we should implement two methods <strong>addPerson</strong> and <strong>listPeople</strong>, the exactly two services declared in the <em>proto</em> file.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="java language-java">public class AddressBookServiceImpl extends AddressBookProtos.AddressBookService {
+    Map&lt;Integer, AddressBookProtos.Person&gt; records = new ConcurrentHashMap&lt;Integer, AddressBookProtos.Person&gt;();
+
+    public void listPeople(RpcController controller,
+                           AddressBookProtos.NamePattern request, RpcCallback&lt;AddressBookProtos.AddressBook&gt; done) {
+	...
+    }
+
+    public void addPerson(RpcController controller,
+                          AddressBookProtos.Person request, RpcCallback&lt;AddressBookProtos.AddressBookSize&gt; done) {
+        ...
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>An example of body for these two methods can be:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="java language-java">public class AddressBookServiceImpl extends AddressBookProtos.AddressBookService {
+    Map&lt;Integer, AddressBookProtos.Person&gt; records = new ConcurrentHashMap&lt;Integer, AddressBookProtos.Person&gt;();
+
+    public void listPeople(RpcController controller,
+                           AddressBookProtos.NamePattern request, RpcCallback&lt;AddressBookProtos.AddressBook&gt; done) {
+        AddressBookProtos.AddressBook.Builder addressbook = AddressBookProtos.AddressBook
+                .newBuilder();
+
+        for (AddressBookProtos.Person person : records.values()) {
+            if (person.getName().indexOf(request.getPattern()) &gt;= 0) {
+                addressbook.addPerson(person);
+            }
+        }
+
+        done.run(addressbook.build());
+    }
+
+    public void addPerson(RpcController controller,
+                          AddressBookProtos.Person request, RpcCallback&lt;AddressBookProtos.AddressBookSize&gt; done) {
+        if (records.containsKey(request.getId())) {
+            System.out.println("Warning: will replace existing person: " + records.get(request.getId()).getName());
+        }
+        records.put(request.getId(), request);
+        done.run(AddressBookProtos.AddressBookSize.newBuilder().setSize(
+                records.size()).build());
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As you can see, its not something straight forward as you thought it should be.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_step_3">Step 3</h4>
+<div class="paragraph">
+<p>In this step, we instantiate our service (in java level) and publish it in the OSGi registry. There are several ways of doing this <strong>Step</strong> so pick up your flavor. We ll do like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="java language-java">@Component
+@Instantiate
+public class RegisterBookService {
+
+    ...
+
+    @Validate
+    public void validate(){
+
+        Dictionary serviceProperties=new Hashtable&lt;String,Object&gt;();
+
+        context.registerService(
+		new String[]{com.google.protobuf.Service.class.getName(),AddressBookProtos.AddressBookService.class.getName()},
+		new AddressBookServiceImpl(),
+		serviceProperties);
+
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This procedure will allow the fuchsia exporter to fetch this instance and export it.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_step_4">Step 4</h4>
+<div class="paragraph">
+<p>As you should have seen in previous sections, the <strong>exporter</strong> (for our case) and a <strong>linker</strong> must be instantiated, they are not instantiated automatically.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="java language-java">@Configuration
+public class Config {
+    Instance ProtobufferExporter = instance()
+            .of("ProtobufferExporterFactory")
+            .with("target").setto("(rpc.export.address=*)");
+
+    Instance ProtobufferExporterLinker = instance()
+            .of(FuchsiaConstants.DEFAULT_EXPORTATION_LINKER_FACTORY_NAME)
+            .with(ExportationLinker.FILTER_EXPORTDECLARATION_PROPERTY).setto("(rpc.export.address=*)")
+            .with(ExportationLinker.FILTER_EXPORTERSERVICE_PROPERTY).setto("(instance.name=ProtobufferExporter)");
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>See that the filters can be customized, they defined the <strong>export declaration</strong> that should be catch by this exporter.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_step_5">Step 5</h4>
+<div class="paragraph">
+<p>The <strong>export declaration</strong> is the intention, in fact it is this file that you express to the framework "Look, i have X instance, and i would like to expose (export) that instance as a Protobuffer RPC service".</p>
+</div>
+<div class="paragraph">
+<p>This sentenced is converted in:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="java language-java">@Component
+@Instantiate
+public class ExportDeclaration {
+
+    ...
+
+    @Validate
+    public void validate(){
+
+        Map&lt;String, Object&gt; metadata=new HashMap&lt;String, Object&gt;();
+
+        metadata.put("id","export-tests");
+        metadata.put("exporter.id","myservice");
+        metadata.put("rpc.export.address","http://localhost:8889/AddressBookService");
+        metadata.put("rpc.export.class","org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos$AddressBookService");
+        metadata.put("rpc.export.message","org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos$AddressBookServiceMessage");
+
+        org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration declaration = ExportDeclarationBuilder.fromMetadata(metadata).build();
+
+        Dictionary&lt;String, Object&gt; props = new Hashtable&lt;String, Object&gt;();
+
+        String clazzes[] = new String[]{org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration.class.getName()};
+        ServiceRegistration registration = context.registerService(clazzes, declaration, props);
+
+    }
+
+}</code></pre>
+</div>
 </div>
 </div>
 </div>
