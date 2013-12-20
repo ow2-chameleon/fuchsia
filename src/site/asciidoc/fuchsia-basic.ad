@@ -263,3 +263,251 @@ sudo /etc/init.d/rabbitmq-server status
 --
 
 
+Exporting Protobuffer RPC service
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In order to be able to export your https://code.google.com/p/protobuf/[Protobuffer] Service, feel things need to be done:
+
+- [ ] Protobuffer class generated (Step 1)
+- [ ] Implement the service methods for the Protobuffer generated class (Step 2)
+- [ ] Protobuffer class instante added to OSGi Registry (Step 3)
+- [ ] Instantiate the exporter and the linker (Step 4)
+- [ ] Declare the exportation (Step 5)
+- [ ] Create the runtime platform (Step 6)
+
+[WARNING]
+====
+Protobuffer *version 2.5.0* must be used, any version other than that may produce errors in the remote call
+====
+
+Step 1
+^^^^^^
+
+Follow the instalation procedure in https://code.google.com/p/protobuf/[Protobuffer] website to get the command for compile _.proto_ file.
+
+Here it is an example of a proto file that can be used for a first glance at the functionality.
+
+[source,bash]
+--
+
+package tutorial;
+
+option java_package = "com.google.code.cxf.protobuf.addressbook";
+option java_outer_classname = "AddressBookProtos";
+
+message Person {
+  required string name = 1;
+  required int32 id = 2;        // Unique ID number for this person.
+  optional string email = 3;
+
+  enum PhoneType {
+    MOBILE = 0;
+    HOME = 1;
+    WORK = 2;
+  }
+
+  message PhoneNumber {
+    required string number = 1;
+    optional PhoneType type = 2 [default = HOME];
+  }
+
+  repeated PhoneNumber phone = 4;
+}
+
+message AddressBook {
+  repeated Person person = 1;
+}
+
+service AddressBookService {
+  rpc addPerson(Person) returns(AddressBookSize);
+  rpc listPeople(NamePattern) returns(AddressBook);
+}
+
+message AddressBookServiceMessage {
+  optional Person addPerson = 1;
+  optional NamePattern listPeople = 2;
+}
+
+message AddressBookSize {
+  optional int32 size = 1;
+}
+
+message NamePattern {
+  optional string pattern = 1;
+}
+--
+
+From this file you can generate your classe by invoking 
+
+[source,bash]
+--
+protoc --java_out=src/main/java/ addressbook.proto
+--
+
+Step 2
+^^^^^^
+
+When _rpc service_ is declared in the _proto_ file, this will generate an interface that *must* to be implemented in order that this rpc service can be called. Since the _proto_ file is not a language, we cannot define what the method should to at this point, it is pretty logic, right?
+
+So in our case we should implement two methods *addPerson* and *listPeople*, the exactly two services declared in the _proto_ file.
+
+[source,java]
+--
+public class AddressBookServiceImpl extends AddressBookProtos.AddressBookService {
+    Map<Integer, AddressBookProtos.Person> records = new ConcurrentHashMap<Integer, AddressBookProtos.Person>();
+
+    public void listPeople(RpcController controller,
+                           AddressBookProtos.NamePattern request, RpcCallback<AddressBookProtos.AddressBook> done) {
+	...
+    }
+
+    public void addPerson(RpcController controller,
+                          AddressBookProtos.Person request, RpcCallback<AddressBookProtos.AddressBookSize> done) {
+        ...
+    }
+
+}
+--
+
+An example of body for these two methods can be:
+
+[source,java]
+--
+public class AddressBookServiceImpl extends AddressBookProtos.AddressBookService {
+    Map<Integer, AddressBookProtos.Person> records = new ConcurrentHashMap<Integer, AddressBookProtos.Person>();
+
+    public void listPeople(RpcController controller,
+                           AddressBookProtos.NamePattern request, RpcCallback<AddressBookProtos.AddressBook> done) {
+        AddressBookProtos.AddressBook.Builder addressbook = AddressBookProtos.AddressBook
+                .newBuilder();
+
+        for (AddressBookProtos.Person person : records.values()) {
+            if (person.getName().indexOf(request.getPattern()) >= 0) {
+                addressbook.addPerson(person);
+            }
+        }
+
+        done.run(addressbook.build());
+    }
+
+    public void addPerson(RpcController controller,
+                          AddressBookProtos.Person request, RpcCallback<AddressBookProtos.AddressBookSize> done) {
+        if (records.containsKey(request.getId())) {
+            System.out.println("Warning: will replace existing person: " + records.get(request.getId()).getName());
+        }
+        records.put(request.getId(), request);
+        done.run(AddressBookProtos.AddressBookSize.newBuilder().setSize(
+                records.size()).build());
+    }
+
+}
+--
+
+As you can see, its not something straight forward as you thought it should be.
+
+Step 3	
+^^^^^^
+
+In this step, we instantiate our service (in java level) and publish it in the OSGi registry. There are several ways of doing this *Step* so pick up your flavor. We ll do like this:
+
+[source,java]
+--
+@Component
+@Instantiate
+public class RegisterBookService {
+
+    ...
+
+    @Validate
+    public void validate(){
+
+        Dictionary serviceProperties=new Hashtable<String,Object>();
+
+        context.registerService(
+		new String[]{com.google.protobuf.Service.class.getName(),AddressBookProtos.AddressBookService.class.getName()},
+		new AddressBookServiceImpl(),
+		serviceProperties);
+
+    }
+
+}
+--
+
+This procedure will allow the fuchsia exporter to fetch this instance and export it.
+
+Step 4
+^^^^^^
+
+As you should have seen in previous sections, the *exporter* (for our case) and a *linker* must be instantiated, they are not instantiated automatically.
+
+
+[source,java]
+--
+@Configuration
+public class Config {
+    Instance ProtobufferExporter = instance()
+            .of("ProtobufferExporterFactory")
+            .with("target").setto("(rpc.export.address=*)");
+
+    Instance ProtobufferExporterLinker = instance()
+            .of(FuchsiaConstants.DEFAULT_EXPORTATION_LINKER_FACTORY_NAME)
+            .with(ExportationLinker.FILTER_EXPORTDECLARATION_PROPERTY).setto("(rpc.export.address=*)")
+            .with(ExportationLinker.FILTER_EXPORTERSERVICE_PROPERTY).setto("(instance.name=ProtobufferExporter)");
+}
+--
+
+See that the filters can be customized, they defined the *export declaration* that should be catch by this exporter.
+
+Step 5
+^^^^^^
+
+The *export declaration* is the intention, in fact it is this file that you express to the framework "Look, i have X instance, and i would like to expose (export) that instance as a Protobuffer RPC service". 
+
+This sentenced is converted in:
+
+[source,java]
+--
+@Component
+@Instantiate
+public class ExportDeclaration {
+
+    ...
+
+    @Validate
+    public void validate(){
+
+        Map<String, Object> metadata=new HashMap<String, Object>();
+
+        metadata.put("id","export-tests");
+        metadata.put("exporter.id","myservice");
+        metadata.put("rpc.export.address","http://localhost:8889/AddressBookService");
+        metadata.put("rpc.export.class","org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos$AddressBookService");
+        metadata.put("rpc.export.message","org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos$AddressBookServiceMessage");
+
+        org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration declaration = ExportDeclarationBuilder.fromMetadata(metadata).build();
+
+        Dictionary<String, Object> props = new Hashtable<String, Object>();
+
+        String clazzes[] = new String[]{org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration.class.getName()};
+        ServiceRegistration registration = context.registerService(clazzes, declaration, props);
+
+    }
+
+}
+--
+
+Step 6
+^^^^^^
+
+Assuming that you have compiled fuchsia (in previous sections), you can use *distribution* module to generate a distribution with dependencies needed.
+
+[source,java]
+--
+mvn clean install -Pcore,fake,protobuffer && cd target/chameleon-distribution && \
+sh chameleon.sh --interactive
+--
+
+To verify that everything was published properly, it is enough to access the url http://localhost:8890/AddressBookService?proto (pay attention that the base url is the same URL we declared in out metadata file)
+
+
+

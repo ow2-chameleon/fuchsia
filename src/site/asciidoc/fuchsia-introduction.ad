@@ -50,6 +50,7 @@ In order to trigger **importers** to perform their job, they must to receive an 
 * JSON-RPC
 * MQTT
 * PUbSubHubBub
+* Protobuffer RPC
 
 Exporters
 ^^^^^^^^^
@@ -58,6 +59,7 @@ Analogue to the *importers*, the *exporters* must to receive a *declaration*, bu
 
 .Available implementations:
 * JAX-WS
+* Protobuffer RPC
 
 Linkers
 ~~~~~~~
