@@ -15,16 +15,16 @@ public class BookClient {
 
     private BundleContext context;
 
-    @Requires (filter = "(fuchsia.importer.id=cxf-protobuffer-importer)")
+    @Requires(filter = "(fuchsia.importer.id=cxf-protobuffer-importer)")
     AddressBookProtos.AddressBookService addressBook;
 
-    public BookClient(BundleContext context){
-        this.context=context;
+    public BookClient(BundleContext context) {
+        this.context = context;
     }
 
 
     @Validate
-    public void validate(){
+    public void validate() {
 
         SimpleRpcController controller = new SimpleRpcController();
 

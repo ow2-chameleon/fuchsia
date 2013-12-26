@@ -18,20 +18,20 @@ public class ExportDeclaration {
 
     BundleContext context;
 
-    public ExportDeclaration(BundleContext bc){
-        context=bc;
+    public ExportDeclaration(BundleContext bc) {
+        context = bc;
     }
 
     @Validate
-    public void validate(){
+    public void validate() {
 
-        Map<String, Object> metadata=new HashMap<String, Object>();
+        Map<String, Object> metadata = new HashMap<String, Object>();
 
-        metadata.put("id","export-tests");
-        metadata.put("exporter.id","myservice");
-        metadata.put("rpc.export.address","http://localhost:8889/AddressBookService");
-        metadata.put("rpc.export.class","org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos$AddressBookService");
-        metadata.put("rpc.export.message","org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos$AddressBookServiceMessage");
+        metadata.put("id", "export-tests");
+        metadata.put("exporter.id", "myservice");
+        metadata.put("rpc.export.address", "http://localhost:8889/AddressBookService");
+        metadata.put("rpc.export.class", "org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos$AddressBookService");
+        metadata.put("rpc.export.message", "org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos$AddressBookServiceMessage");
 
         org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration declaration = ExportDeclarationBuilder.fromMetadata(metadata).build();
 

@@ -14,17 +14,17 @@ public class RegisterBookService {
 
     private BundleContext context;
 
-    public RegisterBookService(BundleContext context){
-        this.context=context;
+    public RegisterBookService(BundleContext context) {
+        this.context = context;
     }
 
 
     @Validate
-    public void validate(){
+    public void validate() {
 
-        Dictionary serviceProperties=new Hashtable<String,Object>();
+        Dictionary serviceProperties = new Hashtable<String, Object>();
 
-        context.registerService(new String[]{com.google.protobuf.Service.class.getName(),AddressBookProtos.AddressBookService.class.getName()},new AddressBookServiceImpl(),serviceProperties);
+        context.registerService(new String[]{com.google.protobuf.Service.class.getName(), AddressBookProtos.AddressBookService.class.getName()}, new AddressBookServiceImpl(), serviceProperties);
 
         System.out.println("Service class exported");
 

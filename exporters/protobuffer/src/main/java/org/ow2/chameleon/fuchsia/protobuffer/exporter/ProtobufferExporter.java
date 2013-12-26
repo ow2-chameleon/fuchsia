@@ -6,26 +6,22 @@ import com.google.protobuf.Service;
 import org.apache.cxf.Bus;
 import org.apache.cxf.BusFactory;
 import org.apache.cxf.binding.BindingFactoryManager;
-import org.apache.cxf.frontend.ServerFactoryBean;
-import org.apache.cxf.transport.servlet.CXFNonSpringServlet;
 import org.apache.felix.ipojo.annotations.*;
 import org.eclipse.jetty.util.component.Container;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.http.HttpService;
-import org.osgi.service.http.NamespaceException;
 import org.ow2.chameleon.fuchsia.core.FuchsiaUtils;
 import org.ow2.chameleon.fuchsia.core.component.AbstractExporterComponent;
 import org.ow2.chameleon.fuchsia.core.component.ExporterService;
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
 
-import javax.servlet.ServletException;
-import java.util.*;
+import java.util.Collection;
 
 @Component(name = "ProtobufferExporterFactory")
 @Provides(specifications = {ExporterService.class})
-public class ProtobufferExporter  extends AbstractExporterComponent {
+public class ProtobufferExporter extends AbstractExporterComponent {
 
     private Bus cxfbus;
 
@@ -37,8 +33,8 @@ public class ProtobufferExporter  extends AbstractExporterComponent {
 
     BundleContext context;
 
-    public ProtobufferExporter(BundleContext context){
-        this.context=context;
+    public ProtobufferExporter(BundleContext context) {
+        this.context = context;
     }
 
     @Override
@@ -46,36 +42,36 @@ public class ProtobufferExporter  extends AbstractExporterComponent {
 
         System.out.println("initiating exportation...");
 
-        String id=exportDeclaration.getMetadata().get("id").toString();
-        String server=exportDeclaration.getMetadata().get("rpc.export.address").toString();
-        String exporterClass=exportDeclaration.getMetadata().get("rpc.export.class").toString();
-        String exporterMessage=exportDeclaration.getMetadata().get("rpc.export.message").toString();
+        String id = exportDeclaration.getMetadata().get("id").toString();
+        String server = exportDeclaration.getMetadata().get("rpc.export.address").toString();
+        String exporterClass = exportDeclaration.getMetadata().get("rpc.export.class").toString();
+        String exporterMessage = exportDeclaration.getMetadata().get("rpc.export.message").toString();
 
         //String specification=exportDeclaration.getMetadata().get("rpc.export.specification").toString();
         //String filter=exportDeclaration.getMetadata().get("rpc.export.filter").toString();
 
         try {
 
-            Class inter=FuchsiaUtils.loadClass(context,exporterClass);
-            Class messageClass=FuchsiaUtils.loadClass(context,exporterMessage);
+            Class inter = FuchsiaUtils.loadClass(context, exporterClass);
+            Class messageClass = FuchsiaUtils.loadClass(context, exporterMessage);
 
-            Class<? extends Service> interpar=inter.asSubclass(Service.class);
+            Class<? extends Service> interpar = inter.asSubclass(Service.class);
 
-            Collection<ServiceReference<Service>> protobuffReferences=context.getServiceReferences(inter,null);
+            Collection<ServiceReference<Service>> protobuffReferences = context.getServiceReferences(inter, null);
 
-            if(protobuffReferences.size()==0){
+            if (protobuffReferences.size() == 0) {
 
                 System.out.println("nothing to be exported was found");
 
-            }else if(protobuffReferences.size()==1){
+            } else if (protobuffReferences.size() == 1) {
 
-                for(ServiceReference<Service> sr:protobuffReferences){
+                for (ServiceReference<Service> sr : protobuffReferences) {
 
-                    Service protobufferService=context.getService(sr);
+                    Service protobufferService = context.getService(sr);
 
                     Bus cxfbus = BusFactory.getThreadDefaultBus();
                     BindingFactoryManager mgr = cxfbus.getExtension(BindingFactoryManager.class);
-                    mgr.registerBindingFactory(ProtobufBindingFactory.PROTOBUF_BINDING_ID,new ProtobufBindingFactory(cxfbus));
+                    mgr.registerBindingFactory(ProtobufBindingFactory.PROTOBUF_BINDING_ID, new ProtobufBindingFactory(cxfbus));
 
                     ProtobufServerFactoryBean serverFactoryBean = new ProtobufServerFactoryBean();
                     //serverFactoryBean.setAddress("http://localhost:8889/AddressBookService");
@@ -102,11 +98,9 @@ public class ProtobufferExporter  extends AbstractExporterComponent {
                     System.out.println("exporting the service with the id:" + id);
 
 
-
-
                 }
 
-            }else if(protobuffReferences.size()>1){
+            } else if (protobuffReferences.size() > 1) {
                 System.out.println("more than one were found to be exported");
             }
 

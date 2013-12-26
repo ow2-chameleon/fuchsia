@@ -3,25 +3,29 @@
 
 package org.ow2.chameleon.fuchsia.protobuffer.protoclass;
 
-import com.google.protobuf.AbstractMessage;
-
 public final class AddressBookProtos {
-    private AddressBookProtos() {}
+    private AddressBookProtos() {
+    }
+
     public static void registerAllExtensions(
             com.google.protobuf.ExtensionRegistry registry) {
     }
+
     public interface PersonOrBuilder
             extends com.google.protobuf.MessageOrBuilder {
 
         // required string name = 1;
+
         /**
          * <code>required string name = 1;</code>
          */
         boolean hasName();
+
         /**
          * <code>required string name = 1;</code>
          */
         java.lang.String getName();
+
         /**
          * <code>required string name = 1;</code>
          */
@@ -29,17 +33,19 @@ public final class AddressBookProtos {
         getNameBytes();
 
         // required int32 id = 2;
+
         /**
          * <code>required int32 id = 2;</code>
-         *
+         * <p/>
          * <pre>
          * Unique ID number for this person.
          * </pre>
          */
         boolean hasId();
+
         /**
          * <code>required int32 id = 2;</code>
-         *
+         * <p/>
          * <pre>
          * Unique ID number for this person.
          * </pre>
@@ -47,14 +53,17 @@ public final class AddressBookProtos {
         int getId();
 
         // optional string email = 3;
+
         /**
          * <code>optional string email = 3;</code>
          */
         boolean hasEmail();
+
         /**
          * <code>optional string email = 3;</code>
          */
         java.lang.String getEmail();
+
         /**
          * <code>optional string email = 3;</code>
          */
@@ -62,30 +71,36 @@ public final class AddressBookProtos {
         getEmailBytes();
 
         // repeated .tutorial.Person.PhoneNumber phone = 4;
+
         /**
          * <code>repeated .tutorial.Person.PhoneNumber phone = 4;</code>
          */
         java.util.List<org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.PhoneNumber>
         getPhoneList();
+
         /**
          * <code>repeated .tutorial.Person.PhoneNumber phone = 4;</code>
          */
         org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.PhoneNumber getPhone(int index);
+
         /**
          * <code>repeated .tutorial.Person.PhoneNumber phone = 4;</code>
          */
         int getPhoneCount();
+
         /**
          * <code>repeated .tutorial.Person.PhoneNumber phone = 4;</code>
          */
         java.util.List<? extends org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.PhoneNumberOrBuilder>
         getPhoneOrBuilderList();
+
         /**
          * <code>repeated .tutorial.Person.PhoneNumber phone = 4;</code>
          */
         org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.PhoneNumberOrBuilder getPhoneOrBuilder(
                 int index);
     }
+
     /**
      * Protobuf type {@code tutorial.Person}
      */
@@ -97,9 +112,13 @@ public final class AddressBookProtos {
             super(builder);
             this.unknownFields = builder.getUnknownFields();
         }
-        private Person(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+        private Person(boolean noInit) {
+            this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+        }
 
         private static final Person defaultInstance;
+
         public static Person getDefaultInstance() {
             return defaultInstance;
         }
@@ -109,11 +128,13 @@ public final class AddressBookProtos {
         }
 
         private final com.google.protobuf.UnknownFieldSet unknownFields;
+
         @java.lang.Override
         public final com.google.protobuf.UnknownFieldSet
         getUnknownFields() {
             return this.unknownFields;
         }
+
         private Person(
                 com.google.protobuf.CodedInputStream input,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -175,6 +196,7 @@ public final class AddressBookProtos {
                 makeExtensionsImmutable();
             }
         }
+
         public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
             return org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.internal_static_tutorial_Person_descriptor;
@@ -218,8 +240,7 @@ public final class AddressBookProtos {
             /**
              * <code>WORK = 2;</code>
              */
-            WORK(2, 2),
-            ;
+            WORK(2, 2),;
 
             /**
              * <code>MOBILE = 0;</code>
@@ -235,14 +256,20 @@ public final class AddressBookProtos {
             public static final int WORK_VALUE = 2;
 
 
-            public final int getNumber() { return value; }
+            public final int getNumber() {
+                return value;
+            }
 
             public static PhoneType valueOf(int value) {
                 switch (value) {
-                    case 0: return MOBILE;
-                    case 1: return HOME;
-                    case 2: return WORK;
-                    default: return null;
+                    case 0:
+                        return MOBILE;
+                    case 1:
+                        return HOME;
+                    case 2:
+                        return WORK;
+                    default:
+                        return null;
                 }
             }
 
@@ -250,6 +277,7 @@ public final class AddressBookProtos {
             internalGetValueMap() {
                 return internalValueMap;
             }
+
             private static com.google.protobuf.Internal.EnumLiteMap<PhoneType>
                     internalValueMap =
                     new com.google.protobuf.Internal.EnumLiteMap<PhoneType>() {
@@ -262,10 +290,12 @@ public final class AddressBookProtos {
             getValueDescriptor() {
                 return getDescriptor().getValues().get(index);
             }
+
             public final com.google.protobuf.Descriptors.EnumDescriptor
             getDescriptorForType() {
                 return getDescriptor();
             }
+
             public static final com.google.protobuf.Descriptors.EnumDescriptor
             getDescriptor() {
                 return org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.getDescriptor().getEnumTypes().get(0);
@@ -297,14 +327,17 @@ public final class AddressBookProtos {
                 extends com.google.protobuf.MessageOrBuilder {
 
             // required string number = 1;
+
             /**
              * <code>required string number = 1;</code>
              */
             boolean hasNumber();
+
             /**
              * <code>required string number = 1;</code>
              */
             java.lang.String getNumber();
+
             /**
              * <code>required string number = 1;</code>
              */
@@ -312,15 +345,18 @@ public final class AddressBookProtos {
             getNumberBytes();
 
             // optional .tutorial.Person.PhoneType type = 2 [default = HOME];
+
             /**
              * <code>optional .tutorial.Person.PhoneType type = 2 [default = HOME];</code>
              */
             boolean hasType();
+
             /**
              * <code>optional .tutorial.Person.PhoneType type = 2 [default = HOME];</code>
              */
             org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.PhoneType getType();
         }
+
         /**
          * Protobuf type {@code tutorial.Person.PhoneNumber}
          */
@@ -332,9 +368,13 @@ public final class AddressBookProtos {
                 super(builder);
                 this.unknownFields = builder.getUnknownFields();
             }
-            private PhoneNumber(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+            private PhoneNumber(boolean noInit) {
+                this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+            }
 
             private static final PhoneNumber defaultInstance;
+
             public static PhoneNumber getDefaultInstance() {
                 return defaultInstance;
             }
@@ -344,11 +384,13 @@ public final class AddressBookProtos {
             }
 
             private final com.google.protobuf.UnknownFieldSet unknownFields;
+
             @java.lang.Override
             public final com.google.protobuf.UnknownFieldSet
             getUnknownFields() {
                 return this.unknownFields;
             }
+
             private PhoneNumber(
                     com.google.protobuf.CodedInputStream input,
                     com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -400,6 +442,7 @@ public final class AddressBookProtos {
                     makeExtensionsImmutable();
                 }
             }
+
             public static final com.google.protobuf.Descriptors.Descriptor
             getDescriptor() {
                 return org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.internal_static_tutorial_Person_PhoneNumber_descriptor;
@@ -431,12 +474,14 @@ public final class AddressBookProtos {
             // required string number = 1;
             public static final int NUMBER_FIELD_NUMBER = 1;
             private java.lang.Object number_;
+
             /**
              * <code>required string number = 1;</code>
              */
             public boolean hasNumber() {
                 return ((bitField0_ & 0x00000001) == 0x00000001);
             }
+
             /**
              * <code>required string number = 1;</code>
              */
@@ -454,6 +499,7 @@ public final class AddressBookProtos {
                     return s;
                 }
             }
+
             /**
              * <code>required string number = 1;</code>
              */
@@ -474,12 +520,14 @@ public final class AddressBookProtos {
             // optional .tutorial.Person.PhoneType type = 2 [default = HOME];
             public static final int TYPE_FIELD_NUMBER = 2;
             private org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.PhoneType type_;
+
             /**
              * <code>optional .tutorial.Person.PhoneType type = 2 [default = HOME];</code>
              */
             public boolean hasType() {
                 return ((bitField0_ & 0x00000002) == 0x00000002);
             }
+
             /**
              * <code>optional .tutorial.Person.PhoneType type = 2 [default = HOME];</code>
              */
@@ -491,7 +539,9 @@ public final class AddressBookProtos {
                 number_ = "";
                 type_ = org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.PhoneType.HOME;
             }
+
             private byte memoizedIsInitialized = -1;
+
             public final boolean isInitialized() {
                 byte isInitialized = memoizedIsInitialized;
                 if (isInitialized != -1) return isInitialized == 1;
@@ -517,6 +567,7 @@ public final class AddressBookProtos {
             }
 
             private int memoizedSerializedSize = -1;
+
             public int getSerializedSize() {
                 int size = memoizedSerializedSize;
                 if (size != -1) return size;
@@ -536,6 +587,7 @@ public final class AddressBookProtos {
             }
 
             private static final long serialVersionUID = 0L;
+
             @java.lang.Override
             protected java.lang.Object writeReplace()
                     throws java.io.ObjectStreamException {
@@ -547,47 +599,56 @@ public final class AddressBookProtos {
                     throws com.google.protobuf.InvalidProtocolBufferException {
                 return PARSER.parseFrom(data);
             }
+
             public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.PhoneNumber parseFrom(
                     com.google.protobuf.ByteString data,
                     com.google.protobuf.ExtensionRegistryLite extensionRegistry)
                     throws com.google.protobuf.InvalidProtocolBufferException {
                 return PARSER.parseFrom(data, extensionRegistry);
             }
+
             public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.PhoneNumber parseFrom(byte[] data)
                     throws com.google.protobuf.InvalidProtocolBufferException {
                 return PARSER.parseFrom(data);
             }
+
             public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.PhoneNumber parseFrom(
                     byte[] data,
                     com.google.protobuf.ExtensionRegistryLite extensionRegistry)
                     throws com.google.protobuf.InvalidProtocolBufferException {
                 return PARSER.parseFrom(data, extensionRegistry);
             }
+
             public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.PhoneNumber parseFrom(java.io.InputStream input)
                     throws java.io.IOException {
                 return PARSER.parseFrom(input);
             }
+
             public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.PhoneNumber parseFrom(
                     java.io.InputStream input,
                     com.google.protobuf.ExtensionRegistryLite extensionRegistry)
                     throws java.io.IOException {
                 return PARSER.parseFrom(input, extensionRegistry);
             }
+
             public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.PhoneNumber parseDelimitedFrom(java.io.InputStream input)
                     throws java.io.IOException {
                 return PARSER.parseDelimitedFrom(input);
             }
+
             public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.PhoneNumber parseDelimitedFrom(
                     java.io.InputStream input,
                     com.google.protobuf.ExtensionRegistryLite extensionRegistry)
                     throws java.io.IOException {
                 return PARSER.parseDelimitedFrom(input, extensionRegistry);
             }
+
             public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.PhoneNumber parseFrom(
                     com.google.protobuf.CodedInputStream input)
                     throws java.io.IOException {
                 return PARSER.parseFrom(input);
             }
+
             public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.PhoneNumber parseFrom(
                     com.google.protobuf.CodedInputStream input,
                     com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -595,12 +656,21 @@ public final class AddressBookProtos {
                 return PARSER.parseFrom(input, extensionRegistry);
             }
 
-            public static Builder newBuilder() { return Builder.create(); }
-            public Builder newBuilderForType() { return newBuilder(); }
+            public static Builder newBuilder() {
+                return Builder.create();
+            }
+
+            public Builder newBuilderForType() {
+                return newBuilder();
+            }
+
             public static Builder newBuilder(org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.PhoneNumber prototype) {
                 return newBuilder().mergeFrom(prototype);
             }
-            public Builder toBuilder() { return newBuilder(this); }
+
+            public Builder toBuilder() {
+                return newBuilder(this);
+            }
 
             @java.lang.Override
             protected Builder newBuilderForType(
@@ -608,6 +678,7 @@ public final class AddressBookProtos {
                 Builder builder = new Builder(parent);
                 return builder;
             }
+
             /**
              * Protobuf type {@code tutorial.Person.PhoneNumber}
              */
@@ -636,10 +707,12 @@ public final class AddressBookProtos {
                     super(parent);
                     maybeForceBuilderInitialization();
                 }
+
                 private void maybeForceBuilderInitialization() {
                     if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
                     }
                 }
+
                 private static Builder create() {
                     return new Builder();
                 }
@@ -693,7 +766,7 @@ public final class AddressBookProtos {
 
                 public Builder mergeFrom(com.google.protobuf.Message other) {
                     if (other instanceof org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.PhoneNumber) {
-                        return mergeFrom((org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.PhoneNumber)other);
+                        return mergeFrom((org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.PhoneNumber) other);
                     } else {
                         super.mergeFrom(other);
                         return this;
@@ -701,7 +774,8 @@ public final class AddressBookProtos {
                 }
 
                 public Builder mergeFrom(org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.PhoneNumber other) {
-                    if (other == org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.PhoneNumber.getDefaultInstance()) return this;
+                    if (other == org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.PhoneNumber.getDefaultInstance())
+                        return this;
                     if (other.hasNumber()) {
                         bitField0_ |= 0x00000001;
                         number_ = other.number_;
@@ -739,16 +813,19 @@ public final class AddressBookProtos {
                     }
                     return this;
                 }
+
                 private int bitField0_;
 
                 // required string number = 1;
                 private java.lang.Object number_ = "";
+
                 /**
                  * <code>required string number = 1;</code>
                  */
                 public boolean hasNumber() {
                     return ((bitField0_ & 0x00000001) == 0x00000001);
                 }
+
                 /**
                  * <code>required string number = 1;</code>
                  */
@@ -763,6 +840,7 @@ public final class AddressBookProtos {
                         return (java.lang.String) ref;
                     }
                 }
+
                 /**
                  * <code>required string number = 1;</code>
                  */
@@ -779,6 +857,7 @@ public final class AddressBookProtos {
                         return (com.google.protobuf.ByteString) ref;
                     }
                 }
+
                 /**
                  * <code>required string number = 1;</code>
                  */
@@ -792,6 +871,7 @@ public final class AddressBookProtos {
                     onChanged();
                     return this;
                 }
+
                 /**
                  * <code>required string number = 1;</code>
                  */
@@ -801,6 +881,7 @@ public final class AddressBookProtos {
                     onChanged();
                     return this;
                 }
+
                 /**
                  * <code>required string number = 1;</code>
                  */
@@ -817,18 +898,21 @@ public final class AddressBookProtos {
 
                 // optional .tutorial.Person.PhoneType type = 2 [default = HOME];
                 private org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.PhoneType type_ = org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.PhoneType.HOME;
+
                 /**
                  * <code>optional .tutorial.Person.PhoneType type = 2 [default = HOME];</code>
                  */
                 public boolean hasType() {
                     return ((bitField0_ & 0x00000002) == 0x00000002);
                 }
+
                 /**
                  * <code>optional .tutorial.Person.PhoneType type = 2 [default = HOME];</code>
                  */
                 public org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.PhoneType getType() {
                     return type_;
                 }
+
                 /**
                  * <code>optional .tutorial.Person.PhoneType type = 2 [default = HOME];</code>
                  */
@@ -841,6 +925,7 @@ public final class AddressBookProtos {
                     onChanged();
                     return this;
                 }
+
                 /**
                  * <code>optional .tutorial.Person.PhoneType type = 2 [default = HOME];</code>
                  */
@@ -866,12 +951,14 @@ public final class AddressBookProtos {
         // required string name = 1;
         public static final int NAME_FIELD_NUMBER = 1;
         private java.lang.Object name_;
+
         /**
          * <code>required string name = 1;</code>
          */
         public boolean hasName() {
             return ((bitField0_ & 0x00000001) == 0x00000001);
         }
+
         /**
          * <code>required string name = 1;</code>
          */
@@ -889,6 +976,7 @@ public final class AddressBookProtos {
                 return s;
             }
         }
+
         /**
          * <code>required string name = 1;</code>
          */
@@ -909,9 +997,10 @@ public final class AddressBookProtos {
         // required int32 id = 2;
         public static final int ID_FIELD_NUMBER = 2;
         private int id_;
+
         /**
          * <code>required int32 id = 2;</code>
-         *
+         * <p/>
          * <pre>
          * Unique ID number for this person.
          * </pre>
@@ -919,9 +1008,10 @@ public final class AddressBookProtos {
         public boolean hasId() {
             return ((bitField0_ & 0x00000002) == 0x00000002);
         }
+
         /**
          * <code>required int32 id = 2;</code>
-         *
+         * <p/>
          * <pre>
          * Unique ID number for this person.
          * </pre>
@@ -933,12 +1023,14 @@ public final class AddressBookProtos {
         // optional string email = 3;
         public static final int EMAIL_FIELD_NUMBER = 3;
         private java.lang.Object email_;
+
         /**
          * <code>optional string email = 3;</code>
          */
         public boolean hasEmail() {
             return ((bitField0_ & 0x00000004) == 0x00000004);
         }
+
         /**
          * <code>optional string email = 3;</code>
          */
@@ -956,6 +1048,7 @@ public final class AddressBookProtos {
                 return s;
             }
         }
+
         /**
          * <code>optional string email = 3;</code>
          */
@@ -976,12 +1069,14 @@ public final class AddressBookProtos {
         // repeated .tutorial.Person.PhoneNumber phone = 4;
         public static final int PHONE_FIELD_NUMBER = 4;
         private java.util.List<org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.PhoneNumber> phone_;
+
         /**
          * <code>repeated .tutorial.Person.PhoneNumber phone = 4;</code>
          */
         public java.util.List<org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.PhoneNumber> getPhoneList() {
             return phone_;
         }
+
         /**
          * <code>repeated .tutorial.Person.PhoneNumber phone = 4;</code>
          */
@@ -989,18 +1084,21 @@ public final class AddressBookProtos {
         getPhoneOrBuilderList() {
             return phone_;
         }
+
         /**
          * <code>repeated .tutorial.Person.PhoneNumber phone = 4;</code>
          */
         public int getPhoneCount() {
             return phone_.size();
         }
+
         /**
          * <code>repeated .tutorial.Person.PhoneNumber phone = 4;</code>
          */
         public org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.PhoneNumber getPhone(int index) {
             return phone_.get(index);
         }
+
         /**
          * <code>repeated .tutorial.Person.PhoneNumber phone = 4;</code>
          */
@@ -1015,7 +1113,9 @@ public final class AddressBookProtos {
             email_ = "";
             phone_ = java.util.Collections.emptyList();
         }
+
         private byte memoizedIsInitialized = -1;
+
         public final boolean isInitialized() {
             byte isInitialized = memoizedIsInitialized;
             if (isInitialized != -1) return isInitialized == 1;
@@ -1057,6 +1157,7 @@ public final class AddressBookProtos {
         }
 
         private int memoizedSerializedSize = -1;
+
         public int getSerializedSize() {
             int size = memoizedSerializedSize;
             if (size != -1) return size;
@@ -1084,6 +1185,7 @@ public final class AddressBookProtos {
         }
 
         private static final long serialVersionUID = 0L;
+
         @java.lang.Override
         protected java.lang.Object writeReplace()
                 throws java.io.ObjectStreamException {
@@ -1095,47 +1197,56 @@ public final class AddressBookProtos {
                 throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data);
         }
+
         public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person parseFrom(
                 com.google.protobuf.ByteString data,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
                 throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data, extensionRegistry);
         }
+
         public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person parseFrom(byte[] data)
                 throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data);
         }
+
         public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person parseFrom(
                 byte[] data,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
                 throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data, extensionRegistry);
         }
+
         public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person parseFrom(java.io.InputStream input)
                 throws java.io.IOException {
             return PARSER.parseFrom(input);
         }
+
         public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person parseFrom(
                 java.io.InputStream input,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
                 throws java.io.IOException {
             return PARSER.parseFrom(input, extensionRegistry);
         }
+
         public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person parseDelimitedFrom(java.io.InputStream input)
                 throws java.io.IOException {
             return PARSER.parseDelimitedFrom(input);
         }
+
         public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person parseDelimitedFrom(
                 java.io.InputStream input,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
                 throws java.io.IOException {
             return PARSER.parseDelimitedFrom(input, extensionRegistry);
         }
+
         public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person parseFrom(
                 com.google.protobuf.CodedInputStream input)
                 throws java.io.IOException {
             return PARSER.parseFrom(input);
         }
+
         public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person parseFrom(
                 com.google.protobuf.CodedInputStream input,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1143,12 +1254,21 @@ public final class AddressBookProtos {
             return PARSER.parseFrom(input, extensionRegistry);
         }
 
-        public static Builder newBuilder() { return Builder.create(); }
-        public Builder newBuilderForType() { return newBuilder(); }
+        public static Builder newBuilder() {
+            return Builder.create();
+        }
+
+        public Builder newBuilderForType() {
+            return newBuilder();
+        }
+
         public static Builder newBuilder(org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person prototype) {
             return newBuilder().mergeFrom(prototype);
         }
-        public Builder toBuilder() { return newBuilder(this); }
+
+        public Builder toBuilder() {
+            return newBuilder(this);
+        }
 
         @java.lang.Override
         protected Builder newBuilderForType(
@@ -1156,6 +1276,7 @@ public final class AddressBookProtos {
             Builder builder = new Builder(parent);
             return builder;
         }
+
         /**
          * Protobuf type {@code tutorial.Person}
          */
@@ -1184,11 +1305,13 @@ public final class AddressBookProtos {
                 super(parent);
                 maybeForceBuilderInitialization();
             }
+
             private void maybeForceBuilderInitialization() {
                 if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
                     getPhoneFieldBuilder();
                 }
             }
+
             private static Builder create() {
                 return new Builder();
             }
@@ -1263,7 +1386,7 @@ public final class AddressBookProtos {
 
             public Builder mergeFrom(com.google.protobuf.Message other) {
                 if (other instanceof org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person) {
-                    return mergeFrom((org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person)other);
+                    return mergeFrom((org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person) other);
                 } else {
                     super.mergeFrom(other);
                     return this;
@@ -1271,7 +1394,8 @@ public final class AddressBookProtos {
             }
 
             public Builder mergeFrom(org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person other) {
-                if (other == org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.getDefaultInstance()) return this;
+                if (other == org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.getDefaultInstance())
+                    return this;
                 if (other.hasName()) {
                     bitField0_ |= 0x00000001;
                     name_ = other.name_;
@@ -1350,16 +1474,19 @@ public final class AddressBookProtos {
                 }
                 return this;
             }
+
             private int bitField0_;
 
             // required string name = 1;
             private java.lang.Object name_ = "";
+
             /**
              * <code>required string name = 1;</code>
              */
             public boolean hasName() {
                 return ((bitField0_ & 0x00000001) == 0x00000001);
             }
+
             /**
              * <code>required string name = 1;</code>
              */
@@ -1374,6 +1501,7 @@ public final class AddressBookProtos {
                     return (java.lang.String) ref;
                 }
             }
+
             /**
              * <code>required string name = 1;</code>
              */
@@ -1390,6 +1518,7 @@ public final class AddressBookProtos {
                     return (com.google.protobuf.ByteString) ref;
                 }
             }
+
             /**
              * <code>required string name = 1;</code>
              */
@@ -1403,6 +1532,7 @@ public final class AddressBookProtos {
                 onChanged();
                 return this;
             }
+
             /**
              * <code>required string name = 1;</code>
              */
@@ -1412,6 +1542,7 @@ public final class AddressBookProtos {
                 onChanged();
                 return this;
             }
+
             /**
              * <code>required string name = 1;</code>
              */
@@ -1427,10 +1558,11 @@ public final class AddressBookProtos {
             }
 
             // required int32 id = 2;
-            private int id_ ;
+            private int id_;
+
             /**
              * <code>required int32 id = 2;</code>
-             *
+             * <p/>
              * <pre>
              * Unique ID number for this person.
              * </pre>
@@ -1438,9 +1570,10 @@ public final class AddressBookProtos {
             public boolean hasId() {
                 return ((bitField0_ & 0x00000002) == 0x00000002);
             }
+
             /**
              * <code>required int32 id = 2;</code>
-             *
+             * <p/>
              * <pre>
              * Unique ID number for this person.
              * </pre>
@@ -1448,9 +1581,10 @@ public final class AddressBookProtos {
             public int getId() {
                 return id_;
             }
+
             /**
              * <code>required int32 id = 2;</code>
-             *
+             * <p/>
              * <pre>
              * Unique ID number for this person.
              * </pre>
@@ -1461,9 +1595,10 @@ public final class AddressBookProtos {
                 onChanged();
                 return this;
             }
+
             /**
              * <code>required int32 id = 2;</code>
-             *
+             * <p/>
              * <pre>
              * Unique ID number for this person.
              * </pre>
@@ -1477,12 +1612,14 @@ public final class AddressBookProtos {
 
             // optional string email = 3;
             private java.lang.Object email_ = "";
+
             /**
              * <code>optional string email = 3;</code>
              */
             public boolean hasEmail() {
                 return ((bitField0_ & 0x00000004) == 0x00000004);
             }
+
             /**
              * <code>optional string email = 3;</code>
              */
@@ -1497,6 +1634,7 @@ public final class AddressBookProtos {
                     return (java.lang.String) ref;
                 }
             }
+
             /**
              * <code>optional string email = 3;</code>
              */
@@ -1513,6 +1651,7 @@ public final class AddressBookProtos {
                     return (com.google.protobuf.ByteString) ref;
                 }
             }
+
             /**
              * <code>optional string email = 3;</code>
              */
@@ -1526,6 +1665,7 @@ public final class AddressBookProtos {
                 onChanged();
                 return this;
             }
+
             /**
              * <code>optional string email = 3;</code>
              */
@@ -1535,6 +1675,7 @@ public final class AddressBookProtos {
                 onChanged();
                 return this;
             }
+
             /**
              * <code>optional string email = 3;</code>
              */
@@ -1552,6 +1693,7 @@ public final class AddressBookProtos {
             // repeated .tutorial.Person.PhoneNumber phone = 4;
             private java.util.List<org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.PhoneNumber> phone_ =
                     java.util.Collections.emptyList();
+
             private void ensurePhoneIsMutable() {
                 if (!((bitField0_ & 0x00000008) == 0x00000008)) {
                     phone_ = new java.util.ArrayList<org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.PhoneNumber>(phone_);
@@ -1572,6 +1714,7 @@ public final class AddressBookProtos {
                     return phoneBuilder_.getMessageList();
                 }
             }
+
             /**
              * <code>repeated .tutorial.Person.PhoneNumber phone = 4;</code>
              */
@@ -1582,6 +1725,7 @@ public final class AddressBookProtos {
                     return phoneBuilder_.getCount();
                 }
             }
+
             /**
              * <code>repeated .tutorial.Person.PhoneNumber phone = 4;</code>
              */
@@ -1592,6 +1736,7 @@ public final class AddressBookProtos {
                     return phoneBuilder_.getMessage(index);
                 }
             }
+
             /**
              * <code>repeated .tutorial.Person.PhoneNumber phone = 4;</code>
              */
@@ -1609,6 +1754,7 @@ public final class AddressBookProtos {
                 }
                 return this;
             }
+
             /**
              * <code>repeated .tutorial.Person.PhoneNumber phone = 4;</code>
              */
@@ -1623,6 +1769,7 @@ public final class AddressBookProtos {
                 }
                 return this;
             }
+
             /**
              * <code>repeated .tutorial.Person.PhoneNumber phone = 4;</code>
              */
@@ -1639,6 +1786,7 @@ public final class AddressBookProtos {
                 }
                 return this;
             }
+
             /**
              * <code>repeated .tutorial.Person.PhoneNumber phone = 4;</code>
              */
@@ -1656,6 +1804,7 @@ public final class AddressBookProtos {
                 }
                 return this;
             }
+
             /**
              * <code>repeated .tutorial.Person.PhoneNumber phone = 4;</code>
              */
@@ -1670,6 +1819,7 @@ public final class AddressBookProtos {
                 }
                 return this;
             }
+
             /**
              * <code>repeated .tutorial.Person.PhoneNumber phone = 4;</code>
              */
@@ -1684,6 +1834,7 @@ public final class AddressBookProtos {
                 }
                 return this;
             }
+
             /**
              * <code>repeated .tutorial.Person.PhoneNumber phone = 4;</code>
              */
@@ -1698,6 +1849,7 @@ public final class AddressBookProtos {
                 }
                 return this;
             }
+
             /**
              * <code>repeated .tutorial.Person.PhoneNumber phone = 4;</code>
              */
@@ -1711,6 +1863,7 @@ public final class AddressBookProtos {
                 }
                 return this;
             }
+
             /**
              * <code>repeated .tutorial.Person.PhoneNumber phone = 4;</code>
              */
@@ -1724,6 +1877,7 @@ public final class AddressBookProtos {
                 }
                 return this;
             }
+
             /**
              * <code>repeated .tutorial.Person.PhoneNumber phone = 4;</code>
              */
@@ -1731,16 +1885,19 @@ public final class AddressBookProtos {
                     int index) {
                 return getPhoneFieldBuilder().getBuilder(index);
             }
+
             /**
              * <code>repeated .tutorial.Person.PhoneNumber phone = 4;</code>
              */
             public org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.PhoneNumberOrBuilder getPhoneOrBuilder(
                     int index) {
                 if (phoneBuilder_ == null) {
-                    return phone_.get(index);  } else {
+                    return phone_.get(index);
+                } else {
                     return phoneBuilder_.getMessageOrBuilder(index);
                 }
             }
+
             /**
              * <code>repeated .tutorial.Person.PhoneNumber phone = 4;</code>
              */
@@ -1752,6 +1909,7 @@ public final class AddressBookProtos {
                     return java.util.Collections.unmodifiableList(phone_);
                 }
             }
+
             /**
              * <code>repeated .tutorial.Person.PhoneNumber phone = 4;</code>
              */
@@ -1759,6 +1917,7 @@ public final class AddressBookProtos {
                 return getPhoneFieldBuilder().addBuilder(
                         org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.PhoneNumber.getDefaultInstance());
             }
+
             /**
              * <code>repeated .tutorial.Person.PhoneNumber phone = 4;</code>
              */
@@ -1767,6 +1926,7 @@ public final class AddressBookProtos {
                 return getPhoneFieldBuilder().addBuilder(
                         index, org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.PhoneNumber.getDefaultInstance());
             }
+
             /**
              * <code>repeated .tutorial.Person.PhoneNumber phone = 4;</code>
              */
@@ -1774,6 +1934,7 @@ public final class AddressBookProtos {
             getPhoneBuilderList() {
                 return getPhoneFieldBuilder().getBuilderList();
             }
+
             private com.google.protobuf.RepeatedFieldBuilder<
                     org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.PhoneNumber, org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.PhoneNumber.Builder, org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.PhoneNumberOrBuilder>
             getPhoneFieldBuilder() {
@@ -1804,33 +1965,39 @@ public final class AddressBookProtos {
             extends com.google.protobuf.MessageOrBuilder {
 
         // repeated .tutorial.Person person = 1;
+
         /**
          * <code>repeated .tutorial.Person person = 1;</code>
          */
         java.util.List<org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person>
         getPersonList();
+
         /**
          * <code>repeated .tutorial.Person person = 1;</code>
          */
         org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person getPerson(int index);
+
         /**
          * <code>repeated .tutorial.Person person = 1;</code>
          */
         int getPersonCount();
+
         /**
          * <code>repeated .tutorial.Person person = 1;</code>
          */
         java.util.List<? extends org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.PersonOrBuilder>
         getPersonOrBuilderList();
+
         /**
          * <code>repeated .tutorial.Person person = 1;</code>
          */
         org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.PersonOrBuilder getPersonOrBuilder(
                 int index);
     }
+
     /**
      * Protobuf type {@code tutorial.AddressBook}
-     *
+     * <p/>
      * <pre>
      * Our address book file is just one of these.
      * </pre>
@@ -1843,9 +2010,13 @@ public final class AddressBookProtos {
             super(builder);
             this.unknownFields = builder.getUnknownFields();
         }
-        private AddressBook(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+        private AddressBook(boolean noInit) {
+            this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+        }
 
         private static final AddressBook defaultInstance;
+
         public static AddressBook getDefaultInstance() {
             return defaultInstance;
         }
@@ -1855,11 +2026,13 @@ public final class AddressBookProtos {
         }
 
         private final com.google.protobuf.UnknownFieldSet unknownFields;
+
         @java.lang.Override
         public final com.google.protobuf.UnknownFieldSet
         getUnknownFields() {
             return this.unknownFields;
         }
+
         private AddressBook(
                 com.google.protobuf.CodedInputStream input,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1906,6 +2079,7 @@ public final class AddressBookProtos {
                 makeExtensionsImmutable();
             }
         }
+
         public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
             return org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.internal_static_tutorial_AddressBook_descriptor;
@@ -1936,12 +2110,14 @@ public final class AddressBookProtos {
         // repeated .tutorial.Person person = 1;
         public static final int PERSON_FIELD_NUMBER = 1;
         private java.util.List<org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person> person_;
+
         /**
          * <code>repeated .tutorial.Person person = 1;</code>
          */
         public java.util.List<org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person> getPersonList() {
             return person_;
         }
+
         /**
          * <code>repeated .tutorial.Person person = 1;</code>
          */
@@ -1949,18 +2125,21 @@ public final class AddressBookProtos {
         getPersonOrBuilderList() {
             return person_;
         }
+
         /**
          * <code>repeated .tutorial.Person person = 1;</code>
          */
         public int getPersonCount() {
             return person_.size();
         }
+
         /**
          * <code>repeated .tutorial.Person person = 1;</code>
          */
         public org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person getPerson(int index) {
             return person_.get(index);
         }
+
         /**
          * <code>repeated .tutorial.Person person = 1;</code>
          */
@@ -1972,7 +2151,9 @@ public final class AddressBookProtos {
         private void initFields() {
             person_ = java.util.Collections.emptyList();
         }
+
         private byte memoizedIsInitialized = -1;
+
         public final boolean isInitialized() {
             byte isInitialized = memoizedIsInitialized;
             if (isInitialized != -1) return isInitialized == 1;
@@ -1997,6 +2178,7 @@ public final class AddressBookProtos {
         }
 
         private int memoizedSerializedSize = -1;
+
         public int getSerializedSize() {
             int size = memoizedSerializedSize;
             if (size != -1) return size;
@@ -2012,6 +2194,7 @@ public final class AddressBookProtos {
         }
 
         private static final long serialVersionUID = 0L;
+
         @java.lang.Override
         protected java.lang.Object writeReplace()
                 throws java.io.ObjectStreamException {
@@ -2023,47 +2206,56 @@ public final class AddressBookProtos {
                 throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data);
         }
+
         public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBook parseFrom(
                 com.google.protobuf.ByteString data,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
                 throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data, extensionRegistry);
         }
+
         public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBook parseFrom(byte[] data)
                 throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data);
         }
+
         public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBook parseFrom(
                 byte[] data,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
                 throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data, extensionRegistry);
         }
+
         public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBook parseFrom(java.io.InputStream input)
                 throws java.io.IOException {
             return PARSER.parseFrom(input);
         }
+
         public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBook parseFrom(
                 java.io.InputStream input,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
                 throws java.io.IOException {
             return PARSER.parseFrom(input, extensionRegistry);
         }
+
         public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBook parseDelimitedFrom(java.io.InputStream input)
                 throws java.io.IOException {
             return PARSER.parseDelimitedFrom(input);
         }
+
         public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBook parseDelimitedFrom(
                 java.io.InputStream input,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
                 throws java.io.IOException {
             return PARSER.parseDelimitedFrom(input, extensionRegistry);
         }
+
         public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBook parseFrom(
                 com.google.protobuf.CodedInputStream input)
                 throws java.io.IOException {
             return PARSER.parseFrom(input);
         }
+
         public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBook parseFrom(
                 com.google.protobuf.CodedInputStream input,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -2071,12 +2263,21 @@ public final class AddressBookProtos {
             return PARSER.parseFrom(input, extensionRegistry);
         }
 
-        public static Builder newBuilder() { return Builder.create(); }
-        public Builder newBuilderForType() { return newBuilder(); }
+        public static Builder newBuilder() {
+            return Builder.create();
+        }
+
+        public Builder newBuilderForType() {
+            return newBuilder();
+        }
+
         public static Builder newBuilder(org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBook prototype) {
             return newBuilder().mergeFrom(prototype);
         }
-        public Builder toBuilder() { return newBuilder(this); }
+
+        public Builder toBuilder() {
+            return newBuilder(this);
+        }
 
         @java.lang.Override
         protected Builder newBuilderForType(
@@ -2084,9 +2285,10 @@ public final class AddressBookProtos {
             Builder builder = new Builder(parent);
             return builder;
         }
+
         /**
          * Protobuf type {@code tutorial.AddressBook}
-         *
+         * <p/>
          * <pre>
          * Our address book file is just one of these.
          * </pre>
@@ -2116,11 +2318,13 @@ public final class AddressBookProtos {
                 super(parent);
                 maybeForceBuilderInitialization();
             }
+
             private void maybeForceBuilderInitialization() {
                 if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
                     getPersonFieldBuilder();
                 }
             }
+
             private static Builder create() {
                 return new Builder();
             }
@@ -2175,7 +2379,7 @@ public final class AddressBookProtos {
 
             public Builder mergeFrom(com.google.protobuf.Message other) {
                 if (other instanceof org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBook) {
-                    return mergeFrom((org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBook)other);
+                    return mergeFrom((org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBook) other);
                 } else {
                     super.mergeFrom(other);
                     return this;
@@ -2183,7 +2387,8 @@ public final class AddressBookProtos {
             }
 
             public Builder mergeFrom(org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBook other) {
-                if (other == org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBook.getDefaultInstance()) return this;
+                if (other == org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBook.getDefaultInstance())
+                    return this;
                 if (personBuilder_ == null) {
                     if (!other.person_.isEmpty()) {
                         if (person_.isEmpty()) {
@@ -2241,11 +2446,13 @@ public final class AddressBookProtos {
                 }
                 return this;
             }
+
             private int bitField0_;
 
             // repeated .tutorial.Person person = 1;
             private java.util.List<org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person> person_ =
                     java.util.Collections.emptyList();
+
             private void ensurePersonIsMutable() {
                 if (!((bitField0_ & 0x00000001) == 0x00000001)) {
                     person_ = new java.util.ArrayList<org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person>(person_);
@@ -2266,6 +2473,7 @@ public final class AddressBookProtos {
                     return personBuilder_.getMessageList();
                 }
             }
+
             /**
              * <code>repeated .tutorial.Person person = 1;</code>
              */
@@ -2276,6 +2484,7 @@ public final class AddressBookProtos {
                     return personBuilder_.getCount();
                 }
             }
+
             /**
              * <code>repeated .tutorial.Person person = 1;</code>
              */
@@ -2286,6 +2495,7 @@ public final class AddressBookProtos {
                     return personBuilder_.getMessage(index);
                 }
             }
+
             /**
              * <code>repeated .tutorial.Person person = 1;</code>
              */
@@ -2303,6 +2513,7 @@ public final class AddressBookProtos {
                 }
                 return this;
             }
+
             /**
              * <code>repeated .tutorial.Person person = 1;</code>
              */
@@ -2317,6 +2528,7 @@ public final class AddressBookProtos {
                 }
                 return this;
             }
+
             /**
              * <code>repeated .tutorial.Person person = 1;</code>
              */
@@ -2333,6 +2545,7 @@ public final class AddressBookProtos {
                 }
                 return this;
             }
+
             /**
              * <code>repeated .tutorial.Person person = 1;</code>
              */
@@ -2350,6 +2563,7 @@ public final class AddressBookProtos {
                 }
                 return this;
             }
+
             /**
              * <code>repeated .tutorial.Person person = 1;</code>
              */
@@ -2364,6 +2578,7 @@ public final class AddressBookProtos {
                 }
                 return this;
             }
+
             /**
              * <code>repeated .tutorial.Person person = 1;</code>
              */
@@ -2378,6 +2593,7 @@ public final class AddressBookProtos {
                 }
                 return this;
             }
+
             /**
              * <code>repeated .tutorial.Person person = 1;</code>
              */
@@ -2392,6 +2608,7 @@ public final class AddressBookProtos {
                 }
                 return this;
             }
+
             /**
              * <code>repeated .tutorial.Person person = 1;</code>
              */
@@ -2405,6 +2622,7 @@ public final class AddressBookProtos {
                 }
                 return this;
             }
+
             /**
              * <code>repeated .tutorial.Person person = 1;</code>
              */
@@ -2418,6 +2636,7 @@ public final class AddressBookProtos {
                 }
                 return this;
             }
+
             /**
              * <code>repeated .tutorial.Person person = 1;</code>
              */
@@ -2425,16 +2644,19 @@ public final class AddressBookProtos {
                     int index) {
                 return getPersonFieldBuilder().getBuilder(index);
             }
+
             /**
              * <code>repeated .tutorial.Person person = 1;</code>
              */
             public org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.PersonOrBuilder getPersonOrBuilder(
                     int index) {
                 if (personBuilder_ == null) {
-                    return person_.get(index);  } else {
+                    return person_.get(index);
+                } else {
                     return personBuilder_.getMessageOrBuilder(index);
                 }
             }
+
             /**
              * <code>repeated .tutorial.Person person = 1;</code>
              */
@@ -2446,6 +2668,7 @@ public final class AddressBookProtos {
                     return java.util.Collections.unmodifiableList(person_);
                 }
             }
+
             /**
              * <code>repeated .tutorial.Person person = 1;</code>
              */
@@ -2453,6 +2676,7 @@ public final class AddressBookProtos {
                 return getPersonFieldBuilder().addBuilder(
                         org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.getDefaultInstance());
             }
+
             /**
              * <code>repeated .tutorial.Person person = 1;</code>
              */
@@ -2461,6 +2685,7 @@ public final class AddressBookProtos {
                 return getPersonFieldBuilder().addBuilder(
                         index, org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.getDefaultInstance());
             }
+
             /**
              * <code>repeated .tutorial.Person person = 1;</code>
              */
@@ -2468,6 +2693,7 @@ public final class AddressBookProtos {
             getPersonBuilderList() {
                 return getPersonFieldBuilder().getBuilderList();
             }
+
             private com.google.protobuf.RepeatedFieldBuilder<
                     org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person, org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.Builder, org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.PersonOrBuilder>
             getPersonFieldBuilder() {
@@ -2498,33 +2724,40 @@ public final class AddressBookProtos {
             extends com.google.protobuf.MessageOrBuilder {
 
         // optional .tutorial.Person addPerson = 1;
+
         /**
          * <code>optional .tutorial.Person addPerson = 1;</code>
          */
         boolean hasAddPerson();
+
         /**
          * <code>optional .tutorial.Person addPerson = 1;</code>
          */
         org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person getAddPerson();
+
         /**
          * <code>optional .tutorial.Person addPerson = 1;</code>
          */
         org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.PersonOrBuilder getAddPersonOrBuilder();
 
         // optional .tutorial.NamePattern listPeople = 2;
+
         /**
          * <code>optional .tutorial.NamePattern listPeople = 2;</code>
          */
         boolean hasListPeople();
+
         /**
          * <code>optional .tutorial.NamePattern listPeople = 2;</code>
          */
         org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.NamePattern getListPeople();
+
         /**
          * <code>optional .tutorial.NamePattern listPeople = 2;</code>
          */
         org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.NamePatternOrBuilder getListPeopleOrBuilder();
     }
+
     /**
      * Protobuf type {@code tutorial.AddressBookServiceMessage}
      */
@@ -2536,9 +2769,13 @@ public final class AddressBookProtos {
             super(builder);
             this.unknownFields = builder.getUnknownFields();
         }
-        private AddressBookServiceMessage(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+        private AddressBookServiceMessage(boolean noInit) {
+            this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+        }
 
         private static final AddressBookServiceMessage defaultInstance;
+
         public static AddressBookServiceMessage getDefaultInstance() {
             return defaultInstance;
         }
@@ -2548,11 +2785,13 @@ public final class AddressBookProtos {
         }
 
         private final com.google.protobuf.UnknownFieldSet unknownFields;
+
         @java.lang.Override
         public final com.google.protobuf.UnknownFieldSet
         getUnknownFields() {
             return this.unknownFields;
         }
+
         private AddressBookServiceMessage(
                 com.google.protobuf.CodedInputStream input,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -2614,6 +2853,7 @@ public final class AddressBookProtos {
                 makeExtensionsImmutable();
             }
         }
+
         public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
             return org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.internal_static_tutorial_AddressBookServiceMessage_descriptor;
@@ -2645,18 +2885,21 @@ public final class AddressBookProtos {
         // optional .tutorial.Person addPerson = 1;
         public static final int ADDPERSON_FIELD_NUMBER = 1;
         private org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person addPerson_;
+
         /**
          * <code>optional .tutorial.Person addPerson = 1;</code>
          */
         public boolean hasAddPerson() {
             return ((bitField0_ & 0x00000001) == 0x00000001);
         }
+
         /**
          * <code>optional .tutorial.Person addPerson = 1;</code>
          */
         public org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person getAddPerson() {
             return addPerson_;
         }
+
         /**
          * <code>optional .tutorial.Person addPerson = 1;</code>
          */
@@ -2667,18 +2910,21 @@ public final class AddressBookProtos {
         // optional .tutorial.NamePattern listPeople = 2;
         public static final int LISTPEOPLE_FIELD_NUMBER = 2;
         private org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.NamePattern listPeople_;
+
         /**
          * <code>optional .tutorial.NamePattern listPeople = 2;</code>
          */
         public boolean hasListPeople() {
             return ((bitField0_ & 0x00000002) == 0x00000002);
         }
+
         /**
          * <code>optional .tutorial.NamePattern listPeople = 2;</code>
          */
         public org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.NamePattern getListPeople() {
             return listPeople_;
         }
+
         /**
          * <code>optional .tutorial.NamePattern listPeople = 2;</code>
          */
@@ -2690,7 +2936,9 @@ public final class AddressBookProtos {
             addPerson_ = org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.getDefaultInstance();
             listPeople_ = org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.NamePattern.getDefaultInstance();
         }
+
         private byte memoizedIsInitialized = -1;
+
         public final boolean isInitialized() {
             byte isInitialized = memoizedIsInitialized;
             if (isInitialized != -1) return isInitialized == 1;
@@ -2718,6 +2966,7 @@ public final class AddressBookProtos {
         }
 
         private int memoizedSerializedSize = -1;
+
         public int getSerializedSize() {
             int size = memoizedSerializedSize;
             if (size != -1) return size;
@@ -2737,6 +2986,7 @@ public final class AddressBookProtos {
         }
 
         private static final long serialVersionUID = 0L;
+
         @java.lang.Override
         protected java.lang.Object writeReplace()
                 throws java.io.ObjectStreamException {
@@ -2748,47 +2998,56 @@ public final class AddressBookProtos {
                 throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data);
         }
+
         public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBookServiceMessage parseFrom(
                 com.google.protobuf.ByteString data,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
                 throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data, extensionRegistry);
         }
+
         public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBookServiceMessage parseFrom(byte[] data)
                 throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data);
         }
+
         public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBookServiceMessage parseFrom(
                 byte[] data,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
                 throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data, extensionRegistry);
         }
+
         public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBookServiceMessage parseFrom(java.io.InputStream input)
                 throws java.io.IOException {
             return PARSER.parseFrom(input);
         }
+
         public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBookServiceMessage parseFrom(
                 java.io.InputStream input,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
                 throws java.io.IOException {
             return PARSER.parseFrom(input, extensionRegistry);
         }
+
         public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBookServiceMessage parseDelimitedFrom(java.io.InputStream input)
                 throws java.io.IOException {
             return PARSER.parseDelimitedFrom(input);
         }
+
         public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBookServiceMessage parseDelimitedFrom(
                 java.io.InputStream input,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
                 throws java.io.IOException {
             return PARSER.parseDelimitedFrom(input, extensionRegistry);
         }
+
         public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBookServiceMessage parseFrom(
                 com.google.protobuf.CodedInputStream input)
                 throws java.io.IOException {
             return PARSER.parseFrom(input);
         }
+
         public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBookServiceMessage parseFrom(
                 com.google.protobuf.CodedInputStream input,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -2796,12 +3055,21 @@ public final class AddressBookProtos {
             return PARSER.parseFrom(input, extensionRegistry);
         }
 
-        public static Builder newBuilder() { return Builder.create(); }
-        public Builder newBuilderForType() { return newBuilder(); }
+        public static Builder newBuilder() {
+            return Builder.create();
+        }
+
+        public Builder newBuilderForType() {
+            return newBuilder();
+        }
+
         public static Builder newBuilder(org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBookServiceMessage prototype) {
             return newBuilder().mergeFrom(prototype);
         }
-        public Builder toBuilder() { return newBuilder(this); }
+
+        public Builder toBuilder() {
+            return newBuilder(this);
+        }
 
         @java.lang.Override
         protected Builder newBuilderForType(
@@ -2809,6 +3077,7 @@ public final class AddressBookProtos {
             Builder builder = new Builder(parent);
             return builder;
         }
+
         /**
          * Protobuf type {@code tutorial.AddressBookServiceMessage}
          */
@@ -2837,12 +3106,14 @@ public final class AddressBookProtos {
                 super(parent);
                 maybeForceBuilderInitialization();
             }
+
             private void maybeForceBuilderInitialization() {
                 if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
                     getAddPersonFieldBuilder();
                     getListPeopleFieldBuilder();
                 }
             }
+
             private static Builder create() {
                 return new Builder();
             }
@@ -2912,7 +3183,7 @@ public final class AddressBookProtos {
 
             public Builder mergeFrom(com.google.protobuf.Message other) {
                 if (other instanceof org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBookServiceMessage) {
-                    return mergeFrom((org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBookServiceMessage)other);
+                    return mergeFrom((org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBookServiceMessage) other);
                 } else {
                     super.mergeFrom(other);
                     return this;
@@ -2920,7 +3191,8 @@ public final class AddressBookProtos {
             }
 
             public Builder mergeFrom(org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBookServiceMessage other) {
-                if (other == org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBookServiceMessage.getDefaultInstance()) return this;
+                if (other == org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBookServiceMessage.getDefaultInstance())
+                    return this;
                 if (other.hasAddPerson()) {
                     mergeAddPerson(other.getAddPerson());
                 }
@@ -2958,18 +3230,21 @@ public final class AddressBookProtos {
                 }
                 return this;
             }
+
             private int bitField0_;
 
             // optional .tutorial.Person addPerson = 1;
             private org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person addPerson_ = org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.getDefaultInstance();
             private com.google.protobuf.SingleFieldBuilder<
                     org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person, org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.Builder, org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.PersonOrBuilder> addPersonBuilder_;
+
             /**
              * <code>optional .tutorial.Person addPerson = 1;</code>
              */
             public boolean hasAddPerson() {
                 return ((bitField0_ & 0x00000001) == 0x00000001);
             }
+
             /**
              * <code>optional .tutorial.Person addPerson = 1;</code>
              */
@@ -2980,6 +3255,7 @@ public final class AddressBookProtos {
                     return addPersonBuilder_.getMessage();
                 }
             }
+
             /**
              * <code>optional .tutorial.Person addPerson = 1;</code>
              */
@@ -2996,6 +3272,7 @@ public final class AddressBookProtos {
                 bitField0_ |= 0x00000001;
                 return this;
             }
+
             /**
              * <code>optional .tutorial.Person addPerson = 1;</code>
              */
@@ -3010,6 +3287,7 @@ public final class AddressBookProtos {
                 bitField0_ |= 0x00000001;
                 return this;
             }
+
             /**
              * <code>optional .tutorial.Person addPerson = 1;</code>
              */
@@ -3029,6 +3307,7 @@ public final class AddressBookProtos {
                 bitField0_ |= 0x00000001;
                 return this;
             }
+
             /**
              * <code>optional .tutorial.Person addPerson = 1;</code>
              */
@@ -3042,6 +3321,7 @@ public final class AddressBookProtos {
                 bitField0_ = (bitField0_ & ~0x00000001);
                 return this;
             }
+
             /**
              * <code>optional .tutorial.Person addPerson = 1;</code>
              */
@@ -3050,6 +3330,7 @@ public final class AddressBookProtos {
                 onChanged();
                 return getAddPersonFieldBuilder().getBuilder();
             }
+
             /**
              * <code>optional .tutorial.Person addPerson = 1;</code>
              */
@@ -3060,6 +3341,7 @@ public final class AddressBookProtos {
                     return addPerson_;
                 }
             }
+
             /**
              * <code>optional .tutorial.Person addPerson = 1;</code>
              */
@@ -3081,12 +3363,14 @@ public final class AddressBookProtos {
             private org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.NamePattern listPeople_ = org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.NamePattern.getDefaultInstance();
             private com.google.protobuf.SingleFieldBuilder<
                     org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.NamePattern, org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.NamePattern.Builder, org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.NamePatternOrBuilder> listPeopleBuilder_;
+
             /**
              * <code>optional .tutorial.NamePattern listPeople = 2;</code>
              */
             public boolean hasListPeople() {
                 return ((bitField0_ & 0x00000002) == 0x00000002);
             }
+
             /**
              * <code>optional .tutorial.NamePattern listPeople = 2;</code>
              */
@@ -3097,6 +3381,7 @@ public final class AddressBookProtos {
                     return listPeopleBuilder_.getMessage();
                 }
             }
+
             /**
              * <code>optional .tutorial.NamePattern listPeople = 2;</code>
              */
@@ -3113,6 +3398,7 @@ public final class AddressBookProtos {
                 bitField0_ |= 0x00000002;
                 return this;
             }
+
             /**
              * <code>optional .tutorial.NamePattern listPeople = 2;</code>
              */
@@ -3127,6 +3413,7 @@ public final class AddressBookProtos {
                 bitField0_ |= 0x00000002;
                 return this;
             }
+
             /**
              * <code>optional .tutorial.NamePattern listPeople = 2;</code>
              */
@@ -3146,6 +3433,7 @@ public final class AddressBookProtos {
                 bitField0_ |= 0x00000002;
                 return this;
             }
+
             /**
              * <code>optional .tutorial.NamePattern listPeople = 2;</code>
              */
@@ -3159,6 +3447,7 @@ public final class AddressBookProtos {
                 bitField0_ = (bitField0_ & ~0x00000002);
                 return this;
             }
+
             /**
              * <code>optional .tutorial.NamePattern listPeople = 2;</code>
              */
@@ -3167,6 +3456,7 @@ public final class AddressBookProtos {
                 onChanged();
                 return getListPeopleFieldBuilder().getBuilder();
             }
+
             /**
              * <code>optional .tutorial.NamePattern listPeople = 2;</code>
              */
@@ -3177,6 +3467,7 @@ public final class AddressBookProtos {
                     return listPeople_;
                 }
             }
+
             /**
              * <code>optional .tutorial.NamePattern listPeople = 2;</code>
              */
@@ -3209,15 +3500,18 @@ public final class AddressBookProtos {
             extends com.google.protobuf.MessageOrBuilder {
 
         // optional int32 size = 1;
+
         /**
          * <code>optional int32 size = 1;</code>
          */
         boolean hasSize();
+
         /**
          * <code>optional int32 size = 1;</code>
          */
         int getSize();
     }
+
     /**
      * Protobuf type {@code tutorial.AddressBookSize}
      */
@@ -3229,9 +3523,13 @@ public final class AddressBookProtos {
             super(builder);
             this.unknownFields = builder.getUnknownFields();
         }
-        private AddressBookSize(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+        private AddressBookSize(boolean noInit) {
+            this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+        }
 
         private static final AddressBookSize defaultInstance;
+
         public static AddressBookSize getDefaultInstance() {
             return defaultInstance;
         }
@@ -3241,11 +3539,13 @@ public final class AddressBookProtos {
         }
 
         private final com.google.protobuf.UnknownFieldSet unknownFields;
+
         @java.lang.Override
         public final com.google.protobuf.UnknownFieldSet
         getUnknownFields() {
             return this.unknownFields;
         }
+
         private AddressBookSize(
                 com.google.protobuf.CodedInputStream input,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -3286,6 +3586,7 @@ public final class AddressBookProtos {
                 makeExtensionsImmutable();
             }
         }
+
         public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
             return org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.internal_static_tutorial_AddressBookSize_descriptor;
@@ -3317,12 +3618,14 @@ public final class AddressBookProtos {
         // optional int32 size = 1;
         public static final int SIZE_FIELD_NUMBER = 1;
         private int size_;
+
         /**
          * <code>optional int32 size = 1;</code>
          */
         public boolean hasSize() {
             return ((bitField0_ & 0x00000001) == 0x00000001);
         }
+
         /**
          * <code>optional int32 size = 1;</code>
          */
@@ -3333,7 +3636,9 @@ public final class AddressBookProtos {
         private void initFields() {
             size_ = 0;
         }
+
         private byte memoizedIsInitialized = -1;
+
         public final boolean isInitialized() {
             byte isInitialized = memoizedIsInitialized;
             if (isInitialized != -1) return isInitialized == 1;
@@ -3352,6 +3657,7 @@ public final class AddressBookProtos {
         }
 
         private int memoizedSerializedSize = -1;
+
         public int getSerializedSize() {
             int size = memoizedSerializedSize;
             if (size != -1) return size;
@@ -3367,6 +3673,7 @@ public final class AddressBookProtos {
         }
 
         private static final long serialVersionUID = 0L;
+
         @java.lang.Override
         protected java.lang.Object writeReplace()
                 throws java.io.ObjectStreamException {
@@ -3378,47 +3685,56 @@ public final class AddressBookProtos {
                 throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data);
         }
+
         public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBookSize parseFrom(
                 com.google.protobuf.ByteString data,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
                 throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data, extensionRegistry);
         }
+
         public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBookSize parseFrom(byte[] data)
                 throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data);
         }
+
         public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBookSize parseFrom(
                 byte[] data,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
                 throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data, extensionRegistry);
         }
+
         public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBookSize parseFrom(java.io.InputStream input)
                 throws java.io.IOException {
             return PARSER.parseFrom(input);
         }
+
         public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBookSize parseFrom(
                 java.io.InputStream input,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
                 throws java.io.IOException {
             return PARSER.parseFrom(input, extensionRegistry);
         }
+
         public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBookSize parseDelimitedFrom(java.io.InputStream input)
                 throws java.io.IOException {
             return PARSER.parseDelimitedFrom(input);
         }
+
         public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBookSize parseDelimitedFrom(
                 java.io.InputStream input,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
                 throws java.io.IOException {
             return PARSER.parseDelimitedFrom(input, extensionRegistry);
         }
+
         public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBookSize parseFrom(
                 com.google.protobuf.CodedInputStream input)
                 throws java.io.IOException {
             return PARSER.parseFrom(input);
         }
+
         public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBookSize parseFrom(
                 com.google.protobuf.CodedInputStream input,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -3426,12 +3742,21 @@ public final class AddressBookProtos {
             return PARSER.parseFrom(input, extensionRegistry);
         }
 
-        public static Builder newBuilder() { return Builder.create(); }
-        public Builder newBuilderForType() { return newBuilder(); }
+        public static Builder newBuilder() {
+            return Builder.create();
+        }
+
+        public Builder newBuilderForType() {
+            return newBuilder();
+        }
+
         public static Builder newBuilder(org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBookSize prototype) {
             return newBuilder().mergeFrom(prototype);
         }
-        public Builder toBuilder() { return newBuilder(this); }
+
+        public Builder toBuilder() {
+            return newBuilder(this);
+        }
 
         @java.lang.Override
         protected Builder newBuilderForType(
@@ -3439,6 +3764,7 @@ public final class AddressBookProtos {
             Builder builder = new Builder(parent);
             return builder;
         }
+
         /**
          * Protobuf type {@code tutorial.AddressBookSize}
          */
@@ -3467,10 +3793,12 @@ public final class AddressBookProtos {
                 super(parent);
                 maybeForceBuilderInitialization();
             }
+
             private void maybeForceBuilderInitialization() {
                 if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
                 }
             }
+
             private static Builder create() {
                 return new Builder();
             }
@@ -3518,7 +3846,7 @@ public final class AddressBookProtos {
 
             public Builder mergeFrom(com.google.protobuf.Message other) {
                 if (other instanceof org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBookSize) {
-                    return mergeFrom((org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBookSize)other);
+                    return mergeFrom((org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBookSize) other);
                 } else {
                     super.mergeFrom(other);
                     return this;
@@ -3526,7 +3854,8 @@ public final class AddressBookProtos {
             }
 
             public Builder mergeFrom(org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBookSize other) {
-                if (other == org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBookSize.getDefaultInstance()) return this;
+                if (other == org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBookSize.getDefaultInstance())
+                    return this;
                 if (other.hasSize()) {
                     setSize(other.getSize());
                 }
@@ -3555,22 +3884,26 @@ public final class AddressBookProtos {
                 }
                 return this;
             }
+
             private int bitField0_;
 
             // optional int32 size = 1;
-            private int size_ ;
+            private int size_;
+
             /**
              * <code>optional int32 size = 1;</code>
              */
             public boolean hasSize() {
                 return ((bitField0_ & 0x00000001) == 0x00000001);
             }
+
             /**
              * <code>optional int32 size = 1;</code>
              */
             public int getSize() {
                 return size_;
             }
+
             /**
              * <code>optional int32 size = 1;</code>
              */
@@ -3580,6 +3913,7 @@ public final class AddressBookProtos {
                 onChanged();
                 return this;
             }
+
             /**
              * <code>optional int32 size = 1;</code>
              */
@@ -3605,20 +3939,24 @@ public final class AddressBookProtos {
             extends com.google.protobuf.MessageOrBuilder {
 
         // optional string pattern = 1;
+
         /**
          * <code>optional string pattern = 1;</code>
          */
         boolean hasPattern();
+
         /**
          * <code>optional string pattern = 1;</code>
          */
         java.lang.String getPattern();
+
         /**
          * <code>optional string pattern = 1;</code>
          */
         com.google.protobuf.ByteString
         getPatternBytes();
     }
+
     /**
      * Protobuf type {@code tutorial.NamePattern}
      */
@@ -3630,9 +3968,13 @@ public final class AddressBookProtos {
             super(builder);
             this.unknownFields = builder.getUnknownFields();
         }
-        private NamePattern(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+        private NamePattern(boolean noInit) {
+            this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+        }
 
         private static final NamePattern defaultInstance;
+
         public static NamePattern getDefaultInstance() {
             return defaultInstance;
         }
@@ -3642,11 +3984,13 @@ public final class AddressBookProtos {
         }
 
         private final com.google.protobuf.UnknownFieldSet unknownFields;
+
         @java.lang.Override
         public final com.google.protobuf.UnknownFieldSet
         getUnknownFields() {
             return this.unknownFields;
         }
+
         private NamePattern(
                 com.google.protobuf.CodedInputStream input,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -3687,6 +4031,7 @@ public final class AddressBookProtos {
                 makeExtensionsImmutable();
             }
         }
+
         public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
             return org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.internal_static_tutorial_NamePattern_descriptor;
@@ -3718,12 +4063,14 @@ public final class AddressBookProtos {
         // optional string pattern = 1;
         public static final int PATTERN_FIELD_NUMBER = 1;
         private java.lang.Object pattern_;
+
         /**
          * <code>optional string pattern = 1;</code>
          */
         public boolean hasPattern() {
             return ((bitField0_ & 0x00000001) == 0x00000001);
         }
+
         /**
          * <code>optional string pattern = 1;</code>
          */
@@ -3741,6 +4088,7 @@ public final class AddressBookProtos {
                 return s;
             }
         }
+
         /**
          * <code>optional string pattern = 1;</code>
          */
@@ -3761,7 +4109,9 @@ public final class AddressBookProtos {
         private void initFields() {
             pattern_ = "";
         }
+
         private byte memoizedIsInitialized = -1;
+
         public final boolean isInitialized() {
             byte isInitialized = memoizedIsInitialized;
             if (isInitialized != -1) return isInitialized == 1;
@@ -3780,6 +4130,7 @@ public final class AddressBookProtos {
         }
 
         private int memoizedSerializedSize = -1;
+
         public int getSerializedSize() {
             int size = memoizedSerializedSize;
             if (size != -1) return size;
@@ -3795,6 +4146,7 @@ public final class AddressBookProtos {
         }
 
         private static final long serialVersionUID = 0L;
+
         @java.lang.Override
         protected java.lang.Object writeReplace()
                 throws java.io.ObjectStreamException {
@@ -3806,47 +4158,56 @@ public final class AddressBookProtos {
                 throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data);
         }
+
         public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.NamePattern parseFrom(
                 com.google.protobuf.ByteString data,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
                 throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data, extensionRegistry);
         }
+
         public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.NamePattern parseFrom(byte[] data)
                 throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data);
         }
+
         public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.NamePattern parseFrom(
                 byte[] data,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
                 throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data, extensionRegistry);
         }
+
         public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.NamePattern parseFrom(java.io.InputStream input)
                 throws java.io.IOException {
             return PARSER.parseFrom(input);
         }
+
         public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.NamePattern parseFrom(
                 java.io.InputStream input,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
                 throws java.io.IOException {
             return PARSER.parseFrom(input, extensionRegistry);
         }
+
         public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.NamePattern parseDelimitedFrom(java.io.InputStream input)
                 throws java.io.IOException {
             return PARSER.parseDelimitedFrom(input);
         }
+
         public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.NamePattern parseDelimitedFrom(
                 java.io.InputStream input,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
                 throws java.io.IOException {
             return PARSER.parseDelimitedFrom(input, extensionRegistry);
         }
+
         public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.NamePattern parseFrom(
                 com.google.protobuf.CodedInputStream input)
                 throws java.io.IOException {
             return PARSER.parseFrom(input);
         }
+
         public static org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.NamePattern parseFrom(
                 com.google.protobuf.CodedInputStream input,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -3854,12 +4215,21 @@ public final class AddressBookProtos {
             return PARSER.parseFrom(input, extensionRegistry);
         }
 
-        public static Builder newBuilder() { return Builder.create(); }
-        public Builder newBuilderForType() { return newBuilder(); }
+        public static Builder newBuilder() {
+            return Builder.create();
+        }
+
+        public Builder newBuilderForType() {
+            return newBuilder();
+        }
+
         public static Builder newBuilder(org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.NamePattern prototype) {
             return newBuilder().mergeFrom(prototype);
         }
-        public Builder toBuilder() { return newBuilder(this); }
+
+        public Builder toBuilder() {
+            return newBuilder(this);
+        }
 
         @java.lang.Override
         protected Builder newBuilderForType(
@@ -3867,6 +4237,7 @@ public final class AddressBookProtos {
             Builder builder = new Builder(parent);
             return builder;
         }
+
         /**
          * Protobuf type {@code tutorial.NamePattern}
          */
@@ -3895,10 +4266,12 @@ public final class AddressBookProtos {
                 super(parent);
                 maybeForceBuilderInitialization();
             }
+
             private void maybeForceBuilderInitialization() {
                 if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
                 }
             }
+
             private static Builder create() {
                 return new Builder();
             }
@@ -3946,7 +4319,7 @@ public final class AddressBookProtos {
 
             public Builder mergeFrom(com.google.protobuf.Message other) {
                 if (other instanceof org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.NamePattern) {
-                    return mergeFrom((org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.NamePattern)other);
+                    return mergeFrom((org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.NamePattern) other);
                 } else {
                     super.mergeFrom(other);
                     return this;
@@ -3954,7 +4327,8 @@ public final class AddressBookProtos {
             }
 
             public Builder mergeFrom(org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.NamePattern other) {
-                if (other == org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.NamePattern.getDefaultInstance()) return this;
+                if (other == org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.NamePattern.getDefaultInstance())
+                    return this;
                 if (other.hasPattern()) {
                     bitField0_ |= 0x00000001;
                     pattern_ = other.pattern_;
@@ -3985,16 +4359,19 @@ public final class AddressBookProtos {
                 }
                 return this;
             }
+
             private int bitField0_;
 
             // optional string pattern = 1;
             private java.lang.Object pattern_ = "";
+
             /**
              * <code>optional string pattern = 1;</code>
              */
             public boolean hasPattern() {
                 return ((bitField0_ & 0x00000001) == 0x00000001);
             }
+
             /**
              * <code>optional string pattern = 1;</code>
              */
@@ -4009,6 +4386,7 @@ public final class AddressBookProtos {
                     return (java.lang.String) ref;
                 }
             }
+
             /**
              * <code>optional string pattern = 1;</code>
              */
@@ -4025,6 +4403,7 @@ public final class AddressBookProtos {
                     return (com.google.protobuf.ByteString) ref;
                 }
             }
+
             /**
              * <code>optional string pattern = 1;</code>
              */
@@ -4038,6 +4417,7 @@ public final class AddressBookProtos {
                 onChanged();
                 return this;
             }
+
             /**
              * <code>optional string pattern = 1;</code>
              */
@@ -4047,6 +4427,7 @@ public final class AddressBookProtos {
                 onChanged();
                 return this;
             }
+
             /**
              * <code>optional string pattern = 1;</code>
              */
@@ -4077,7 +4458,8 @@ public final class AddressBookProtos {
      */
     public static abstract class AddressBookService
             implements com.google.protobuf.Service {
-        protected AddressBookService() {}
+        protected AddressBookService() {
+        }
 
         public interface Interface {
             /**
@@ -4102,7 +4484,7 @@ public final class AddressBookProtos {
                 final Interface impl) {
             return new AddressBookService() {
                 @java.lang.Override
-                public  void addPerson(
+                public void addPerson(
                         com.google.protobuf.RpcController controller,
                         org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person request,
                         com.google.protobuf.RpcCallback<org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBookSize> done) {
@@ -4110,7 +4492,7 @@ public final class AddressBookProtos {
                 }
 
                 @java.lang.Override
-                public  void listPeople(
+                public void listPeople(
                         com.google.protobuf.RpcController controller,
                         org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.NamePattern request,
                         com.google.protobuf.RpcCallback<org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBook> done) {
@@ -4138,11 +4520,11 @@ public final class AddressBookProtos {
                                 "Service.callBlockingMethod() given method descriptor for " +
                                         "wrong service type.");
                     }
-                    switch(method.getIndex()) {
+                    switch (method.getIndex()) {
                         case 0:
-                            return impl.addPerson(controller, (org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person)request);
+                            return impl.addPerson(controller, (org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person) request);
                         case 1:
-                            return impl.listPeople(controller, (org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.NamePattern)request);
+                            return impl.listPeople(controller, (org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.NamePattern) request);
                         default:
                             throw new java.lang.AssertionError("Can't get here.");
                     }
@@ -4156,7 +4538,7 @@ public final class AddressBookProtos {
                                 "Service.getRequestPrototype() given method " +
                                         "descriptor for wrong service type.");
                     }
-                    switch(method.getIndex()) {
+                    switch (method.getIndex()) {
                         case 0:
                             return org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.getDefaultInstance();
                         case 1:
@@ -4174,7 +4556,7 @@ public final class AddressBookProtos {
                                 "Service.getResponsePrototype() given method " +
                                         "descriptor for wrong service type.");
                     }
-                    switch(method.getIndex()) {
+                    switch (method.getIndex()) {
                         case 0:
                             return org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBookSize.getDefaultInstance();
                         case 1:
@@ -4203,11 +4585,11 @@ public final class AddressBookProtos {
                 org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.NamePattern request,
                 com.google.protobuf.RpcCallback<org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBook> done);
 
-        public static final
-        com.google.protobuf.Descriptors.ServiceDescriptor
+        public static final com.google.protobuf.Descriptors.ServiceDescriptor
         getDescriptor() {
             return org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.getDescriptor().getServices().get(0);
         }
+
         public final com.google.protobuf.Descriptors.ServiceDescriptor
         getDescriptorForType() {
             return getDescriptor();
@@ -4224,14 +4606,14 @@ public final class AddressBookProtos {
                         "Service.callMethod() given method descriptor for wrong " +
                                 "service type.");
             }
-            switch(method.getIndex()) {
+            switch (method.getIndex()) {
                 case 0:
-                    this.addPerson(controller, (org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person)request,
+                    this.addPerson(controller, (org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person) request,
                             com.google.protobuf.RpcUtil.<org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBookSize>specializeCallback(
                                     done));
                     return;
                 case 1:
-                    this.listPeople(controller, (org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.NamePattern)request,
+                    this.listPeople(controller, (org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.NamePattern) request,
                             com.google.protobuf.RpcUtil.<org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBook>specializeCallback(
                                     done));
                     return;
@@ -4248,7 +4630,7 @@ public final class AddressBookProtos {
                         "Service.getRequestPrototype() given method " +
                                 "descriptor for wrong service type.");
             }
-            switch(method.getIndex()) {
+            switch (method.getIndex()) {
                 case 0:
                     return org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person.getDefaultInstance();
                 case 1:
@@ -4266,7 +4648,7 @@ public final class AddressBookProtos {
                         "Service.getResponsePrototype() given method " +
                                 "descriptor for wrong service type.");
             }
-            switch(method.getIndex()) {
+            switch (method.getIndex()) {
                 case 0:
                     return org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBookSize.getDefaultInstance();
                 case 1:
@@ -4292,7 +4674,7 @@ public final class AddressBookProtos {
                 return channel;
             }
 
-            public  void addPerson(
+            public void addPerson(
                     com.google.protobuf.RpcController controller,
                     org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.Person request,
                     com.google.protobuf.RpcCallback<org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBookSize> done) {
@@ -4307,7 +4689,7 @@ public final class AddressBookProtos {
                                 org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBookSize.getDefaultInstance()));
             }
 
-            public  void listPeople(
+            public void listPeople(
                     com.google.protobuf.RpcController controller,
                     org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.NamePattern request,
                     com.google.protobuf.RpcCallback<org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos.AddressBook> done) {
@@ -4410,8 +4792,10 @@ public final class AddressBookProtos {
     getDescriptor() {
         return descriptor;
     }
+
     private static com.google.protobuf.Descriptors.FileDescriptor
             descriptor;
+
     static {
         java.lang.String[] descriptorData = {
                 "\n\021addressbook.proto\022\010tutorial\"\332\001\n\006Person" +
@@ -4442,43 +4826,43 @@ public final class AddressBookProtos {
                         internal_static_tutorial_Person_fieldAccessorTable = new
                                 com.google.protobuf.GeneratedMessage.FieldAccessorTable(
                                 internal_static_tutorial_Person_descriptor,
-                                new java.lang.String[] { "Name", "Id", "Email", "Phone", });
+                                new java.lang.String[]{"Name", "Id", "Email", "Phone",});
                         internal_static_tutorial_Person_PhoneNumber_descriptor =
                                 internal_static_tutorial_Person_descriptor.getNestedTypes().get(0);
                         internal_static_tutorial_Person_PhoneNumber_fieldAccessorTable = new
                                 com.google.protobuf.GeneratedMessage.FieldAccessorTable(
                                 internal_static_tutorial_Person_PhoneNumber_descriptor,
-                                new java.lang.String[] { "Number", "Type", });
+                                new java.lang.String[]{"Number", "Type",});
                         internal_static_tutorial_AddressBook_descriptor =
                                 getDescriptor().getMessageTypes().get(1);
                         internal_static_tutorial_AddressBook_fieldAccessorTable = new
                                 com.google.protobuf.GeneratedMessage.FieldAccessorTable(
                                 internal_static_tutorial_AddressBook_descriptor,
-                                new java.lang.String[] { "Person", });
+                                new java.lang.String[]{"Person",});
                         internal_static_tutorial_AddressBookServiceMessage_descriptor =
                                 getDescriptor().getMessageTypes().get(2);
                         internal_static_tutorial_AddressBookServiceMessage_fieldAccessorTable = new
                                 com.google.protobuf.GeneratedMessage.FieldAccessorTable(
                                 internal_static_tutorial_AddressBookServiceMessage_descriptor,
-                                new java.lang.String[] { "AddPerson", "ListPeople", });
+                                new java.lang.String[]{"AddPerson", "ListPeople",});
                         internal_static_tutorial_AddressBookSize_descriptor =
                                 getDescriptor().getMessageTypes().get(3);
                         internal_static_tutorial_AddressBookSize_fieldAccessorTable = new
                                 com.google.protobuf.GeneratedMessage.FieldAccessorTable(
                                 internal_static_tutorial_AddressBookSize_descriptor,
-                                new java.lang.String[] { "Size", });
+                                new java.lang.String[]{"Size",});
                         internal_static_tutorial_NamePattern_descriptor =
                                 getDescriptor().getMessageTypes().get(4);
                         internal_static_tutorial_NamePattern_fieldAccessorTable = new
                                 com.google.protobuf.GeneratedMessage.FieldAccessorTable(
                                 internal_static_tutorial_NamePattern_descriptor,
-                                new java.lang.String[] { "Pattern", });
+                                new java.lang.String[]{"Pattern",});
                         return null;
                     }
                 };
         com.google.protobuf.Descriptors.FileDescriptor
                 .internalBuildGeneratedFileFrom(descriptorData,
-                        new com.google.protobuf.Descriptors.FileDescriptor[] {
+                        new com.google.protobuf.Descriptors.FileDescriptor[]{
                         }, assigner);
     }
 

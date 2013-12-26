@@ -31,30 +31,30 @@ public class ProtobufferImporter extends AbstractImporterComponent {
 
     private BundleContext context;
 
-    private Logger log=LoggerFactory.getLogger(this.getClass().getName());
+    private Logger log = LoggerFactory.getLogger(this.getClass().getName());
 
     @ServiceProperty(name = "instance.name")
     private String name;
     @ServiceProperty(name = "target", value = "(id=*)")
     private String filter;
 
-    public ProtobufferImporter(BundleContext context){
-        this.context=context;
+    public ProtobufferImporter(BundleContext context) {
+        this.context = context;
     }
 
     @Validate
-    public void validate(){
+    public void validate() {
         log.info("Protobuffer Importer RPC is up and running");
     }
 
     @Override
     protected void useImportDeclaration(ImportDeclaration importDeclaration) throws ImporterException {
 
-        String id=importDeclaration.getMetadata().get("id").toString();
-        String serverHostname=importDeclaration.getMetadata().get("rpc.server.address").toString();
-        String protoclass=importDeclaration.getMetadata().get("rpc.proto.class").toString();
-        String protoservice=importDeclaration.getMetadata().get("rpc.proto.service").toString();
-        String protomessage=importDeclaration.getMetadata().get("rpc.proto.message").toString();
+        String id = importDeclaration.getMetadata().get("id").toString();
+        String serverHostname = importDeclaration.getMetadata().get("rpc.server.address").toString();
+        String protoclass = importDeclaration.getMetadata().get("rpc.proto.class").toString();
+        String protoservice = importDeclaration.getMetadata().get("rpc.proto.service").toString();
+        String protomessage = importDeclaration.getMetadata().get("rpc.proto.message").toString();
 
         log.info("Importing declaration with ID {}", id);
 
@@ -62,27 +62,27 @@ public class ProtobufferImporter extends AbstractImporterComponent {
 
             Bus cxfbus = BusFactory.getThreadDefaultBus();
             BindingFactoryManager mgr = cxfbus.getExtension(BindingFactoryManager.class);
-            mgr.registerBindingFactory(ProtobufBindingFactory.PROTOBUF_BINDING_ID,new ProtobufBindingFactory(cxfbus));
+            mgr.registerBindingFactory(ProtobufBindingFactory.PROTOBUF_BINDING_ID, new ProtobufBindingFactory(cxfbus));
 
-            Class<?> bufferService=FuchsiaUtils.loadClass(context,String.format("%s$%s",protoclass,protoservice));
+            Class<?> bufferService = FuchsiaUtils.loadClass(context, String.format("%s$%s", protoclass, protoservice));
 
             Class<?> bufferMessage = FuchsiaUtils.loadClass(context, String.format("%s$%s", protoclass, protomessage));
 
-            Class<? extends Message> generic=bufferMessage.asSubclass(Message.class);
+            Class<? extends Message> generic = bufferMessage.asSubclass(Message.class);
 
-            RpcChannel channel=new SimpleRpcChannel(serverHostname,generic);
+            RpcChannel channel = new SimpleRpcChannel(serverHostname, generic);
 
-            Method method=bufferService.getMethod("newStub",RpcChannel.class);
+            Method method = bufferService.getMethod("newStub", RpcChannel.class);
 
-            Object service=method.invoke(bufferService, channel);
+            Object service = method.invoke(bufferService, channel);
 
             Dictionary<String, Object> serviceProperties = new Hashtable<String, Object>();
-            serviceProperties.put("fuchsia.importer.id",id);
+            serviceProperties.put("fuchsia.importer.id", id);
 
-            ServiceRegistration registrationTicket=context.registerService(bufferService.getName(),service,serviceProperties);
+            ServiceRegistration registrationTicket = context.registerService(bufferService.getName(), service, serviceProperties);
 
         } catch (Exception e) {
-            log.error("Fail to import Protobuffer RPC service with the message '{}'",e.getMessage());
+            log.error("Fail to import Protobuffer RPC service with the message '{}'", e.getMessage());
         }
 
     }
@@ -90,7 +90,7 @@ public class ProtobufferImporter extends AbstractImporterComponent {
     @Override
     protected void denyImportDeclaration(ImportDeclaration importDeclaration) throws ImporterException {
 
-       // Don't care mama!
+        // Don't care mama!
 
     }
 
