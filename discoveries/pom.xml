@@ -15,7 +15,7 @@
 
     <modules>
         <module>fake</module>
-        <module>mdns</module>
+        <module>mdns</module> 
         <module>upnp</module>
         <module>upnp.it</module>
 <!--        <module>bluetooth</module> -->
