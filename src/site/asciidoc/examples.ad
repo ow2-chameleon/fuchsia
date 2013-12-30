@@ -1,14 +1,14 @@
 Fake-Discovery
 ~~~~~~~~~~~~~~
 
-First things first, in order to have an discovery we need to create a fuchsia distribution that embbeds it, or to use an already existing distribution and add the modules required. Below we ll show you how to use couples of discoveries that are available in the platform.
+First things first, in order to have an discovery we need to create a fuchsia distribution that embeds it, or to use an already existing distribution and add the modules required. Below we will show you how to use couples of discoveries that are available in the platform.
 
 What it does?!
 ^^^^^^^^^^^^^^
 
 As seen in the introduction the fundamental task of a discovery is to create an instance of Declaration which represents the availability of a service/device, and the intrinsic information of such service/device are contained inside **Declaration** as properties (stored in a Map).
 
-The idea behind having a fake discovery, is in infact be able to deploy a file (property file style, containing key value mapping).
+The idea behind having a fake discovery, is in fact be able to deploy a file (property file style, containing key value mapping).
 
 In order to activate the fake discovery its enough to compile the distribution with the profile **fake** (meaning mvn clean install -Pcore,fake), from the moment you compile a distribution with this parameter and you launch this distribution a directory called **load** will be created in the root of the chameleon distribution ($FUCHSIA/distribution/target/chameleon-distribution), this directory will be used to deploy your files that contain the key-value that you need to be instantiated in the platform.
 
@@ -49,7 +49,7 @@ mDNS is a discovery protocol based on the previous Bonjour(c), from Apple. To pe
 
 'mvn clean install -Pcore,mdns,mdns-config'
 
-core and mdns are the modules that we need, in this case, the fuchsia core types and the discovery module itself. The 3td element 'mdns-config' is the element responsible to configure the discovery. Even though the **mdns** module is available with the -Pmdns profile, it is necessary to create an instance of it, shaping it as we wish. We will explain in few paragraphs how to do that manually, but for now we will use an configuration example that setup the discovery to findout all the printers available in the local network, for that we add the profile -Pmdns-config.
+core and mdns are the modules that we need, in this case, the fuchsia core types and the discovery module itself. The 3td element 'mdns-config' is the element responsible to configure the discovery. Even though the **mdns** module is available with the -Pmdns profile, it is necessary to create an instance of it, shaping it as we wish. We will explain in few paragraphs how to do that manually, but for now we will use an configuration example that setup the discovery to find out all the printers available in the local network, for that we add the profile -Pmdns-config.
 
 To verify that the discovery works properly you can use the console.
 
@@ -161,7 +161,7 @@ If  you install the fuchsia bundle *Fake-Importer*, you can type *instances*, an
 Instance GenericDeviceInst-virtual-camera -> valid
 ----
 
-As we can see, the fake importer created an instance name *GenericDeviceInst-virtual-camera* (our *id* preceed by 'GenericDeviceInst-')
+As we can see, the fake importer created an instance name *GenericDeviceInst-virtual-camera* (our *id* preceded by 'GenericDeviceInst-')
 
 
 

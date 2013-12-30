@@ -8,12 +8,12 @@ Fuchsia can materialize an OSGi outcast service (not visible in the platform) in
 * PuSH (PUbSubHubbub) hub, if you have a feed that uses PuSH as hub, all updates are sent via eventAdmin. Thus, avoiding you to implement the protocol
 * MQTT provider, so you can receive your MQTT messages locally (via EventAdmin) without having to implement the subscriber for this protocol
 
-All those are already builtin features, the materialization of an external service into OSGi platform, this processor is called: *Importer*. 
+All those are already built-in features, the materialization of an external service into OSGi platform, this processor is called: *Importer*. 
 
-The second type of processor is called *Exporter*, this type enables us to turn an OSGi service instance into a service that can be access outside of OSGi, exposed as a web service for instance. The builtin exporters are:
+The second type of processor is called *Exporter*, this type enables us to turn an OSGi service instance into a service that can be access outside of OSGi, exposed as a web service for instance. The built-in exporters are:
 
 * JAX-WS, based in an OSGi service instance, publishes a WebService to be accessed remotely. You can use Fuchsia to instantiate the exported service or use directly http://cxf.apache.org/[Apache CXF].
 
 Of course those processors (*importers* or *exporters*) are available without needing to code a single line. 
 
-Albeit, Fuchsia has builtin processors, we are aware that most of applications use their own protocol or adopt their protocol specific device, knowing that Fuchsia was build to be extensible, thus implementing and deploying a customized processor is quite straight forward.
+Albeit, Fuchsia has built-in processors, we are aware that most of applications use their own protocol or adopt their protocol specific device, knowing that Fuchsia was build to be extensible, thus implementing and deploying a customized processor is quite straight forward.

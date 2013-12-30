@@ -43,7 +43,7 @@ MQTT importer
 
 *Detailed Description*
 
-http://mqtt.org/[MQTT] is a protocol http://openiot.eu/[largely diffused] protocole for message exchange due to its good performance. The implementation used by Fuchsia to support MQTT was http://www.rabbitmq.com/[RabbitMQ]
+http://mqtt.org/[MQTT] is a protocol http://openiot.eu/[largely diffused] protocol for message exchange due to its good performance. The implementation used by Fuchsia to support MQTT was http://www.rabbitmq.com/[RabbitMQ]
 
 PubSubHubBub importer
 ~~~~~~~~~~~~~~~~~~~~~

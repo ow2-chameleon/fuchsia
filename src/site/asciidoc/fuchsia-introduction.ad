@@ -6,7 +6,7 @@ As most of modern applications require multiple sources of information such as w
 
 In ubiquitous applications this kind of integration is even more important since the dynamicity and the multitude of protocol grows with number of devices supported.
 
-So, developers are suddenly facing the challenge of mastering several protocol, and their respective tools for debugging, dependency managing, native calls access, access configuration, etc. That is where Fuchsia plays a key role, by providing the same way of dealing with different protocols, creating a single entrypoint for all protocols supported.
+So, developers are suddenly facing the challenge of mastering several protocol, and their respective tools for debugging, dependency managing, native calls access, access configuration, etc. That is where Fuchsia plays a key role, by providing the same way of dealing with different protocols, creating a single entry-point for all protocols supported.
 
 In Appsgate all those characteristics are gathered in order to provide an Smart Home environment.
 
@@ -14,7 +14,7 @@ You can administrate and monitor all the exchange of your OSGi platform with ext
 
 .There exist essentially 4 types of entities inside fuchsia that you need to understand before go hands-on the code:
 * Declaration, it is the metadata that describes a device or a service
-* Discovery, responsible for the detection of a device/service, in Fuchsia that means create a *Declaration* and adding it to the osgi registry
+* Discovery, responsible for the detection of a device/service, in Fuchsia that means create a *Declaration* and adding it to the OSGi registry
 * Processors, it represents the task itself.
 * Linkers, connects a declaration to a processor, evaluate the constraints to be respected in order to connect those two.
 
@@ -23,7 +23,7 @@ Declarations
 
 Think in **Declaration** as a property file, although that it is not a file, it is an service registered in an OSGi platform, as long as this service is registered with the proper platform, *Fuchsia* will recognize it. 
 
-Its function is to indicate that a given device/service is available with certain properties, and is the role of an Importer/Exporter (explained later) to receive those information as inputs and create a bridge between the osgi platform and this device (all by using the properties given by the **Declaration**), allowing other services to access this device without knowing its protocol.
+Its function is to indicate that a given device/service is available with certain properties, and is the role of an Importer/Exporter (explained later) to receive those information as inputs and create a bridge between the OSGi platform and this device (all by using the properties given by the **Declaration**), allowing other services to access this device without knowing its protocol.
 
 Discoveries
 ~~~~~~~~~~~
@@ -64,4 +64,4 @@ Analogue to the *importers*, the *exporters* must to receive a *declaration*, bu
 Linkers
 ~~~~~~~
 
-The existence of a **declaration** and a **processor** is not enough to trigger a connection between them, there has to exist a **linker**. This _linker_ is resposible to check the condition on both sides (processor and declaration) see if they _match_, and just then establish a connection between them.
+The existence of a **declaration** and a **processor** is not enough to trigger a connection between them, there has to exist a **linker**. This _linker_ is responsible to check the condition on both sides (processor and declaration) see if they _match_, and just then establish a connection between them.

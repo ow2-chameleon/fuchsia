@@ -45,11 +45,11 @@ This method is quick and fast to integrate for compilation, although, depending 
 Compiling a distribution
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-In order to generate a Fuchsia distribution there is only one mandatory profile the **core**, all the other modules are optional and can be included in the distribution by adding the apropriate maven profile ( *mvn -P parameter* ). The maven profile and its contents are specified right below.
+In order to generate a Fuchsia distribution there is only one mandatory profile the **core**, all the other modules are optional and can be included in the distribution by adding the appropriate maven profile ( *mvn -P parameter* ). The maven profile and its contents are specified right below.
 
 * core - This module contains all the basic Fuchsia types, fuchsia shell tool is installed automatically in this profile as well, even though its not part of the bundle core
 * discoveries
-** http://jmdns.sourceforge.net/[mdns] - the implementation os dnssd/mdns discovery protocol
+** http://jmdns.sourceforge.net/[mdns] - the implementation of dnssd/mdns discovery protocol
 ** upnp
 * importers
 ** importer-cxf

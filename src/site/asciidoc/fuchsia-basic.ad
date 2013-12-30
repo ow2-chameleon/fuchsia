@@ -73,7 +73,7 @@ The *Linkers* job is to evaluate if a given *Declaration* and a *Service* match 
             .with("fuchsia.linker.filter.importerService").setto("(instance.name=cxfimporterlinker)");
 --
 
-In this linker we are saying "if a declaration constains _endpoint.url_ than connect it with the importer in which the instance is called _cxfimporterlinker_".
+In this linker we are saying "if a declaration contains _endpoint.url_ than connect it with the importer in which the instance is called _cxfimporterlinker_".
 
 In order to _Inform fuchsia the JAX-WS info_, we have several options, either we can publish a service that follows the interface _org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration_, or we can use the Fake-Discovery, which translate files deployed in the folder named _load_ into a ImportDeclaration.
 
@@ -130,7 +130,7 @@ deviceSubType=another
 device.serialNumber=virtual-camera
 --
 
-Then, just request your service as a regular dependency (as shown below), then you ll see your dependency being injected and ready for use without much trouble.
+Then, just request your service as a regular dependency (as shown below), then you will see your dependency being injected and ready for use without much trouble.
 
 [source,java]
 --
@@ -219,9 +219,9 @@ Now when you receive an update from the _Hub_ it will be automatically redirecte
 Import a MQTT service
 ~~~~~~~~~~~~~~~~~~~~~
 
-As MQTT is an efficient message exchange protocole, Fuchsia has builtin a *MQTT* importer that receives and forward messages from MQTT bus into EventAdmin bus. 
+As MQTT is an efficient message exchange protocol, Fuchsia has built in a *MQTT* importer that receives and forward messages from MQTT bus into EventAdmin bus. 
 
-The address of the MQTT server is supposely known, and the next two steps (importer and linker instantiation) can be done with the maven profile, according to the command below.
+The address of the MQTT server is supposedly known, and the next two steps (importer and linker instantiation) can be done with the maven profile, according to the command below.
 
 [source,bash]
 --
@@ -270,7 +270,7 @@ In order to be able to export your https://code.google.com/p/protobuf/[Protobuff
 
 - [ ] Protobuffer class generated (Step 1)
 - [ ] Implement the service methods for the Protobuffer generated class (Step 2)
-- [ ] Protobuffer class instante added to OSGi Registry (Step 3)
+- [ ] Protobuffer class instance added to OSGi Registry (Step 3)
 - [ ] Instantiate the exporter and the linker (Step 4)
 - [ ] Declare the exportation (Step 5)
 - [ ] Create the runtime platform (Step 6)
@@ -283,7 +283,7 @@ Protobuffer *version 2.5.0* must be used, any version other than that may produc
 Step 1
 ^^^^^^
 
-Follow the instalation procedure in https://code.google.com/p/protobuf/[Protobuffer] website to get the command for compile _.proto_ file.
+Follow the installation procedure in https://code.google.com/p/protobuf/[Protobuffer] website to get the command for compile _.proto_ file.
 
 Here it is an example of a proto file that can be used for a first glance at the functionality.
 
@@ -337,7 +337,7 @@ message NamePattern {
 }
 --
 
-From this file you can generate your classe by invoking 
+From this file you can generate your class by invoking 
 
 [source,bash]
 --
@@ -408,7 +408,7 @@ As you can see, its not something straight forward as you thought it should be.
 Step 3	
 ^^^^^^
 
-In this step, we instantiate our service (in java level) and publish it in the OSGi registry. There are several ways of doing this *Step* so pick up your flavor. We ll do like this:
+In this step, we instantiate our service (in java level) and publish it in the OSGi registry. There are several ways of doing this *Step* so pick up your flavor. We will do like this:
 
 [source,java]
 --
@@ -512,7 +512,7 @@ To verify that everything was published properly, it is enough to access the url
 Importing Protobuffer RPC service
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Here, we can see the similatity in the importation process, if a given protocol is supported by Fuchsia the processors are used similarly independently of the protocol.
+Here, we can see the similarity in the importation process, if a given protocol is supported by Fuchsia the processors are used similarly independently of the protocol.
 
 .Prepare the environment
 - [ ] Instantiate the importer & linker (Step 1)
@@ -522,7 +522,7 @@ Here, we can see the similatity in the importation process, if a given protocol 
 Step 1
 ^^^^^^
 
-This step is mandatory for use of *processors* (importer, exporter). From the moment you instantiate one processor, it is usually required for you to create a *linker* otherwise your service cannot be notified in case of a *declaration* appeareance.
+This step is mandatory for use of *processors* (importer, exporter). From the moment you instantiate one processor, it is usually required for you to create a *linker* otherwise your service cannot be notified in case of a *declaration* appearance.
 
 [source,java]
 --
