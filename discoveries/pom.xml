@@ -20,4 +20,9 @@
         <module>upnp.it</module>
 <!--        <module>bluetooth</module> -->
     </modules>
+
+    <build>
+        <finalName>fuchsia-discovery-${project.artifactId}</finalName>
+    </build>
+
 </project>
