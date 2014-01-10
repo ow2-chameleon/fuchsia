@@ -57,7 +57,13 @@ public class FakeDiscoveryBridge extends AbstractDiscoveryComponent implements D
         super.start();
 
         try {
-            new DirectoryMonitor(new File(monitoredDirectory),pollingTime).start(getBundleContext());
+
+            File monitoredFolder=new File(monitoredDirectory);
+
+            DirectoryMonitor dm=new DirectoryMonitor(monitoredFolder,pollingTime);
+
+            dm.start(getBundleContext());
+
             getLogger().info("Discovery up and running.");
         } catch (Exception e) {
             getLogger().error("Failed to start {} for the directory {} and polling time {}, with the message '{}'", new String[]{DirectoryMonitor.class.getName(), monitoredDirectory, pollingTime.toString(), e.getMessage()});
@@ -200,6 +206,8 @@ public class FakeDiscoveryBridge extends AbstractDiscoveryComponent implements D
 
         ImportDeclaration declaration=importDeclarationsFile.get(file.getAbsolutePath());
 
+        if(declaration==null) return;
+
         if(importDeclarationsFile.remove(file.getAbsolutePath())==null){
             getLogger().error("Failed to unregister device-file mapping ({}),  it did not existed before.",file.getAbsolutePath());
         } else {
@@ -214,7 +222,10 @@ public class FakeDiscoveryBridge extends AbstractDiscoveryComponent implements D
 
         try {
             String deviceId=(String)declaration.getMetadata().get(Constants.DEVICE_ID);
-            devicesManaged.get(deviceId).dispose();
+            InstanceManager imDevice=devicesManaged.get(deviceId);
+
+            if(imDevice!=null) imDevice.dispose();
+
         } catch(NullPointerException e){
             getLogger().error("Failed to disconnect device {}, this device was not registered by this discovery",(String)declaration.getMetadata().get(Constants.DEVICE_ID));
         }

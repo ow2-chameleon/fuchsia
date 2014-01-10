@@ -66,6 +66,7 @@ public class DirectoryMonitor implements BundleActivator, ServiceTrackerCustomiz
 
         // We observes all files.
         FileAlterationObserver observer = new FileAlterationObserver(directory, TrueFileFilter.INSTANCE);
+        observer.checkAndNotify();
         observer.addListener(new FileMonitor());
         monitor = new FileAlterationMonitor(polling, observer);
     }
