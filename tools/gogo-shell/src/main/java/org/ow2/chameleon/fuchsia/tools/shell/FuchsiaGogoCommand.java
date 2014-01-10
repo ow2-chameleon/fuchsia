@@ -1,10 +1,7 @@
 package org.ow2.chameleon.fuchsia.tools.shell;
 
 import org.apache.felix.ipojo.Factory;
-import org.apache.felix.ipojo.annotations.Component;
-import org.apache.felix.ipojo.annotations.Instantiate;
-import org.apache.felix.ipojo.annotations.Provides;
-import org.apache.felix.ipojo.annotations.ServiceProperty;
+import org.apache.felix.ipojo.annotations.*;
 import org.apache.felix.ipojo.architecture.Architecture;
 import org.apache.felix.ipojo.architecture.HandlerDescription;
 import org.apache.felix.ipojo.extender.Declaration;
@@ -14,6 +11,8 @@ import org.apache.felix.service.command.Descriptor;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.event.Event;
+import org.osgi.service.event.EventAdmin;
 import org.ow2.chameleon.fuchsia.core.ExportationLinker;
 import org.ow2.chameleon.fuchsia.core.ImportationLinker;
 import org.ow2.chameleon.fuchsia.core.component.DiscoveryService;
@@ -22,8 +21,7 @@ import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 
-import java.util.Collection;
-import java.util.Map;
+import java.util.*;
 
 @Component(immediate = true)
 @Instantiate
@@ -40,13 +38,16 @@ public class FuchsiaGogoCommand {
     String m_scope;
 
     @ServiceProperty(name = "osgi.command.function", value = "{}")
-    String[] m_function = new String[]{"declaration", "linker", "discovery","importer","exporter"};
+    String[] m_function = new String[]{"declaration", "linker", "discovery","importer","exporter","sendmessage"};
 
     private BundleContext m_context = null;
 
     public FuchsiaGogoCommand(BundleContext context) {
         this.m_context = context;
     }
+
+    @Requires
+    EventAdmin eventAdmin;
 
     @Descriptor("Gets info about the importation declaration available")
     public void declaration(@Descriptor("declaration [ID name]") String... parameters) {
@@ -208,6 +209,39 @@ public class FuchsiaGogoCommand {
         } catch (InvalidSyntaxException e) {
             System.out.println("failed to execute the command with the message: " + e.getMessage());
         }
+
+    }
+
+    @Descriptor("Send event admin messages")
+    public void sendmessage(@Descriptor("sendmessage BUS [KEY=VALUE]*") String... parameters){
+
+        assert parameters[0]!=null;
+
+        String bus=parameters[0];
+
+        Dictionary eventAdminPayload=new Hashtable();
+
+        for(String m:parameters){
+            if(m.contains("=")){
+                StringTokenizer st = new StringTokenizer(m,"=");
+
+                assert st.countTokens()==2;
+
+                String key=st.nextToken();
+                String value=st.nextToken();
+
+                eventAdminPayload.put(key,value);
+
+            }
+        }
+
+        Event eventAdminMessage = new Event(bus,eventAdminPayload);
+
+        System.out.println(String.format("Sending message to the bus %s with the arguments %s", bus, eventAdminPayload));
+
+        System.out.println("Authorization request sent");
+
+        eventAdmin.sendEvent(eventAdminMessage);
 
     }
 
