@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package org.ow2.chameleon.fuchsia.bluetooth;
+package org.ow2.chameleon.fuchsia.bluetooth.discovery;
 
 public class BluetoothConstants {
     public static final String BLUETOOTH_DEVICE_ADDRESS = "bluetooth.device.address";

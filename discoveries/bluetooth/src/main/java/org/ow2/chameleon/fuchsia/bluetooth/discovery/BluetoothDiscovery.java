@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package org.ow2.chameleon.fuchsia.bluetooth;
+package org.ow2.chameleon.fuchsia.bluetooth.discovery;
 
 import org.apache.felix.ipojo.annotations.Bind;
 import org.apache.felix.ipojo.annotations.Component;
@@ -38,8 +38,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.ow2.chameleon.fuchsia.bluetooth.BluetoothConstants.BLUETOOTH_DEVICE_ADDRESS;
-import static org.ow2.chameleon.fuchsia.bluetooth.BluetoothConstants.BLUETOOTH_DEVICE_FRIENDLYNAME;
+import static org.ow2.chameleon.fuchsia.bluetooth.discovery.BluetoothConstants.BLUETOOTH_DEVICE_ADDRESS;
+import static org.ow2.chameleon.fuchsia.bluetooth.discovery.BluetoothConstants.BLUETOOTH_DEVICE_FRIENDLYNAME;
 import static org.ow2.chameleon.fuchsia.core.declaration.Constants.PROTOCOL_NAME;
 
 /**
@@ -74,12 +74,14 @@ public class BluetoothDiscovery extends AbstractDiscoveryComponent {
             String ba = device.getBluetoothAddress();
             logger.debug("Building declaration for device " + ba);
 
-            Map<String, Object> metadata = new HashMap<String, Object>();
-            metadata.put(PROTOCOL_NAME, "bluetooth");
-            metadata.put(BLUETOOTH_DEVICE_ADDRESS, device.getBluetoothAddress());
-            metadata.put(BLUETOOTH_DEVICE_FRIENDLYNAME, device.getFriendlyName(false));
+            iDec = ImportDeclarationBuilder.empty()
+                    .key(PROTOCOL_NAME).value("bluetooth")
+                    .key(BLUETOOTH_DEVICE_ADDRESS).value(device.getBluetoothAddress())
+                    .key(BLUETOOTH_DEVICE_FRIENDLYNAME).value(device.getFriendlyName(false))
+                    // FIXME scope metadata
+                    .key("scope").value("generic")
+                    .build();
 
-            iDec = ImportDeclarationBuilder.fromMetadata(metadata).build();
         } catch (IOException e) {
             logger.error("Can't get description from the device, maybe is already gone.");
             return;
