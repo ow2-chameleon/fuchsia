@@ -10,7 +10,7 @@
     </parent>
 
 
-    <artifactId>upnp</artifactId>
+    <artifactId>org.ow2.chameleon.fuchsia.discovery.upnp</artifactId>
     <name>OW2 Chameleon - Fuchsia Discovery UPnP</name>
     <packaging>bundle</packaging>
 
@@ -35,12 +35,12 @@
 
         <dependency>
             <groupId>org.ow2.chameleon.fuchsia</groupId>
-            <artifactId>fuchsia-core</artifactId>
+            <artifactId>org.ow2.chameleon.fuchsia.core</artifactId>
         </dependency>
 
         <dependency>
             <groupId>org.ow2.chameleon.fuchsia.base</groupId>
-            <artifactId>fuchsia-fake-device</artifactId>
+            <artifactId>org.ow2.chameleon.fuchsia.base.fake-device</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 

@@ -28,12 +28,12 @@
         </dependency>
         <dependency>
             <groupId>org.ow2.chameleon.fuchsia</groupId>
-            <artifactId>fuchsia-core</artifactId>
+            <artifactId>org.ow2.chameleon.fuchsia.core</artifactId>
             <version>${parent.version}</version>
         </dependency>
         <dependency>
             <groupId>org.ow2.chameleon.fuchsia.importer.jaxws</groupId>
-            <artifactId>cxf-importer</artifactId>
+            <artifactId>org.ow2.chameleon.fuchsia.importer.jax-rs</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>

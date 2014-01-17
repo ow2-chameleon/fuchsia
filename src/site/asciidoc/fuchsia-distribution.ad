@@ -29,7 +29,7 @@ Now, we have to declare one or more Fuchsia module *as a maven dependency* of yo
 ----
 <dependency>
     <groupId>org.ow2.chameleon.fuchsia</groupId>
-    <artifactId>fuchsia-core</artifactId>
+    <artifactId>org.ow2.chameleon.fuchsia.core</artifactId>
     <version>0.0.1</version>
 </dependency>
 ----

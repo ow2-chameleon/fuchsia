@@ -10,10 +10,9 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>fuchsia-push-publisher</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
-
     <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>fuchsia-push-publisher</artifactId>
     <packaging>bundle</packaging>
     <name>OW2 Chameleon - Fuchsia PUbSubHubbub Publisher</name>
 
@@ -25,7 +24,7 @@
     <dependencies>
         <dependency>
             <groupId>org.ow2.chameleon.fuchsia</groupId>
-            <artifactId>fuchsia-core</artifactId>
+            <artifactId>org.ow2.chameleon.fuchsia.core</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>

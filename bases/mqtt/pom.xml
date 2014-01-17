@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>fuchsia-bases</artifactId>
+        <groupId>org.ow2.chameleon.fuchsia.base</groupId>
+        <version>0.0.2-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <name>OW2 Chameleon - Fuchsia Base MQTT</name>
+    <artifactId>org.ow2.chameleon.fuchsia.base.mqtt</artifactId>
+    <packaging>pom</packaging>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.ow2.chameleon.fuchsia.base</groupId>
+                <artifactId>org.ow2.chameleon.fuchsia.base.fake-device</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.rabbitmq</groupId>
+                <artifactId>amqp-client</artifactId>
+                <version>${com.rabbitmq}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+</project>

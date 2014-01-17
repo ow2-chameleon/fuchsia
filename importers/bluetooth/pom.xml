@@ -9,9 +9,8 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-
-    <artifactId>bluetooth</artifactId>
-    <name>OW2 Chameleon - Fuchsia Bluetooth Importer</name>
+    <artifactId>org.ow2.chameleon.fuchsia.importer.bluetooth</artifactId>
+    <name>OW2 Chameleon - Fuchsia Importer Bluetooth</name>
     <packaging>bundle</packaging>
 
     <dependencies>
@@ -25,7 +24,7 @@
         </dependency>
         <dependency>
             <groupId>org.ow2.chameleon.fuchsia</groupId>
-            <artifactId>fuchsia-core</artifactId>
+            <artifactId>org.ow2.chameleon.fuchsia.core</artifactId>
         </dependency>
 
         <dependency>

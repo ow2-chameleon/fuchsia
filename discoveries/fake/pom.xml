@@ -3,14 +3,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>fuchsia-discoveries</artifactId>
-        <groupId>org.ow2.chameleon.fuchsia.discovery</groupId>
+        <artifactId>org.ow2.chameleon.fuchsia.base.fake</artifactId>
+        <groupId>org.ow2.chameleon.fuchsia.base</groupId>
         <version>0.0.2-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
+        <relativePath>../../bases/fake/pom.xml</relativePath>
     </parent>
 
 
-    <artifactId>fake</artifactId>
+    <artifactId>org.ow2.chameleon.fuchsia.discovery.fake</artifactId>
+    <groupId>org.ow2.chameleon.fuchsia.discovery</groupId>
     <name>OW2 Chameleon - Fuchsia Discovery Fake</name>
     <packaging>bundle</packaging>
 
@@ -26,7 +27,7 @@
 
         <dependency>
             <groupId>org.ow2.chameleon.fuchsia</groupId>
-            <artifactId>fuchsia-core</artifactId>
+            <artifactId>org.ow2.chameleon.fuchsia.core</artifactId>
         </dependency>
 
         <dependency>
@@ -35,15 +36,13 @@
         </dependency>
 
         <dependency>
-            <groupId>org.ow2.chameleon.fuchsia.base</groupId>
-            <artifactId>fuchsia-fake-device</artifactId>
-            <version>${project.parent.version}</version>
+            <groupId>org.ow2.chameleon.fuchsia.base.fake</groupId>
+            <artifactId>org.ow2.chameleon.fuchsia.base.fake.fake-device</artifactId>
         </dependency>
 
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.4</version>
         </dependency>
 
     </dependencies>

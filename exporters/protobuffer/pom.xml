@@ -18,15 +18,15 @@
 
     <!-- Project's parent -->
     <parent>
-        <artifactId>fuchsia-exporters</artifactId>
-        <groupId>org.ow2.chameleon.fuchsia.exporter</groupId>
+        <artifactId>org.ow2.chameleon.fuchsia.base.protobuffer</artifactId>
+        <groupId>org.ow2.chameleon.fuchsia.base</groupId>
         <version>0.0.2-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
+        <relativePath>../../bases/protobuffer/pom.xml</relativePath>
     </parent>
 
     <!-- Description of the project -->
-    <artifactId>protobuffer-exporter</artifactId>
-    <name>OW2 Chameleon - Protobuffer RPC Exporter</name>
+    <artifactId>org.ow2.chameleon.fuchsia.exporter.protobuffer</artifactId>
+    <name>OW2 Chameleon - Fuchsia Exporter Protobuffer</name>
     <packaging>bundle</packaging>
 
     <properties>
@@ -46,37 +46,23 @@
         </dependency>
         <dependency>
             <groupId>org.ow2.chameleon.fuchsia</groupId>
-            <artifactId>fuchsia-core</artifactId>
+            <artifactId>org.ow2.chameleon.fuchsia.core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.ow2.chameleon.fuchsia.base.protobuffer</groupId>
+            <artifactId>org.ow2.chameleon.fuchsia.base.protobuffer.cxf-protobuf</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
-            <version>2.5.0</version>
         </dependency>
-        <!--
-        <dependency>
-            <groupId>com.google.code.cxf.protobuf</groupId>
-            <artifactId>cxf-protobuf</artifactId>
-            <version>0.3</version>
-        </dependency>
-        -->
-        <dependency>
-            <groupId>org.ow2.chameleon.fuchsia.base</groupId>
-            <artifactId>cxf-protobuf</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <!--
         <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-bundle-minimal</artifactId>
-            <version>2.2.1</version>
         </dependency>
-        -->
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-bundle-minimal</artifactId>
-            <version>2.5.2</version>
-        </dependency>
+
         <dependency>
             <groupId>org.ow2.chameleon.fuchsia.examples</groupId>
             <artifactId>proto-class</artifactId>

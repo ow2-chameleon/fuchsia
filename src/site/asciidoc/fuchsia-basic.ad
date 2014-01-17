@@ -22,7 +22,7 @@ Make sure to add *Fuchsia* dependency:
 --
 <dependency>
     <groupId>org.ow2.chameleon.fuchsia</groupId>
-    <artifactId>fuchsia-core</artifactId>
+    <artifactId>org.ow2.chameleon.fuchsia.core</artifactId>
     <version>0.0.1</version>
 </dependency>
 --
@@ -81,7 +81,7 @@ You can check that everything is up and running by typing *importer* on the cons
 
 [source]
 --
-Importer [cxfimporter] provided by bundle cxf-importer (46)
+Importer [cxfimporter] provided by bundle org.ow2.chameleon.fuchsia.importer.jax-rs (46)
 	*importer name = cxfimporter
 	Service properties:
 		factory.name = Fuchsia_importer.cxf

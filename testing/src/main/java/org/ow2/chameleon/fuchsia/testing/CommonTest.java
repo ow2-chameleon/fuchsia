@@ -47,7 +47,7 @@ public class CommonTest extends BaseTest {
 
     protected Option fuchsiaBundles() {
         return composite(
-                mavenBundle().groupId("org.ow2.chameleon.fuchsia").artifactId("fuchsia-core").versionAsInProject(),
+                mavenBundle().groupId("org.ow2.chameleon.fuchsia").artifactId("org.ow2.chameleon.fuchsia.core").versionAsInProject(),
                 mavenBundle().groupId("org.ow2.chameleon.fuchsia.testing").artifactId("fuchsia-helpers").versionAsInProject()
         );
     }

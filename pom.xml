@@ -11,7 +11,8 @@
         License.
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -53,7 +54,13 @@
         <depends.plugin.version>1.2</depends.plugin.version>
         <release.plugin.version>2.4.1</release.plugin.version>
         <site.plugin.version>3.3</site.plugin.version>
-        <github.site.plugin.version>0.8</github.site.plugin.version>
+        <github.site.plugin.version>0.9</github.site.plugin.version>
+        <resources.plugin.version>2.6</resources.plugin.version>
+        <dependency.plugin.version>2.8</dependency.plugin.version>
+        <pax.plugin.version>1.5</pax.plugin.version>
+
+        <!-- Extensions versions -->
+        <wagon.extension.version>2.2</wagon.extension.version>
 
         <!-- Test dependencies version -->
         <mockito.version>1.9.5</mockito.version>
@@ -79,11 +86,10 @@
         <!-- Website deploy -->
         <site.path>snapshot</site.path>
         <github.global.server>github</github.global.server>
-	<asciidoctor.version>0.1.3.1</asciidoctor.version>
-	<github.global.server>github</github.global.server>
-	<project.url>https://github.com/ow2-chameleon/fuchsia/</project.url>
+        <asciidoctor.version>0.1.3.1</asciidoctor.version>
+        <github.global.server>github</github.global.server>
+        <project.url>https://github.com/ow2-chameleon/fuchsia/</project.url>
     </properties>
-
 
 
     <!-- ======== -->
@@ -96,22 +102,22 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
 
-	    <modules>
-		<module>distribution</module>
-		<module>core</module>
-		<module>bases</module>
-		<module>importers</module>
-		<module>exporters</module>
-		<module>discoveries</module>
-		<module>tools</module>
-		<module>testing</module>
-	    </modules>
-        </profile> 
+            <modules>
+                <module>distribution</module>
+                <module>core</module>
+                <module>bases</module>
+                <module>importers</module>
+                <module>exporters</module>
+                <module>discoveries</module>
+                <module>tools</module>
+                <module>testing</module>
+            </modules>
+        </profile>
 
         <profile>
             <id>examples</id>
             <modules>
-		<module>examples</module>
+                <module>examples</module>
             </modules>
         </profile>
 
@@ -176,7 +182,7 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
-     
+
         <repository>
             <id>upnp-release</id>
             <name>ow2 Maven Repository [OLD]</name>
@@ -208,9 +214,9 @@
         </repository>
 
         <repository>
-	        <id>com.springsource.repository.bundles.external</id>
-	        <name>EBR External Release Repository</name>
-	        <url>http://repository.springsource.com/maven/bundles/external</url>
+            <id>com.springsource.repository.bundles.external</id>
+            <name>EBR External Release Repository</name>
+            <url>http://repository.springsource.com/maven/bundles/external</url>
         </repository>
 
     </repositories>
@@ -223,7 +229,7 @@
         <dependencies>
             <dependency>
                 <groupId>org.ow2.chameleon.fuchsia</groupId>
-                <artifactId>fuchsia-core</artifactId>
+                <artifactId>org.ow2.chameleon.fuchsia.core</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -403,6 +409,19 @@
                     <artifactId>depends-maven-plugin</artifactId>
                     <version>${depends.plugin.version}</version>
                 </plugin>
+                <plugin>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>${resources.plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>${dependency.plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-pax-plugin</artifactId>
+                    <groupId>org.ops4j</groupId>
+                    <version>${pax.plugin.version}</version>
+                </plugin>
             </plugins>
         </pluginManagement>
 
@@ -425,68 +444,7 @@
                     <goals>deploy</goals>
                 </configuration>
             </plugin>
-<!--
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>${javadoc.plugin.version}</version>
-                <configuration>
-                    <outputDirectory>${project.parent.basedir}/target/site/api/</outputDirectory>
-                    <aggregate>true</aggregate>
-                </configuration>
 
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>javadoc</goal>
-                            <goal>test-javadoc</goal>
-                        </goals>
-                        <phase>site</phase>
-                        <configuration>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-
-  <plugin>
-      <artifactId>maven-site-plugin</artifactId>
-      <version>3.0-beta-2</version>
-      <executions>
-        <execution>
-          <id>attach-descriptor</id>
-          <goals>
-            <goal>attach-descriptor</goal>
-          </goals>
-        </execution>
-      </executions>
-                <dependencies>
-		        <dependency>
-		            <groupId>org.asciidoctor</groupId>
-		            <artifactId>asciidoctor-maven-plugin</artifactId>
-		            <version>${asciidoctor.version}</version>
-		        </dependency>
-                </dependencies>
-    </plugin>
--->
-
-<!--
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-site-plugin</artifactId>
-                <version>3.2</version>
-                <configuration>
-                    <skipDeploy>true</skipDeploy>
-                </configuration>
-                <dependencies>
-		        <dependency>
-		            <groupId>org.asciidoctor</groupId>
-		            <artifactId>asciidoctor-maven-plugin</artifactId>
-		            <version>${asciidoctor.version}</version>
-		        </dependency>
-                </dependencies>
-            </plugin>
--->
             <plugin>
                 <groupId>org.asciidoctor</groupId>
                 <artifactId>asciidoctor-maven-plugin</artifactId>
@@ -510,7 +468,7 @@
                 <configuration>
                     <sourceDirectory>src/site/asciidoc</sourceDirectory>
                     <outputDirectory>${project.build.directory}/site/</outputDirectory>
-			<templateDir>src/site/resources/themes</templateDir>
+                    <templateDir>src/site/resources/themes</templateDir>
                     <backend>html</backend>
                     <compact>true</compact>
                     <attributes>
@@ -524,7 +482,6 @@
 
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>2.6</version>
                 <executions>
                     <execution>
                         <id>copy-resources</id>
@@ -549,7 +506,7 @@
             <plugin>
                 <groupId>com.github.github</groupId>
                 <artifactId>site-maven-plugin</artifactId>
-                <version>0.9</version>
+                <version>${github.site.plugin.version}</version>
                 <executions>
                     <execution>
                         <goals>
@@ -571,7 +528,7 @@
             <extension>
                 <groupId>org.apache.maven.wagon</groupId>
                 <artifactId>wagon-webdav-jackrabbit</artifactId>
-                <version>2.2</version>
+                <version>${wagon.extension.version}</version>
             </extension>
         </extensions>
     </build>

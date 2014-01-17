@@ -41,8 +41,8 @@ public class UPnPFunctionnalitiesTest extends BaseTest {
                 wrappedBundle(mavenBundle("org.apache.felix", "org.apache.felix.upnp.basedriver").versionAsInProject()),
                 wrappedBundle(mavenBundle("org.apache.felix", "org.apache.felix.upnp.extra").versionAsInProject()),
                 wrappedBundle(mavenBundle("org.osgi", "org.osgi.compendium").versionAsInProject()),
-                wrappedBundle(mavenBundle("org.ow2.chameleon.fuchsia", "fuchsia-core").versionAsInProject()),
-                wrappedBundle(mavenBundle("org.ow2.chameleon.fuchsia.discovery", "upnp").versionAsInProject()),
+                wrappedBundle(mavenBundle("org.ow2.chameleon.fuchsia", "org.ow2.chameleon.fuchsia.core").versionAsInProject()),
+                wrappedBundle(mavenBundle("org.ow2.chameleon.fuchsia.discovery", "org.ow2.chameleon.fuchsia.discovery.upnp").versionAsInProject()),
 
                 //Fest assert wrapper bundles
                 wrappedBundle(mavenBundle("org.easytesting", "fest-util").versionAsInProject()),

@@ -20,13 +20,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>bluetooth</artifactId>
+        <artifactId>org.ow2.chameleon.fuchsia.base.bluetooth</artifactId>
         <groupId>org.ow2.chameleon.fuchsia.base</groupId>
         <version>0.0.2-SNAPSHOT</version>
         <relativePath>../../bases/bluetooth/pom.xml</relativePath>
     </parent>
 
-    <artifactId>bluetooth</artifactId>
+    <artifactId>org.ow2.chameleon.fuchsia.discovery.bluetooth</artifactId>
     <groupId>org.ow2.chameleon.fuchsia.discovery</groupId>
     <name>OW2 Chameleon - Fuchsia Discovery Bluetooth</name>
     <packaging>bundle</packaging>
@@ -50,7 +50,7 @@
         </dependency>
         <dependency>
             <groupId>org.ow2.chameleon.fuchsia</groupId>
-            <artifactId>fuchsia-core</artifactId>
+            <artifactId>org.ow2.chameleon.fuchsia.core</artifactId>
         </dependency>
         <dependency>
             <groupId>org.ow2.chameleon.bluetooth</groupId>

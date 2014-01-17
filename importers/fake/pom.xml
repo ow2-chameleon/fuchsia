@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <parent>
-    	<artifactId>fuchsia-importers</artifactId>
-    	<groupId>org.ow2.chameleon.fuchsia.importer</groupId>
+        <artifactId>org.ow2.chameleon.fuchsia.base.fake</artifactId>
+        <groupId>org.ow2.chameleon.fuchsia.base</groupId>
         <version>0.0.2-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
+        <relativePath>../../bases/fake/pom.xml</relativePath>
     </parent>
 
-
-    <artifactId>fake</artifactId>
-    <name>OW2 Chameleon - Fuchsia Fake Importer</name>
+    <artifactId>org.ow2.chameleon.fuchsia.importer.fake</artifactId>
+    <groupId>org.ow2.chameleon.fuchsia.importer</groupId>
+    <name>OW2 Chameleon - Fuchsia Importer Fake</name>
     <packaging>bundle</packaging>
 
     <dependencies>
@@ -25,7 +24,7 @@
         </dependency>
         <dependency>
             <groupId>org.ow2.chameleon.fuchsia</groupId>
-            <artifactId>fuchsia-core</artifactId>
+            <artifactId>org.ow2.chameleon.fuchsia.core</artifactId>
         </dependency>
 
         <dependency>
@@ -34,9 +33,8 @@
         </dependency>
 
         <dependency>
-            <groupId>org.ow2.chameleon.fuchsia.base</groupId>
-            <artifactId>fuchsia-fake-device</artifactId>
-            <version>${project.parent.version}</version>
+            <groupId>org.ow2.chameleon.fuchsia.base.fake</groupId>
+            <artifactId>org.ow2.chameleon.fuchsia.base.fake.fake-device</artifactId>
         </dependency>
     </dependencies>
 

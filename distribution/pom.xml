@@ -10,12 +10,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <artifactId>fuchsia-distribution</artifactId>
     <name>OW2 Chameleon - Fuchsia Distribution</name>
-    <artifactId>distribution</artifactId>
 
-    <description>
-        A distribution of fuchsia platform
-    </description>
+    <description>A distribution of fuchsia platform</description>
 
     <profiles>
         <profile>
@@ -26,7 +24,7 @@
             <dependencies>
                 <dependency>
                     <groupId>${project.parent.groupId}</groupId>
-                    <artifactId>fuchsia-core</artifactId>
+                    <artifactId>org.ow2.chameleon.fuchsia.core</artifactId>
                     <version>${project.parent.version}</version>
                 </dependency>
 
@@ -70,7 +68,6 @@
                 <dependency>
                     <groupId>org.apache.felix</groupId>
                     <artifactId>org.apache.felix.log</artifactId>
-                    <version>1.0.1</version>
                 </dependency>
             </dependencies>
         </profile>
@@ -107,35 +104,33 @@
 		<!--
                 <dependency>
                     <groupId>org.ow2.chameleon.fuchsia.importer</groupId>
-                    <artifactId>fake-importer</artifactId>
+                    <artifactId>org.ow2.chameleon.fuchsia.importer.fake</artifactId>
                     <version>${project.parent.version}</version>
                 </dependency>
 		-->
-
 		<!--
                 <dependency>
-		    <groupId>org.ow2.chameleon.fuchsia.examples</groupId>
-		    <artifactId>fake-importer-config</artifactId>
+                    <groupId>org.ow2.chameleon.fuchsia.examples</groupId>
+                    <artifactId>fake-importer-config</artifactId>
                     <version>${project.parent.version}</version>
                 </dependency>
 		-->
 
                 <dependency>
                     <groupId>org.ow2.chameleon.fuchsia.base</groupId>
-                    <artifactId>fuchsia-fake-device</artifactId>
+                    <artifactId>org.ow2.chameleon.fuchsia.base.fake-device</artifactId>
                     <version>${project.parent.version}</version>
                 </dependency>
 
                 <dependency>
                     <groupId>org.ow2.chameleon.fuchsia.discovery</groupId>
-                    <artifactId>fuchsia-fake-discovery</artifactId>
+                    <artifactId>org.ow2.chameleon.fuchsia.discovery.fake</artifactId>
                     <version>${project.parent.version}</version>
                 </dependency>
 
                 <dependency>
                     <groupId>org.osgi</groupId>
                     <artifactId>org.osgi.compendium</artifactId>
-                    <version>4.3.1</version>
                 </dependency>
                 <dependency>
                     <groupId>org.apache.felix</groupId>
@@ -158,7 +153,6 @@
                 <dependency>
                     <groupId>commons-io</groupId>
                     <artifactId>commons-io</artifactId>
-                    <version>2.4</version>
                 </dependency>
             </dependencies>
         </profile>
@@ -169,7 +163,6 @@
                 <dependency>
                     <groupId>org.osgi</groupId>
                     <artifactId>org.osgi.compendium</artifactId>
-                    <version>4.3.1</version>
                 </dependency>
 
                 <dependency>
@@ -260,7 +253,7 @@
 		</dependency>
 		<dependency>
 		    <groupId>org.ow2.chameleon.fuchsia.base</groupId>
-		    <artifactId>cxf-protobuf</artifactId>
+		    <artifactId>org.ow2.chameleon.fuchsia.base.protobuffer</artifactId>
 		    <version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -393,7 +386,7 @@
             <dependencies>
                 <dependency>
                     <groupId>org.ow2.chameleon.fuchsia.base</groupId>
-                    <artifactId>fuchsia-fake-device</artifactId>
+                    <artifactId>org.ow2.chameleon.fuchsia.base.fake-device</artifactId>
                     <version>${project.parent.version}</version>
                 </dependency>
                 <dependency>
@@ -404,13 +397,13 @@
                 <!--
                 <dependency>
                     <groupId>org.ow2.chameleon.fuchsia.upnp</groupId>
-                    <artifactId>fuchsia-upnp-importer</artifactId>
+                    <artifactId>org.ow2.chameleon.fuchsia.importer.upnp</artifactId>
                     <version>${project.parent.version}</version>
                 </dependency>
                 -->
                 <dependency>
                     <groupId>org.ow2.chameleon.fuchsia.discovery</groupId>
-                    <artifactId>upnp</artifactId>
+                    <artifactId>org.ow2.chameleon.fuchsia.discovery.upnp</artifactId>
                     <version>${project.parent.version}</version>
                 </dependency>
                 <dependency>
@@ -446,8 +439,8 @@
                 </dependency>
                 <dependency>
                     <groupId>org.ow2.chameleon.fuchsia.discovery</groupId>
-                    <artifactId>bluetooth</artifactId>
-                    <version>0.0.2-SNAPSHOT</version>
+                    <artifactId>org.ow2.chameleon.fuchsia.discovery.bluetooth</artifactId>
+                    <version>${project.version}</version>
                 </dependency>
             </dependencies>
         </profile>
@@ -473,7 +466,7 @@
 
                 <dependency>
                     <groupId>org.ow2.chameleon.fuchsia.importer</groupId>
-                    <artifactId>mqtt-importer</artifactId>
+                    <artifactId>org.ow2.chameleon.fuchsia.importer.mqtt</artifactId>
                     <version>${project.version}</version>
                 </dependency>
 
@@ -491,7 +484,7 @@
                 </dependency>
                 <dependency>
                     <groupId>org.ow2.chameleon.fuchsia.discovery</groupId>
-                    <artifactId>mdns</artifactId>
+                    <artifactId>org.ow2.chameleon.fuchsia.discovery.mdns</artifactId>
                     <version>${project.version}</version>
                 </dependency>
             </dependencies>
@@ -606,7 +599,7 @@
                 </dependency>
                 <dependency>
                     <groupId>org.ow2.chameleon.fuchsia.exporter</groupId>
-                    <artifactId>jaxws</artifactId>
+                    <artifactId>org.ow2.chameleon.fuchsia.exporter.jax-ws</artifactId>
                     <version>${project.version}</version>
                 </dependency>
             </dependencies>
@@ -693,8 +686,8 @@
                     <version>1.6.2</version>
                 </dependency>
                 <dependency>
-                    <groupId>org.ow2.chameleon.fuchsia.importer.jaxws</groupId>
-                    <artifactId>cxf-importer</artifactId>
+                    <groupId>org.ow2.chameleon.fuchsia.importer</groupId>
+                    <artifactId>org.ow2.chameleon.fuchsia.importer.jax-ws</artifactId>
                     <version>${project.version}</version>
                 </dependency>
             </dependencies>
@@ -706,7 +699,6 @@
         <plugins>
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>2.6</version>
                 <executions>
                     <execution>
                         <id>copy-resources</id>
@@ -730,7 +722,6 @@
 
             <plugin>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.8</version>
                 <executions>
                     <execution>
                         <id>copy-chameleon-distribution</id>

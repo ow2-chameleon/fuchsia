@@ -21,7 +21,7 @@
     </parent>
 
     <!-- Description of the project -->
-    <artifactId>fuchsia-core</artifactId>
+    <artifactId>org.ow2.chameleon.fuchsia.core</artifactId>
     <name>OW2 Chameleon - Fuchsia Core</name>
     <packaging>bundle</packaging>
     <description>OW2 Chameleon Fuchsia Core bundle, contains the Fuchsia service specification.</description>

@@ -35,13 +35,13 @@ Directory :
 Maven configuration :
 
 ```XML
-<groupId>org.ow2.chameleon.fuchsia.bases</groupId>
-<artifactId>{protocol}</artifactId>
+<artifactId>org.ow2.chameleon.fuchsia.base.{protocol}</artifactId>
+<groupId>org.ow2.chameleon.fuchsia.base</groupId>
 <name>OW2 Chameleon - Fuchsia Base {Protocol}</name>
 
 <parent>
+    <artifactId>fuchsia-bases</artifactId>
     <groupId>org.ow2.chameleon.fuchsia.bases</groupId>
-    <artifactId>FIXME</artifactId>
     <version>{}</version>
     <relativePath>../pom.xml</relativePath>
 </parent>
@@ -56,13 +56,13 @@ Directory :
 Maven configuration :
 
 ```XML
-<groupId>org.ow2.chameleon.fuchsia.bases</groupId>
-<artifactId>{protocol}.{sub-module_name}</artifactId>
-<name>OW2 Chameleon - Fuchsia Base {Protocol} {sub-module_name}</name>
+<artifactId>org.ow2.chameleon.fuchsia.base.{protocol}.{sub-module_name}</artifactId>
+<groupId>org.ow2.chameleon.fuchsia.base.{protocol}</groupId>
+<name>OW2 Chameleon - Fuchsia Base {Protocol} : {sub-module_name}</name>
 
 <parent>
-    <groupId>org.ow2.chameleon.fuchsia.bases</groupId>
-    <artifactId>{protocol}</artifactId>
+    <artifactId>org.ow2.chameleon.fuchsia.base.{protocol}</artifactId>
+    <groupId>org.ow2.chameleon.fuchsia.base</groupId>
     <version>{}</version>
     <relativePath>../pom.xml</relativePath>
 </parent>
@@ -79,16 +79,25 @@ Directory :
 Maven configuration :
 
 ```XML
-<groupId>org.ow2.chameleon.fuchsia.importers</groupId>
-<artifactId>{protocol}</artifactId>
+<artifactId>org.ow2.chameleon.fuchsia.importer.{protocol}</artifactId>
+<groupId>org.ow2.chameleon.fuchsia.importer</groupId>
 <name>OW2 Chameleon - Fuchsia Importer {Protocol}</name>
 
 <parent>
-    <groupId>org.ow2.chameleon.fuchsia.importers</groupId>
-    <artifactId>{protocol}</artifactId>
+    <artifactId>org.ow2.chameleon.fuchsia.base.{protocol}</artifactId>
+    <groupId>org.ow2.chameleon.fuchsia.base</groupId>
     <version>{}</version>
     <relativePath>../../bases/{protocol}/pom.xml</relativePath>
 </parent>
+<!-- OR -->
+<parent>
+    <artifactId>fuchsia-importers</artifactId>
+    <groupId>org.ow2.chameleon.fuchsia.importer</groupId>
+    <version>{}</version>
+    <relativePath>../pom.xml</relativePath>
+</parent>
+
+
 ```
 
 #### Importer integration tests
@@ -100,15 +109,22 @@ Directory :
 Maven configuration :
 
 ```XML
-<groupId>org.ow2.chameleon.fuchsia.importers</groupId>
-<artifactId>{protocol}.it</artifactId>
+<artifactId>org.ow2.chameleon.fuchsia.importer.{protocol}-it</artifactId>
+<groupId>org.ow2.chameleon.fuchsia.importer</groupId>
 <name>OW2 Chameleon - Fuchsia Importer {Protocol} [IntegrationTests]</name>
 
 <parent>
-    <groupId>org.ow2.chameleon.fuchsia.importers</groupId>
-    <artifactId>{protocol}</artifactId>
+    <artifactId>org.ow2.chameleon.fuchsia.base.{protocol}</artifactId>
+    <groupId>org.ow2.chameleon.fuchsia.base</groupId>
     <version>{}</version>
     <relativePath>../../bases/{protocol}/pom.xml</relativePath>
+</parent>
+<!-- OR -->
+<parent>
+    <artifactId>fuchsia-importers</artifactId>
+    <groupId>org.ow2.chameleon.fuchsia.importer</groupId>
+    <version>{}</version>
+    <relativePath>../pom.xml</relativePath>
 </parent>
 ```
 
@@ -123,15 +139,22 @@ Directory :
 Maven configuration :
 
 ```XML
-<groupId>org.ow2.chameleon.fuchsia.discoveries</groupId>
-<artifactId>{protocol}</artifactId>
+<artifactId>org.ow2.chameleon.fuchsia.discovery.{protocol}</artifactId>
+<groupId>org.ow2.chameleon.fuchsia.discovery</groupId>
 <name>OW2 Chameleon - Fuchsia Discovery {Protocol}</name>
 
 <parent>
-    <groupId>org.ow2.chameleon.fuchsia.discoveries</groupId>
-    <artifactId>{protocol}</artifactId>
+    <artifactId>org.ow2.chameleon.fuchsia.base.{protocol}</artifactId>
+    <groupId>org.ow2.chameleon.fuchsia.base</groupId>
     <version>{}</version>
     <relativePath>../../bases/{protocol}/pom.xml</relativePath>
+</parent>
+<!-- OR -->
+<parent>
+    <artifactId>fuchsia-discoveries</artifactId>
+    <groupId>org.ow2.chameleon.fuchsia.discovery</groupId>
+    <version>{}</version>
+    <relativePath>../pom.xml</relativePath>
 </parent>
 ```
 
@@ -144,15 +167,22 @@ Directory :
 Maven configuration :
 
 ```XML
-<groupId>org.ow2.chameleon.fuchsia.discoveries</groupId>
-<artifactId>{protocol}.it</artifactId>
+<artifactId>org.ow2.chameleon.fuchsia.discovery.{protocol}-it</artifactId>
+<groupId>org.ow2.chameleon.fuchsia.discovery</groupId>
 <name>OW2 Chameleon - Fuchsia Discovery {Protocol} [IntegrationTests]</name>
 
 <parent>
-    <groupId>org.ow2.chameleon.fuchsia.discoveries</groupId>
-    <artifactId>{protocol}</artifactId>
+    <artifactId>org.ow2.chameleon.fuchsia.base.{protocol}</artifactId>
+    <groupId>org.ow2.chameleon.fuchsia.base</groupId>
     <version>{}</version>
     <relativePath>../../bases/{protocol}/pom.xml</relativePath>
+</parent>
+<!-- OR -->
+<parent>
+    <artifactId>fuchsia-discoveries</artifactId>
+    <groupId>org.ow2.chameleon.fuchsia.discovery</groupId>
+    <version>{}</version>
+    <relativePath>../pom.xml</relativePath>
 </parent>
 ```
 
@@ -170,13 +200,13 @@ Directory :
 Maven configuration :
 
 ```XML
+<artifactId>fuchsia-{tool}</artifactId>
 <groupId>org.ow2.chameleon.fuchsia.tools</groupId>
-<artifactId>{tool}</artifactId>
 <name>OW2 Chameleon - Fuchsia {Tool}</name>
 
 <parent>
+    <artifactId>fuchsia-tools</artifactId>
     <groupId>org.ow2.chameleon.fuchsia.tools</groupId>
-    <artifactId>{tool}</artifactId>
     <version>{}</version>
     <relativePath>../pom.xml</relativePath>
 </parent>
@@ -190,13 +220,13 @@ Directory :
 Maven configuration :
 
 ```XML
+<artifactId>fuchsia-{tool}-it</artifactId>
 <groupId>org.ow2.chameleon.fuchsia.tools</groupId>
-<artifactId>{tool}.it</artifactId>
 <name>OW2 Chameleon - Fuchsia {Tool} [IntegrationTests]</name>
 
 <parent>
+    <artifactId>fuchsia-tools</artifactId>
     <groupId>org.ow2.chameleon.fuchsia.tools</groupId>
-    <artifactId>{tool}</artifactId>
     <version>{}</version>
     <relativePath>../pom.xml</relativePath>
 </parent>

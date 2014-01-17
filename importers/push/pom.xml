@@ -6,12 +6,13 @@
         <version>0.0.2-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
+
     <modelVersion>4.0.0</modelVersion>
 
-    <name>OW2 Chameleon - Fuchsia PuSH</name>
     <artifactId>fuchsia-push</artifactId>
     <groupId>org.ow2.chameleon.fuchsia.push</groupId>
     <packaging>pom</packaging>
+    <name>OW2 Chameleon - Fuchsia PuSH</name>
 
     <dependencyManagement>
         <dependencies>

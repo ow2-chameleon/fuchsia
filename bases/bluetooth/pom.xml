@@ -3,15 +3,14 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>fuchsia-base</artifactId>
+        <artifactId>fuchsia-bases</artifactId>
         <groupId>org.ow2.chameleon.fuchsia.base</groupId>
         <version>0.0.2-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>bluetooth</artifactId>
-    <groupId>org.ow2.chameleon.fuchsia.base</groupId>
+    <artifactId>org.ow2.chameleon.fuchsia.base.bluetooth</artifactId>
     <name>OW2 Chameleon - Fuchsia Base Bluetooth</name>
     <packaging>pom</packaging>
 
