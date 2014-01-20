@@ -3,10 +3,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>org.ow2.chameleon.fuchsia.base.fake</artifactId>
-        <groupId>org.ow2.chameleon.fuchsia.base</groupId>
+    	<artifactId>fuchsia-discoveries</artifactId>
+    	<groupId>org.ow2.chameleon.fuchsia.discovery</groupId>
         <version>0.0.2-SNAPSHOT</version>
-        <relativePath>../../bases/fake/pom.xml</relativePath>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
 
@@ -33,11 +33,6 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.ow2.chameleon.fuchsia.base.fake</groupId>
-            <artifactId>org.ow2.chameleon.fuchsia.base.fake.fake-device</artifactId>
         </dependency>
 
         <dependency>

@@ -1,13 +1,12 @@
 package org.ow2.chameleon.fuchsia.fake.discovery;
 
-import org.apache.felix.ipojo.*;
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
 import org.ow2.chameleon.fuchsia.core.component.AbstractDiscoveryComponent;
 import org.ow2.chameleon.fuchsia.core.component.DiscoveryService;
-import org.ow2.chameleon.fuchsia.core.declaration.*;
-import org.ow2.chameleon.fuchsia.fake.device.GenericDevice;
+import org.ow2.chameleon.fuchsia.core.declaration.Constants;
+import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
+import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclarationBuilder;
 import org.ow2.chameleon.fuchsia.fake.discovery.monitor.Deployer;
 import org.ow2.chameleon.fuchsia.fake.discovery.monitor.DirectoryMonitor;
 import org.slf4j.Logger;
@@ -16,14 +15,16 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
 import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
 
 /**
  * This component instantiate a directory monitor (initially pointed to a directory in chameleon called "load") that reads all file placed there (as property files)
- * and instantiate a {@link org.ow2.chameleon.fuchsia.fake.device.GenericDevice} according with the same properties as the ones declared in the property file and
- * published an {@link ImportDeclaration}
+ * and publishes an {@link ImportDeclaration}
  *
  * @author jeremy.savonet@gmail.com
  * @author botelho (at) imag.fr
@@ -44,8 +45,6 @@ public class FakeDiscoveryBridge extends AbstractDiscoveryComponent implements D
     private Long pollingTime;
 
     private final HashMap<String,ImportDeclaration> importDeclarationsFile = new HashMap<String, ImportDeclaration>();
-
-    private final HashMap<String,InstanceManager> devicesManaged =new LinkedHashMap<String, InstanceManager>();
 
     public FakeDiscoveryBridge(BundleContext bundleContext) {
         super(bundleContext);
@@ -84,44 +83,6 @@ public class FakeDiscoveryBridge extends AbstractDiscoveryComponent implements D
 
     public String getName() {
         return name;
-    }
-
-    private InstanceManager createAndRegisterFakeDevice(String deviceId) throws Exception {
-
-        try {
-            Collection<ServiceReference<Factory>> factory=getBundleContext().getServiceReferences(Factory.class,String.format("(%s=%s)","factory.name",FakeDiscoveryConstants.FAKE_DEVICE_FACTORY_NAME));
-
-            if(factory.size()==0) {
-                getLogger().error("No {} component is available in the platform. Impossible to create a fake device.", GenericDevice.class.getName());
-                throw new Exception(String.format("No %s component is available in the platform. Impossible to create a fake device.",GenericDevice.class.getName()));
-            }
-
-            if(factory.size()>1) {
-                getLogger().warn("Several components implementing {} were found. One will be picket randomly but this may indicate an issue.", GenericDevice.class.getName());
-            }
-
-            for (ServiceReference<Factory> factoryServiceReference : factory) {
-
-                Factory deviceIpojoFactory=(Factory)getBundleContext().getService(factoryServiceReference);
-
-                Hashtable deviceProperties=new Hashtable<String,Object>();
-                deviceProperties.put(Factory.INSTANCE_NAME_PROPERTY, "GenericDeviceInst-" + deviceId);
-                deviceProperties.put(GenericDevice.DEVICE_SERIAL_NUMBER, "SN-" + deviceId);
-
-                InstanceManager deviceInstanceManager=(InstanceManager)deviceIpojoFactory.createComponentInstance(deviceProperties);
-
-                devicesManaged.put(deviceId,deviceInstanceManager);
-
-                return deviceInstanceManager;
-
-            }
-
-        } catch (Exception e) {
-           throw new Exception(e);
-        }
-
-        return null;
-
     }
 
     private ImportDeclaration createAndRegisterImportDeclaration(HashMap<String, Object> metadata){
@@ -166,8 +127,6 @@ public class FakeDiscoveryBridge extends AbstractDiscoveryComponent implements D
             Properties deviceReificationProperties=parseFile(file);
 
             String deviceId=deviceReificationProperties.getProperty(Constants.ID);
-
-            createAndRegisterFakeDevice(deviceId);
 
             HashMap<String, Object> metadata = new HashMap<String, Object>();
             metadata.put(Constants.DEVICE_ID, deviceId);
@@ -218,16 +177,6 @@ public class FakeDiscoveryBridge extends AbstractDiscoveryComponent implements D
             unregisterImportDeclaration(declaration);
         } catch(IllegalStateException e){
             getLogger().error("Failed to unregister import declaration for the device {},  it did not existed before.",declaration.getMetadata());
-        }
-
-        try {
-            String deviceId=(String)declaration.getMetadata().get(Constants.DEVICE_ID);
-            InstanceManager imDevice=devicesManaged.get(deviceId);
-
-            if(imDevice!=null) imDevice.dispose();
-
-        } catch(NullPointerException e){
-            getLogger().error("Failed to disconnect device {}, this device was not registered by this discovery",(String)declaration.getMetadata().get(Constants.DEVICE_ID));
         }
 
     }
