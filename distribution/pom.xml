@@ -117,12 +117,6 @@
 		-->
 
                 <dependency>
-                    <groupId>org.ow2.chameleon.fuchsia.base</groupId>
-                    <artifactId>org.ow2.chameleon.fuchsia.base.fake-device</artifactId>
-                    <version>${project.parent.version}</version>
-                </dependency>
-
-                <dependency>
                     <groupId>org.ow2.chameleon.fuchsia.discovery</groupId>
                     <artifactId>org.ow2.chameleon.fuchsia.discovery.fake</artifactId>
                     <version>${project.parent.version}</version>
@@ -384,11 +378,6 @@
         <profile>
             <id>upnp</id>
             <dependencies>
-                <dependency>
-                    <groupId>org.ow2.chameleon.fuchsia.base</groupId>
-                    <artifactId>org.ow2.chameleon.fuchsia.base.fake-device</artifactId>
-                    <version>${project.parent.version}</version>
-                </dependency>
                 <dependency>
                     <groupId>${project.parent.groupId}.examples</groupId>
                     <artifactId>fuchsia-upnp-components</artifactId>

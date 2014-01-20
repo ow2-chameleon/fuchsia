@@ -15,7 +15,6 @@
 
     <modules>
         <module>bluetooth</module>
-        <module>fake</module>
         <module>mqtt</module>
         <module>push</module>
         <module>protobuffer</module>
