@@ -69,6 +69,12 @@
                     <groupId>org.apache.felix</groupId>
                     <artifactId>org.apache.felix.log</artifactId>
                 </dependency>
+
+                <dependency>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>org.apache.felix.eventadmin</artifactId>
+                </dependency>
+
             </dependencies>
         </profile>
 
@@ -380,7 +386,7 @@
             <dependencies>
                 <dependency>
                     <groupId>${project.parent.groupId}.examples</groupId>
-                    <artifactId>fuchsia-upnp-components</artifactId>
+                    <artifactId>upnp-config</artifactId>
                     <version>${project.parent.version}</version>
                 </dependency>
                 <!--
