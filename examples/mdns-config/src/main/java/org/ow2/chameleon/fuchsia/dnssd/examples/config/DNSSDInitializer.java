@@ -16,14 +16,4 @@ public class DNSSDInitializer {
             .named("DNSSDDiscovery")
             .with("dnssd.service.type").setto("_printer._tcp.local.");
 
-    /**
-
-    Instance pushLinker = instance()
-            .of(FuchsiaConstants.DEFAULT_IMPORTATION_LINKER_FACTORY_NAME)
-            .named("UPnPDeviceLinker")
-            .with(FILTER_IMPORTDECLARATION_PROPERTY).setto("(discovery.mdns.device.name=*)")
-            .with(FILTER_IMPORTERSERVICE_PROPERTY).setto("(instance.name=UPnPDeviceImporter)");
-
-     **/
-
 }
