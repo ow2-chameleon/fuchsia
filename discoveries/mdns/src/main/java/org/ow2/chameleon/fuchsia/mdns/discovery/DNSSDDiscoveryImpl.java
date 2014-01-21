@@ -14,7 +14,9 @@ import org.slf4j.LoggerFactory;
 import javax.jmdns.*;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Map;
 
 
 @Component(name = "DNSSDDiscoveryFactory")
@@ -87,8 +89,36 @@ public class DNSSDDiscoveryImpl extends AbstractDiscoveryComponent implements Ne
     private synchronized void createImportationDeclaration(ServiceEvent event) {
 
         HashMap<String, Object> metadata = new HashMap<String, Object>();
+
+        StringBuffer bufAddress=new StringBuffer();
+
+        InetAddress[] addresses =  event.getInfo().getInetAddresses();
+        if (addresses.length > 0) {
+            for (InetAddress address : addresses) {
+                bufAddress.append(address);
+                bufAddress.append(':');
+                bufAddress.append(event.getInfo().getPort());
+                bufAddress.append(' ');
+            }
+        } else {
+            bufAddress.append("(null):");
+            bufAddress.append(event.getInfo().getPort());
+        }
+
+        StringBuffer bufProperty=new StringBuffer();
+
+        Enumeration<String> propertiesNameEnum=event.getInfo().getPropertyNames();
+
+        while(propertiesNameEnum.hasMoreElements()){
+            String name=propertiesNameEnum.nextElement();
+            bufProperty.append(name+"="+event.getInfo().getPropertyString(name)+",");
+        }
+
         metadata.put("id", event.getName());
         metadata.put("discovery.mdns.device.name", event.getName());
+        metadata.put("discovery.mdns.device.addresses", bufAddress.toString());
+        metadata.put("discovery.mdns.device.isPersistent",event.getInfo().isPersistent());
+        metadata.put("discovery.mdns.device.properties",bufProperty.toString());
 
         ImportDeclaration declaration = ImportDeclarationBuilder.fromMetadata(metadata).build();
 
