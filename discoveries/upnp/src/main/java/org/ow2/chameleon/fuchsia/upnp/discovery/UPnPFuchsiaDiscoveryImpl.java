@@ -3,6 +3,8 @@ package org.ow2.chameleon.fuchsia.upnp.discovery;
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.device.Device;
+import org.osgi.service.upnp.UPnPDevice;
 import org.ow2.chameleon.fuchsia.core.component.AbstractDiscoveryComponent;
 import org.ow2.chameleon.fuchsia.core.component.DiscoveryService;
 import org.ow2.chameleon.fuchsia.core.declaration.Constants;
@@ -59,19 +61,21 @@ public class UPnPFuchsiaDiscoveryImpl extends AbstractDiscoveryComponent {
         return name;
     }
 
-    @Bind(specification = Constants.BIND_SPECIFICATION_FOR_UPnPDevice)
+    @Bind(id="upnp-device", specification = Constants.BIND_SPECIFICATION_FOR_UPnPDevice,aggregate = true)
     public Object addingService(ServiceReference reference) {
 
-        String deviceID = (String) reference.getProperty(Constants.DEVICE_ID);
-        String deviceType = (String) reference.getProperty(Constants.DEVICE_TYPE);
-        String deviceSubType = (String) reference.getProperty(Constants.DEVICE_TYPE_SUB);
 
-        createImportationDeclaration(deviceID, deviceType, deviceSubType, reference);
+
+        String deviceID = (String) reference.getProperty(UPnPDevice.FRIENDLY_NAME);
+        String deviceType = (String) reference.getProperty(UPnPDevice.TYPE);
+        String UDN = (String) reference.getProperty(UPnPDevice.ID);
+
+        createImportationDeclaration(deviceID, deviceType, UDN, reference);
 
         return getBundleContext().getService(reference);
     }
 
-    @Unbind(specification = Constants.BIND_SPECIFICATION_FOR_UPnPDevice)
+    @Unbind(id="upnp-device", specification = Constants.BIND_SPECIFICATION_FOR_UPnPDevice,aggregate = true)
     public void removedService(ServiceReference reference) {
 
         String deviceID = (String) reference.getProperty(Constants.DEVICE_ID);
