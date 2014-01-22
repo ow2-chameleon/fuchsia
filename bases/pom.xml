@@ -16,7 +16,7 @@
     <modules>
         <module>protobuffer</module>
         <module>bluetooth</module>
-        <module>json-rpc</module>
+        <!--<module>json-rpc</module>-->
         <module>mqtt</module>
         <module>jax-ws</module>
     </modules>
