@@ -45,8 +45,8 @@
             <artifactId>org.apache.felix.ipojo.annotations</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.jabsorb</groupId>
-            <artifactId>jabsorb</artifactId>
+            <groupId>com.github.briandilley.jsonrpc4j</groupId>
+            <artifactId>jsonrpc4j</artifactId>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>

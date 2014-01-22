@@ -84,7 +84,7 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
         ImporterService importer = getImporterService();
 
         //create an importDeclaration for logService
-        ImportDeclaration iDec = createImportDeclaration("toto", LogService.class, logService);
+        ImportDeclaration iDec = createImportDeclaration("testImportService", LogService.class, logService);
 
         //import the logService
         try {
@@ -93,7 +93,6 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
             e.printStackTrace();
             fail();
         }
-
         LogService proxy = osgiHelper.getServiceObject(LogService.class);
 
         //check that the client is not null
@@ -116,7 +115,7 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
         ImporterService importer = getImporterService();
 
         //create an endpoint for logService
-        ImportDeclaration iDec = createImportDeclaration("toto", LogEntry.class, logEntry);
+        ImportDeclaration iDec = createImportDeclaration("testImportServiceNoVoid", LogEntry.class, logEntry);
 
         //import the logService
         try {
@@ -151,7 +150,7 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
         ImporterService importer = getImporterService(); //get the service
 
         //create an endpoint for logService
-        ImportDeclaration iDec = createImportDeclaration("toto", LogService.class, logService);
+        ImportDeclaration iDec = createImportDeclaration("testRemoveImportService", LogService.class, logService);
 
         //import the logService
         try {
@@ -191,7 +190,7 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
         ImporterService importer = getImporterService(); //get the service
 
         //create an endpoint for logService
-        ImportDeclaration iDec = createImportDeclaration("toto", LogService.class, logService);
+        ImportDeclaration iDec = createImportDeclaration("testReImportService", LogService.class, logService);
 
         //import the logService
         try {

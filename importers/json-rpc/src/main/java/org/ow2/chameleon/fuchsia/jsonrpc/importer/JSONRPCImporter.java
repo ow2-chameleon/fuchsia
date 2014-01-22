@@ -1,11 +1,8 @@
 package org.ow2.chameleon.fuchsia.jsonrpc.importer;
 
-import org.apache.felix.ipojo.annotations.Component;
-import org.apache.felix.ipojo.annotations.Invalidate;
-import org.apache.felix.ipojo.annotations.Provides;
-import org.apache.felix.ipojo.annotations.ServiceProperty;
-import org.apache.felix.ipojo.annotations.Validate;
-import org.jabsorb.client.Client;
+import com.googlecode.jsonrpc4j.JsonRpcHttpAsyncClient;
+import com.googlecode.jsonrpc4j.ProxyUtil;
+import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.ow2.chameleon.fuchsia.core.FuchsiaUtils;
@@ -15,13 +12,8 @@ import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Dictionary;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
+import java.net.MalformedURLException;
+import java.util.*;
 
 import static java.lang.String.valueOf;
 import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
@@ -29,7 +21,7 @@ import static org.ow2.chameleon.fuchsia.core.declaration.Constants.*;
 
 /**
  * Provides an {@link ImporterService} allowing to access a
- * remote endpoint through jsonrpc thanks to the jabsorb implementation.
+ * remote endpoint through jsonrpc thanks to the jsonrpc4j implementation.
  * <p/>
  * A valid {@link ImportDeclaration} for this ImporterService contains has metadata :
  * - ID : a unique String which is the id of the JSON-RPC service
@@ -50,9 +42,9 @@ public class JSONRPCImporter extends AbstractImporterComponent {
     private final BundleContext context;
 
     /**
-     * Map which contains the proxies and theirs Client.
+     * Map which contains the clients and theirs Client.
      */
-    private final Map<String, Client> proxies = new HashMap<String, Client>();
+    private final Map<String, JsonRpcHttpAsyncClient> clients = new HashMap<String, JsonRpcHttpAsyncClient>();
     private final Map<String, ServiceRegistration> registrations = new HashMap<String, ServiceRegistration>();
 
     public JSONRPCImporter(BundleContext pContext) {
@@ -61,21 +53,20 @@ public class JSONRPCImporter extends AbstractImporterComponent {
 
     @Override
     public void useImportDeclaration(ImportDeclaration importDeclaration) {
+        final JsonRpcHttpAsyncClient client;
         final Object proxy;
-        final Client client;
+        final Class<?> klass;
+        final String uri, id, klassName;
 
         // Get the URI
-        String uri = valueOf(importDeclaration.getMetadata().get(URL));
-
+        uri = valueOf(importDeclaration.getMetadata().get(URL));
         // Get an id
-        String id = (String) importDeclaration.getMetadata().get(ID);
-
+        id = (String) importDeclaration.getMetadata().get(ID);
         //Try to load the class
-        String klassName = (String) importDeclaration.getMetadata().get(SERVICE_CLASS);
+        klassName = (String) importDeclaration.getMetadata().get(SERVICE_CLASS);
         if (klassName == null) {
             throw new IllegalArgumentException("The property" + SERVICE_CLASS + "must be set and contain a valid class name");
         }
-        final Class<?> klass;
         try {
             klass = FuchsiaUtils.loadClass(context, klassName);
         } catch (ClassNotFoundException e) {
@@ -85,19 +76,15 @@ public class JSONRPCImporter extends AbstractImporterComponent {
         }
 
         try {
-            ImporterHTTPSession session = new ImporterHTTPSession(new URI(uri));
-            client = new ImporterClient(session);
-        } catch (URISyntaxException e) {
-            throw new IllegalArgumentException("The property" + URL + "must be set and a valid String form of the endpoint URL", e);
-        } catch (Exception e) {
-            throw new IllegalArgumentException("CATAPOSTROPHE !", e);
+            client = new JsonRpcHttpAsyncClient(new java.net.URL(uri));
+        } catch (MalformedURLException e) {
+            logger.error("Error during connection to " + uri, e);
+            return; //FIXME
         }
+        clients.put(id, client);
 
-        // Create the proxy thanks to jabsorb
-        proxy = client.openProxy(id, klass);
-
-        // Add the proxy to the proxy list
-        proxies.put(id, client);
+        // create the proxy !
+        proxy = ProxyUtil.createAsyncClientProxy(JSONRPCImporter.class.getClassLoader(), klass, client);
 
         // TODO : which properties to publish on the proxy?
         Dictionary<String, Object> props = new Hashtable<String, Object>();
@@ -105,19 +92,19 @@ public class JSONRPCImporter extends AbstractImporterComponent {
 
         // Add the registration to the registration list
         registrations.put(id, sReg);
+        logger.debug("JsonRPC Proxy successfully created and registered in OSGi " + uri + "");
     }
 
     @Override
     public void denyImportDeclaration(ImportDeclaration importDeclaration) {
         String id = (String) importDeclaration.getMetadata().get(ID);
-        if (proxies.containsKey(id)) {
-            // Unregister the proxy
+        if (clients.containsKey(id)) {
+            // Unregister the proxy from OSGi
             ServiceRegistration sReg = registrations.remove(id);
             sReg.unregister();
 
-            // Close the proxy
-            Client client = proxies.remove(id);
-            client.closeProxy(id);
+            // Remove the client
+            clients.remove(id);
         } else {
             throw new IllegalArgumentException("The given object has not been created through this factory");
         }
