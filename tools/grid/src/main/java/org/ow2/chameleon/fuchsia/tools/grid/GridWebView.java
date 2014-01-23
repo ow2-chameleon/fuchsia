@@ -8,6 +8,7 @@ import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.http.HttpContext;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.http.NamespaceException;
 import org.ow2.chameleon.fuchsia.core.ImportationLinkerIntrospection;
@@ -24,6 +25,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -49,6 +53,9 @@ public class GridWebView {
     public void validate() throws ServletException, NamespaceException {
 
         web.registerServlet(SERVLET,new MainPage(),null,null);
+
+        web.registerResources("/js", "/js", web.createDefaultHttpContext());
+
 
     }
 
