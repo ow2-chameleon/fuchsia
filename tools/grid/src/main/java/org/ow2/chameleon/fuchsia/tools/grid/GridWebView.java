@@ -39,6 +39,7 @@ import java.util.Map;
 public class GridWebView {
 
     private static final String SERVLET="/grid";
+    private static final String RESOURCES="/js";
     private static final String TEMPLATE_FILE="/index.html";
     private static final String TEMPLATE_ENCODING="UTF-8";
     private static final String TEMPLATE_FILE_REPOSITORY="/";
@@ -54,13 +55,14 @@ public class GridWebView {
 
         web.registerServlet(SERVLET,new MainPage(),null,null);
 
-        web.registerResources("/js", "/js", web.createDefaultHttpContext());
+        web.registerResources(RESOURCES, RESOURCES, web.createDefaultHttpContext());
 
 
     }
 
     public void invalidate(){
         web.unregister(SERVLET);
+        web.unregister(RESOURCES);
     }
 
     public GridWebView(BundleContext context){
