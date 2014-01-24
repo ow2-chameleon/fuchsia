@@ -19,8 +19,8 @@
         <module>push</module>
         <module>protobuffer</module>
         <module>jax-ws</module>
-        <!--<module>json-rpc</module>-->
-        <!--<module>json-rpc-it</module>-->
+        <module>json-rpc</module>
+        <module>json-rpc-it</module>
     </modules>
 
 </project>

@@ -1,6 +1,6 @@
 package org.ow2.chameleon.fuchsia.jsonrpc.importer;
 
-import com.googlecode.jsonrpc4j.JsonRpcHttpAsyncClient;
+import com.googlecode.jsonrpc4j.JsonRpcHttpClient;
 import com.googlecode.jsonrpc4j.ProxyUtil;
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
@@ -44,7 +44,7 @@ public class JSONRPCImporter extends AbstractImporterComponent {
     /**
      * Map which contains the clients and theirs Client.
      */
-    private final Map<String, JsonRpcHttpAsyncClient> clients = new HashMap<String, JsonRpcHttpAsyncClient>();
+    private final Map<String, JsonRpcHttpClient> clients = new HashMap<String, JsonRpcHttpClient>();
     private final Map<String, ServiceRegistration> registrations = new HashMap<String, ServiceRegistration>();
 
     public JSONRPCImporter(BundleContext pContext) {
@@ -53,7 +53,7 @@ public class JSONRPCImporter extends AbstractImporterComponent {
 
     @Override
     public void useImportDeclaration(ImportDeclaration importDeclaration) {
-        final JsonRpcHttpAsyncClient client;
+        final JsonRpcHttpClient client;
         final Object proxy;
         final Class<?> klass;
         final String uri, id, klassName;
@@ -76,7 +76,7 @@ public class JSONRPCImporter extends AbstractImporterComponent {
         }
 
         try {
-            client = new JsonRpcHttpAsyncClient(new java.net.URL(uri));
+            client = new JsonRpcHttpClient(new java.net.URL(uri));
         } catch (MalformedURLException e) {
             logger.error("Error during connection to " + uri, e);
             return; //FIXME
@@ -84,7 +84,7 @@ public class JSONRPCImporter extends AbstractImporterComponent {
         clients.put(id, client);
 
         // create the proxy !
-        proxy = ProxyUtil.createAsyncClientProxy(JSONRPCImporter.class.getClassLoader(), klass, client);
+        proxy = ProxyUtil.createClientProxy(JSONRPCImporter.class.getClassLoader(), klass, client);
 
         // TODO : which properties to publish on the proxy?
         Dictionary<String, Object> props = new Hashtable<String, Object>();
