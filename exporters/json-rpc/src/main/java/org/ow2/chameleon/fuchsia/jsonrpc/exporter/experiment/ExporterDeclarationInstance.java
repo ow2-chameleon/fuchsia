@@ -42,10 +42,6 @@ public class ExporterDeclarationInstance {
         metadata.put("fuchsia.export.jsonrpc.class","org.ow2.chameleon.fuchsia.jsonrpc.exporter.experiment.DummyIface");
         metadata.put("fuchsia.export.jsonrpc.instance","DummyPojoInstance");
 
-        //metadata.put("fuchsia.export.cxf.class.name",dummyInstance.getClass().getName());
-        //metadata.put("fuchsia.export.cxf.instance",dummyInstance);
-        //metadata.put("fuchsia.export.cxf.url.context","/PojoSampleToBeExported");
-
         ExportDeclaration declaration = ExportDeclarationBuilder.fromMetadata(metadata).build();
 
         Dictionary<String, Object> props = new Hashtable<String, Object>();
