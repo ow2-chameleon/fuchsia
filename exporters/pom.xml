@@ -16,6 +16,7 @@
 
     <modules>
         <module>jax-ws</module>
+        <module>json-rpc</module>
         <module>protobuffer</module>
     </modules>
 
