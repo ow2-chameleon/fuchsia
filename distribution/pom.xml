@@ -503,7 +503,7 @@
         </profile>
 
         <profile>
-            <id>jsonrpc-exporter</id>
+            <id>exporter-jsonrpc</id>
             <dependencies>
                 <dependency>
                     <groupId>javax.servlet</groupId>

@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.jsonrpc.exporter.experiment;
+package org.ow2.chameleon.fuchsia.examples.jsonrpc.exporter.experiment;
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,3 +11,4 @@ public interface DummyIface {
     public void helloworld(String value);
 
 }
+

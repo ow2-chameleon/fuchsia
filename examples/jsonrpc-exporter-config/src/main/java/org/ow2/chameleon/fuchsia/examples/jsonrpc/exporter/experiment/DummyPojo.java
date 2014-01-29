@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.jsonrpc.exporter.experiment;
+package org.ow2.chameleon.fuchsia.examples.jsonrpc.exporter.experiment;
 
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;

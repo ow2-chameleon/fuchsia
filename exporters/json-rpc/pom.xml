@@ -107,13 +107,9 @@
                         <Bundle-SymbolicName>
                             ${project.artifactId}
                         </Bundle-SymbolicName>
-                        <Export-Package>
-                            org.ow2.chameleon.fuchsia.jsonrpc.exporter, org.ow2.chameleon.fuchsia.jsonrpc.exporter.model
-                        </Export-Package>
                         <Import-Package>
                             *
                         </Import-Package>
-                        <Export-Package/>
                     </instructions>
                 </configuration>
             </plugin>
