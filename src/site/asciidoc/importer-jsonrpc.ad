@@ -1,0 +1,86 @@
+Import JSONRPC
+==============
+
+Goal
+----
+
+Materialise an a remote JSONRPC instance (available through a URL) into the current OSGi platform.
+
+Requirements
+------------
+
+* URL of the JSONRPC object to be imported
+* declaration containing the metadata below:
+** *id* - a platform unique identifier
+** *url* - URL where the object was published. e.g. http://localhost:8080/JSONRPC/DummyPojoInstance
+** *service.class* - full class identifier used as interface, this reference will be used to register in OSGi. e.g. org.ow2.chameleon.fuchsia.examples.jsonrpc.exporter.experiment.DummyIface
+** *configs* - this is a constant, always set with the value *jsonrpc*
+
+Example
+-------
+
+Importer instantiation
+~~~~~~~~~~~~~~~~~~~~~~
+
+[source,java]
+----
+     Instance jsonRPCImporter = instance()
+            .of("Fuchsia-Importer:JSON-RPC")
+            .with(ImporterService.TARGET_FILTER_PROPERTY).setto("(configs=jsonrpc)");
+----
+
+
+Linker instantiation
+~~~~~~~~~~~~~~~~~~~~
+
+[source,java]
+----
+        Instance jsonRPCImporterLinker = instance()
+            .of(FuchsiaConstants.DEFAULT_IMPORTATION_LINKER_FACTORY_NAME)
+            .with(FILTER_IMPORTDECLARATION_PROPERTY).setto("(configs=jsonrpc)")
+            .with(FILTER_IMPORTERSERVICE_PROPERTY).setto("(instance.name=jsonRPCImporter)");
+----
+
+Importer Declaration instantiation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+[source,java]
+----
+        Map<String, Object> metadata=new HashMap<String, Object>();
+        metadata.put(ID, "endipoint");
+        metadata.put(URL, "http://localhost:8080/JSONRPC/DummyPojoInstance");
+        metadata.put(SERVICE_CLASS, "org.ow2.chameleon.fuchsia.examples.jsonrpc.exporter.experiment.DummyIface");
+        metadata.put(CONFIGS, "jsonrpc");
+
+        ImportDeclaration declaration = ImportDeclarationBuilder.fromMetadata(metadata).build();
+
+        String clazzes[] = new String[]{ImportDeclaration.class.getName()};
+
+        Dictionary<String, Object> props = new Hashtable<String, Object>();
+
+        ServiceRegistration registration = context.registerService(clazzes, declaration, props);
+----
+
+
+Verification
+------------
+
+Service was properly imported
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You can use *felix shelbie shell* and inspect the importer bundle to check if it has correcly imported our JSONRPC remote instance
+
+[source,xml]
+----
+shelbie-shell$ lb
+..
+   31|Active     |    1|OW2 Chameleon - Fuchsia Importer JSON-RPC (0.0.2.SNAPSHOT)
+..
+shelbie-shell$ inspect cap service 31
+...
+service; org.ow2.chameleon.fuchsia.examples.jsonrpc.exporter.experiment.DummyIface with properties:
+   service.id = 693
+
+----
+
+Importer should provide a service with the interface that we'd configured just before in the *Importer Declaration instantiation*.
