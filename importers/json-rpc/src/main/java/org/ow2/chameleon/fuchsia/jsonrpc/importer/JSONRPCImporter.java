@@ -37,6 +37,9 @@ public class JSONRPCImporter extends AbstractImporterComponent {
     @ServiceProperty(name = INSTANCE_NAME_PROPERTY)
     private String name;
 
+    @ServiceProperty(name = "target")
+    private String filter;
+
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final BundleContext context;
@@ -53,6 +56,7 @@ public class JSONRPCImporter extends AbstractImporterComponent {
 
     @Override
     public void useImportDeclaration(ImportDeclaration importDeclaration) {
+
         final JsonRpcHttpClient client;
         final Object proxy;
         final Class<?> klass;
@@ -64,11 +68,14 @@ public class JSONRPCImporter extends AbstractImporterComponent {
         id = (String) importDeclaration.getMetadata().get(ID);
         //Try to load the class
         klassName = (String) importDeclaration.getMetadata().get(SERVICE_CLASS);
+
         if (klassName == null) {
             throw new IllegalArgumentException("The property" + SERVICE_CLASS + "must be set and contain a valid class name");
         }
         try {
+
             klass = FuchsiaUtils.loadClass(context, klassName);
+
         } catch (ClassNotFoundException e) {
             throw new IllegalStateException(
                     "Cannot create a proxy for the ImportDeclaration : " + importDeclaration
@@ -84,7 +91,7 @@ public class JSONRPCImporter extends AbstractImporterComponent {
         clients.put(id, client);
 
         // create the proxy !
-        proxy = ProxyUtil.createClientProxy(JSONRPCImporter.class.getClassLoader(), klass, client);
+        proxy = ProxyUtil.createClientProxy(klass.getClassLoader(), klass, client);
 
         // TODO : which properties to publish on the proxy?
         Dictionary<String, Object> props = new Hashtable<String, Object>();
