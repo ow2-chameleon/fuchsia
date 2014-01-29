@@ -2,17 +2,11 @@ package org.ow2.chameleon.fuchsia.jsonrpc.exporter.model;
 
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
 
-/**
- * Created with IntelliJ IDEA.
- * User: jnascimento
- * Date: 27/01/14
- * Time: 17:54
- * To change this template use File | Settings | File Templates.
- */
 public class JSONRPCExporterPojo {
 
     private String instanceName;
     private String instanceClass;
+    private String urlContext;
 
 
     private JSONRPCExporterPojo(){}
@@ -24,7 +18,18 @@ public class JSONRPCExporterPojo {
         dto.instanceClass=exportDeclaration.getMetadata().get("fuchsia.export.jsonrpc.class").toString();
         dto.instanceName=exportDeclaration.getMetadata().get("fuchsia.export.jsonrpc.instance").toString();
 
+
+        String url=exportDeclaration.getMetadata().get("fuchsia.export.jsonrpc.url.context");
+
+
+        if(url==null){
+            dto.urlContext=url;
+        }else {
+            dto.urlContext="/JSONRPC";
+        }
+
         return dto;
+
     }
 
     public String getInstanceName() {
@@ -41,5 +46,13 @@ public class JSONRPCExporterPojo {
 
     public void setInstanceClass(String instanceClass) {
         this.instanceClass = instanceClass;
+    }
+
+    public String getUrlContext() {
+        return urlContext;
+    }
+
+    public void setUrlContext(String urlContext) {
+        this.urlContext = urlContext;
     }
 }

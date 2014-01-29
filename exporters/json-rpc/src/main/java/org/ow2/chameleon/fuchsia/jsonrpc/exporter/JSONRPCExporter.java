@@ -42,8 +42,6 @@ import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
 @Provides(specifications = {ExporterService.class})
 public class JSONRPCExporter extends AbstractExporterComponent {
 
-    private static final String SERVLET_NAME = "/JSONRPC";
-
     @ServiceProperty(name = INSTANCE_NAME_PROPERTY)
     private String name;
 
@@ -87,7 +85,7 @@ public class JSONRPCExporter extends AbstractExporterComponent {
 
             final JsonRpcServer jsonRpcServer = new JsonRpcServer(serviceToBePublished, klass);
 
-            final String endpointURL=String.format("%s/%s",SERVLET_NAME,jp.getInstanceName()).toString();
+            final String endpointURL=String.format("%s/%s",jp.getUrlContext(),jp.getInstanceName()).toString();
 
             Servlet gs=new RPCServlet(jsonRpcServer);
 
@@ -119,7 +117,7 @@ public class JSONRPCExporter extends AbstractExporterComponent {
 
         JSONRPCExporterPojo jp=JSONRPCExporterPojo.create(exportDeclaration);
 
-        final String endpointURL=String.format("%s/%s",SERVLET_NAME,jp.getInstanceName()).toString();
+        final String endpointURL=String.format("%s/%s",jp.getUrlContext(),jp.getInstanceName()).toString();
 
         web.unregister(endpointURL);
 
