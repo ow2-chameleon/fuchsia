@@ -20,5 +20,6 @@
         <module>upnp</module>
         <module>upnp.it</module>
         <module>bluetooth</module>
+        <module>philips-hue-discovery</module>
     </modules>
 </project>

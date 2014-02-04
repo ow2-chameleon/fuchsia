@@ -37,6 +37,7 @@
         <module>cxf-base</module>
         <module>cxf-client</module>
         <module>jsonrpc-exporter-config</module>
+        <module>philips-hue-config</module>
         <module>cxf-exporter-config</module>
         <module>cxf-importer-config</module>
         <module>fake-importer-config</module>
