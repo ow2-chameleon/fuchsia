@@ -1,0 +1,236 @@
+package com.philips.lighting.hue.sdk.upnp;
+
+import java.util.ArrayList;
+
+import com.philips.lighting.hue.sdk.PHAccessPoint;
+import com.philips.lighting.hue.sdk.PHBridgeSearchManager;
+import com.philips.lighting.hue.sdk.PHMessageType;
+import com.philips.lighting.hue.sdk.PHSDKListener;
+import com.philips.lighting.hue.sdk.data.PHHueConstants;
+import com.philips.lighting.hue.sdk.notification.impl.PHNotificationManagerImpl;
+import com.philips.lighting.hue.sdk.utilities.impl.PHHueHelper;
+import com.philips.lighting.hue.sdk.utilities.impl.PHLog;
+/**
+ * Enables SSDP search for finding bridges
+ * @author Manmath R
+ *
+ */
+public class PHBridgeSearchManagerImpl implements PHBridgeSearchManager {
+
+	private static final String TAG = "PHBridgeSerachManagerImpl";
+
+	/** The IPBRIDGE. */
+	private static final String IPBRIDGE = "IpBridge";
+
+	/** The LOCATION text. */
+	private static final String LOCATION_TEXT = "LOCATION: http://";
+
+	/** The COLON. */
+	private static final String COLON = ":";
+
+	/** The LINE. */
+	private static final String LINE = "-";
+	/** USN string*/
+	private static final String USN="USN: uuid:";
+	
+	
+	/**
+	 * Searches for access points in through Upnp. Discovered access points are notified through {@link PHSDKListener} as {@link PHAccessPoint}.	
+	 */
+	@Override
+	public void upnpSearch() {
+		search(true, false, false);		
+	}
+
+	/**
+	 * Searches for access points in through the portal. Discovered access points are notified through {@link PHSDKListener} as {@link PHAccessPoint}.	
+	 */
+	@Override
+	public void portalSearch() {
+		search(false, true, false);	
+		
+	}
+
+	/**
+	 * Searches for access points in through ip address search. Discovered access points are notified through {@link PHSDKListener} as {@link PHAccessPoint}.	
+	 */
+	@Override
+	public void ipAddressSearch() {
+		search(false, false, true);			
+	}	
+	
+	/**
+	 * Searches for access points in network. Discovered access points are notified through {@link PHSDKListener} as {@link PHAccessPoint}.
+	 *  @param searchUpnp indicates whether UPnP should be used for searching    
+	 *  @param searchPortal indicates whether portal based discovery should be used for searching
+	 */
+	@Override
+	public void search(final boolean searchUpnp, final boolean searchPortal) {
+		search(searchUpnp, searchPortal, false);
+	}
+	
+	
+	/**
+	 * Searches for access points in network. Discovered access points are notified through {@link PHSDKListener} as {@link PHAccessPoint}.
+	 *  @param searchUpnp indicates whether UPnP should be used for searching    
+	 *  @param searchPortal indicates whether portal based discovery should be used for searching
+	 */
+	@Override
+	public void search(final boolean searchUpnp, final boolean searchPortal, final boolean searchIpAddress) {
+		new Thread(){
+			public void run() {
+				ArrayList<PHAccessPoint> phAccessPointList = new ArrayList<PHAccessPoint>();
+				PHNotificationManagerImpl notificationManager=PHNotificationManagerImpl.getNotificationManager();
+				if(searchUpnp){
+					PHUpnpManager manager =getUpnpManager();
+
+					PHLog.d(TAG,"Discovering Devices ...");
+					ArrayList<String> ssdpReceivedMessage = manager.startSearch();
+
+					for(String message : ssdpReceivedMessage) {
+
+						//Only get the location If the text IpBridge is found in the received string
+						if (message.indexOf(IPBRIDGE) >= 0) {
+
+							int locI = message.indexOf(LOCATION_TEXT);
+							if (message.length() >(locI + LOCATION_TEXT.length() + 15)) {
+								// get ip address
+								locI += LOCATION_TEXT.length();
+								int locColon = message.indexOf(COLON,locI);
+								String ipString = message.substring(locI,locColon);
+								// get the USN string and pars
+								int usnIndex=message.indexOf(USN);
+								String tempString=message.substring(usnIndex+USN.length());
+								int colonIndex=tempString.indexOf(':');
+								String  usnString=null;
+								if(colonIndex>0){
+									usnString=tempString.substring(0,colonIndex);
+								}else{
+									usnString=tempString;
+								}
+								int indexofLine=usnString.lastIndexOf(LINE);
+								PHAccessPoint accessPoint=null;
+								if(indexofLine>=0){
+									String macString=usnString.substring(indexofLine+1);
+									if(macString.length()<12){ // if less than 12 don't add
+										continue;
+									}else if(macString.length()>12) { 
+										macString=macString.substring(0,12);
+									}
+									accessPoint=new PHAccessPoint();
+									accessPoint.setMacAddress(PHHueHelper.formatMacAddress(macString.trim()));
+									accessPoint.setIpAddress(ipString.trim());
+								}
+
+
+								if(!phAccessPointList.contains(accessPoint))
+								{
+									phAccessPointList.add(accessPoint);
+								}
+							}
+
+
+
+						}
+
+					}
+				}
+
+				// If no local bridge found, start portal bridge search
+
+				if(searchPortal){
+					ArrayList<PHAccessPoint>  portalAccessPoints=getPortalSearchManager().searchPortal();
+					if(portalAccessPoints!=null && portalAccessPoints.size()>0){
+						for(PHAccessPoint accessPoint : portalAccessPoints){ // remove duplicate bridges
+							if(verifyDuplicateMac(phAccessPointList, accessPoint)){
+								continue;
+							}
+							if(!phAccessPointList.contains(accessPoint))
+							{							
+								phAccessPointList.add(accessPoint);
+							}
+
+						}
+					}
+				}
+
+				if(searchIpAddress){
+					ArrayList<PHAccessPoint>  ipAddressAccessPoints=getIpAddressSearchManager().startIpAddressSearch();
+					if(ipAddressAccessPoints!=null && !ipAddressAccessPoints.isEmpty()){
+						for(PHAccessPoint accessPoint : ipAddressAccessPoints){ // remove duplicate bridges
+							if(verifyDuplicateMac(phAccessPointList, accessPoint)){
+								continue;
+							}
+							if(!phAccessPointList.contains(accessPoint))
+							{							
+								phAccessPointList.add(accessPoint);
+							}
+
+						}
+					}
+				}
+
+				if(phAccessPointList == null || phAccessPointList.isEmpty()){
+					String localBridgeNotFound=PHHueConstants.TXT_NO_BRIDGE_FOUND;
+					if(notificationManager!=null){
+						notificationManager.notifySDKError(PHMessageType.BRIDGE_NOT_FOUND, localBridgeNotFound);
+					}
+				}else{
+					if(notificationManager!=null){
+						notificationManager.notifyBridgeSearchResult(phAccessPointList);
+					}
+				}
+			}
+		}.start();
+
+	}
+	/**
+	 * Provides upnp manager
+	 * @return the {@link PHUpnpManager} object
+	 */
+	public PHUpnpManager getUpnpManager(){
+		return new  PHUpnpManager();
+	}
+	/**
+	 * Provides portal search manager object
+	 * @return the portal search manager object
+	 */
+	public PHPortalSearchManager getPortalSearchManager(){
+		return new  PHPortalSearchManager();
+	}	
+	/**
+	 * Provides ip address search manager object
+	 * @return the ip address search manager object
+	 */
+	public PHIpAddressSearchManager getIpAddressSearchManager(){
+		return new  PHIpAddressSearchManager();
+	}
+
+	/**
+	 * Check for access point with duplicate MAC address. 
+	 * @param phAccessPointList an array list of {@link PHAccessPoint} objects.
+	 * @param accessPoint the {@link PHAccessPoint} object.
+	 * @return return true if access point with duplicate MAC address found, otherwise false. 
+	 */
+	private boolean verifyDuplicateMac(ArrayList<PHAccessPoint> phAccessPointList, PHAccessPoint accessPoint){
+		for(int i = 0 ; i < phAccessPointList.size() ; i++){
+			// Fix for #4085 
+<<<<<<< HEAD
+			if (accessPoint.getMacAddress()==null || phAccessPointList.get(i).getMacAddress()==null) {
+				continue;
+			}
+
+			if(phAccessPointList.get(i).getMacAddress().equals(accessPoint.getMacAddress())){
+				return true;
+=======
+			if (accessPoint !=null && accessPoint.getMacAddress() !=null && phAccessPointList.get(i) != null &&  phAccessPointList.get(i).getMacAddress()!=null) {
+				if(phAccessPointList.get(i).getMacAddress().equals(accessPoint.getMacAddress())){
+					return true;
+				}
+>>>>>>> 8f6cf7f... Fixed NPE in verifyDuplicateMac method.
+			}
+		}
+		return false;
+	}
+	
+}
