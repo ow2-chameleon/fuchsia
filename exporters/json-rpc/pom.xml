@@ -57,9 +57,6 @@
             <artifactId>servlet-api</artifactId>
             <version>2.5</version>
         </dependency>
-
-        <!-- dep other -->
-
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpcore-nio</artifactId>
