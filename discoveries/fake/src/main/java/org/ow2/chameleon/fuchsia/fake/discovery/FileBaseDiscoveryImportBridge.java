@@ -23,30 +23,30 @@ import java.util.Properties;
 import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
 
 /**
- * This component instantiate a directory monitor (initially pointed to a directory in chameleon called "load") that reads all file placed there (as property files)
- * and publishes an {@link ImportDeclaration}
+ * This component instantiate a directory monitor (initially pointed to a directory in chameleon called "load/import") that reads all file placed there (as property files)
+ * and publishes an {@link org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration}
  *
  * @author jeremy.savonet@gmail.com
  * @author botelho (at) imag.fr
  */
 
-@Component(name = "Fuchsia-FakeDiscovery-Factory")
+@Component(name = "Fuchsia-FileBaseImportDiscovery-Factory")
 @Provides(specifications = {DiscoveryService.class,Deployer.class})
-@Instantiate(name = "Fuchsia-FakeDiscovery")
-public class FakeDiscoveryBridge extends AbstractDiscoveryComponent implements Deployer {
+@Instantiate
+public class FileBaseDiscoveryImportBridge extends AbstractDiscoveryComponent implements Deployer {
 
     @ServiceProperty(name = INSTANCE_NAME_PROPERTY)
     private String name;
 
-    @ServiceProperty(name = FakeDiscoveryConstants.FAKE_DISCOVERY_PROPERTY_KEY_MONITORED_DIR_KEY,value = FakeDiscoveryConstants.FAKE_DISCOVERY_PROPERTY_KEY_MONITORED_DIR_VALUE)
-    private String monitoredDirectory;
+    @ServiceProperty(name = FakeDiscoveryConstants.FAKE_DISCOVERY_IMPORT_PROPERTY_KEY_MONITORED_DIR_KEY,value = FakeDiscoveryConstants.FAKE_DISCOVERY_IMPORT_PROPERTY_KEY_MONITORED_DIR_VALUE)
+    private String monitoredImportDirectory;
 
     @ServiceProperty(name = FakeDiscoveryConstants.FAKE_DISCOVERY_PROPERTY_POLLING_TIME_KEY,value = FakeDiscoveryConstants.FAKE_DISCOVERY_PROPERTY_POLLING_TIME_VALUE)
     private Long pollingTime;
 
     private final HashMap<String,ImportDeclaration> importDeclarationsFile = new HashMap<String, ImportDeclaration>();
 
-    public FakeDiscoveryBridge(BundleContext bundleContext) {
+    public FileBaseDiscoveryImportBridge(BundleContext bundleContext) {
         super(bundleContext);
     }
 
@@ -55,17 +55,22 @@ public class FakeDiscoveryBridge extends AbstractDiscoveryComponent implements D
 
         super.start();
 
+        startMonitorDirectory(monitoredImportDirectory,pollingTime);
+
+        getLogger().info("Filebase Import discovery up and running.");
+
+    }
+
+    private void startMonitorDirectory(String directory, Long poolTime){
+
         try {
 
-            File monitoredFolder=new File(monitoredDirectory);
-
-            DirectoryMonitor dm=new DirectoryMonitor(monitoredFolder,pollingTime);
+            DirectoryMonitor dm=new DirectoryMonitor(directory,pollingTime,this);
 
             dm.start(getBundleContext());
 
-            getLogger().info("Discovery up and running.");
         } catch (Exception e) {
-            getLogger().error("Failed to start {} for the directory {} and polling time {}, with the message '{}'", new String[]{DirectoryMonitor.class.getName(), monitoredDirectory, pollingTime.toString(), e.getMessage()});
+            getLogger().error("Failed to start {} for the directory {} and polling time {}, with the message '{}'", new String[]{DirectoryMonitor.class.getName(), directory, poolTime.toString(), e.getMessage()});
         }
 
     }
@@ -85,16 +90,6 @@ public class FakeDiscoveryBridge extends AbstractDiscoveryComponent implements D
         return name;
     }
 
-    private ImportDeclaration createAndRegisterImportDeclaration(HashMap<String, Object> metadata){
-
-        ImportDeclaration declaration = ImportDeclarationBuilder.fromMetadata(metadata).build();
-
-        registerImportDeclaration(declaration);
-
-        return declaration;
-
-    }
-
     public boolean accept(File file) {
         return true;
     }
@@ -110,8 +105,8 @@ public class FakeDiscoveryBridge extends AbstractDiscoveryComponent implements D
         }
 
         if( !deviceReificationProperties.containsKey(Constants.ID) ||
-            !deviceReificationProperties.containsKey(Constants.DEVICE_TYPE)||
-            !deviceReificationProperties.containsKey(Constants.DEVICE_TYPE_SUB)){
+                !deviceReificationProperties.containsKey(Constants.DEVICE_TYPE)||
+                !deviceReificationProperties.containsKey(Constants.DEVICE_TYPE_SUB)){
             throw new Exception(String.format("File cannot represent a device since it does not contain the information base to work as such",file.getAbsoluteFile()));
         }
 
@@ -190,4 +185,15 @@ public class FakeDiscoveryBridge extends AbstractDiscoveryComponent implements D
     }
 
     public void close() { }
+
+    private ImportDeclaration createAndRegisterImportDeclaration(HashMap<String, Object> metadata){
+
+        ImportDeclaration declaration = ImportDeclarationBuilder.fromMetadata(metadata).build();
+
+        registerImportDeclaration(declaration);
+
+        return declaration;
+
+    }
+
 }

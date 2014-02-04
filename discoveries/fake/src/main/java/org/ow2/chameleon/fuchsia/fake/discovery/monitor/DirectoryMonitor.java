@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 
-public class DirectoryMonitor implements BundleActivator, ServiceTrackerCustomizer {
+public class DirectoryMonitor implements BundleActivator,ServiceTrackerCustomizer {
 
     /**
      * A logger.
@@ -54,8 +54,10 @@ public class DirectoryMonitor implements BundleActivator, ServiceTrackerCustomiz
     private ServiceTracker tracker;
     private BundleContext context;
 
-    public DirectoryMonitor(File directory, long polling) {
-        this.directory = directory;
+    public DirectoryMonitor(String directorypath, long polling, Deployer deployer) {
+
+        this.directory=new File(directorypath);
+
         this.polling = polling;
         this.logger = LoggerFactory.getLogger(DirectoryMonitor.class.getName() + "[" + directory.getName() + "]");
 
@@ -69,10 +71,8 @@ public class DirectoryMonitor implements BundleActivator, ServiceTrackerCustomiz
         observer.checkAndNotify();
         observer.addListener(new FileMonitor());
         monitor = new FileAlterationMonitor(polling, observer);
-    }
 
-    public DirectoryMonitor(File directory) {
-        this(directory, -1);
+        deployers.add(deployer);
     }
 
     /**
@@ -193,6 +193,8 @@ public class DirectoryMonitor implements BundleActivator, ServiceTrackerCustomiz
     }
 
     public Object addingService(ServiceReference reference) {
+
+        /*
         Deployer deployer = (Deployer) context.getService(reference);
 
         try {
@@ -211,6 +213,9 @@ public class DirectoryMonitor implements BundleActivator, ServiceTrackerCustomiz
         }
 
         return deployer;
+        */
+        return null;
+
     }
 
     public void modifiedService(ServiceReference reference, Object o) {
