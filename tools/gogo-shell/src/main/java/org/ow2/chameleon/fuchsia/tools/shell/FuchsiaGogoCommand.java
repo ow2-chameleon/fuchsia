@@ -2,11 +2,6 @@ package org.ow2.chameleon.fuchsia.tools.shell;
 
 import org.apache.felix.ipojo.Factory;
 import org.apache.felix.ipojo.annotations.*;
-import org.apache.felix.ipojo.architecture.Architecture;
-import org.apache.felix.ipojo.architecture.HandlerDescription;
-import org.apache.felix.ipojo.extender.Declaration;
-import org.apache.felix.ipojo.handlers.dependency.DependencyDescription;
-import org.apache.felix.ipojo.handlers.dependency.DependencyHandlerDescription;
 import org.apache.felix.service.command.Descriptor;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
@@ -50,41 +45,79 @@ public class FuchsiaGogoCommand {
     EventAdmin eventAdmin;
 
     @Descriptor("Gets info about the importation declaration available")
-    public void declaration(@Descriptor("declaration [ID name]") String... parameters) {
+    public void declaration(@Descriptor("declaration [--type import|export]") String... parameters) {
 
         String filter = null;
+        String type=getArgumentValue("--type",parameters);
 
         try {
-            ServiceReference[] importDeclarationsRef = m_context.getAllServiceReferences(ImportDeclaration.class.getName(), filter);
 
-            if (importDeclarationsRef != null) {
-                for (ServiceReference reference : importDeclarationsRef) {
+            if(type==null||type.equals("import")){
 
-                    ImportDeclaration declaration= (ImportDeclaration) m_context.getService(reference);
+                ServiceReference[] importDeclarationsRef = m_context.getAllServiceReferences(ImportDeclaration.class.getName(), filter);
 
-                    Map<String, Object> metadata = declaration.getMetadata();
+                System.out.println("--- Import declaration ---");
 
-                    displayServiceProperties(reference);
+                if (importDeclarationsRef!=null) {
 
-                    System.out.println("Metadata");
+                    List<ServiceReference> references=Arrays.asList(importDeclarationsRef);
 
-                    for(Map.Entry<String,Object> entry:metadata.entrySet()){
-                        System.out.println(String.format("\t%s=%s",entry.getKey(),entry.getValue()));
+                    for (ServiceReference reference : references) {
+
+                        ImportDeclaration declaration=(ImportDeclaration) m_context.getService(reference);
+
+                        displayDeclarationMetadata(reference, declaration.getMetadata());
+
                     }
-
-                    if(metadata.entrySet().size()==0){
-                        System.out.println("\tEMPTY");
-                    }
-
+                } else {
+                    System.out.println("\tNo declarations available.");
                 }
-            } else {
-                System.out.println("No declarations available.");
+
+
             }
 
-        } catch (InvalidSyntaxException e) {
+            if(type==null||type.equals("export")){
+
+                ServiceReference[] exportDeclarationsRef = m_context.getAllServiceReferences(ExportDeclaration.class.getName(), filter);
+
+                System.out.println("--- Export declaration ---");
+
+                if (exportDeclarationsRef!=null) {
+
+                    List<ServiceReference> references=Arrays.asList(exportDeclarationsRef);
+
+                    for (ServiceReference reference : references) {
+
+                        ExportDeclaration declaration= (ExportDeclaration) m_context.getService(reference);
+
+                        displayDeclarationMetadata(reference, declaration.getMetadata());
+
+                    }
+                } else {
+                    System.out.println("\tNo declarations available.");
+                }
+
+            }
+
+        } catch (Exception e) {
             System.out.println("failed to execute the command with the message: " + e.getMessage());
         }
 
+    }
+
+    private void displayDeclarationMetadata(ServiceReference reference, Map<String, Object> metadata){
+
+                displayServiceProperties(reference);
+
+                System.out.println("\tMetadata");
+
+                for(Map.Entry<String,Object> entry:metadata.entrySet()){
+                    System.out.println(String.format("\t\t%s=%s",entry.getKey(),entry.getValue()));
+                }
+
+                if(metadata.entrySet().size()==0){
+                    System.out.println("\tEMPTY");
+                }
     }
 
     @Descriptor("Gets the importation/exportation linker available")
