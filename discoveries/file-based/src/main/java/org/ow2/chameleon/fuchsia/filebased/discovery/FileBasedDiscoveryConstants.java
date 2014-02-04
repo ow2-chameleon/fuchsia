@@ -1,6 +1,6 @@
-package org.ow2.chameleon.fuchsia.fake.discovery;
+package org.ow2.chameleon.fuchsia.filebased.discovery;
 
-public class FakeDiscoveryConstants {
+public class FileBasedDiscoveryConstants {
 
     public static final String FAKE_DISCOVERY_IMPORT_PROPERTY_KEY_MONITORED_DIR_KEY ="fuchsia.system.fake.discovery.directory";
     public static final String FAKE_DISCOVERY_IMPORT_PROPERTY_KEY_MONITORED_DIR_VALUE ="load/import";

@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.fake.discovery.monitor;
+package org.ow2.chameleon.fuchsia.filebased.discovery.monitor;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;

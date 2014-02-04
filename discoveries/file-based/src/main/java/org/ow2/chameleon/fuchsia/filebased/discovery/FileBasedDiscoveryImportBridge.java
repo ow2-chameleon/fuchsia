@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.fake.discovery;
+package org.ow2.chameleon.fuchsia.filebased.discovery;
 
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
@@ -7,8 +7,8 @@ import org.ow2.chameleon.fuchsia.core.component.DiscoveryService;
 import org.ow2.chameleon.fuchsia.core.declaration.Constants;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclarationBuilder;
-import org.ow2.chameleon.fuchsia.fake.discovery.monitor.Deployer;
-import org.ow2.chameleon.fuchsia.fake.discovery.monitor.DirectoryMonitor;
+import org.ow2.chameleon.fuchsia.filebased.discovery.monitor.Deployer;
+import org.ow2.chameleon.fuchsia.filebased.discovery.monitor.DirectoryMonitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,20 +33,20 @@ import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
 @Component(name = "Fuchsia-FileBaseImportDiscovery-Factory")
 @Provides(specifications = {DiscoveryService.class,Deployer.class})
 @Instantiate
-public class FileBaseDiscoveryImportBridge extends AbstractDiscoveryComponent implements Deployer {
+public class FileBasedDiscoveryImportBridge extends AbstractDiscoveryComponent implements Deployer {
 
     @ServiceProperty(name = INSTANCE_NAME_PROPERTY)
     private String name;
 
-    @ServiceProperty(name = FakeDiscoveryConstants.FAKE_DISCOVERY_IMPORT_PROPERTY_KEY_MONITORED_DIR_KEY,value = FakeDiscoveryConstants.FAKE_DISCOVERY_IMPORT_PROPERTY_KEY_MONITORED_DIR_VALUE)
+    @ServiceProperty(name = org.ow2.chameleon.fuchsia.filebased.discovery.FileBasedDiscoveryConstants.FAKE_DISCOVERY_IMPORT_PROPERTY_KEY_MONITORED_DIR_KEY,value = FileBasedDiscoveryConstants.FAKE_DISCOVERY_IMPORT_PROPERTY_KEY_MONITORED_DIR_VALUE)
     private String monitoredImportDirectory;
 
-    @ServiceProperty(name = FakeDiscoveryConstants.FAKE_DISCOVERY_PROPERTY_POLLING_TIME_KEY,value = FakeDiscoveryConstants.FAKE_DISCOVERY_PROPERTY_POLLING_TIME_VALUE)
+    @ServiceProperty(name = FileBasedDiscoveryConstants.FAKE_DISCOVERY_PROPERTY_POLLING_TIME_KEY,value = FileBasedDiscoveryConstants.FAKE_DISCOVERY_PROPERTY_POLLING_TIME_VALUE)
     private Long pollingTime;
 
     private final HashMap<String,ImportDeclaration> importDeclarationsFile = new HashMap<String, ImportDeclaration>();
 
-    public FileBaseDiscoveryImportBridge(BundleContext bundleContext) {
+    public FileBasedDiscoveryImportBridge(BundleContext bundleContext) {
         super(bundleContext);
     }
 

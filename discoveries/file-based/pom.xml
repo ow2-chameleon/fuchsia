@@ -10,9 +10,8 @@
     </parent>
 
 
-    <artifactId>org.ow2.chameleon.fuchsia.discovery.fake</artifactId>
-    <groupId>org.ow2.chameleon.fuchsia.discovery</groupId>
-    <name>OW2 Chameleon - Fuchsia Discovery Fake</name>
+    <artifactId>org.ow2.chameleon.fuchsia.discovery.filebased</artifactId>
+    <name>OW2 Chameleon - Fuchsia Discovery FileBased</name>
     <packaging>bundle</packaging>
 
     <dependencies>
@@ -55,7 +54,7 @@
                             ${project.artifactId}
                         </Bundle-SymbolicName>
                         <Export-Package>
-                            org.ow2.chameleon.fuchsia.fake.discovery
+                            org.ow2.chameleon.fuchsia.filebased.discovery
                         </Export-Package>
                         <Import-Package>
                             *

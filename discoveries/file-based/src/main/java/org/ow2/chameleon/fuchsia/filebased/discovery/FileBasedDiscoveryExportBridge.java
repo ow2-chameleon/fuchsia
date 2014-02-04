@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.fake.discovery;
+package org.ow2.chameleon.fuchsia.filebased.discovery;
 
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
@@ -8,8 +8,9 @@ import org.ow2.chameleon.fuchsia.core.component.DiscoveryService;
 import org.ow2.chameleon.fuchsia.core.declaration.Constants;
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclarationBuilder;
-import org.ow2.chameleon.fuchsia.fake.discovery.monitor.Deployer;
-import org.ow2.chameleon.fuchsia.fake.discovery.monitor.DirectoryMonitor;
+import org.ow2.chameleon.fuchsia.filebased.discovery.monitor.Deployer;
+import org.ow2.chameleon.fuchsia.filebased.discovery.monitor.DirectoryMonitor;
+import org.ow2.chameleon.fuchsia.filebased.discovery.monitor.Deployer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,22 +32,22 @@ import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
 @Component(name = "Fuchsia-FileBaseExportDiscovery-Factory")
 @Provides(specifications = {DiscoveryService.class,Deployer.class})
 @Instantiate
-public class FileBaseDiscoveryExportBridge extends AbstractDiscoveryComponent implements Deployer {
+public class FileBasedDiscoveryExportBridge extends AbstractDiscoveryComponent implements Deployer {
 
     @ServiceProperty(name = INSTANCE_NAME_PROPERTY)
     private String name;
 
-    @ServiceProperty(name = FakeDiscoveryConstants.FAKE_DISCOVERY_EXPORT_PROPERTY_KEY_MONITORED_DIR_KEY,value = FakeDiscoveryConstants.FAKE_DISCOVERY_EXPORT_PROPERTY_KEY_MONITORED_DIR_VALUE)
+    @ServiceProperty(name = FileBasedDiscoveryConstants.FAKE_DISCOVERY_EXPORT_PROPERTY_KEY_MONITORED_DIR_KEY,value = FileBasedDiscoveryConstants.FAKE_DISCOVERY_EXPORT_PROPERTY_KEY_MONITORED_DIR_VALUE)
     private String monitoredExportDirectory;
 
-    @ServiceProperty(name = FakeDiscoveryConstants.FAKE_DISCOVERY_PROPERTY_POLLING_TIME_KEY,value = FakeDiscoveryConstants.FAKE_DISCOVERY_PROPERTY_POLLING_TIME_VALUE)
+    @ServiceProperty(name = FileBasedDiscoveryConstants.FAKE_DISCOVERY_PROPERTY_POLLING_TIME_KEY,value = FileBasedDiscoveryConstants.FAKE_DISCOVERY_PROPERTY_POLLING_TIME_VALUE)
     private Long pollingTime;
 
     private final Map<ExportDeclaration, ServiceRegistration> exportDeclarationsRegistered=new HashMap<ExportDeclaration, ServiceRegistration>();
 
     private final HashMap<String,ExportDeclaration> exportDeclarationsFile = new HashMap<String, ExportDeclaration>();
 
-    public FileBaseDiscoveryExportBridge(BundleContext bundleContext) {
+    public FileBasedDiscoveryExportBridge(BundleContext bundleContext) {
         super(bundleContext);
     }
 

@@ -105,7 +105,7 @@
         </profile>
 
         <profile>
-            <id>fake</id>
+            <id>filebased-discovery</id>
             <dependencies>
 		<!--
                 <dependency>
@@ -124,7 +124,7 @@
 
                 <dependency>
                     <groupId>org.ow2.chameleon.fuchsia.discovery</groupId>
-                    <artifactId>org.ow2.chameleon.fuchsia.discovery.fake</artifactId>
+                    <artifactId>org.ow2.chameleon.fuchsia.discovery.filebased</artifactId>
                     <version>${project.parent.version}</version>
                 </dependency>
 

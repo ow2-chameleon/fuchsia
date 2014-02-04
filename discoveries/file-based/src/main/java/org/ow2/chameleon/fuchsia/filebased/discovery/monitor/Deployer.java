@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.fake.discovery.monitor;
+package org.ow2.chameleon.fuchsia.filebased.discovery.monitor;
 
 import java.io.File;
 import java.util.Collection;
