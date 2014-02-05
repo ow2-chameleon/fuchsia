@@ -22,6 +22,15 @@ This folder contains the code source of the OW2 Chameleon Fuchsia project.
 Fuchsia is licensed under the Apache License 2.0.
 
 
+## iPOJO usage conventions
+
+Fuchsia rely heavily on iPojo. Each Fuchsia component is an iPOJO component.
+
+Here a few rules to be consistent :
+
+- No component should be instantiated by default, except for the tools,
+- No name should be given for the factory, we keep the default name.
+
 ## Module hierarchy and naming conventions !Draft!
 
 ### Bases modules
@@ -231,6 +240,12 @@ Maven configuration :
     <relativePath>../pom.xml</relativePath>
 </parent>
 ```
+
+## Package naming convention
+
+The package name for the classes of a module must be equal to the artifactId of the module (i.e. for a discovery : "org.ow2.chameleon.fuchsia.discovery.{protocol}").
+
+The tools are the exception, the package name for a tools must be : "org.ow2.chameleon.fuchsia.tools.{tool}".
 
 ## Commits convention
 
