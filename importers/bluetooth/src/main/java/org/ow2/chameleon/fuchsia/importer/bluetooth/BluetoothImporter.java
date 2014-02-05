@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.bluetooth.importer;
+package org.ow2.chameleon.fuchsia.importer.bluetooth;
 
 import org.apache.felix.ipojo.*;
 import org.apache.felix.ipojo.annotations.*;
@@ -14,7 +14,7 @@ import java.util.*;
 import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
 import static org.ow2.chameleon.fuchsia.core.declaration.Constants.PROTOCOL_NAME;
 
-@Component(name = "BluetoothImporter-Factory")
+@Component()
 @Provides(specifications = org.ow2.chameleon.fuchsia.core.component.ImporterService.class)
 // FIXME ADD LOCKS !!
 public class BluetoothImporter extends AbstractImporterComponent {
