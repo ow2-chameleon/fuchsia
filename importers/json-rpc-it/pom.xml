@@ -14,6 +14,7 @@
 
     <!-- Description of the project -->
     <artifactId>forg.ow2.chameleon.fuchsia.importer.jsonrpc-it</artifactId>
+    <groupId>org.ow2.chameleon.fuchsia.importer</groupId>
     <name>OW2 Chameleon - Fuchsia Importer JSON-RPC [IntegrationTest]</name>
     <packaging>jar</packaging>
 

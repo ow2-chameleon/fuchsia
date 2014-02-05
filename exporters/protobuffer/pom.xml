@@ -26,6 +26,7 @@
 
     <!-- Description of the project -->
     <artifactId>org.ow2.chameleon.fuchsia.exporter.protobuffer</artifactId>
+    <groupId>org.ow2.chameleon.fuchsia.exporter</groupId>
     <name>OW2 Chameleon - Fuchsia Exporter Protobuffer</name>
     <packaging>bundle</packaging>
 
