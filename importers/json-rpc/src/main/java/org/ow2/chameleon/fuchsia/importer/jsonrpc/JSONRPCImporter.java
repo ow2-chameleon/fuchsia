@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.jsonrpc.importer;
+package org.ow2.chameleon.fuchsia.importer.jsonrpc;
 
 import com.googlecode.jsonrpc4j.JsonRpcHttpClient;
 import com.googlecode.jsonrpc4j.ProxyUtil;
@@ -30,7 +30,7 @@ import static org.ow2.chameleon.fuchsia.core.declaration.Constants.*;
  * <p/>
  * TODO : Improves the client management, only one client should be created for a given uri.
  */
-@Component(name = "Fuchsia-Importer:JSON-RPC")
+@Component()
 @Provides(specifications = {ImporterService.class})
 public class JSONRPCImporter extends AbstractImporterComponent {
 

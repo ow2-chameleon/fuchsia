@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.jsonrpc.importer.it;
+package org.ow2.chameleon.fuchsia.importer.jsonrpc.it;
 
 import com.googlecode.jsonrpc4j.JsonRpcServer;
 import com.sun.net.httpserver.HttpExchange;
@@ -49,7 +49,7 @@ public class JSONRPCImporterTest extends ImporterComponentAbstractTest {
         Dictionary<String, String> conf = new Hashtable<String, String>();
         conf.put(INSTANCE_NAME_PROPERTY, IMPORTER_NAME);
         conf.put(TARGET_FILTER_PROPERTY, "(" + CONFIGS + "=jsonrpc)");
-        ipojoHelper.createComponentInstance("Fuchsia-Importer:JSON-RPC", conf);
+        ipojoHelper.createComponentInstance("org.ow2.chameleon.fuchsia.importer.jsonrpc.JSONRPCImporter", conf);
 
         // create HttpServer
         try {
