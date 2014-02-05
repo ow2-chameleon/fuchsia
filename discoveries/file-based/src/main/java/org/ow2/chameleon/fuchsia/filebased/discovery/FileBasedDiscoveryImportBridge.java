@@ -38,10 +38,10 @@ public class FileBasedDiscoveryImportBridge extends AbstractDiscoveryComponent i
     @ServiceProperty(name = INSTANCE_NAME_PROPERTY)
     private String name;
 
-    @ServiceProperty(name = org.ow2.chameleon.fuchsia.filebased.discovery.FileBasedDiscoveryConstants.FAKE_DISCOVERY_IMPORT_PROPERTY_KEY_MONITORED_DIR_KEY,value = FileBasedDiscoveryConstants.FAKE_DISCOVERY_IMPORT_PROPERTY_KEY_MONITORED_DIR_VALUE)
+    @ServiceProperty(name = org.ow2.chameleon.fuchsia.filebased.discovery.FileBasedDiscoveryConstants.FILEBASED_DISCOVERY_IMPORT_PROPERTY_KEY_MONITORED_DIR_KEY,value = FileBasedDiscoveryConstants.FILEBASED_DISCOVERY_IMPORT_PROPERTY_KEY_MONITORED_DIR_VALUE)
     private String monitoredImportDirectory;
 
-    @ServiceProperty(name = FileBasedDiscoveryConstants.FAKE_DISCOVERY_PROPERTY_POLLING_TIME_KEY,value = FileBasedDiscoveryConstants.FAKE_DISCOVERY_PROPERTY_POLLING_TIME_VALUE)
+    @ServiceProperty(name = FileBasedDiscoveryConstants.FILEBASED_DISCOVERY_PROPERTY_POLLING_TIME_KEY,value = FileBasedDiscoveryConstants.FILEBASED_DISCOVERY_PROPERTY_POLLING_TIME_VALUE)
     private Long pollingTime;
 
     private final HashMap<String,ImportDeclaration> importDeclarationsFile = new HashMap<String, ImportDeclaration>();
