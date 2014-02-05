@@ -36,7 +36,7 @@
         </dependency>
 
         <dependency>
-            <artifactId>philips-hue-dependencies</artifactId>
+            <artifactId>philips-hue-all</artifactId>
             <groupId>org.ow2.chameleon.fuchsia.base</groupId>
             <version>${project.version}</version>
         </dependency>
