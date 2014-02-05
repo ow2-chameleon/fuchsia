@@ -86,6 +86,7 @@ public class JSONRPCImporterTest extends ImporterComponentAbstractTest {
                 mavenBundle().groupId("org.apache.httpcomponents").artifactId("httpclient-osgi").versionAsInProject(),
                 wrappedBundle(mavenBundle("org.apache.httpcomponents", "httpcore-nio").versionAsInProject()),
                 mavenBundle().groupId("org.ow2.chameleon.fuchsia.importer").artifactId("org.ow2.chameleon.fuchsia.importer.json-rpc").versionAsInProject(),
+                mavenBundle().groupId("org.ow2.chameleon.fuchsia.tools").artifactId("fuchsia-proxies-utils").versionAsInProject(),
                 mavenBundle().groupId("javax.portlet").artifactId("portlet-api").versionAsInProject(),
                 mavenBundle().groupId("javax.servlet").artifactId("javax.servlet-api").versionAsInProject(),
                 systemPackages("com.sun.net.httpserver", "sun.misc", "com.sun.net.httpserver.spi")

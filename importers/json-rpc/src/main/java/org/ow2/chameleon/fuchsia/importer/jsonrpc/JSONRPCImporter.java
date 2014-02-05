@@ -2,6 +2,7 @@ package org.ow2.chameleon.fuchsia.importer.jsonrpc;
 
 import com.googlecode.jsonrpc4j.JsonRpcHttpClient;
 import com.googlecode.jsonrpc4j.ProxyUtil;
+import org.apache.felix.ipojo.*;
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
@@ -40,6 +41,9 @@ public class JSONRPCImporter extends AbstractImporterComponent {
     @ServiceProperty(name = TARGET_FILTER_PROPERTY, value = "(&(" + PROTOCOL_NAME + "=jsonrpc)(scope=generic))")
     private String filter;
 
+    @Requires(filter = "(factory.name=JSONRPCDefaultProxy-Factory)", optional = false)
+    Factory defaultProxyFactory;
+
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final BundleContext context;
@@ -49,6 +53,7 @@ public class JSONRPCImporter extends AbstractImporterComponent {
      */
     private final Map<String, JsonRpcHttpClient> clients = new HashMap<String, JsonRpcHttpClient>();
     private final Map<String, ServiceRegistration> registrations = new HashMap<String, ServiceRegistration>();
+    private final Map<String, ComponentInstance> componentInstances = new HashMap<String, ComponentInstance>();
 
     public JSONRPCImporter(BundleContext pContext) {
         context = pContext;
@@ -66,21 +71,6 @@ public class JSONRPCImporter extends AbstractImporterComponent {
         uri = valueOf(importDeclaration.getMetadata().get(URL));
         // Get an id
         id = (String) importDeclaration.getMetadata().get(ID);
-        //Try to load the class
-        klassName = (String) importDeclaration.getMetadata().get(SERVICE_CLASS);
-
-        if (klassName == null) {
-            throw new IllegalArgumentException("The property" + SERVICE_CLASS + "must be set and contain a valid class name");
-        }
-        try {
-
-            klass = FuchsiaUtils.loadClass(context, klassName);
-
-        } catch (ClassNotFoundException e) {
-            throw new IllegalStateException(
-                    "Cannot create a proxy for the ImportDeclaration : " + importDeclaration
-                            + " unable to find a bundle which export the service class.", e);
-        }
 
         try {
             client = new JsonRpcHttpClient(new java.net.URL(uri));
@@ -90,15 +80,47 @@ public class JSONRPCImporter extends AbstractImporterComponent {
         }
         clients.put(id, client);
 
-        // create the proxy !
-        proxy = ProxyUtil.createClientProxy(klass.getClassLoader(), klass, client);
-
-        // TODO : which properties to publish on the proxy?
         Dictionary<String, Object> props = new Hashtable<String, Object>();
-        ServiceRegistration sReg = context.registerService(klassName, proxy, props);
+        props.put("name", "JsonRPCProxy-" + id);
+        props.put("metadata", importDeclaration.getMetadata());
 
-        // Add the registration to the registration list
-        registrations.put(id, sReg);
+        //Try to load the class
+        klassName = (String) importDeclaration.getMetadata().get(SERVICE_CLASS);
+        if (klassName != null) {
+            // Use given klass
+            try {
+                klass = FuchsiaUtils.loadClass(context, klassName);
+            } catch (ClassNotFoundException e) {
+                throw new IllegalStateException(
+                        "Cannot create a proxy for the ImportDeclaration : " + importDeclaration
+                                + " unable to find a bundle which export the service class.", e);
+            }
+
+            // create the proxy !
+            proxy = ProxyUtil.createClientProxy(klass.getClassLoader(), klass, client);
+            ServiceRegistration sReg = context.registerService(klassName, proxy, props);
+
+            // Add the registration to the registration list
+            registrations.put(id, sReg);
+        } else {
+            // Use a default/generic proxy
+            ComponentInstance componentInstance = null;
+            props.put("client", client);
+            try {
+                componentInstance = defaultProxyFactory.createComponentInstance(props);
+            } catch (UnacceptableConfiguration unacceptableConfiguration) {
+                unacceptableConfiguration.printStackTrace();
+                return;
+            } catch (MissingHandlerException e) {
+                e.printStackTrace();
+                return;
+            } catch (ConfigurationException e) {
+                e.printStackTrace();
+                return;
+            }
+            componentInstances.put(id, componentInstance);
+        }
+
         logger.debug("JsonRPC Proxy successfully created and registered in OSGi " + uri + "");
     }
 
@@ -106,10 +128,22 @@ public class JSONRPCImporter extends AbstractImporterComponent {
     public void denyImportDeclaration(ImportDeclaration importDeclaration) {
         String id = (String) importDeclaration.getMetadata().get(ID);
         if (clients.containsKey(id)) {
-            // Unregister the proxy from OSGi
-            ServiceRegistration sReg = registrations.remove(id);
-            sReg.unregister();
 
+            String klassName = (String) importDeclaration.getMetadata().get(SERVICE_CLASS);
+            if (klassName != null) {
+                // Unregister the proxy from OSGi
+                ServiceRegistration sReg = registrations.remove(id);
+                if (sReg != null) {
+                    sReg.unregister();
+                } else {
+                    // FIXME : fail
+                }
+            } else {
+                ComponentInstance componentInstance = componentInstances.remove(id);
+                if (componentInstance != null) {
+                    componentInstance.dispose();
+                }
+            }
             // Remove the client
             clients.remove(id);
         } else {
