@@ -37,7 +37,7 @@ public class JSONRPCImporter extends AbstractImporterComponent {
     @ServiceProperty(name = INSTANCE_NAME_PROPERTY)
     private String name;
 
-    @ServiceProperty(name = "target")
+    @ServiceProperty(name = TARGET_FILTER_PROPERTY, value = "(&(" + PROTOCOL_NAME + "=jsonrpc)(scope=generic))")
     private String filter;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
