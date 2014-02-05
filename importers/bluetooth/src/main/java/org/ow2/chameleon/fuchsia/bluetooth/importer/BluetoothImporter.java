@@ -16,7 +16,6 @@ import static org.ow2.chameleon.fuchsia.core.declaration.Constants.PROTOCOL_NAME
 
 @Component(name = "BluetoothImporter-Factory")
 @Provides(specifications = org.ow2.chameleon.fuchsia.core.component.ImporterService.class)
-@Instantiate(name = "Fuchsia-BluetoothImporter")
 // FIXME ADD LOCKS !!
 public class BluetoothImporter extends AbstractImporterComponent {
     // FIXME scope metadata
