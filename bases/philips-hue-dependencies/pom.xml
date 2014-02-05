@@ -3,68 +3,14 @@
     <modelVersion>4.0.0</modelVersion>
 
 	<artifactId>philips-hue-dependencies</artifactId>
-    <packaging>bundle</packaging>
+    <packaging>pom</packaging>
     <name>OW2 Chameleon - Fuchsia Base Philips Hue</name>
 
-    <properties>
-        <file>src/main/resources/sdkresources.jar</file>
-	    <artifactId>hue-sdk</artifactId>
-    	<groupId>philips</groupId>
-    	<packaging>jar</packaging>
-        <version>${project.version}</version>
-    </properties>
-
-   <build>
-        
-        <plugins>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <extensions>true</extensions>
-                <configuration>
-                    <instructions>
-                        <Bundle-SymbolicName>
-                            ${project.artifactId}
-                        </Bundle-SymbolicName>
-                        <Export-Package>
-                            *
-                        </Export-Package>
-                    </instructions>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-ipojo-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>ipojo-bundle</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
-                </configuration>
-            </plugin>
-	        <plugin>
-		    <groupId>org.apache.maven.plugins</groupId>
-		    <artifactId>maven-install-plugin</artifactId>
-		    <executions>
-		      <execution>
-		        <phase>install</phase>
-		        <goals>
-		          <goal>install-file</goal>
-		        </goals>
-		      </execution>
-		    </executions>
-	          </plugin>
-            </plugins>
-    </build>
+    <modules>
+        <module>huesdk-core</module>
+        <module>huesdk-resources</module>
+        <module>huesdk-all</module>
+    </modules>
 
     <parent>
         <artifactId>fuchsia-bases</artifactId>
