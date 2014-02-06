@@ -94,8 +94,8 @@ public class JSONRPCImporterTest extends ImporterComponentAbstractTest {
     }
 
     @Override
-    protected ImporterService getImporterService() {
-        return fuchsiaHelper.getServiceObject(ImporterService.class, "(" + INSTANCE_NAME_PROPERTY + "=" + IMPORTER_NAME + ")");
+    protected String getImporterServiceInstanceName() {
+        return IMPORTER_NAME;
     }
 
     @Override

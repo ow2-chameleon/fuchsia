@@ -1,5 +1,6 @@
 package org.ow2.chameleon.fuchsia.testing;
 
+import org.apache.felix.ipojo.Factory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,8 +11,8 @@ import org.osgi.service.log.LogService;
 import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.exceptions.ImporterException;
-import org.ow2.chameleon.testing.helpers.TimeUtils;
 
+import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
@@ -57,16 +58,18 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
         return false;
     }
 
+    protected ImporterService waitForImporterService() {
+        String filter = "(" + INSTANCE_NAME_PROPERTY + "=" + getImporterServiceInstanceName() + ")";
+        return osgiHelper.waitForService(ImporterService.class, filter, 0);
+    }
+
     /**
      * Basic Test, in order to know if the {@link ImporterService} service is correctly provided.
      */
     @Test
     public void testAvailability() {
         //wait for the service to be available.
-        FuchsiaHelper.waitForIt(100);
-
-        //Get the ImporterService
-        ImporterService importer = getImporterService();
+        ImporterService importer = waitForImporterService();
 
         //Check that the importer != null
         assertThat(importer).isNotNull();
@@ -79,10 +82,7 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
     @Test
     public void testImportService() {
         //wait for the service to be available.
-        FuchsiaHelper.waitForIt(100);
-
-        //get the service
-        ImporterService importer = getImporterService();
+        ImporterService importer = waitForImporterService();
 
         //create an importDeclaration for logService
         ImportDeclaration iDec = createImportDeclaration("testImportService", LogService.class, logService);
@@ -110,10 +110,7 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
     @Test
     public void testImportServiceNoVoid() {
         //wait for the service to be available.
-        FuchsiaHelper.waitForIt(100);
-
-        //get the service
-        ImporterService importer = getImporterService();
+        ImporterService importer = waitForImporterService();
 
         //create an endpoint for logService
         ImportDeclaration iDec = createImportDeclaration("testImportServiceNoVoid", LogEntry.class, logEntry);
@@ -146,9 +143,7 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
     public void testRemoveImportService() {
         LogService proxy = null;
         //wait for the service to be available.
-        FuchsiaHelper.waitForIt(100);
-
-        ImporterService importer = getImporterService(); //get the service
+        ImporterService importer = waitForImporterService();
 
         //create an endpoint for logService
         ImportDeclaration iDec = createImportDeclaration("testRemoveImportService", LogService.class, logService);
@@ -186,9 +181,7 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
     @Test
     public void testReImportService() {
         //wait for the service to be available.
-        FuchsiaHelper.waitForIt(100);
-
-        ImporterService importer = getImporterService(); //get the service
+        ImporterService importer = waitForImporterService();
 
         //create an endpoint for logService
         ImportDeclaration iDec = createImportDeclaration("testReImportService", LogService.class, logService);
@@ -232,9 +225,9 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
     }
 
     /**
-     * @return The {@link ImporterService} to be tested.
+     * @return The name of the instance of the {@link ImporterService} to be tested.
      */
-    protected abstract ImporterService getImporterService();
+    protected abstract String getImporterServiceInstanceName();
 
     /**
      */
