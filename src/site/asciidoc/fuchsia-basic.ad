@@ -175,7 +175,7 @@ The first two steps you have to know already those addresses, the next two steps
 
 [source,bash]
 --
-mvn clean install -f distribution/pom.xml -Pcore,push,push-config,filebased-discovery && \
+mvn clean install -f distribution/pom.xml -Pcore,push,push-config,discovery-filebased && \
 cd distribution/target/chameleon-distribution/ && \
 sh chameleon.sh --interactive
 --
@@ -225,7 +225,7 @@ The address of the MQTT server is supposedly known, and the next two steps (impo
 
 [source,bash]
 --
-mvn clean install -f distribution/pom.xml -Pcore,mqtt,mqtt-config,filebased-discovery && \
+mvn clean install -f distribution/pom.xml -Pcore,mqtt,mqtt-config,discovery-filebased && \
 cd distribution/target/chameleon-distribution/ && \
 sh chameleon.sh --interactive
 --  
@@ -503,7 +503,7 @@ Assuming that you have compiled fuchsia (in previous sections), you can use *dis
 
 [source,java]
 --
-mvn clean install -Pcore,filebased-discovery,protobuffer && cd target/chameleon-distribution && \
+mvn clean install -Pcore,discovery-filebased,protobuffer && cd target/chameleon-distribution && \
 sh chameleon.sh --interactive
 --
 
