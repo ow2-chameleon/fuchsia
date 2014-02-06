@@ -12,6 +12,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>org.ow2.chameleon.fuchsia.importer.philips.hue</artifactId>
+    <groupId>org.ow2.chameleon.fuchsia.importer</groupId>
     <name>OW2 Chameleon - Fuchsia Importer for Philips Hue</name>
     <packaging>bundle</packaging>
 
