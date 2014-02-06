@@ -51,15 +51,19 @@ In order to generate a Fuchsia distribution there is only one mandatory profile 
 * discoveries
 ** http://jmdns.sourceforge.net/[mdns] - the implementation of dnssd/mdns discovery protocol
 ** upnp
+** discovery-filebased
+** discovery-philips-hue
 * importers
 ** importer-cxf
+** importer-cxf
+** importer-philips-hue
 ** http://mqtt.org/[mqtt]
 ** https://code.google.com/p/pubsubhubbub/[push]
 * exporter
 ** exporter-cxf
 * tools
 ** grid
-** fake
+** shell
 
 Configuration profiles
 ^^^^^^^^^^^^^^^^^^^^^^

@@ -2,11 +2,6 @@
 
 As seen in [Fuchsia 101](Fuchsia-101), importers use **import declaration** as input. The information contained in the **import declaration** must be enough in order that the processor execute its role properly.
 
-Fake importer
-~~~~~~~~~~~~~
-
-As soon as this **importer** is connected to an **import declaration** it generates an instance of Fuchsia *GenericDevice*, and this instance is published as a service inside OSGi platform.
-
 JAX-WS importer
 ~~~~~~~~~~~~~~~
 

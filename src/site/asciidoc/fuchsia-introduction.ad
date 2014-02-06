@@ -31,7 +31,7 @@ Discoveries
 As seen before, the way that we inform the Fuchsia platform the existence of a device/service is through a declaration **Declaration**, that can be registered manually of course (since its a service registered in OSGi platform with the interface *org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration*), but this can be done by fuchsia discoveries, that use specialized discovery protocols to extract all the relevant information of a given service/device and publish in OSGi platform a **Declaration** containing all those informations. 
 
 .Available discovery implementations:
-* Fake discovery
+* Filebased discovery
 * mDNS/DNSsd
 * uPnP
 
@@ -44,7 +44,6 @@ Importers
 In order to trigger **importers** to perform their job, they must to receive an *import declaration* which is configuration (think of it as a key value mapping, just like java properties). The *importation declaration* will recognized by *Fuchsia* as long as they are registered in OSGi with the proper Fuchsia interface (for an importer for example must be *org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration* )
 
 .Available implementations:
-* Fake importer
 * JAX-RS
 * JAX-WS
 * JSON-RPC

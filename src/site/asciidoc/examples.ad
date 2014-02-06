@@ -1,4 +1,4 @@
-Fake-Discovery
+Filebased-Discovery
 ~~~~~~~~~~~~~~
 
 First things first, in order to have an discovery we need to create a fuchsia distribution that embeds it, or to use an already existing distribution and add the modules required. Below we will show you how to use couples of discoveries that are available in the platform.
@@ -8,9 +8,9 @@ What it does?!
 
 As seen in the introduction the fundamental task of a discovery is to create an instance of Declaration which represents the availability of a service/device, and the intrinsic information of such service/device are contained inside **Declaration** as properties (stored in a Map).
 
-The idea behind having a fake discovery, is in fact be able to deploy a file (property file style, containing key value mapping).
+The idea behind having a filebased discovery, is in fact be able to deploy a file (property file style, containing key value mapping).
 
-In order to activate the fake discovery its enough to compile the distribution with the profile **fake** (meaning mvn clean install -Pcore,fake), from the moment you compile a distribution with this parameter and you launch this distribution a directory called **load** will be created in the root of the chameleon distribution ($FUCHSIA/distribution/target/chameleon-distribution), this directory will be used to deploy your files that contain the key-value that you need to be instantiated in the platform.
+In order to activate the filebased discovery its enough to compile the distribution with the profile **discovery-filebased** (meaning mvn clean install -Pcore,discovery-filebased), from the moment you compile a distribution with this parameter and you launch this distribution a directory called **load** will be created in the root of the chameleon distribution ($FUCHSIA/distribution/target/chameleon-distribution), this directory will be used to deploy your files that contain the key-value that you need to be instantiated in the platform.
 
 An example of such file is this one:
 
@@ -104,64 +104,3 @@ public class DNSSDInitializer {
 =====
 This instance can be created in any fashion, as long as it is an http://www.ipojo.org[iPOJO] instance. 
 =====
-
-Fake-Importer
-~~~~~~~~~~~~~
-
-To start, we are going to use _fake-importer_, which create an instance of a GenericDevice interface based on a description that will be added into a file. This file must to be published in a specific folder of the framework (_load_ folder by default).
-
-[source]
-----
-mvn clean install -Pcore,fake
-----
-
-After launching the platform and type *instances* you will see something like
-
-[source]
-----
-...
-Instance org.ow2.chameleon.fuchsia.tools.shell.FuchsiaGogoCommand-0 -> valid
-Instance Fuchsia-FakeDiscovery -> valid
-...
-----
-
-If you type *declaration* you will see that there are no declarations available.
-
-Now lets create a text file with the following content:
-
-[source]
-----
-id=virtual-camera
-deviceType=camera
-deviceSubType=sony-dhc
-device.serialNumber=virtual-camera
-----
-
-Copy this file for to the folder _load_ (located inside chameleon directory), after that you can type the command _declaration_ and you should see:
-
-[source]
-----
-Service properties:
-		objectClass = [Ljava.lang.String;@19d8f01
-		service.id = 316
-Metadata
-	id=virtual-camera
-	deviceType=camera
-	deviceSubType=sony-dhc
-	device.serialNumber=virtual-camera
-----
-
-A declaration with the exactly the same properties values as the file that you just deployed.
-
-If  you install the fuchsia bundle *Fake-Importer*, you can type *instances*, and you should see:
-
-[source]
-----
-...
-Instance GenericDeviceInst-virtual-camera -> valid
-----
-
-As we can see, the fake importer created an instance name *GenericDeviceInst-virtual-camera* (our *id* preceded by 'GenericDeviceInst-')
-
-
-

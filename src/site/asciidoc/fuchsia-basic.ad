@@ -75,7 +75,7 @@ The *Linkers* job is to evaluate if a given *Declaration* and a *Service* match 
 
 In this linker we are saying "if a declaration contains _endpoint.url_ than connect it with the importer in which the instance is called _cxfimporterlinker_".
 
-In order to _Inform fuchsia the JAX-WS info_, we have several options, either we can publish a service that follows the interface _org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration_, or we can use the Fake-Discovery, which translate files deployed in the folder named _load_ into a ImportDeclaration.
+In order to _Inform fuchsia the JAX-WS info_, we have several options, either we can publish a service that follows the interface _org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration_, or we can use the Filebased-Discovery, which translate files deployed in the folder named _load_ into a ImportDeclaration.
 
 You can check that everything is up and running by typing *importer* on the console, you should see at least:
 
@@ -91,16 +91,16 @@ Importer [cxfimporter] provided by bundle org.ow2.chameleon.fuchsia.importer.jax
 		target = (endpoint.url=*)
 --
 
-And check that the FakeDiscovery is running as well by typing *discovery* and you will see:
+And check that the FilebasedDiscovery is running as well by typing *discovery* and you will see:
 
 [source]
 --
-Discovery [Fuchsia-FakeDiscovery] provided by bundle fuchsia-fake-discovery (37)
+Discovery [Fuchsia-FilebasedDiscovery] provided by bundle fuchsia-filebased-discovery (37)
 	Service properties:
-		factory.name = Fuchsia-FakeDiscovery-Factory
-		fuchsia.system.fake.discovery.directory = load
-		fuchsia.system.fake.discovery.polling = 2000
-		instance.name = Fuchsia-FakeDiscovery
+		factory.name = Fuchsia-FilebasedDiscovery-Factory
+		fuchsia.system.filebased.discovery.directory = load
+		fuchsia.system.filebased.discovery.polling = 2000
+		instance.name = Fuchsia-FilebasedDiscovery
 		objectClass = [Ljava.lang.String;@20e9c6
 		service.id = 321
 
@@ -116,7 +116,7 @@ So far we've our checklist look like this:
 - [ ] Inform fuchsia the JAX-WS info
 - [ ] Use the remote instance
 
-The last two steps consist in informing the Fuchsia the address of our JAX-WS service. For that its enough to deploy a file in the folder _load_ (thanks to the Fake-Discovery) with the following content:
+The last two steps consist in informing the Fuchsia the address of our JAX-WS service. For that its enough to deploy a file in the folder _load_ (thanks to the Filebased-Discovery) with the following content:
 
 [source]
 --
@@ -175,7 +175,7 @@ The first two steps you have to know already those addresses, the next two steps
 
 [source,bash]
 --
-mvn clean install -f distribution/pom.xml -Pcore,push,push-config,fake && \
+mvn clean install -f distribution/pom.xml -Pcore,push,push-config,filebased-discovery && \
 cd distribution/target/chameleon-distribution/ && \
 sh chameleon.sh --interactive
 --
@@ -225,7 +225,7 @@ The address of the MQTT server is supposedly known, and the next two steps (impo
 
 [source,bash]
 --
-mvn clean install -f distribution/pom.xml -Pcore,mqtt,mqtt-config,fake && \
+mvn clean install -f distribution/pom.xml -Pcore,mqtt,mqtt-config,filebased-discovery && \
 cd distribution/target/chameleon-distribution/ && \
 sh chameleon.sh --interactive
 --  
@@ -503,7 +503,7 @@ Assuming that you have compiled fuchsia (in previous sections), you can use *dis
 
 [source,java]
 --
-mvn clean install -Pcore,fake,protobuffer && cd target/chameleon-distribution && \
+mvn clean install -Pcore,filebased-discovery,protobuffer && cd target/chameleon-distribution && \
 sh chameleon.sh --interactive
 --
 
