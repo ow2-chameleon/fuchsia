@@ -10,6 +10,7 @@ import org.osgi.service.log.LogService;
 import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.exceptions.ImporterException;
+import org.ow2.chameleon.testing.helpers.TimeUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
@@ -62,7 +63,7 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
     @Test
     public void testAvailability() {
         //wait for the service to be available.
-        fuchsiaHelper.waitForIt(100);
+        FuchsiaHelper.waitForIt(100);
 
         //Get the ImporterService
         ImporterService importer = getImporterService();
@@ -78,7 +79,7 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
     @Test
     public void testImportService() {
         //wait for the service to be available.
-        fuchsiaHelper.waitForIt(100);
+        FuchsiaHelper.waitForIt(100);
 
         //get the service
         ImporterService importer = getImporterService();
@@ -109,7 +110,7 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
     @Test
     public void testImportServiceNoVoid() {
         //wait for the service to be available.
-        fuchsiaHelper.waitForIt(100);
+        FuchsiaHelper.waitForIt(100);
 
         //get the service
         ImporterService importer = getImporterService();
@@ -145,7 +146,7 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
     public void testRemoveImportService() {
         LogService proxy = null;
         //wait for the service to be available.
-        fuchsiaHelper.waitForIt(100);
+        FuchsiaHelper.waitForIt(100);
 
         ImporterService importer = getImporterService(); //get the service
 
@@ -185,7 +186,7 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
     @Test
     public void testReImportService() {
         //wait for the service to be available.
-        fuchsiaHelper.waitForIt(100);
+        FuchsiaHelper.waitForIt(100);
 
         ImporterService importer = getImporterService(); //get the service
 
