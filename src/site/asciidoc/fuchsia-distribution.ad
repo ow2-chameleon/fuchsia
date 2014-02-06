@@ -55,7 +55,6 @@ In order to generate a Fuchsia distribution there is only one mandatory profile 
 ** discovery-philips-hue
 * importers
 ** importer-cxf
-** importer-cxf
 ** importer-philips-hue
 ** http://mqtt.org/[mqtt]
 ** https://code.google.com/p/pubsubhubbub/[push]
