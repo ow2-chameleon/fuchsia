@@ -19,7 +19,15 @@
         <module>mdns</module>
         <module>upnp</module>
         <module>upnp.it</module>
-        <module>bluetooth</module>
         <module>philips-hue-discovery</module>
     </modules>
+
+    <profiles>
+        <profile>
+            <id>experimental</id>
+            <modules>
+                <module>bluetooth</module>
+            </modules>
+        </profile>
+    </profiles>
 </project>

@@ -17,11 +17,19 @@
         <module>mqtt</module>
         <module>push</module>
         <module>protobuffer</module>
-        <module>bluetooth</module>
         <module>philips-hue-importer</module>
         <module>jax-ws</module>
         <module>json-rpc</module>
         <module>json-rpc-it</module>
     </modules>
+
+    <profiles>
+        <profile>
+            <id>experimental</id>
+            <modules>
+                <module>bluetooth</module>
+            </modules>
+        </profile>
+    </profiles>
 
 </project>
