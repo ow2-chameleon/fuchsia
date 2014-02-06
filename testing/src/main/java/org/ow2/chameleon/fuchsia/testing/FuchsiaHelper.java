@@ -19,6 +19,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.ow2.chameleon.testing.helpers.OSGiHelper;
+import org.ow2.chameleon.testing.helpers.TimeUtils;
 
 import java.util.Dictionary;
 
@@ -66,11 +67,7 @@ public class FuchsiaHelper {
     }
 
     public static void waitForIt(int time) {
-        try {
-            Thread.sleep(time);
-        } catch (InterruptedException e) {
-            assert false;
-        }
+        TimeUtils.grace(time);
     }
 
     public <T> ServiceRegistration registerService(T service, Class<T> klass) {
@@ -79,20 +76,8 @@ public class FuchsiaHelper {
 
     @SuppressWarnings("unchecked")
     public <T> T getServiceObject(Class<T> klass, String filter) {
-        ServiceReference[] srefs = null;
-
-        try {
-            srefs = context.getAllServiceReferences(klass.getName(), filter);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-
-        if (srefs != null && srefs.length > 0) {
-            return (T) context.getService(srefs[0]);
-        } else {
-            return null;
-        }
+        OSGiHelper helper = new OSGiHelper(context);
+        return  helper.getServiceObject(klass, filter);
     }
 
     @SuppressWarnings("unchecked")
