@@ -96,7 +96,7 @@
         </profile>
 
         <profile>
-            <id>filebased-discovery</id>
+            <id>discovery-filebased</id>
             <dependencies>
                 <dependency>
                     <groupId>org.ow2.chameleon.fuchsia.discovery</groupId>
@@ -424,7 +424,7 @@
         </profile>
 
         <profile>
-            <id>philips-hue</id>
+            <id>discovery-philips-hue</id>
             <dependencies>
                 <dependency>
                     <artifactId>philips-hue-all</artifactId>
@@ -436,13 +436,22 @@
                     <groupId>org.ow2.chameleon.fuchsia.discovery</groupId>
                     <version>${project.version}</version>
                 </dependency>
-                <!--
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>importer-philips-hue</id>
+            <dependencies>
                 <dependency>
-                    <groupId>org.ow2.chameleon.fuchsia.examples</groupId>
-                    <artifactId>philips-hue-config</artifactId>
+                    <artifactId>philips-hue-all</artifactId>
+                    <groupId>org.ow2.chameleon.fuchsia.base</groupId>
                     <version>${project.version}</version>
                 </dependency>
-                -->
+                <dependency>
+                    <artifactId>org.ow2.chameleon.fuchsia.importer.philips.hue</artifactId>
+                    <groupId>org.ow2.chameleon.fuchsia.importer</groupId>
+                    <version>${project.version}</version>
+                </dependency>
             </dependencies>
         </profile>
 
