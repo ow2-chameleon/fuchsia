@@ -370,7 +370,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
 <li><a href="#_what_can_fuchsia_do_for_me">What can Fuchsia do for me?</a></li>
-<li><a href="#_what_is_fuchsia">What is Fuchsia?</a></li>
+<li><a href="#_core_concepts">Core concepts</a></li>
 <li>
 <ul class="sectlevel2">
 <li><a href="#_declarations">Declarations</a></li>
@@ -408,6 +408,15 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <li><a href="#_fake_importer_2">Fake-Importer</a></li>
 </ul>
 </li>
+<li><a href="#_tutorial_style">Tutorial Style</a></li>
+<li>
+<ul class="sectlevel2">
+<li><a href="#_export_jsonrpc">Export JSONRPC</a></li>
+<li><a href="#_import_jsonrpc">Import JSONRPC</a></li>
+<li><a href="#_export_jaxws">Export JAXWS</a></li>
+<li><a href="#_import_jaxws">Import JAXWS</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -441,10 +450,10 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 </ul>
 </div>
 <div class="paragraph">
-<p>All those are already builtin features, the materialization of an external service into OSGi platform, this processor is called: <strong>Importer</strong>.</p>
+<p>All those are already built-in features, the materialization of an external service into OSGi platform, this processor is called: <strong>Importer</strong>.</p>
 </div>
 <div class="paragraph">
-<p>The second type of processor is called <strong>Exporter</strong>, this type enables us to turn an OSGi service instance into a service that can be access outside of OSGi, exposed as a web service for instance. The builtin exporters are:</p>
+<p>The second type of processor is called <strong>Exporter</strong>, this type enables us to turn an OSGi service instance into a service that can be access outside of OSGi, exposed as a web service for instance. The built-in exporters are:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -457,12 +466,12 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <p>Of course those processors (<strong>importers</strong> or <strong>exporters</strong>) are available without needing to code a single line.</p>
 </div>
 <div class="paragraph">
-<p>Albeit, Fuchsia has builtin processors, we are aware that most of applications use their own protocol or adopt their protocol specific device, knowing that Fuchsia was build to be extensible, thus implementing and deploying a customized processor is quite straight forward.</p>
+<p>Albeit, Fuchsia has built-in processors, we are aware that most of applications use their own protocol or adopt their protocol specific device, knowing that Fuchsia was build to be extensible, thus implementing and deploying a customized processor is quite straight forward.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_what_is_fuchsia">What is Fuchsia?</h2>
+<h2 id="_core_concepts">Core concepts</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p><span class="image"><a class="image" href="diagram/importer01.svg"><img src="diagram/importer01.svg" alt="Fuchsia" width="1024"></a></span></p>
@@ -477,7 +486,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <p>In ubiquitous applications this kind of integration is even more important since the dynamicity and the multitude of protocol grows with number of devices supported.</p>
 </div>
 <div class="paragraph">
-<p>So, developers are suddenly facing the challenge of mastering several protocol, and their respective tools for debugging, dependency managing, native calls access, access configuration, etc. That is where Fuchsia plays a key role, by providing the same way of dealing with different protocols, creating a single entrypoint for all protocols supported.</p>
+<p>So, developers are suddenly facing the challenge of mastering several protocol, and their respective tools for debugging, dependency managing, native calls access, access configuration, etc. That is where Fuchsia plays a key role, by providing the same way of dealing with different protocols, creating a single entry-point for all protocols supported.</p>
 </div>
 <div class="paragraph">
 <p>In Appsgate all those characteristics are gathered in order to provide an Smart Home environment.</p>
@@ -492,7 +501,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <p>Declaration, it is the metadata that describes a device or a service</p>
 </li>
 <li>
-<p>Discovery, responsible for the detection of a device/service, in Fuchsia that means create a <strong>Declaration</strong> and adding it to the osgi registry</p>
+<p>Discovery, responsible for the detection of a device/service, in Fuchsia that means create a <strong>Declaration</strong> and adding it to the OSGi registry</p>
 </li>
 <li>
 <p>Processors, it represents the task itself.</p>
@@ -508,7 +517,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <p>Think in <strong>Declaration</strong> as a property file, although that it is not a file, it is an service registered in an OSGi platform, as long as this service is registered with the proper platform, <strong>Fuchsia</strong> will recognize it.</p>
 </div>
 <div class="paragraph">
-<p>Its function is to indicate that a given device/service is available with certain properties, and is the role of an Importer/Exporter (explained later) to receive those information as inputs and create a bridge between the osgi platform and this device (all by using the properties given by the <strong>Declaration</strong>), allowing other services to access this device without knowing its protocol.</p>
+<p>Its function is to indicate that a given device/service is available with certain properties, and is the role of an Importer/Exporter (explained later) to receive those information as inputs and create a bridge between the OSGi platform and this device (all by using the properties given by the <strong>Declaration</strong>), allowing other services to access this device without knowing its protocol.</p>
 </div>
 </div>
 <div class="sect2">
@@ -586,7 +595,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <div class="sect2">
 <h3 id="_linkers">Linkers</h3>
 <div class="paragraph">
-<p>The existence of a <strong>declaration</strong> and a <strong>processor</strong> is not enough to trigger a connection between them, there has to exist a <strong>linker</strong>. This <em>linker</em> is resposible to check the condition on both sides (processor and declaration) see if they <em>match</em>, and just then establish a connection between them.</p>
+<p>The existence of a <strong>declaration</strong> and a <strong>processor</strong> is not enough to trigger a connection between them, there has to exist a <strong>linker</strong>. This <em>linker</em> is responsible to check the condition on both sides (processor and declaration) see if they <em>match</em>, and just then establish a connection between them.</p>
 </div>
 </div>
 </div>
@@ -626,7 +635,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <div class="content">
 <pre class="highlight"><code class="xml language-xml">&lt;dependency&gt;
     &lt;groupId&gt;org.ow2.chameleon.fuchsia&lt;/groupId&gt;
-    &lt;artifactId&gt;fuchsia-core&lt;/artifactId&gt;
+    &lt;artifactId&gt;org.ow2.chameleon.fuchsia.core&lt;/artifactId&gt;
     &lt;version&gt;0.0.1&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
@@ -653,7 +662,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <div class="sect2">
 <h3 id="_compiling_a_distribution">Compiling a distribution</h3>
 <div class="paragraph">
-<p>In order to generate a Fuchsia distribution there is only one mandatory profile the <strong>core</strong>, all the other modules are optional and can be included in the distribution by adding the apropriate maven profile ( <strong>mvn -P parameter</strong> ). The maven profile and its contents are specified right below.</p>
+<p>In order to generate a Fuchsia distribution there is only one mandatory profile the <strong>core</strong>, all the other modules are optional and can be included in the distribution by adding the appropriate maven profile ( <strong>mvn -P parameter</strong> ). The maven profile and its contents are specified right below.</p>
 </div>
 <div class="ulist">
 <ul>
@@ -665,7 +674,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <div class="ulist">
 <ul>
 <li>
-<p><a href="http://jmdns.sourceforge.net/">mdns</a> - the implementation os dnssd/mdns discovery protocol</p>
+<p><a href="http://jmdns.sourceforge.net/">mdns</a> - the implementation of dnssd/mdns discovery protocol</p>
 </li>
 <li>
 <p>upnp</p>
@@ -879,7 +888,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <p><strong>Detailed Description</strong></p>
 </div>
 <div class="paragraph">
-<p><a href="http://mqtt.org/">MQTT</a> is a protocol <a href="http://openiot.eu/">largely diffused</a> protocole for message exchange due to its good performance. The implementation used by Fuchsia to support MQTT was <a href="http://www.rabbitmq.com/">RabbitMQ</a></p>
+<p><a href="http://mqtt.org/">MQTT</a> is a protocol <a href="http://openiot.eu/">largely diffused</a> protocol for message exchange due to its good performance. The implementation used by Fuchsia to support MQTT was <a href="http://www.rabbitmq.com/">RabbitMQ</a></p>
 </div>
 </div>
 <div class="sect2">
@@ -957,7 +966,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <div class="content">
 <pre class="highlight"><code class="xml language-xml">&lt;dependency&gt;
     &lt;groupId&gt;org.ow2.chameleon.fuchsia&lt;/groupId&gt;
-    &lt;artifactId&gt;fuchsia-core&lt;/artifactId&gt;
+    &lt;artifactId&gt;org.ow2.chameleon.fuchsia.core&lt;/artifactId&gt;
     &lt;version&gt;0.0.1&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
@@ -1037,7 +1046,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 </div>
 </div>
 <div class="paragraph">
-<p>In this linker we are saying "if a declaration constains <em>endpoint.url</em> than connect it with the importer in which the instance is called <em>cxfimporterlinker</em>".</p>
+<p>In this linker we are saying "if a declaration contains <em>endpoint.url</em> than connect it with the importer in which the instance is called <em>cxfimporterlinker</em>".</p>
 </div>
 <div class="paragraph">
 <p>In order to <em>Inform fuchsia the JAX-WS info</em>, we have several options, either we can publish a service that follows the interface <em>org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration</em>, or we can use the Fake-Discovery, which translate files deployed in the folder named <em>load</em> into a ImportDeclaration.</p>
@@ -1047,7 +1056,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>Importer [cxfimporter] provided by bundle cxf-importer (46)
+<pre class="highlight"><code>Importer [cxfimporter] provided by bundle org.ow2.chameleon.fuchsia.importer.jax-rs (46)
 	*importer name = cxfimporter
 	Service properties:
 		factory.name = Fuchsia_importer.cxf
@@ -1111,7 +1120,7 @@ device.serialNumber=virtual-camera</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Then, just request your service as a regular dependency (as shown below), then you ll see your dependency being injected and ready for use without much trouble.</p>
+<p>Then, just request your service as a regular dependency (as shown below), then you will see your dependency being injected and ready for use without much trouble.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1249,10 +1258,10 @@ device.serialNumber=push-dispatch-event-admin</code></pre>
 <div class="sect2">
 <h3 id="_import_a_mqtt_service">Import a MQTT service</h3>
 <div class="paragraph">
-<p>As MQTT is an efficient message exchange protocole, Fuchsia has builtin a <strong>MQTT</strong> importer that receives and forward messages from MQTT bus into EventAdmin bus.</p>
+<p>As MQTT is an efficient message exchange protocol, Fuchsia has built in a <strong>MQTT</strong> importer that receives and forward messages from MQTT bus into EventAdmin bus.</p>
 </div>
 <div class="paragraph">
-<p>The address of the MQTT server is supposely known, and the next two steps (importer and linker instantiation) can be done with the maven profile, according to the command below.</p>
+<p>The address of the MQTT server is supposedly known, and the next two steps (importer and linker instantiation) can be done with the maven profile, according to the command below.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1326,7 +1335,7 @@ mqtt.server.port=5672</code></pre>
 <p><input type="checkbox" data-item-complete="0" disabled> Implement the service methods for the Protobuffer generated class (Step 2)</p>
 </li>
 <li>
-<p><input type="checkbox" data-item-complete="0" disabled> Protobuffer class instante added to OSGi Registry (Step 3)</p>
+<p><input type="checkbox" data-item-complete="0" disabled> Protobuffer class instance added to OSGi Registry (Step 3)</p>
 </li>
 <li>
 <p><input type="checkbox" data-item-complete="0" disabled> Instantiate the exporter and the linker (Step 4)</p>
@@ -1356,7 +1365,7 @@ mqtt.server.port=5672</code></pre>
 <div class="sect3">
 <h4 id="_step_1">Step 1</h4>
 <div class="paragraph">
-<p>Follow the instalation procedure in <a href="https://code.google.com/p/protobuf/">Protobuffer</a> website to get the command for compile <em>.proto</em> file.</p>
+<p>Follow the installation procedure in <a href="https://code.google.com/p/protobuf/">Protobuffer</a> website to get the command for compile <em>.proto</em> file.</p>
 </div>
 <div class="paragraph">
 <p>Here it is an example of a proto file that can be used for a first glance at the functionality.</p>
@@ -1412,7 +1421,7 @@ message NamePattern {
 </div>
 </div>
 <div class="paragraph">
-<p>From this file you can generate your classe by invoking</p>
+<p>From this file you can generate your class by invoking</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1488,7 +1497,7 @@ message NamePattern {
 <div class="sect3">
 <h4 id="_step_3">Step 3</h4>
 <div class="paragraph">
-<p>In this step, we instantiate our service (in java level) and publish it in the OSGi registry. There are several ways of doing this <strong>Step</strong> so pick up your flavor. We ll do like this:</p>
+<p>In this step, we instantiate our service (in java level) and publish it in the OSGi registry. There are several ways of doing this <strong>Step</strong> so pick up your flavor. We will do like this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1600,7 +1609,7 @@ sh chameleon.sh --interactive</code></pre>
 <div class="sect2">
 <h3 id="_importing_protobuffer_rpc_service">Importing Protobuffer RPC service</h3>
 <div class="paragraph">
-<p>Here, we can see the similatity in the importation process, if a given protocol is supported by Fuchsia the processors are used similarly independently of the protocol.</p>
+<p>Here, we can see the similarity in the importation process, if a given protocol is supported by Fuchsia the processors are used similarly independently of the protocol.</p>
 </div>
 <div class="ulist checklist">
 <div class="title">Prepare the environment</div>
@@ -1619,7 +1628,7 @@ sh chameleon.sh --interactive</code></pre>
 <div class="sect3">
 <h4 id="_step_1_2">Step 1</h4>
 <div class="paragraph">
-<p>This step is mandatory for use of <strong>processors</strong> (importer, exporter). From the moment you instantiate one processor, it is usually required for you to create a <strong>linker</strong> otherwise your service cannot be notified in case of a <strong>declaration</strong> appeareance.</p>
+<p>This step is mandatory for use of <strong>processors</strong> (importer, exporter). From the moment you instantiate one processor, it is usually required for you to create a <strong>linker</strong> otherwise your service cannot be notified in case of a <strong>declaration</strong> appearance.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1728,7 +1737,7 @@ public class BookClient {
 <div class="sect2">
 <h3 id="_fake_discovery">Fake-Discovery</h3>
 <div class="paragraph">
-<p>First things first, in order to have an discovery we need to create a fuchsia distribution that embbeds it, or to use an already existing distribution and add the modules required. Below we ll show you how to use couples of discoveries that are available in the platform.</p>
+<p>First things first, in order to have an discovery we need to create a fuchsia distribution that embeds it, or to use an already existing distribution and add the modules required. Below we will show you how to use couples of discoveries that are available in the platform.</p>
 </div>
 <div class="sect3">
 <h4 id="_what_it_does">What it does?!</h4>
@@ -1736,7 +1745,7 @@ public class BookClient {
 <p>As seen in the introduction the fundamental task of a discovery is to create an instance of Declaration which represents the availability of a service/device, and the intrinsic information of such service/device are contained inside <strong>Declaration</strong> as properties (stored in a Map).</p>
 </div>
 <div class="paragraph">
-<p>The idea behind having a fake discovery, is in infact be able to deploy a file (property file style, containing key value mapping).</p>
+<p>The idea behind having a fake discovery, is in fact be able to deploy a file (property file style, containing key value mapping).</p>
 </div>
 <div class="paragraph">
 <p>In order to activate the fake discovery its enough to compile the distribution with the profile <strong>fake</strong> (meaning mvn clean install -Pcore,fake), from the moment you compile a distribution with this parameter and you launch this distribution a directory called <strong>load</strong> will be created in the root of the chameleon distribution ($FUCHSIA/distribution/target/chameleon-distribution), this directory will be used to deploy your files that contain the key-value that you need to be instantiated in the platform.</p>
@@ -1784,7 +1793,7 @@ Metadata
 <p><em>mvn clean install -Pcore,mdns,mdns-config</em></p>
 </div>
 <div class="paragraph">
-<p>core and mdns are the modules that we need, in this case, the fuchsia core types and the discovery module itself. The 3td element <em>mdns-config</em> is the element responsible to configure the discovery. Even though the <strong>mdns</strong> module is available with the -Pmdns profile, it is necessary to create an instance of it, shaping it as we wish. We will explain in few paragraphs how to do that manually, but for now we will use an configuration example that setup the discovery to findout all the printers available in the local network, for that we add the profile -Pmdns-config.</p>
+<p>core and mdns are the modules that we need, in this case, the fuchsia core types and the discovery module itself. The 3td element <em>mdns-config</em> is the element responsible to configure the discovery. Even though the <strong>mdns</strong> module is available with the -Pmdns profile, it is necessary to create an instance of it, shaping it as we wish. We will explain in few paragraphs how to do that manually, but for now we will use an configuration example that setup the discovery to find out all the printers available in the local network, for that we add the profile -Pmdns-config.</p>
 </div>
 <div class="paragraph">
 <p>To verify that the discovery works properly you can use the console.</p>
@@ -1920,7 +1929,436 @@ Instance GenericDeviceInst-virtual-camera -&gt; valid</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>As we can see, the fake importer created an instance name <strong>GenericDeviceInst-virtual-camera</strong> (our <strong>id</strong> preceed by <em>GenericDeviceInst-</em>)</p>
+<p>As we can see, the fake importer created an instance name <strong>GenericDeviceInst-virtual-camera</strong> (our <strong>id</strong> preceded by <em>GenericDeviceInst-</em>)</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_tutorial_style">Tutorial Style</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_export_jsonrpc">Export JSONRPC</h3>
+<div class="sect3">
+<h4 id="_goal">Goal</h4>
+<div class="paragraph">
+<p>Expose an OSGi service instance as a JSONRPC service that can be accessed remotely through a URL.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_requirements">Requirements</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>service instance that will be exporter</p>
+</li>
+<li>
+<p>declaration containing the metadata below:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>fuchsia.export.jsonrpc.class</strong> - full name of the interface in which your instance implements. e.g. /org.ow2.chameleon.fuchsia.jsonrpc.exporter.experiment.DummyIface/</p>
+</li>
+<li>
+<p><strong>fuchsia.export.jsonrpc.instance</strong> - instance.name (in OSGi terms) of your service, which will be used to grab the proper instance to be exported. e.g. DummyPojoInstance</p>
+</li>
+<li>
+<p><strong>fuchsia.export.jsonrpc.url.context</strong> (optional) - indicated the context that will be added in URL, by default "JSONRPC", which will be used as a prefix in the URL for the instance as in the example: <strong><a href="http://localhost:8080/JSONRPC/DummyPojoInstance">http://localhost:8080/JSONRPC/DummyPojoInstance</a></strong></p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_example">Example</h4>
+<div class="sect4">
+<h5 id="_exporter_instantiation">Exporter instantiation</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="java language-java">       Instance jsonRPCExporter = instance()
+                .of("Fuchsia-Exporter:JSON-RPC")
+                .with("target").setto("(fuchsia.export.jsonrpc.instance=*)");</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_linker_instantiation">Linker instantiation</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="java language-java">        Instance jsonRPCExporterLinker = instance()
+            .of(FuchsiaConstants.DEFAULT_EXPORTATION_LINKER_FACTORY_NAME)
+            .with(ExportationLinker.FILTER_EXPORTDECLARATION_PROPERTY).setto("(fuchsia.export.jsonrpc.instance=*)")
+            .with(ExportationLinker.FILTER_EXPORTERSERVICE_PROPERTY).setto("(instance.name=jsonRPCExporter)");</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_export_declaration_instantiation">Export Declaration instantiation</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="java language-java">
+        Map&lt;String, Object&gt; metadata=new HashMap&lt;String, Object&gt;();
+
+        metadata.put("id","exporter-1");
+        metadata.put("fuchsia.export.jsonrpc.class","org.ow2.chameleon.fuchsia.jsonrpc.exporter.experiment.DummyIface");
+        metadata.put("fuchsia.export.jsonrpc.instance","DummyPojoInstance");
+
+        ExportDeclaration declaration = ExportDeclarationBuilder.fromMetadata(metadata).build();
+
+        Dictionary&lt;String, Object&gt; props = new Hashtable&lt;String, Object&gt;();
+
+        String clazzes[] = new String[]{org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration.class.getName()};
+        ServiceRegistration registration = context.registerService(clazzes, declaration, props);
+</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_verification">Verification</h4>
+<div class="sect4">
+<h5 id="_service_was_properly_exported">Service was properly exported</h5>
+<div class="paragraph">
+<p>You can use <a href="http://fr.wikipedia.org/wiki/CURL">cURL</a> to test if your instance was properly exported.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="xml language-xml">linux-shell# curl -i -X POST -d '{"jsonrpc": "2.0", "method": "helloworld", "params": ["earth"], "id": 1}' http://localhost:8080/JSONRPC/DummyPojoInstance</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>helloworld</strong> should be replaced by the method name declared on your interface to be exported</p>
+</div>
+<div class="paragraph">
+<p><strong>earth</strong> will be replaced by the parameters requested by your interface</p>
+</div>
+<div class="paragraph">
+<p><strong><a href="http://localhost:8080/JSONRPC/DummyPojoInstance">http://localhost:8080/JSONRPC/DummyPojoInstance</a></strong>, consider this example an instance of the pattern "http://A:B/C/D", A and B depend on your framework configuration; C is constant and will never change; D is in fact the same "instance.name" of your OSGi service instance;</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_import_jsonrpc">Import JSONRPC</h3>
+<div class="sect3">
+<h4 id="_goal_2">Goal</h4>
+<div class="paragraph">
+<p>Materialise an a remote JSONRPC service instance (available through a URL) into the current OSGi platform.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_requirements_2">Requirements</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>URL of the JSONRPC object to be imported</p>
+</li>
+<li>
+<p>declaration containing the metadata below:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>id</strong> - a platform unique identifier</p>
+</li>
+<li>
+<p><strong>url</strong> - URL where the object was published. e.g. <a href="http://localhost:8080/JSONRPC/DummyPojoInstance">http://localhost:8080/JSONRPC/DummyPojoInstance</a></p>
+</li>
+<li>
+<p><strong>service.class</strong> - full class identifier used as interface, this reference will be used to register in OSGi. e.g. org.ow2.chameleon.fuchsia.examples.jsonrpc.exporter.experiment.DummyIface</p>
+</li>
+<li>
+<p><strong>configs</strong> - this is a constant, always set with the value <strong>jsonrpc</strong></p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_example_2">Example</h4>
+<div class="sect4">
+<h5 id="_importer_instantiation">Importer instantiation</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="java language-java">     Instance jsonRPCImporter = instance()
+            .of("Fuchsia-Importer:JSON-RPC")
+            .with(ImporterService.TARGET_FILTER_PROPERTY).setto("(configs=jsonrpc)");</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_linker_instantiation_2">Linker instantiation</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="java language-java">        Instance jsonRPCImporterLinker = instance()
+            .of(FuchsiaConstants.DEFAULT_IMPORTATION_LINKER_FACTORY_NAME)
+            .with(FILTER_IMPORTDECLARATION_PROPERTY).setto("(configs=jsonrpc)")
+            .with(FILTER_IMPORTERSERVICE_PROPERTY).setto("(instance.name=jsonRPCImporter)");</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_importer_declaration_instantiation">Importer Declaration instantiation</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="java language-java">        Map&lt;String, Object&gt; metadata=new HashMap&lt;String, Object&gt;();
+        metadata.put(ID, "endipoint");
+        metadata.put(URL, "http://localhost:8080/JSONRPC/DummyPojoInstance");
+        metadata.put(SERVICE_CLASS, "org.ow2.chameleon.fuchsia.examples.jsonrpc.exporter.experiment.DummyIface");
+        metadata.put(CONFIGS, "jsonrpc");
+
+        ImportDeclaration declaration = ImportDeclarationBuilder.fromMetadata(metadata).build();
+
+        String clazzes[] = new String[]{ImportDeclaration.class.getName()};
+
+        Dictionary&lt;String, Object&gt; props = new Hashtable&lt;String, Object&gt;();
+
+        ServiceRegistration registration = context.registerService(clazzes, declaration, props);</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_verification_2">Verification</h4>
+<div class="sect4">
+<h5 id="_service_was_properly_imported">Service was properly imported</h5>
+<div class="paragraph">
+<p>You can use <strong>felix shelbie shell</strong> and inspect the importer bundle to check if it has correcly imported our JSONRPC remote instance</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="xml language-xml">shelbie-shell$ lb
+..
+   31|Active     |    1|OW2 Chameleon - Fuchsia Importer JSON-RPC (0.0.2.SNAPSHOT)
+..
+shelbie-shell$ inspect cap service 31
+...
+service; org.ow2.chameleon.fuchsia.examples.jsonrpc.exporter.experiment.DummyIface with properties:
+   service.id = 693
+</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Importer should provide a service with the interface that we&#8217;d configured just before in the <strong>Importer Declaration instantiation</strong>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_export_jaxws">Export JAXWS</h3>
+<div class="sect3">
+<h4 id="_goal_3">Goal</h4>
+<div class="paragraph">
+<p>Expose an OSGi service instance as a JAXWS service that can be accessed remotely through a URL.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_requirements_3">Requirements</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>service instance that will be exporter</p>
+</li>
+<li>
+<p>declaration containing the metadata below:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>fuchsia.export.cxf.class.name</strong> - full name of the interface in which your instance implements. e.g. /org.ow2.chameleon.fuchsia.exporter.cxf.examples.base.PojoSampleToBeExportedIface/</p>
+</li>
+<li>
+<p><strong>fuchsia.export.cxf.instance</strong> - instance.name (in OSGi terms) of your service, which will be used to grab the proper instance to be exported. e.g. DummyPojoInstance</p>
+</li>
+<li>
+<p><strong>fuchsia.export.cxf.url.context</strong> - indicated the context that will be added in URL, which will be used as a prefix in the URL for the instance as in the example: <strong>/PojoSampleToBeExported</strong></p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_example_3">Example</h4>
+<div class="sect4">
+<h5 id="_exporter_instantiation_2">Exporter instantiation</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="java language-java">    Instance cxfexporter = instance()
+            .of("CxfExporterFactory")
+            .with("target").setto("(fuchsia.export.cxf.instance=*)");</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_linker_instantiation_3">Linker instantiation</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="java language-java">    Instance cxfexporterlinker = instance()
+            .of(FuchsiaConstants.DEFAULT_EXPORTATION_LINKER_FACTORY_NAME)
+            .with(ExportationLinker.FILTER_EXPORTDECLARATION_PROPERTY).setto("(fuchsia.export.cxf.instance=*)")
+            .with(ExportationLinker.FILTER_EXPORTERSERVICE_PROPERTY).setto("(instance.name=cxfexporter)");</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_export_declaration_instantiation_2">Export Declaration instantiation</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="java language-java">
+        Map&lt;String, Object&gt;  metadata=new HashMap&lt;String, Object&gt;();
+
+        metadata.put("id","a");
+        metadata.put("exporter.id","myservice");
+        metadata.put("fuchsia.export.cxf.class.name",dummyInstance.getClass().getName());
+        metadata.put("fuchsia.export.cxf.instance",dummyInstance);
+        metadata.put("fuchsia.export.cxf.url.context","/PojoSampleToBeExported");
+
+        ExportDeclaration declaration = ExportDeclarationBuilder.fromMetadata(metadata).build();
+
+        Dictionary&lt;String, Object&gt; props = new Hashtable&lt;String, Object&gt;();
+        String clazzes[] = new String[]{org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration.class.getName()};
+        ServiceRegistration registration = context.registerService(clazzes, declaration, props);
+</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_verification_3">Verification</h4>
+<div class="sect4">
+<h5 id="_service_was_properly_exported_2">Service was properly exported</h5>
+<div class="paragraph">
+<p>Try to access the URL <strong><a href="http://localhost:8080/cxf/PojoSampleToBeExported?wsdl">http://localhost:8080/cxf/PojoSampleToBeExported?wsdl</a></strong> this should show you the WSDL of the service exported</p>
+</div>
+<div class="paragraph">
+<p>Of course that this URL is based on the example created above, if you changed the property "fuchsia.export.cxf.url.context" (which it is always the case) you have to replace the "PojoSampleToBeExported" on the URL by the proper name.</p>
+</div>
+<div class="paragraph">
+<p>You should see something like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="xml language-xml">&lt;wsdl:definitions xmlns:ns1="http://schemas.xmlsoap.org/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://base.examples.cxf.exporter.fuchsia.chameleon.ow2.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="PojoSampleToBeExported" targetNamespace="http://base.examples.cxf.exporter.fuchsia.chameleon.ow2.org/"&gt;
+...
+&lt;/wsdl:service&gt;
+&lt;/wsdl:definitions&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_import_jaxws">Import JAXWS</h3>
+<div class="sect3">
+<h4 id="_goal_4">Goal</h4>
+<div class="paragraph">
+<p>Materialise an a remote JAXWS service instance (available through a URL) into the current OSGi platform.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_requirements_4">Requirements</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>URL of the JAXWS (SOAP) object to be imported</p>
+</li>
+<li>
+<p>declaration containing the metadata below:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>id</strong> - a platform unique identifier</p>
+</li>
+<li>
+<p><strong>endpoint.url</strong> - URL where the object was published. e.g. <strong><a href="http://localhost:8080/cxf/PojoSampleToBeExported">http://localhost:8080/cxf/PojoSampleToBeExported</a></strong></p>
+</li>
+<li>
+<p><strong>className</strong> - full class identifier used as interface, this reference will be used to register in OSGi. e.g. <strong>org.ow2.chameleon.fuchsia.exporter.cxf.examples.base.PojoSampleToBeExportedIface</strong></p>
+</li>
+<li>
+<p><strong>configs</strong> - this is a constant, always set with the value <strong>jsonrpc</strong></p>
+</li>
+<li>
+<p><strong>jax-ws.importer.interfaces</strong> (optional) - interfaces that will charged by the importer</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_example_4">Example</h4>
+<div class="sect4">
+<h5 id="_importer_instantiation_2">Importer instantiation</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="java language-java">    Instance cxfimporter = instance()
+            .of("Fuchsia_importer.cxf")
+            .named("cxfimporter")
+            .with("target").setto("(endpoint.url=*)");</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_linker_instantiation_4">Linker instantiation</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="java language-java">    Instance cxfimporterlinker = instance()
+            .of(FuchsiaConstants.DEFAULT_IMPORTATION_LINKER_FACTORY_NAME)
+            .named("cxfimporterlinker")
+            .with(FILTER_IMPORTDECLARATION_PROPERTY).setto("(endpoint.url=*)")
+            .with(FILTER_IMPORTERSERVICE_PROPERTY).setto("(instance.name=cxfimporter)");</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_importer_declaration_instantiation_2">Importer Declaration instantiation</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="java language-java">        Map&lt;String, Object&gt;  metadata=new HashMap&lt;String, Object&gt;();
+
+        metadata.put("id","b");
+        metadata.put("className","org.ow2.chameleon.fuchsia.exporter.cxf.examples.base.PojoSampleToBeExportedIface");
+        metadata.put("jax-ws.importer.interfaces","[org.ow2.chameleon.fuchsia.exporter.cxf.examples.base.PojoSampleToBeExportedIface]");
+        metadata.put("endpoint.url","http://localhost:8080/cxf/PojoSampleToBeExported");
+
+        ImportDeclaration declaration = ImportDeclarationBuilder.fromMetadata(metadata).build();
+
+        Dictionary&lt;String, Object&gt; props = new Hashtable&lt;String, Object&gt;();
+        props.put("endpoint.url","http://localhost:8080/cxf/PojoSampleToBeExported");
+        String clazzes[] = new String[]{ImportDeclaration.class.getName()};
+        ServiceRegistration registration = context.registerService(clazzes, declaration, props);</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_verification_4">Verification</h4>
+<div class="sect4">
+<h5 id="_service_was_properly_imported_2">Service was properly imported</h5>
+<div class="paragraph">
+<p>You can use <strong>felix shelbie shell</strong> and inspect the importer bundle to check if it has correcly imported our JAXWS remote instance</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="xml language-xml">shelbie-shell$ lb
+..
+   52|Active     |    1|OW2 Chameleon - Fuchsia Importer JAX-WS (0.0.2.SNAPSHOT)
+..
+shelbie-shell$ inspect cap service 52 # you should find something similar to this output
+...
+service; org.ow2.chameleon.fuchsia.exporter.cxf.examples.base.PojoSampleToBeExportedIface</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Importer should provide a service with the interface that we&#8217;d configured just before in the <strong>Importer Declaration instantiation</strong>.</p>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -1928,7 +2366,7 @@ Instance GenericDeviceInst-virtual-camera -&gt; valid</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2013-12-10 09:09:58 CET
+Last updated 2014-02-06 13:27:44 CET
 </div>
 </div>
 </body>
