@@ -13,7 +13,7 @@
     </parent>
 
     <!-- Description of the project -->
-    <artifactId>org.ow2.chameleon.fuchsia.importer.jsonrpc-it</artifactId>
+    <artifactId>org.ow2.chameleon.fuchsia.importer.json-rpc-it</artifactId>
     <groupId>org.ow2.chameleon.fuchsia.importer</groupId>
     <name>OW2 Chameleon - Fuchsia Importer JSON-RPC [IntegrationTest]</name>
     <packaging>jar</packaging>
