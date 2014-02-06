@@ -21,8 +21,8 @@
     </parent>
 
     <!-- Description of the project -->
-    <groupId>org.ow2.chameleon.fuchsia.base</groupId>
-    <artifactId>org.ow2.chameleon.fuchsia.base.json-rpc-bundle</artifactId>
+    <groupId>org.ow2.chameleon.fuchsia.base.json-rpc</groupId>
+    <artifactId>org.ow2.chameleon.fuchsia.base.json-rpc.json-rpc-bundle</artifactId>
     <name>OW2 Chameleon - JSONRPC4J-Bundle</name>
     <packaging>bundle</packaging>
     <description>A wrapper around the JSONRPC4J library to build a consistent OSGi Bundle.</description>

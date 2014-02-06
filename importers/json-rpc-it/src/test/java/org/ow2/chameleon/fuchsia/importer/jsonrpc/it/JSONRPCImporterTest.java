@@ -76,8 +76,8 @@ public class JSONRPCImporterTest extends ImporterComponentAbstractTest {
     public Option getBundles() {
         return CoreOptions.composite(
                 // CoreOptions.vmOption("-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005"),
-                mavenBundle().groupId("org.ow2.chameleon.fuchsia.base").artifactId("org.ow2.chameleon.fuchsia.base" +
-                        ".json-rpc-bundle").versionAsInProject(),
+                mavenBundle().groupId("org.ow2.chameleon.fuchsia.base.json-rpc")
+                        .artifactId("org.ow2.chameleon.fuchsia.base.json-rpc.json-rpc-bundle").versionAsInProject(),
                 mavenBundle().groupId("com.fasterxml.jackson.core").artifactId("jackson-core").versionAsInProject(),
                 mavenBundle().groupId("commons-io").artifactId("commons-io").versionAsInProject(),
                 mavenBundle().groupId("com.fasterxml.jackson.core").artifactId("jackson-databind").versionAsInProject(),

@@ -29,8 +29,8 @@
             <artifactId>org.ow2.chameleon.fuchsia.core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.ow2.chameleon.fuchsia.base</groupId>
-            <artifactId>org.ow2.chameleon.fuchsia.base.json-rpc-bundle</artifactId>
+            <groupId>org.ow2.chameleon.fuchsia.base.json-rpc</groupId>
+            <artifactId>org.ow2.chameleon.fuchsia.base.json-rpc.json-rpc-bundle</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
