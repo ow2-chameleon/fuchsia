@@ -15,8 +15,8 @@ What can Fuchsia do for me?
 
 include::fuchsia-doanddonts.ad[]
 
-What is Fuchsia?
-----------------
+Core concepts
+-------------
 
 include::fuchsia-introduction.ad[]
 
@@ -36,6 +36,12 @@ include::fuchsia-basic.ad[]
 
 include::examples.ad[]
 
+Tutorial Style
+--------------
+
+include::exporter-jsonrpc.ad[]
+
+include::importer-jsonrpc.ad[]
 
 
 

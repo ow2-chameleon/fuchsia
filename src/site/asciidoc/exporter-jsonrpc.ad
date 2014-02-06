@@ -1,13 +1,13 @@
 Export JSONRPC
-==============
+~~~~~~~~~~~~~~
 
 Goal
-----
+^^^^
 
-Expose an OSGi service instance in a JSONRPC service that can be accessed remotely through a URL.
+Expose an OSGi service instance as a JSONRPC service that can be accessed remotely through a URL.
 
 Requirements
-------------
+^^^^^^^^^^^^
 
 * service instance that will be exporter
 * declaration containing the metadata below:
@@ -16,10 +16,10 @@ Requirements
 ** *fuchsia.export.jsonrpc.url.context* (optional) - indicated the context that will be added in URL, by default "JSONRPC", which will be used as a prefix in the URL for the instance as in the example: *http://localhost:8080/JSONRPC/DummyPojoInstance*
 
 Example
--------
+^^^^^^^
 
 Exporter instantiation
-~~~~~~~~~~~~~~~~~~~~~~
+++++++++++++++++++++++
 
 [source,java]
 ----
@@ -30,7 +30,7 @@ Exporter instantiation
 
 
 Linker instantiation
-~~~~~~~~~~~~~~~~~~~~
+++++++++++++++++++++
 
 [source,java]
 ----
@@ -41,7 +41,7 @@ Linker instantiation
 ----
 
 Export Declaration instantiation
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+++++++++++++++++++++++++++++++++
 
 [source,java]
 ----
@@ -63,10 +63,10 @@ Export Declaration instantiation
 
 
 Verification
-------------
+^^^^^^^^^^^^
 
 Service was properly exported
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++++++++++++++++++++++++++++++
 
 You can use http://fr.wikipedia.org/wiki/CURL[cURL] to test if your instance was properly exported. 
 

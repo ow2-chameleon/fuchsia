@@ -1,13 +1,13 @@
 Import JSONRPC
-==============
+~~~~~~~~~~~~~~
 
 Goal
-----
+^^^^
 
-Materialise an a remote JSONRPC instance (available through a URL) into the current OSGi platform.
+Materialise an a remote JSONRPC service instance (available through a URL) into the current OSGi platform.
 
 Requirements
-------------
+^^^^^^^^^^^^
 
 * URL of the JSONRPC object to be imported
 * declaration containing the metadata below:
@@ -17,10 +17,10 @@ Requirements
 ** *configs* - this is a constant, always set with the value *jsonrpc*
 
 Example
--------
+^^^^^^^
 
 Importer instantiation
-~~~~~~~~~~~~~~~~~~~~~~
+++++++++++++++++++++++
 
 [source,java]
 ----
@@ -31,7 +31,7 @@ Importer instantiation
 
 
 Linker instantiation
-~~~~~~~~~~~~~~~~~~~~
+++++++++++++++++++++
 
 [source,java]
 ----
@@ -42,7 +42,7 @@ Linker instantiation
 ----
 
 Importer Declaration instantiation
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+++++++++++++++++++++++++++++++++++
 
 [source,java]
 ----
@@ -63,10 +63,10 @@ Importer Declaration instantiation
 
 
 Verification
-------------
+^^^^^^^^^^^^
 
 Service was properly imported
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++++++++++++++++++++++++++++++
 
 You can use *felix shelbie shell* and inspect the importer bundle to check if it has correcly imported our JSONRPC remote instance
 
