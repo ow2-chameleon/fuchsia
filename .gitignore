@@ -12,6 +12,7 @@ target
 # (produced by IntelliJ IDEA):
 .idea/
 *.ipr
+*.bak
 *.iml
 *.iws
 
