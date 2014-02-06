@@ -389,7 +389,6 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <li><a href="#_input_output_of_processors">Input-Output of processors</a></li>
 <li>
 <ul class="sectlevel2">
-<li><a href="#_fake_importer">Fake importer</a></li>
 <li><a href="#_jax_ws_importer">JAX-WS importer</a></li>
 <li><a href="#_mqtt_importer">MQTT importer</a></li>
 <li><a href="#_pubsubhubbub_importer">PubSubHubBub importer</a></li>
@@ -404,8 +403,6 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <li><a href="#_import_a_mqtt_service">Import a MQTT service</a></li>
 <li><a href="#_exporting_protobuffer_rpc_service">Exporting Protobuffer RPC service</a></li>
 <li><a href="#_importing_protobuffer_rpc_service">Importing Protobuffer RPC service</a></li>
-<li><a href="#_fake_discovery">Fake-Discovery</a></li>
-<li><a href="#_fake_importer_2">Fake-Importer</a></li>
 </ul>
 </li>
 <li><a href="#_tutorial_style">Tutorial Style</a></li>
@@ -529,7 +526,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <div class="title">Available discovery implementations:</div>
 <ul>
 <li>
-<p>Fake discovery</p>
+<p>Filebased discovery</p>
 </li>
 <li>
 <p>mDNS/DNSsd</p>
@@ -550,9 +547,6 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <div class="ulist">
 <div class="title">Available implementations:</div>
 <ul>
-<li>
-<p>Fake importer</p>
-</li>
 <li>
 <p>JAX-RS</p>
 </li>
@@ -679,6 +673,12 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <li>
 <p>upnp</p>
 </li>
+<li>
+<p>discovery-filebased</p>
+</li>
+<li>
+<p>discovery-philips-hue</p>
+</li>
 </ul>
 </div>
 </li>
@@ -688,6 +688,12 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <ul>
 <li>
 <p>importer-cxf</p>
+</li>
+<li>
+<p>importer-cxf</p>
+</li>
+<li>
+<p>importer-philips-hue</p>
 </li>
 <li>
 <p><a href="http://mqtt.org/">mqtt</a></p>
@@ -716,7 +722,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <p>grid</p>
 </li>
 <li>
-<p>fake</p>
+<p>shell</p>
 </li>
 </ul>
 </div>
@@ -803,12 +809,6 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <div class="sectionbody">
 <div class="paragraph">
 <p>As seen in [Fuchsia 101](Fuchsia-101), importers use <strong>import declaration</strong> as input. The information contained in the <strong>import declaration</strong> must be enough in order that the processor execute its role properly.</p>
-</div>
-<div class="sect2">
-<h3 id="_fake_importer">Fake importer</h3>
-<div class="paragraph">
-<p>As soon as this <strong>importer</strong> is connected to an <strong>import declaration</strong> it generates an instance of Fuchsia <strong>GenericDevice</strong>, and this instance is published as a service inside OSGi platform.</p>
-</div>
 </div>
 <div class="sect2">
 <h3 id="_jax_ws_importer">JAX-WS importer</h3>
@@ -1049,7 +1049,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <p>In this linker we are saying "if a declaration contains <em>endpoint.url</em> than connect it with the importer in which the instance is called <em>cxfimporterlinker</em>".</p>
 </div>
 <div class="paragraph">
-<p>In order to <em>Inform fuchsia the JAX-WS info</em>, we have several options, either we can publish a service that follows the interface <em>org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration</em>, or we can use the Fake-Discovery, which translate files deployed in the folder named <em>load</em> into a ImportDeclaration.</p>
+<p>In order to <em>Inform fuchsia the JAX-WS info</em>, we have several options, either we can publish a service that follows the interface <em>org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration</em>, or we can use the Filebased-Discovery, which translate files deployed in the folder named <em>load</em> into a ImportDeclaration.</p>
 </div>
 <div class="paragraph">
 <p>You can check that everything is up and running by typing <strong>importer</strong> on the console, you should see at least:</p>
@@ -1067,16 +1067,16 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 </div>
 </div>
 <div class="paragraph">
-<p>And check that the FakeDiscovery is running as well by typing <strong>discovery</strong> and you will see:</p>
+<p>And check that the FilebasedDiscovery is running as well by typing <strong>discovery</strong> and you will see:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>Discovery [Fuchsia-FakeDiscovery] provided by bundle fuchsia-fake-discovery (37)
+<pre class="highlight"><code>Discovery [Fuchsia-FilebasedDiscovery] provided by bundle fuchsia-filebased-discovery (37)
 	Service properties:
-		factory.name = Fuchsia-FakeDiscovery-Factory
-		fuchsia.system.fake.discovery.directory = load
-		fuchsia.system.fake.discovery.polling = 2000
-		instance.name = Fuchsia-FakeDiscovery
+		factory.name = Fuchsia-FilebasedDiscovery-Factory
+		fuchsia.system.filebased.discovery.directory = load
+		fuchsia.system.filebased.discovery.polling = 2000
+		instance.name = Fuchsia-FilebasedDiscovery
 		objectClass = [Ljava.lang.String;@20e9c6
 		service.id = 321
 </code></pre>
@@ -1105,7 +1105,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 </ul>
 </div>
 <div class="paragraph">
-<p>The last two steps consist in informing the Fuchsia the address of our JAX-WS service. For that its enough to deploy a file in the folder <em>load</em> (thanks to the Fake-Discovery) with the following content:</p>
+<p>The last two steps consist in informing the Fuchsia the address of our JAX-WS service. For that its enough to deploy a file in the folder <em>load</em> (thanks to the Filebased-Discovery) with the following content:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1183,7 +1183,7 @@ public class Client {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="bash language-bash">mvn clean install -f distribution/pom.xml -Pcore,push,push-config,fake &amp;&amp; \
+<pre class="highlight"><code class="bash language-bash">mvn clean install -f distribution/pom.xml -Pcore,push,push-config,discovery-filebased &amp;&amp; \
 cd distribution/target/chameleon-distribution/ &amp;&amp; \
 sh chameleon.sh --interactive</code></pre>
 </div>
@@ -1265,7 +1265,7 @@ device.serialNumber=push-dispatch-event-admin</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="bash language-bash">mvn clean install -f distribution/pom.xml -Pcore,mqtt,mqtt-config,fake &amp;&amp; \
+<pre class="highlight"><code class="bash language-bash">mvn clean install -f distribution/pom.xml -Pcore,mqtt,mqtt-config,discovery-filebased &amp;&amp; \
 cd distribution/target/chameleon-distribution/ &amp;&amp; \
 sh chameleon.sh --interactive</code></pre>
 </div>
@@ -1597,7 +1597,7 @@ public class ExportDeclaration {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="java language-java">mvn clean install -Pcore,fake,protobuffer &amp;&amp; cd target/chameleon-distribution &amp;&amp; \
+<pre class="highlight"><code class="java language-java">mvn clean install -Pcore,discovery-filebased,protobuffer &amp;&amp; cd target/chameleon-distribution &amp;&amp; \
 sh chameleon.sh --interactive</code></pre>
 </div>
 </div>
@@ -1732,12 +1732,13 @@ public class BookClient {
 <div class="paragraph">
 <p>The only reason we added the filter in <strong>@Required</strong> was to make sure that the remote instance (created by imported) is injected. So this is not mandatory in regular cases.</p>
 </div>
+<div class="paragraph">
+<p>Filebased-Discovery
+<sub>~</sub><sub>~</sub><sub>~</sub><sub>~</sub>~~</p>
 </div>
-</div>
-<div class="sect2">
-<h3 id="_fake_discovery">Fake-Discovery</h3>
 <div class="paragraph">
 <p>First things first, in order to have an discovery we need to create a fuchsia distribution that embeds it, or to use an already existing distribution and add the modules required. Below we will show you how to use couples of discoveries that are available in the platform.</p>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_what_it_does">What it does?!</h4>
@@ -1745,10 +1746,10 @@ public class BookClient {
 <p>As seen in the introduction the fundamental task of a discovery is to create an instance of Declaration which represents the availability of a service/device, and the intrinsic information of such service/device are contained inside <strong>Declaration</strong> as properties (stored in a Map).</p>
 </div>
 <div class="paragraph">
-<p>The idea behind having a fake discovery, is in fact be able to deploy a file (property file style, containing key value mapping).</p>
+<p>The idea behind having a filebased discovery, is in fact be able to deploy a file (property file style, containing key value mapping).</p>
 </div>
 <div class="paragraph">
-<p>In order to activate the fake discovery its enough to compile the distribution with the profile <strong>fake</strong> (meaning mvn clean install -Pcore,fake), from the moment you compile a distribution with this parameter and you launch this distribution a directory called <strong>load</strong> will be created in the root of the chameleon distribution ($FUCHSIA/distribution/target/chameleon-distribution), this directory will be used to deploy your files that contain the key-value that you need to be instantiated in the platform.</p>
+<p>In order to activate the filebased discovery its enough to compile the distribution with the profile <strong>discovery-filebased</strong> (meaning mvn clean install -Pcore,discovery-filebased), from the moment you compile a distribution with this parameter and you launch this distribution a directory called <strong>load</strong> will be created in the root of the chameleon distribution ($FUCHSIA/distribution/target/chameleon-distribution), this directory will be used to deploy your files that contain the key-value that you need to be instantiated in the platform.</p>
 </div>
 <div class="paragraph">
 <p>An example of such file is this one:</p>
@@ -1864,72 +1865,6 @@ public class DNSSDInitializer {
 </tr>
 </table>
 </div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_fake_importer_2">Fake-Importer</h3>
-<div class="paragraph">
-<p>To start, we are going to use <em>fake-importer</em>, which create an instance of a GenericDevice interface based on a description that will be added into a file. This file must to be published in a specific folder of the framework (<em>load</em> folder by default).</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code>mvn clean install -Pcore,fake</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>After launching the platform and type <strong>instances</strong> you will see something like</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code>...
-Instance org.ow2.chameleon.fuchsia.tools.shell.FuchsiaGogoCommand-0 -&gt; valid
-Instance Fuchsia-FakeDiscovery -&gt; valid
-...</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>If you type <strong>declaration</strong> you will see that there are no declarations available.</p>
-</div>
-<div class="paragraph">
-<p>Now lets create a text file with the following content:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code>id=virtual-camera
-deviceType=camera
-deviceSubType=sony-dhc
-device.serialNumber=virtual-camera</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Copy this file for to the folder <em>load</em> (located inside chameleon directory), after that you can type the command <em>declaration</em> and you should see:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code>Service properties:
-		objectClass = [Ljava.lang.String;@19d8f01
-		service.id = 316
-Metadata
-	id=virtual-camera
-	deviceType=camera
-	deviceSubType=sony-dhc
-	device.serialNumber=virtual-camera</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>A declaration with the exactly the same properties values as the file that you just deployed.</p>
-</div>
-<div class="paragraph">
-<p>If  you install the fuchsia bundle <strong>Fake-Importer</strong>, you can type <strong>instances</strong>, and you should see:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code>...
-Instance GenericDeviceInst-virtual-camera -&gt; valid</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>As we can see, the fake importer created an instance name <strong>GenericDeviceInst-virtual-camera</strong> (our <strong>id</strong> preceded by <em>GenericDeviceInst-</em>)</p>
 </div>
 </div>
 </div>
