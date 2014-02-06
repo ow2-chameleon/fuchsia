@@ -13,7 +13,7 @@
     </parent>
 
     <!-- Description of the project -->
-    <artifactId>forg.ow2.chameleon.fuchsia.importer.jsonrpc-it</artifactId>
+    <artifactId>org.ow2.chameleon.fuchsia.importer.jsonrpc-it</artifactId>
     <groupId>org.ow2.chameleon.fuchsia.importer</groupId>
     <name>OW2 Chameleon - Fuchsia Importer JSON-RPC [IntegrationTest]</name>
     <packaging>jar</packaging>
@@ -57,8 +57,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.briandilley.jsonrpc4j</groupId>
-            <artifactId>jsonrpc4j</artifactId>
+            <groupId>org.ow2.chameleon.fuchsia.base</groupId>
+            <artifactId>org.ow2.chameleon.fuchsia.base.json-rpc-bundle</artifactId>
+            <version>0.0.2-SNAPSHOT</version>
         </dependency>
 
         <dependency>

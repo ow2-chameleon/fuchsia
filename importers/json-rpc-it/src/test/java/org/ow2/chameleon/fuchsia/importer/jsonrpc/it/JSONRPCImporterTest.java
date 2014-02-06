@@ -25,9 +25,7 @@ import java.util.Map;
 import java.util.concurrent.Executors;
 
 import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
-import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
-import static org.ops4j.pax.exam.CoreOptions.systemPackages;
-import static org.ops4j.pax.exam.CoreOptions.wrappedBundle;
+import static org.ops4j.pax.exam.CoreOptions.*;
 import static org.ow2.chameleon.fuchsia.core.component.ImporterService.TARGET_FILTER_PROPERTY;
 import static org.ow2.chameleon.fuchsia.core.declaration.Constants.*;
 
@@ -78,7 +76,8 @@ public class JSONRPCImporterTest extends ImporterComponentAbstractTest {
     public Option getBundles() {
         return CoreOptions.composite(
                 // CoreOptions.vmOption("-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005"),
-                mavenBundle().groupId("com.github.briandilley.jsonrpc4j").artifactId("jsonrpc4j").versionAsInProject(),
+                mavenBundle().groupId("org.ow2.chameleon.fuchsia.base").artifactId("org.ow2.chameleon.fuchsia.base" +
+                        ".json-rpc-bundle").versionAsInProject(),
                 mavenBundle().groupId("com.fasterxml.jackson.core").artifactId("jackson-core").versionAsInProject(),
                 mavenBundle().groupId("commons-io").artifactId("commons-io").versionAsInProject(),
                 mavenBundle().groupId("com.fasterxml.jackson.core").artifactId("jackson-databind").versionAsInProject(),
@@ -134,9 +133,7 @@ public class JSONRPCImporterTest extends ImporterComponentAbstractTest {
         props.put(SERVICE_CLASS, klass.getName());
         props.put(CONFIGS, "jsonrpc");
 
-        ImportDeclaration iDec = ImportDeclarationBuilder.fromMetadata(props).build();
-
-        return iDec;
+        return ImportDeclarationBuilder.fromMetadata(props).build();
     }
 
 }
