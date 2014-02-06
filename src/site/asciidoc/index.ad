@@ -43,6 +43,10 @@ include::exporter-jsonrpc.ad[]
 
 include::importer-jsonrpc.ad[]
 
+include::exporter-jaxws.ad[]
+
+include::importer-jaxws.ad[]
+
 
 
 

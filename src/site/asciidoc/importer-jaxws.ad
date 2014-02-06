@@ -1,0 +1,87 @@
+Import JAXWS
+~~~~~~~~~~~~
+
+Goal
+^^^^
+
+Materialise an a remote JAXWS service instance (available through a URL) into the current OSGi platform.
+
+Requirements
+^^^^^^^^^^^^
+
+* URL of the JAXWS (SOAP) object to be imported
+* declaration containing the metadata below:
+** *id* - a platform unique identifier
+** *endpoint.url* - URL where the object was published. e.g. *http://localhost:8080/cxf/PojoSampleToBeExported*
+** *className* - full class identifier used as interface, this reference will be used to register in OSGi. e.g. *org.ow2.chameleon.fuchsia.exporter.cxf.examples.base.PojoSampleToBeExportedIface*
+** *configs* - this is a constant, always set with the value *jsonrpc*
+** *jax-ws.importer.interfaces* (optional) - interfaces that will charged by the importer
+
+Example
+^^^^^^^
+
+Importer instantiation
+++++++++++++++++++++++
+
+[source,java]
+----
+    Instance cxfimporter = instance()
+            .of("Fuchsia_importer.cxf")
+            .named("cxfimporter")
+            .with("target").setto("(endpoint.url=*)");
+----
+
+
+Linker instantiation
+++++++++++++++++++++
+
+[source,java]
+----
+    Instance cxfimporterlinker = instance()
+            .of(FuchsiaConstants.DEFAULT_IMPORTATION_LINKER_FACTORY_NAME)
+            .named("cxfimporterlinker")
+            .with(FILTER_IMPORTDECLARATION_PROPERTY).setto("(endpoint.url=*)")
+            .with(FILTER_IMPORTERSERVICE_PROPERTY).setto("(instance.name=cxfimporter)");
+----
+
+Importer Declaration instantiation
+++++++++++++++++++++++++++++++++++
+
+[source,java]
+----
+        Map<String, Object>  metadata=new HashMap<String, Object>();
+
+        metadata.put("id","b");
+        metadata.put("className","org.ow2.chameleon.fuchsia.exporter.cxf.examples.base.PojoSampleToBeExportedIface");
+        metadata.put("jax-ws.importer.interfaces","[org.ow2.chameleon.fuchsia.exporter.cxf.examples.base.PojoSampleToBeExportedIface]");
+        metadata.put("endpoint.url","http://localhost:8080/cxf/PojoSampleToBeExported");
+
+        ImportDeclaration declaration = ImportDeclarationBuilder.fromMetadata(metadata).build();
+
+        Dictionary<String, Object> props = new Hashtable<String, Object>();
+        props.put("endpoint.url","http://localhost:8080/cxf/PojoSampleToBeExported");
+        String clazzes[] = new String[]{ImportDeclaration.class.getName()};
+        ServiceRegistration registration = context.registerService(clazzes, declaration, props);
+----
+
+
+Verification
+^^^^^^^^^^^^
+
+Service was properly imported
++++++++++++++++++++++++++++++
+
+You can use *felix shelbie shell* and inspect the importer bundle to check if it has correcly imported our JAXWS remote instance
+
+[source,xml]
+----
+shelbie-shell$ lb
+..
+   52|Active     |    1|OW2 Chameleon - Fuchsia Importer JAX-WS (0.0.2.SNAPSHOT)
+..
+shelbie-shell$ inspect cap service 52 # you should find something similar to this output
+...
+service; org.ow2.chameleon.fuchsia.exporter.cxf.examples.base.PojoSampleToBeExportedIface
+----
+
+Importer should provide a service with the interface that we'd configured just before in the *Importer Declaration instantiation*.

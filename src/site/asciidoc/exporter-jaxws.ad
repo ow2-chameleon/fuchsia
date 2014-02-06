@@ -1,0 +1,86 @@
+Export JAXWS
+~~~~~~~~~~~~
+
+Goal
+^^^^
+
+Expose an OSGi service instance as a JAXWS service that can be accessed remotely through a URL.
+
+Requirements
+^^^^^^^^^^^^
+
+* service instance that will be exporter
+* declaration containing the metadata below:
+** *fuchsia.export.cxf.class.name* - full name of the interface in which your instance implements. e.g. /org.ow2.chameleon.fuchsia.exporter.cxf.examples.base.PojoSampleToBeExportedIface/
+** *fuchsia.export.cxf.instance* - instance.name (in OSGi terms) of your service, which will be used to grab the proper instance to be exported. e.g. DummyPojoInstance
+** *fuchsia.export.cxf.url.context* - indicated the context that will be added in URL, which will be used as a prefix in the URL for the instance as in the example: */PojoSampleToBeExported*
+
+Example
+^^^^^^^
+
+Exporter instantiation
+++++++++++++++++++++++
+
+[source,java]
+----
+    Instance cxfexporter = instance()
+            .of("CxfExporterFactory")
+            .with("target").setto("(fuchsia.export.cxf.instance=*)");
+----
+
+
+Linker instantiation
+++++++++++++++++++++
+
+[source,java]
+----
+    Instance cxfexporterlinker = instance()
+            .of(FuchsiaConstants.DEFAULT_EXPORTATION_LINKER_FACTORY_NAME)
+            .with(ExportationLinker.FILTER_EXPORTDECLARATION_PROPERTY).setto("(fuchsia.export.cxf.instance=*)")
+            .with(ExportationLinker.FILTER_EXPORTERSERVICE_PROPERTY).setto("(instance.name=cxfexporter)");
+----
+
+Export Declaration instantiation
+++++++++++++++++++++++++++++++++
+
+[source,java]
+----
+
+        Map<String, Object>  metadata=new HashMap<String, Object>();
+
+        metadata.put("id","a");
+        metadata.put("exporter.id","myservice");
+        metadata.put("fuchsia.export.cxf.class.name",dummyInstance.getClass().getName());
+        metadata.put("fuchsia.export.cxf.instance",dummyInstance);
+        metadata.put("fuchsia.export.cxf.url.context","/PojoSampleToBeExported");
+
+        ExportDeclaration declaration = ExportDeclarationBuilder.fromMetadata(metadata).build();
+
+        Dictionary<String, Object> props = new Hashtable<String, Object>();
+        String clazzes[] = new String[]{org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration.class.getName()};
+        ServiceRegistration registration = context.registerService(clazzes, declaration, props);
+
+----
+
+
+Verification
+^^^^^^^^^^^^
+
+Service was properly exported
++++++++++++++++++++++++++++++
+
+Try to access the URL *http://localhost:8080/cxf/PojoSampleToBeExported?wsdl* this should show you the WSDL of the service exported
+
+Of course that this URL is based on the example created above, if you changed the property "fuchsia.export.cxf.url.context" (which it is always the case) you have to replace the "PojoSampleToBeExported" on the URL by the proper name.
+
+
+You should see something like:
+
+[source,xml]
+----
+<wsdl:definitions xmlns:ns1="http://schemas.xmlsoap.org/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://base.examples.cxf.exporter.fuchsia.chameleon.ow2.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="PojoSampleToBeExported" targetNamespace="http://base.examples.cxf.exporter.fuchsia.chameleon.ow2.org/">
+...
+</wsdl:service>
+</wsdl:definitions>
+----
+
