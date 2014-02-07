@@ -230,4 +230,9 @@ public class SubscriptionImport extends AbstractImporterComponent implements Sub
     protected void denyImportDeclaration(ImportDeclaration importDeclaration) throws ImporterException {
         //TODO
     }
+
+    @Override
+    protected Logger getLogger() {
+        return logger;
+    }
 }

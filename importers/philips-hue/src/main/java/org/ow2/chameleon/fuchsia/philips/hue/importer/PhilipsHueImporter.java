@@ -97,10 +97,11 @@ public class PhilipsHueImporter extends AbstractImporterComponent {
         }catch(IllegalStateException e){
             log.error("failed unregistering bridge");
         }
+    }
 
-
-
-
+    @Override
+    protected Logger getLogger() {
+        return log;
     }
 
 

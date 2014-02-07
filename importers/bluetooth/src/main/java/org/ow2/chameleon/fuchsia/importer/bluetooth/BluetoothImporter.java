@@ -113,6 +113,11 @@ public class BluetoothImporter extends AbstractImporterComponent {
         // FIXME : destroy proxy
     }
 
+    @Override
+    protected Logger getLogger() {
+        return logger;
+    }
+
 
     @Bind(aggregate = true, optional = true, filter = "(protocol=bluetooth)")
     private void bindBluetoothProxyFactories(Factory f, ServiceReference<Factory> sr) {

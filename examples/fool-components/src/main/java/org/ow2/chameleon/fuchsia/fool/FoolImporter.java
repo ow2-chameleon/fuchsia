@@ -42,6 +42,11 @@ public class FoolImporter extends AbstractImporterComponent {
     }
 
     @Override
+    protected Logger getLogger() {
+        return logger;
+    }
+
+    @Override
     @Validate
     protected void stop() {
         super.stop();

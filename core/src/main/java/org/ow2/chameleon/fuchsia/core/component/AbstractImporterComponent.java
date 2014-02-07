@@ -2,6 +2,7 @@ package org.ow2.chameleon.fuchsia.core.component;
 
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.exceptions.ImporterException;
+import org.slf4j.Logger;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -32,6 +33,11 @@ public abstract class AbstractImporterComponent implements ImporterService, Impo
     protected abstract void denyImportDeclaration(final ImportDeclaration importDeclaration) throws ImporterException;
 
     /**
+     *
+     */
+    protected abstract Logger getLogger();
+
+    /**
      * Stop the Importer component, iPOJO Invalidate instance callback.
      * Must be override !
      */
@@ -43,7 +49,9 @@ public abstract class AbstractImporterComponent implements ImporterService, Impo
                 try {
                     denyImportDeclaration(importDeclaration);
                 } catch (ImporterException e) {
-                    e.printStackTrace();
+                    getLogger().error("An exception has been thrown while denying the importDeclaration "
+                            + importDeclaration
+                            + "Stopping in progress.", e);
                 }
             }
             // Clear the map

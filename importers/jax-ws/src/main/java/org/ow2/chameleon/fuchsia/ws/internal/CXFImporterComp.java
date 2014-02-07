@@ -156,4 +156,9 @@ public class CXFImporterComp extends AbstractImporterComponent {
         serviceRegistration.unregister();
         map.remove(importDeclaration);
     }
+
+    @Override
+    protected Logger getLogger() {
+        return logger;
+    }
 }
