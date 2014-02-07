@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.philips.hue.discovery;
+package org.ow2.chameleon.fuchsia.discovery.philipshue;
 
 import com.philips.lighting.hue.sdk.PHAccessPoint;
 import com.philips.lighting.hue.sdk.PHBridgeSearchManager;
@@ -26,7 +26,7 @@ import java.util.prefs.Preferences;
 
 import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
 
-@Component(name = "Fuchsia-PhilipsHueDiscovery-Factory")
+@Component()
 @Provides(specifications = {DiscoveryService.class})
 @Instantiate
 public class PhilipsHueDiscovery extends AbstractDiscoveryComponent implements PHSDKListener, Runnable {

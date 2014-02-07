@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.upnp.test;
+package org.ow2.chameleon.fuchsia.discovery.upnp.it;
 
 import org.apache.felix.ipojo.ComponentInstance;
 import org.junit.After;
@@ -49,7 +49,6 @@ public class UPnPFunctionnalitiesTest extends BaseTest {
                 wrappedBundle(mavenBundle("org.easytesting", "fest-assert").versionAsInProject()),
 
                 bootDelegationPackage("com.intellij.rt.coverage.data")
-
         );
     }
 
@@ -66,7 +65,7 @@ public class UPnPFunctionnalitiesTest extends BaseTest {
 
         Dictionary<String, String> confDisc = new Hashtable<String, String>();
         confDisc.put(INSTANCE_NAME_PROPERTY, DISCOVERY_NAME);
-        ipojoHelper.createComponentInstance("Fuchsia-UPnPDiscovery-Factory", confDisc);
+        ipojoHelper.createComponentInstance("org.ow2.chameleon.fuchsia.discovery.upnp.UPnPDiscovery", confDisc);
     }
 
     @After

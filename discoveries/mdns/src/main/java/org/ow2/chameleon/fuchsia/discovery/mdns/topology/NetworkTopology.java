@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.mdns.discovery.topology;
+package org.ow2.chameleon.fuchsia.discovery.mdns.topology;
 
 import javax.jmdns.NetworkTopologyDiscovery;
 import java.net.Inet6Address;

@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.mdns.discovery;
+package org.ow2.chameleon.fuchsia.discovery.mdns;
 
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
@@ -6,8 +6,7 @@ import org.ow2.chameleon.fuchsia.core.component.AbstractDiscoveryComponent;
 import org.ow2.chameleon.fuchsia.core.component.DiscoveryService;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclarationBuilder;
-import org.ow2.chameleon.fuchsia.mdns.discovery.MDNSConstants;
-import org.ow2.chameleon.fuchsia.mdns.discovery.topology.NetworkTopology;
+import org.ow2.chameleon.fuchsia.discovery.mdns.topology.NetworkTopology;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,19 +15,18 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Map;
 
 
-@Component(name = "DNSSDDiscoveryFactory")
+@Component()
 @Provides(specifications = DiscoveryService.class)
-public class DNSSDDiscoveryImpl extends AbstractDiscoveryComponent implements NetworkTopologyDiscovery.Factory.ClassDelegate, ServiceListener {
+public class DNSSDDiscovery extends AbstractDiscoveryComponent implements NetworkTopologyDiscovery.Factory.ClassDelegate, ServiceListener {
 
     private final HashMap<String, ImportDeclaration> importDeclarations = new HashMap<String, ImportDeclaration>();
 
     @Property(name = "dnssd.service.type",value = MDNSConstants.DNSSD_SERVICE_TYPE)
     private String dnssdServiceType;
 
-    protected DNSSDDiscoveryImpl(BundleContext bundleContext) {
+    protected DNSSDDiscovery(BundleContext bundleContext) {
         super(bundleContext);
     }
 

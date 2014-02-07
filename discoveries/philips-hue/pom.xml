@@ -56,7 +56,7 @@
                             ${project.artifactId}
                         </Bundle-SymbolicName>
                         <Export-Package>
-                            org.ow2.chameleon.fuchsia.fake.discovery
+
                         </Export-Package>
                         <Import-Package>
                             *

@@ -13,11 +13,10 @@
  * limitations under the License.
  */
 
-package org.ow2.chameleon.fuchsia.bluetooth.discovery;
+package org.ow2.chameleon.fuchsia.discovery.bluetooth;
 
 import org.apache.felix.ipojo.annotations.Bind;
 import org.apache.felix.ipojo.annotations.Component;
-import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Invalidate;
 import org.apache.felix.ipojo.annotations.Provides;
 import org.apache.felix.ipojo.annotations.Requires;
@@ -38,14 +37,14 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.ow2.chameleon.fuchsia.bluetooth.discovery.BluetoothConstants.BLUETOOTH_DEVICE_ADDRESS;
-import static org.ow2.chameleon.fuchsia.bluetooth.discovery.BluetoothConstants.BLUETOOTH_DEVICE_FRIENDLYNAME;
+import static org.ow2.chameleon.fuchsia.discovery.bluetooth.BluetoothConstants.BLUETOOTH_DEVICE_ADDRESS;
+import static org.ow2.chameleon.fuchsia.discovery.bluetooth.BluetoothConstants.BLUETOOTH_DEVICE_FRIENDLYNAME;
 import static org.ow2.chameleon.fuchsia.core.declaration.Constants.PROTOCOL_NAME;
 
 /**
  * @author Morgan Martinet
  */
-@Component(name = "Fuchsia-BluetoothDiscovery-Factory")
+@Component()
 @Provides(specifications = DiscoveryService.class)
 public class BluetoothDiscovery extends AbstractDiscoveryComponent {
 

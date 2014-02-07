@@ -11,7 +11,7 @@ import static org.ow2.chameleon.fuchsia.core.ImportationLinker.FILTER_IMPORTERSE
 public class DiscoveryInitializer {
 
     Instance upnpDiscovery = instance()
-            .of("Fuchsia-UPnPDiscovery-Factory")
+            .of("org.ow2.chameleon.fuchsia.discovery.upnp.UPnPDiscovery")
             .named("Fuchsia-UPnPDiscovery")
             .with(FILTER_IMPORTERSERVICE_PROPERTY).setto("(instance.name=FuchsiaUPnPImporter)")
             .with("target").setto("(id=*)");

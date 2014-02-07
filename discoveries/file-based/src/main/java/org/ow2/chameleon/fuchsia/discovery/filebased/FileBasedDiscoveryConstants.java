@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.filebased.discovery;
+package org.ow2.chameleon.fuchsia.discovery.filebased;
 
 public class FileBasedDiscoveryConstants {
 

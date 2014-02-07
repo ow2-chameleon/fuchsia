@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.filebased.discovery;
+package org.ow2.chameleon.fuchsia.discovery.filebased;
 
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
@@ -7,8 +7,8 @@ import org.ow2.chameleon.fuchsia.core.component.DiscoveryService;
 import org.ow2.chameleon.fuchsia.core.declaration.Constants;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclarationBuilder;
-import org.ow2.chameleon.fuchsia.filebased.discovery.monitor.Deployer;
-import org.ow2.chameleon.fuchsia.filebased.discovery.monitor.DirectoryMonitor;
+import org.ow2.chameleon.fuchsia.discovery.filebased.monitor.Deployer;
+import org.ow2.chameleon.fuchsia.discovery.filebased.monitor.DirectoryMonitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,14 +31,14 @@ import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
  * @author morgan.martinet@imag.fr
  */
 
-@Component(name = "Fuchsia-FileBasedImportDiscovery-Factory")
+@Component()
 @Provides(specifications = {DiscoveryService.class, Deployer.class})
 public class FileBasedDiscoveryImportBridge extends AbstractDiscoveryComponent implements Deployer {
 
     @ServiceProperty(name = INSTANCE_NAME_PROPERTY)
     private String name;
 
-    @ServiceProperty(name = org.ow2.chameleon.fuchsia.filebased.discovery.FileBasedDiscoveryConstants.FILEBASED_DISCOVERY_IMPORT_PROPERTY_KEY_MONITORED_DIR_KEY, value = FileBasedDiscoveryConstants.FILEBASED_DISCOVERY_IMPORT_PROPERTY_KEY_MONITORED_DIR_VALUE)
+    @ServiceProperty(name = FileBasedDiscoveryConstants.FILEBASED_DISCOVERY_IMPORT_PROPERTY_KEY_MONITORED_DIR_KEY, value = FileBasedDiscoveryConstants.FILEBASED_DISCOVERY_IMPORT_PROPERTY_KEY_MONITORED_DIR_VALUE)
     private String monitoredImportDirectory;
 
     @ServiceProperty(name = FileBasedDiscoveryConstants.FILEBASED_DISCOVERY_PROPERTY_POLLING_TIME_KEY, value = FileBasedDiscoveryConstants.FILEBASED_DISCOVERY_PROPERTY_POLLING_TIME_VALUE)

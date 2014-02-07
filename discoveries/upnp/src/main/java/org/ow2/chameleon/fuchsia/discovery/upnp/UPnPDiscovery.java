@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.upnp.discovery;
+package org.ow2.chameleon.fuchsia.discovery.upnp;
 
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
@@ -23,16 +23,16 @@ import java.util.Set;
  * @author jeremy.savonet@gmail.com
  * @author jander nascimento (botelho at imag.fr)
  */
-@Component(name = "Fuchsia-UPnPDiscovery-Factory")
+@Component()
 @Provides(specifications = {DiscoveryService.class})
-public class UPnPFuchsiaDiscoveryImpl extends AbstractDiscoveryComponent {
+public class UPnPDiscovery extends AbstractDiscoveryComponent {
 
     private final HashMap<String, ImportDeclaration> importDeclarations = new HashMap<String, ImportDeclaration>();
 
     @ServiceProperty(name = "instance.name")
     private String name;
 
-    public UPnPFuchsiaDiscoveryImpl(BundleContext bundleContext) {
+    public UPnPDiscovery(BundleContext bundleContext) {
         super(bundleContext);
         getLogger().debug("UPnP discovery: loading..");
     }

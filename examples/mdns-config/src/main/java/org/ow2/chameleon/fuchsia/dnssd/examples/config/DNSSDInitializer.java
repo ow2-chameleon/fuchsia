@@ -12,7 +12,7 @@ public class DNSSDInitializer {
 
     //This configuration starts a discovery to detect all local printer based on DNSSD/mDNS protocol
     Instance dnssdDiscovery = instance()
-            .of("DNSSDDiscoveryFactory")
+            .of("org.ow2.chameleon.fuchsia.discovery.mdns.DNSSDDiscovery")
             .named("DNSSDDiscovery")
             .with("dnssd.service.type").setto("_printer._tcp.local.");
 

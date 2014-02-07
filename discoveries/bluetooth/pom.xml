@@ -76,7 +76,7 @@
                 <configuration>
                     <instructions>
                         <Export-Package>
-                            org.ow2.chameleon.fuchsia.bluetooth.discovery.*,
+                            org.ow2.chameleon.fuchsia.discovery.bluetooth,
                             org.ow2.chameleon.bluetooth.discovery.BluetoothThreadManager
                         </Export-Package>
                     </instructions>

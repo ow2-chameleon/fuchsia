@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.mdns.discovery;
+package org.ow2.chameleon.fuchsia.discovery.mdns;
 
 
 public class MDNSConstants {
