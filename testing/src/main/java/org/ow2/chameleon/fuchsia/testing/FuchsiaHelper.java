@@ -11,10 +11,8 @@
 package org.ow2.chameleon.fuchsia.testing;
 
 import org.apache.felix.ipojo.ComponentInstance;
-import org.apache.felix.ipojo.ConfigurationException;
 import org.apache.felix.ipojo.Factory;
-import org.apache.felix.ipojo.MissingHandlerException;
-import org.apache.felix.ipojo.UnacceptableConfiguration;
+import org.assertj.core.api.Assertions;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
@@ -43,9 +41,9 @@ public class FuchsiaHelper {
         // Create an instance
         try {
             instance = factory.createComponentInstance(properties);
-        } catch (UnacceptableConfiguration e) {
-        } catch (MissingHandlerException e) {
-        } catch (ConfigurationException e) {
+        } catch (Exception e) {
+            Assertions.fail("Creation of instance failed (" + factory +
+                    ", " + properties + ").", e);
         }
         return instance;
     }
@@ -77,7 +75,7 @@ public class FuchsiaHelper {
     @SuppressWarnings("unchecked")
     public <T> T getServiceObject(Class<T> klass, String filter) {
         OSGiHelper helper = new OSGiHelper(context);
-        return  helper.getServiceObject(klass, filter);
+        return helper.getServiceObject(klass, filter);
     }
 
     @SuppressWarnings("unchecked")
