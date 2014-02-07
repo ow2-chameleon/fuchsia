@@ -33,9 +33,11 @@ public final class ExchangeUtils {
 
         if (conduitSelector != null && message != null) {
             selectedConduit = conduitSelector.selectConduit(message);
+            selectedConduit.close(message);
         }
 
-        selectedConduit.close(message);
+        //TODO the line below was removed, check the impact on the protobuffer importer/exporter
+        //selectedConduit.close(message);
     }
 
     public static void setExchangeFinished(Exchange exchange) {

@@ -26,6 +26,8 @@ import org.apache.cxf.interceptor.Fault;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.AbstractPhaseInterceptor;
 import org.apache.cxf.phase.Phase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Parse incoming protocol buffer message.
@@ -35,6 +37,8 @@ import org.apache.cxf.phase.Phase;
 public class ProtobufMessageInInterceptor extends AbstractPhaseInterceptor<Message> {
 
     public static final String IN_MESSAGE_CLASS = ProtobufMessageInInterceptor.class.getName() + ".IN_MESSAGE_CLASS";
+
+    private Logger log = LoggerFactory.getLogger(this.getClass());
 
     /**
      *
@@ -62,7 +66,7 @@ public class ProtobufMessageInInterceptor extends AbstractPhaseInterceptor<Messa
                     InputStream.class).invoke(null, in);
             message.setContent(com.google.protobuf.Message.class, m);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Failed to invoke message method from protobuffer.",e);
             throw new RuntimeException(e);
         }
     }

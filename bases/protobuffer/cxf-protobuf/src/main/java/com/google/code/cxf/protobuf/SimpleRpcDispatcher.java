@@ -22,6 +22,7 @@ package com.google.code.cxf.protobuf;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.cxf.common.logging.LogUtils;
@@ -30,6 +31,7 @@ import com.google.protobuf.Message;
 import com.google.protobuf.RpcCallback;
 import com.google.protobuf.RpcController;
 import com.google.protobuf.Descriptors.FieldDescriptor;
+import org.slf4j.LoggerFactory;
 
 /**
  * Simple dispatcher for dispatching protobuf messages to user defined service
@@ -38,6 +40,7 @@ import com.google.protobuf.Descriptors.FieldDescriptor;
  * @author Gyorgy Orban
  */
 public class SimpleRpcDispatcher implements RpcDispatcher {
+
     private Object service;
 
     private static final Logger log = LogUtils
@@ -115,8 +118,8 @@ public class SimpleRpcDispatcher implements RpcDispatcher {
                         if (method.getName().equals(name)) {
                             try {
                                 method.setAccessible(true);
-                            } catch (Exception x) {
-                                // ignore this
+                            } catch (Exception ex) {
+                                log.log(Level.SEVERE,"Error accessing RPC method");
                             }
 
                             targetMethod = method;

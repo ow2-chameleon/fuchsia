@@ -32,6 +32,8 @@ import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.Descriptors.MethodDescriptor;
 import com.google.protobuf.Message.Builder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A simple RpcChannel implementation that uses CXF for sending and receiving messages.
@@ -39,11 +41,14 @@ import com.google.protobuf.Message.Builder;
  * @author Gyorgy Orban
  */
 public class SimpleRpcChannel implements RpcChannel {
+
     private ProtobufClient messageSender;
 
     private Map<String, FieldDescriptor> fieldNameToDescriptor = new HashMap<String, FieldDescriptor>();
 
     private Class<? extends Message> wrapperMessage;
+
+    private Logger log = LoggerFactory.getLogger(this.getClass());
 
     /**
      * @param messageSender
@@ -97,7 +102,7 @@ public class SimpleRpcChannel implements RpcChannel {
             messageSender.send(wrapperMessage, controller, request, responsePrototype, done, isOneWay);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Failed to invoke method.",e);
             throw new RuntimeException(e);
         }
     }

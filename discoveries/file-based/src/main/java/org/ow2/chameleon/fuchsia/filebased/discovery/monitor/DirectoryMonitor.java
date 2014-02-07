@@ -258,7 +258,7 @@ public class DirectoryMonitor implements BundleActivator,ServiceTrackerCustomize
             for (Deployer deployer : depl) {
                 try {
                     deployer.onFileCreate(file);
-                } catch (Throwable e) {
+                } catch (Exception e) {
                     logger.error("Error during the management of {} (created) by {}",
                             new Object[] {file.getAbsolutePath(), deployer, e});
                 }
@@ -286,7 +286,7 @@ public class DirectoryMonitor implements BundleActivator,ServiceTrackerCustomize
             for (Deployer deployer : depl) {
                 try {
                     deployer.onFileChange(file);
-                } catch (Throwable e) {
+                } catch (Exception e) {
                     logger.error("Error during the management of {} (change) by {}",
                             new Object[] {file.getAbsolutePath(), deployer, e});
                 }
@@ -313,7 +313,7 @@ public class DirectoryMonitor implements BundleActivator,ServiceTrackerCustomize
             for (Deployer deployer : depl) {
                 try {
                     deployer.onFileDelete(file);
-                } catch (Throwable e) {
+                } catch (Exception e) {
                     logger.error("Error during the management of {} (delete) by {}",
                             new Object[] {file.getAbsolutePath(), deployer, e});
                 }
