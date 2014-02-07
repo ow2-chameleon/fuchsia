@@ -1,6 +1,5 @@
 package org.ow2.chameleon.fuchsia.testing;
 
-import org.apache.felix.ipojo.Factory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +13,7 @@ import org.ow2.chameleon.fuchsia.core.exceptions.ImporterException;
 
 import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
+import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -30,6 +29,8 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
     // Mock Device
     @Mock
     private LogEntry logEntry;
+
+
 
     /**
      * Done some initializations.
@@ -91,8 +92,7 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
         try {
             importer.addImportDeclaration(iDec);
         } catch (ImporterException e) {
-            e.printStackTrace();
-            fail();
+            fail("Cannot give the importDeclaration to the importer", e);
         }
         LogService proxy = osgiHelper.getServiceObject(LogService.class);
 
@@ -119,8 +119,7 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
         try {
             importer.addImportDeclaration(iDec);
         } catch (ImporterException e) {
-            e.printStackTrace();
-            fail();
+            fail("Cannot give the importDeclaration to the importer", e);
         }
 
         //get the client
@@ -152,8 +151,7 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
         try {
             importer.addImportDeclaration(iDec);
         } catch (ImporterException e) {
-            e.printStackTrace();
-            fail();
+            fail("Cannot give the importDeclaration to the importer", e);
         }
         //get the client
         proxy = (LogService) osgiHelper.getServiceObject(LogService.class);
@@ -165,8 +163,7 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
         try {
             importer.removeImportDeclaration(iDec);
         } catch (ImporterException e) {
-            e.printStackTrace();
-            fail();
+            fail("Cannot take the importDeclaration of the importer", e);
         }
 
         //get the client
@@ -190,24 +187,21 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
         try {
             importer.addImportDeclaration(iDec);
         } catch (ImporterException e) {
-            e.printStackTrace();
-            fail();
+            fail("Cannot give the importDeclaration to the importer", e);
         }
 
         // un-import the logService
         try {
             importer.removeImportDeclaration(iDec);
         } catch (ImporterException e) {
-            e.printStackTrace();
-            fail();
+            fail("Cannot take back the importDeclaration of the importer", e);
         }
 
         // re import the logService
         try {
             importer.addImportDeclaration(iDec);
         } catch (ImporterException e) {
-            e.printStackTrace();
-            fail();
+            fail("Cannot give the importDeclaration to the importer a second time", e);
         }
 
         //get the client
