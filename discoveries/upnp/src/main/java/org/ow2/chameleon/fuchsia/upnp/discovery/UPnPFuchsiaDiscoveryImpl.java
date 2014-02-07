@@ -3,7 +3,6 @@ package org.ow2.chameleon.fuchsia.upnp.discovery;
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.device.Device;
 import org.osgi.service.upnp.UPnPDevice;
 import org.ow2.chameleon.fuchsia.core.component.AbstractDiscoveryComponent;
 import org.ow2.chameleon.fuchsia.core.component.DiscoveryService;
@@ -61,7 +60,7 @@ public class UPnPFuchsiaDiscoveryImpl extends AbstractDiscoveryComponent {
         return name;
     }
 
-    @Bind(id="upnp-device", specification = Constants.BIND_SPECIFICATION_FOR_UPnPDevice,aggregate = true)
+    @Bind(id="upnp-device", specification = Constants.ORG_OSGI_SERVICE_UPNP_UPNP_DEVICE,aggregate = true)
     public Object addingService(ServiceReference reference) {
 
 
@@ -75,7 +74,7 @@ public class UPnPFuchsiaDiscoveryImpl extends AbstractDiscoveryComponent {
         return getBundleContext().getService(reference);
     }
 
-    @Unbind(id="upnp-device", specification = Constants.BIND_SPECIFICATION_FOR_UPnPDevice,aggregate = true)
+    @Unbind(id="upnp-device", specification = Constants.ORG_OSGI_SERVICE_UPNP_UPNP_DEVICE,aggregate = true)
     public void removedService(ServiceReference reference) {
 
         String deviceID = (String) reference.getProperty(Constants.DEVICE_ID);

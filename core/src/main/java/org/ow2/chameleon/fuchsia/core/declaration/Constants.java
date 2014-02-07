@@ -11,7 +11,7 @@ public interface Constants {
     String SERVICE_CLASS = "service.class";
     String CONFIGS = "configs";
 
-    String BIND_SPECIFICATION_FOR_UPnPDevice="org.osgi.service.upnp.UPnPDevice";
+    String ORG_OSGI_SERVICE_UPNP_UPNP_DEVICE ="org.osgi.service.upnp.UPnPDevice";
 
     String DEVICE_ID="id";
     String DEVICE_TYPE="deviceType";

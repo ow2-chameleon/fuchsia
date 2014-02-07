@@ -18,6 +18,8 @@ import java.util.List;
 
 public class FuchsiaUtils {
 
+    private FuchsiaUtils(){}
+
     public static Filter getFilter(Object filterObject) throws InvalidFilterException {
         Filter filter = null;
         if (filterObject instanceof String) {
@@ -45,7 +47,7 @@ public class FuchsiaUtils {
      * @throws ClassNotFoundException if we can't load the Class of name <code>klassName</code>
      */
     public static Class<?> loadClassNew(BundleContext context, String klassName) throws ClassNotFoundException {
-        String packageName = klassName.substring(0, klassName.lastIndexOf(".")); // extract package name
+        String packageName = klassName.substring(0, klassName.lastIndexOf('.')); // extract package name
         BundleCapability exportedPackage = getExportedPackage(context, packageName);
         if (exportedPackage == null) {
             throw new ClassNotFoundException("No package found with name " + packageName + " while trying to load the class "
@@ -99,7 +101,7 @@ public class FuchsiaUtils {
         ServiceReference sref = context.getServiceReference(PackageAdmin.class.getName());
         try {
             PackageAdmin padmin = (PackageAdmin) context.getService(sref);
-            String packageName = klassName.substring(0, klassName.lastIndexOf(".")); // extract package name
+            String packageName = klassName.substring(0, klassName.lastIndexOf('.')); // extract package name
             ExportedPackage pkg = padmin.getExportedPackage(packageName);
             if (pkg == null) {
                 throw new ClassNotFoundException("No package found with name " + packageName + " while trying to load the class "
@@ -125,12 +127,12 @@ public class FuchsiaUtils {
         List<Class<?>> klass = new ArrayList<Class<?>>(klassNames.size());
 
         if (sref == null) { // no package admin !
-            return null;
+            return new ArrayList<Class<?>>();
         }
         try {
             PackageAdmin padmin = (PackageAdmin) context.getService(sref);
             for (String klassName : klassNames) {
-                String packageName = klassName.substring(0, klassName.lastIndexOf(".")); // extract package name
+                String packageName = klassName.substring(0, klassName.lastIndexOf('.')); // extract package name
 
                 ExportedPackage pkg = padmin.getExportedPackage(packageName);
                 if (pkg == null) {

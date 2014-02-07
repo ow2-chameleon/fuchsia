@@ -1,22 +1,17 @@
 package org.ow2.chameleon.fuchsia.core;
 
-import org.apache.felix.ipojo.ComponentInstance;
-import org.apache.felix.ipojo.InstanceManager;
 import org.apache.felix.ipojo.annotations.Bind;
 import org.apache.felix.ipojo.annotations.Component;
-import org.apache.felix.ipojo.annotations.Controller;
 import org.apache.felix.ipojo.annotations.Invalidate;
 import org.apache.felix.ipojo.annotations.Property;
 import org.apache.felix.ipojo.annotations.Provides;
 import org.apache.felix.ipojo.annotations.ServiceProperty;
 import org.apache.felix.ipojo.annotations.Unbind;
 import org.apache.felix.ipojo.annotations.Validate;
-import org.apache.felix.ipojo.configuration.Instance;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
 import org.osgi.framework.ServiceReference;
 import org.ow2.chameleon.fuchsia.core.component.ExporterService;
-import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
 import org.ow2.chameleon.fuchsia.core.exceptions.InvalidFilterException;
 import org.slf4j.Logger;
@@ -57,16 +52,13 @@ public class DefaultExportationLinker implements ExportationLinker {
     private boolean state;
 
     @ServiceProperty(name = INSTANCE_NAME_PROPERTY)
-    private String linker_name;
+    private String linkerName;
 
     @ServiceProperty(name = FILTER_EXPORTDECLARATION_PROPERTY, mandatory = true)
     private Object exportDeclarationFilterProperty;
 
     @ServiceProperty(name = FILTER_EXPORTERSERVICE_PROPERTY, mandatory = true)
     private Object exporterServiceFilterProperty;
-
-    @ServiceProperty(name = FILTER_EXPORTERSERVICE_PROPERTY, mandatory = true)
-    private String exporterServiceFilter;
 
     @ServiceProperty(name = UNIQUE_EXPORTATION_PROPERTY, mandatory = false)
     private boolean uniqueExportationProperty = false;
@@ -84,26 +76,10 @@ public class DefaultExportationLinker implements ExportationLinker {
             exportDeclarationFilter = getFilter(filterProperty);
             state = true;
         } catch (InvalidFilterException invalidFilterException) {
-            logger.debug("The value of the Property " + FILTER_EXPORTDECLARATION_PROPERTY + " is invalid,"
+            LOGGER.debug("The value of the Property " + FILTER_EXPORTDECLARATION_PROPERTY + " is invalid,"
                     + " the recuperation of the Filter has failed. The instance gonna stop.", invalidFilterException);
             state = false;
         }
-    }
-
-    public void computeExporterServiceFilter(Object filterProperty) {
-
-        if (!state) {
-            return;
-        }
-        /*
-        try {
-            exporterServiceFilter = getFilter(filterProperty);
-            state = true;
-        } catch (InvalidFilterException invalidFilterException) {
-            logger.debug("The value of the Property " + FILTER_EXPORTERSERVICE_PROPERTY + " is invalid,"
-                    + " the recuperation of the Filter has failed. The instance gonna stop.", invalidFilterException);
-            state = false;
-        }*/
     }
 
     private final Object lock = new Object();
@@ -115,18 +91,18 @@ public class DefaultExportationLinker implements ExportationLinker {
     private final Set<ExportDeclaration> exportDeclarations = new HashSet<ExportDeclaration>();
 
     /**
-     * logger
+     * LOGGER
      */
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultExportationLinker.class);
 
     @Validate
     public void start() {
-        logger.debug(linker_name + " starting");
+        LOGGER.debug(linkerName + " starting");
     }
 
     @Invalidate
     public void stop() {
-        logger.debug(linker_name + " stopping");
+        LOGGER.debug(linkerName + " stopping");
     }
 
     public DefaultExportationLinker(BundleContext context) {
@@ -151,24 +127,24 @@ public class DefaultExportationLinker implements ExportationLinker {
             properties.put(property,serviceReference.getProperty(property));
         }
 
-        if (!getFilter(exporterServiceFilter).matches(properties)) {
+        if (!getFilter(exporterServiceFilterProperty).matches(properties)) {
             return;
         }
 
-        logger.debug(linker_name + " : Bind the ExporterService " + exporterService);
+        LOGGER.debug(linkerName + " : Bind the ExporterService " + exporterService);
 
         Filter filter = null;
         try {
             filter = getFilter(properties.get("target"));
         } catch (InvalidFilterException invalidFilterException) {
-            logger.error("The ServiceProperty \"target\" of the ExporterService " + exporterService
+            LOGGER.error("The ServiceProperty \"target\" of the ExporterService " + exporterService
                     + " doesn't provides a valid Filter."
                     + " To be used, it must provides a correct \"target\" ServiceProperty.", invalidFilterException);
             return;
         }
 
         synchronized (lock) {
-            logger.debug(linker_name + " : Add the ExporterService " + exporterService
+            LOGGER.debug(linkerName + " : Add the ExporterService " + exporterService
                     + " with filter " + filter.toString());
 
             exporterServices.put(exporterService, filter);
@@ -188,7 +164,7 @@ public class DefaultExportationLinker implements ExportationLinker {
 
         ExporterService exporterService=(ExporterService)bundleContext.getService(serviceReference);
 
-        logger.debug(linker_name + " : Unbind the ExporterService " + exporterService);
+        LOGGER.debug(linkerName + " : Unbind the ExporterService " + exporterService);
         synchronized (lock) {
             for (ExportDeclaration exportDeclaration : exportDeclarations) {
                 if (exportDeclaration.getStatus().getServiceReferences().contains(exporterService)) {
@@ -214,7 +190,7 @@ public class DefaultExportationLinker implements ExportationLinker {
         if (!exportDeclarationFilter.matches(exportDeclaration.getMetadata())) {
             return;
         }
-        logger.debug(linker_name + " : Bind the ExportDeclaration " + exportDeclaration);
+        LOGGER.debug(linkerName + " : Bind the ExportDeclaration " + exportDeclaration);
 
         synchronized (lock) {
             exportDeclarations.add(exportDeclaration);
@@ -230,7 +206,7 @@ public class DefaultExportationLinker implements ExportationLinker {
      */
     @Unbind(id = "exportDeclarations")
     void unbindExportDeclaration(ExportDeclaration exportDeclaration) {
-        logger.debug(linker_name + " : Unbind the ExportDeclaration " + exportDeclaration);
+        LOGGER.debug(linkerName + " : Unbind the ExportDeclaration " + exportDeclaration);
         synchronized (lock) {
             for (ServiceReference serviceReference : exportDeclaration.getStatus().getServiceReferences()) {
                 tryToUnbind(exportDeclaration, serviceReference);
@@ -258,15 +234,15 @@ public class DefaultExportationLinker implements ExportationLinker {
             try {
                 exporterService.addExportDeclaration(exportDeclaration);
             } catch (Exception e) {
-                logger.debug(exporterService + " throw an exception with giving to it the ExportDeclaration "
+                LOGGER.debug(exporterService + " throw an exception with giving to it the ExportDeclaration "
                         + exportDeclaration, e);
                 return false;
             }
-            logger.debug(exportDeclaration + " match the filter of " + exporterService + " : bind them together");
+            LOGGER.debug(exportDeclaration + " match the filter of " + exporterService + " : bind them together");
             exportDeclaration.bind(exporterServiceReference);
             return true;
         }
-        logger.debug(exportDeclaration + " doesn't match the filter of " + exporterService
+        LOGGER.debug(exportDeclaration + " doesn't match the filter of " + exporterService
                 + "(" + exportDeclaration.getMetadata().toString() + ")");
         return false;
     }
@@ -285,7 +261,7 @@ public class DefaultExportationLinker implements ExportationLinker {
         try {
             exporterService.removeExportDeclaration(exportDeclaration);
         } catch (Exception e) {
-            logger.debug(exporterService + " throw an exception with removing of it the ExportDeclaration "
+            LOGGER.debug(exporterService + " throw an exception with removing of it the ExportDeclaration "
                     + exportDeclaration, e);
             return false;
         }
@@ -293,7 +269,7 @@ public class DefaultExportationLinker implements ExportationLinker {
     }
 
     public String getName() {
-        return linker_name;
+        return linkerName;
     }
 
     /**
