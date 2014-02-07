@@ -23,7 +23,6 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.Method;
 import java.util.Dictionary;
 import java.util.Hashtable;
-import java.util.List;
 
 @Component(name = "ProtobufferImporterFactory")
 @Provides(specifications = {org.ow2.chameleon.fuchsia.core.component.ImporterService.class})
@@ -92,10 +91,6 @@ public class ProtobufferImporter extends AbstractImporterComponent {
 
         // Don't care mama!
 
-    }
-
-    public List<String> getConfigPrefix() {
-        return null;
     }
 
     public String getName() {

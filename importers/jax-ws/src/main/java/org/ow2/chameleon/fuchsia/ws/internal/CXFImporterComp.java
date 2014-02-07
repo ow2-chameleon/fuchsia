@@ -66,11 +66,6 @@ public class CXFImporterComp extends AbstractImporterComponent {
         super.start();
     }
 
-    public List<String> getConfigPrefix() {
-        List<String> l = new ArrayList<String>();
-        l.add("JaxWS");
-        return l;    }
-
 
     /**
      * Return the name of the instance

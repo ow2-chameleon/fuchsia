@@ -29,12 +29,6 @@ public interface ImporterService {
      */
     void removeImportDeclaration(final ImportDeclaration importDeclaration) throws ImporterException;
 
-    /**
-     * @return The configuration prefix used or defined by this {@link ImporterService}.
-     *         (i.e <code>json-rpc,org.jabsorb,jax-rs,bluetooth,upnp</code>.
-     */
-    List<String> getConfigPrefix();
-
     String getName();
 
 }

@@ -139,12 +139,6 @@ public class BluetoothImporter extends AbstractImporterComponent {
         // FIXME destroy proxy
     }
 
-    public List<String> getConfigPrefix() {
-        List<String> l = new ArrayList<String>();
-        l.add("bluetooth,*");
-        return l;
-    }
-
     public String getName() {
         return name;
     }

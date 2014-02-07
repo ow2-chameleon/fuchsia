@@ -13,9 +13,6 @@ import org.ow2.chameleon.fuchsia.core.exceptions.ImporterException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
 
 @Component(name = "Fuchsia-FoolImporter-Factory")
@@ -54,12 +51,6 @@ public class FoolImporter extends AbstractImporterComponent {
     @Invalidate
     protected void start() {
         super.start();
-    }
-
-    public List<String> getConfigPrefix() {
-        List<String> l = new ArrayList<String>();
-        l.add("fool");
-        return l;
     }
 
     public String getName() {

@@ -121,10 +121,6 @@ public class JSONRPCImporter extends AbstractImporterComponent {
         return logger;
     }
 
-    public List<String> getConfigPrefix() {
-        return null;
-    }
-
     public String getName() {
         return name;
     }

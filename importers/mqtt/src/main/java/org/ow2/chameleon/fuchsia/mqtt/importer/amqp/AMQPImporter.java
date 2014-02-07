@@ -76,10 +76,6 @@ public class AMQPImporter extends AbstractImporterComponent {
 
     }
 
-    public List<String> getConfigPrefix() {
-        return null;
-    }
-
     public String getName() {
         return name;
     }

@@ -12,9 +12,7 @@ import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.exceptions.ImporterException;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -101,10 +99,6 @@ public class AbstractImporterComponentTest {
         @Override
         protected void start() {
             super.start();
-        }
-
-        public List<String> getConfigPrefix() {
-            return Collections.emptyList();
         }
 
         public String getName() {

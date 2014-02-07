@@ -97,10 +97,6 @@ public class SubscriptionImport extends AbstractImporterComponent implements Sub
 
     }
 
-    public List<String> getConfigPrefix() {
-        return null;
-    }
-
     public String getName() {
         return this.getClass().getSimpleName();
     }

@@ -6,8 +6,6 @@ import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
 import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 
-import java.util.List;
-
 @Component(name = "SimpleImporterFactory")
 @Provides(specifications = {ImporterService.class})
 public class SimpleImporter extends AbstractImporterComponent {
@@ -19,10 +17,6 @@ public class SimpleImporter extends AbstractImporterComponent {
     @Override
     public void denyImportDeclaration(ImportDeclaration importDeclaration) {
         //
-    }
-
-    public List<String> getConfigPrefix() {
-        return null;
     }
 
     public String getName() {
