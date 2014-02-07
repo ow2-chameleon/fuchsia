@@ -19,20 +19,14 @@
 
 package com.google.code.cxf.protobuf;
 
-import java.io.IOException;
-
-import javax.annotation.PostConstruct;
-
+import com.google.code.cxf.protobuf.binding.ProtobufBindingFactory;
+import com.google.code.cxf.protobuf.interceptor.ProtobufMessageInInterceptor;
+import com.google.protobuf.Message;
 import org.apache.cxf.BusException;
 import org.apache.cxf.binding.BindingConfiguration;
 import org.apache.cxf.binding.BindingFactory;
 import org.apache.cxf.binding.BindingFactoryManager;
-import org.apache.cxf.endpoint.AbstractEndpointFactory;
-import org.apache.cxf.endpoint.Endpoint;
-import org.apache.cxf.endpoint.EndpointException;
-import org.apache.cxf.endpoint.EndpointImpl;
-import org.apache.cxf.endpoint.Server;
-import org.apache.cxf.endpoint.ServerImpl;
+import org.apache.cxf.endpoint.*;
 import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.service.Service;
 import org.apache.cxf.service.factory.ServiceConstructionException;
@@ -41,10 +35,11 @@ import org.apache.cxf.service.model.BindingInfo;
 import org.apache.cxf.service.model.EndpointInfo;
 import org.apache.cxf.transport.DestinationFactory;
 import org.apache.cxf.transport.DestinationFactoryManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.google.code.cxf.protobuf.binding.ProtobufBindingFactory;
-import com.google.code.cxf.protobuf.interceptor.ProtobufMessageInInterceptor;
-import com.google.protobuf.Message;
+import javax.annotation.PostConstruct;
+import java.io.IOException;
 
 /**
  * Server factory for protobuf endpoints.
@@ -52,6 +47,7 @@ import com.google.protobuf.Message;
  * @author Gyorgy Orban
  */
 public class ProtobufServerFactoryBean extends AbstractEndpointFactory {
+
     private Server server;
 
     private Invoker invoker;
@@ -63,6 +59,8 @@ public class ProtobufServerFactoryBean extends AbstractEndpointFactory {
     private Object serviceBean;
 
     private Class<? extends Message> messageClass;
+
+    private Logger log=LoggerFactory.getLogger(this.getClass());
 
     public static String PROTOBUF_MESSAGE_CLASS = ProtobufServerFactoryBean.class.getName() + "."
             + "PROTOBUF_MESSAGE_CLASS";
@@ -214,8 +212,7 @@ public class ProtobufServerFactoryBean extends AbstractEndpointFactory {
             setBindingFactory(bindingFactory);
             return bindingFactory.createBindingInfo(serviceFactory.getService(), binding, bindingConfig);
         } catch (BusException ex) {
-            ex.printStackTrace();
-            // do nothing
+            log.error("Failed to create CXF bus with the message {}",ex.getMessage());
         }
         return null;
     }

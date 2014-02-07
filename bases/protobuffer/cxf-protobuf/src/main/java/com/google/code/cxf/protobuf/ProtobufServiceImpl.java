@@ -44,7 +44,7 @@ import org.apache.cxf.workqueue.SynchronousExecutor;
 public class ProtobufServiceImpl extends AbstractAttributedInterceptorProvider implements Service, Configurable {
     private DataBinding dataBinding;
 
-    private Executor executor = SynchronousExecutor.getInstance();
+    private transient Executor executor = SynchronousExecutor.getInstance();
 
     private Invoker invoker;
 

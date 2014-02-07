@@ -39,6 +39,8 @@ import org.apache.cxf.transport.ConduitInitiator;
 import org.apache.cxf.transport.ConduitInitiatorManager;
 
 import com.google.code.cxf.protobuf.binding.ProtobufBindingFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Utilities for building a minimal service model for a protobuf service.
@@ -46,6 +48,8 @@ import com.google.code.cxf.protobuf.binding.ProtobufBindingFactory;
  * @author Gyorgy Orban
  */
 public final class ServiceUtils {
+
+    private static Logger log = LoggerFactory.getLogger(ServiceUtils.class);
 
     private ServiceUtils() {
     }
@@ -136,7 +140,7 @@ public final class ServiceUtils {
                 return null;
             }
         } catch (BusException x) {
-            //ignore this
+            log.error("Failed to access CXF bus",x);
             return null;
         } catch (Exception x) {
             throw new ServiceConstructionException(x);
