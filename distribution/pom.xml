@@ -427,12 +427,12 @@
             <id>discovery-philips-hue</id>
             <dependencies>
                 <dependency>
-                    <artifactId>philips-hue-all</artifactId>
-                    <groupId>org.ow2.chameleon.fuchsia.base</groupId>
+                    <artifactId>org.ow2.chameleon.fuchsia.base.philips-hue.huedsk-bundle</artifactId>
+                    <groupId>org.ow2.chameleon.fuchsia.base.philips-hue</groupId>
                     <version>${project.version}</version>
                 </dependency>
                 <dependency>
-                    <artifactId>org.ow2.chameleon.fuchsia.discovery.philips.hue</artifactId>
+                    <artifactId>org.ow2.chameleon.fuchsia.discovery.philips-hue</artifactId>
                     <groupId>org.ow2.chameleon.fuchsia.discovery</groupId>
                     <version>${project.version}</version>
                 </dependency>
@@ -443,12 +443,12 @@
             <id>importer-philips-hue</id>
             <dependencies>
                 <dependency>
-                    <artifactId>philips-hue-all</artifactId>
-                    <groupId>org.ow2.chameleon.fuchsia.base</groupId>
+                    <artifactId>org.ow2.chameleon.fuchsia.base.philips-hue.huedsk-bundle</artifactId>
+                    <groupId>org.ow2.chameleon.fuchsia.base.philips-hue</groupId>
                     <version>${project.version}</version>
                 </dependency>
                 <dependency>
-                    <artifactId>org.ow2.chameleon.fuchsia.importer.philips.hue</artifactId>
+                    <artifactId>org.ow2.chameleon.fuchsia.importer.philips-hue</artifactId>
                     <groupId>org.ow2.chameleon.fuchsia.importer</groupId>
                     <version>${project.version}</version>
                 </dependency>

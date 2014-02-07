@@ -19,6 +19,6 @@
         <module>json-rpc</module>
         <module>mqtt</module>
         <module>jax-ws</module>
-	    <module>philips-hue-dependencies</module>
+	    <module>philips-hue</module>
     </modules>
 </project>

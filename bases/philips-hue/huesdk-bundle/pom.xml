@@ -1,50 +1,35 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-    	<artifactId>fuchsia-discoveries</artifactId>
-    	<groupId>org.ow2.chameleon.fuchsia.discovery</groupId>
+        <artifactId>org.ow2.chameleon.fuchsia.base.philips-hue</artifactId>
+        <groupId>org.ow2.chameleon.fuchsia.base</groupId>
         <version>0.0.2-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-
-    <artifactId>org.ow2.chameleon.fuchsia.discovery.philips.hue</artifactId>
-    <groupId>org.ow2.chameleon.fuchsia.discovery</groupId>
-    <name>OW2 Chameleon - Fuchsia Discovery for Philips Hue</name>
+    <artifactId>org.ow2.chameleon.fuchsia.base.philips-hue.huedsk-bundle</artifactId>
+    <groupId>org.ow2.chameleon.fuchsia.base.philips-hue</groupId>
     <packaging>bundle</packaging>
+    <name>OW2 Chameleon - Philips Hue SDK Bundle</name>
 
     <dependencies>
         <dependency>
-            <groupId>org.apache.felix</groupId>
-            <artifactId>org.apache.felix.ipojo</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.felix</groupId>
-            <artifactId>org.apache.felix.ipojo.annotations</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.ow2.chameleon.fuchsia</groupId>
-            <artifactId>org.ow2.chameleon.fuchsia.core</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-        </dependency>
-
-        <dependency>
-            <artifactId>philips-hue-all</artifactId>
-            <groupId>org.ow2.chameleon.fuchsia.base</groupId>
+            <artifactId>hue-sdk-core</artifactId>
+            <groupId>philips</groupId>
             <version>${project.version}</version>
         </dependency>
-
+        <dependency>
+            <artifactId>hue-sdk-resources</artifactId>
+            <groupId>philips</groupId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
-    <!-- Build configuration -->
+
     <build>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.felix</groupId>
@@ -55,12 +40,8 @@
                         <Bundle-SymbolicName>
                             ${project.artifactId}
                         </Bundle-SymbolicName>
-                        <Export-Package>
-                            org.ow2.chameleon.fuchsia.fake.discovery
-                        </Export-Package>
-                        <Import-Package>
-                            *
-                        </Import-Package>
+                        <Export-Package>*</Export-Package>
+                        <Embed-Dependency>*;scope=compile|runtime;inline=true</Embed-Dependency>
                     </instructions>
                 </configuration>
             </plugin>
@@ -86,5 +67,4 @@
         </plugins>
     </build>
 
-    
 </project>

@@ -3,17 +3,17 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>philips-hue-dependencies</artifactId>
+        <artifactId>org.ow2.chameleon.fuchsia.base.philips-hue</artifactId>
         <groupId>org.ow2.chameleon.fuchsia.base</groupId>
         <version>0.0.2-SNAPSHOT</version>
-        <relativePath>../../bases/philips-hue-dependencies/pom.xml</relativePath>
+        <relativePath>../../bases/philips-hue/pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>org.ow2.chameleon.fuchsia.importer.philips.hue</artifactId>
+    <artifactId>org.ow2.chameleon.fuchsia.importer.philips-hue</artifactId>
     <groupId>org.ow2.chameleon.fuchsia.importer</groupId>
-    <name>OW2 Chameleon - Fuchsia Importer for Philips Hue</name>
+    <name>OW2 Chameleon - Fuchsia Importer Philips Hue</name>
     <packaging>bundle</packaging>
 
     <dependencies>
@@ -36,8 +36,8 @@
         </dependency>
 
         <dependency>
-            <artifactId>philips-hue-all</artifactId>
-            <groupId>org.ow2.chameleon.fuchsia.base</groupId>
+            <artifactId>org.ow2.chameleon.fuchsia.base.philips-hue.huedsk-bundle</artifactId>
+            <groupId>org.ow2.chameleon.fuchsia.base.philips-hue</groupId>
             <version>${project.version}</version>
         </dependency>
 

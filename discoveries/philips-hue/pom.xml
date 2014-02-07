@@ -3,48 +3,26 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.ow2.chameleon.fuchsia.examples</groupId>
-        <artifactId>fuchsia-examples</artifactId>
+    	<artifactId>org.ow2.chameleon.fuchsia.base.philips-hue</artifactId>
+    	<groupId>org.ow2.chameleon.fuchsia.base</groupId>
         <version>0.0.2-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
+        <relativePath>../../bases/philips-hue/pom.xml</relativePath>
     </parent>
 
 
-    <artifactId>philips-hue-config</artifactId>
-    <name>OW2 Chameleon - Fuchsia PhilipsHue Configuration</name>
+    <artifactId>org.ow2.chameleon.fuchsia.discovery.philips-hue</artifactId>
+    <groupId>org.ow2.chameleon.fuchsia.discovery</groupId>
+    <name>OW2 Chameleon - Fuchsia Discovery Philips Hue</name>
     <packaging>bundle</packaging>
 
     <dependencies>
-
         <dependency>
-            <groupId>org.apache.felix</groupId>
-            <artifactId>org.apache.felix.gogo.runtime</artifactId>
-            <version>0.10.0</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.eclipse.osgi</groupId>
-                    <artifactId>org.eclipse.osgi</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-       <dependency>
             <groupId>org.apache.felix</groupId>
             <artifactId>org.apache.felix.ipojo</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.felix</groupId>
             <artifactId>org.apache.felix.ipojo.annotations</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.core</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.compendium</artifactId>
         </dependency>
 
         <dependency>
@@ -55,12 +33,6 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-        </dependency>
-
-        <dependency>
-            <artifactId>org.ow2.chameleon.fuchsia.discovery.philips-hue</artifactId>
-            <groupId>org.ow2.chameleon.fuchsia.discovery</groupId>
-            <version>${project.version}</version>
         </dependency>
 
         <dependency>
@@ -83,6 +55,9 @@
                         <Bundle-SymbolicName>
                             ${project.artifactId}
                         </Bundle-SymbolicName>
+                        <Export-Package>
+                            org.ow2.chameleon.fuchsia.fake.discovery
+                        </Export-Package>
                         <Import-Package>
                             *
                         </Import-Package>
@@ -111,5 +86,5 @@
         </plugins>
     </build>
 
-
+    
 </project>

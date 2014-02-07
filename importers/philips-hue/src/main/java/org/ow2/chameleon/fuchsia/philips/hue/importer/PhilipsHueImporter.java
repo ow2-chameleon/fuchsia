@@ -103,6 +103,7 @@ public class PhilipsHueImporter extends AbstractImporterComponent {
 
     }
 
+
     public String getName() {
         return this.getClass().getSimpleName();
     }

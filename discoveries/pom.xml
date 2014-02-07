@@ -19,7 +19,7 @@
         <module>mdns</module>
         <module>upnp</module>
         <module>upnp.it</module>
-        <module>philips-hue-discovery</module>
+        <module>philips-hue</module>
     </modules>
 
     <profiles>
