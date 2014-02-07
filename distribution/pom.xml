@@ -212,8 +212,8 @@
                     <version>${project.version}</version>
                 </dependency>
                 <dependency>
-                    <groupId>org.ow2.chameleon.fuchsia.base</groupId>
-                    <artifactId>org.ow2.chameleon.fuchsia.base.protobuffer</artifactId>
+                    <groupId>org.ow2.chameleon.fuchsia.base.protobuffer</groupId>
+                    <artifactId>org.ow2.chameleon.fuchsia.base.protobuffer.cxf-protobuf</artifactId>
                     <version>${project.version}</version>
                 </dependency>
                 <dependency>
@@ -485,9 +485,9 @@
                     <version>2.0</version>
                 </dependency>
                 <dependency>
-                    <groupId>org.ow2.chameleon.fuchsia.base</groupId>
-                    <artifactId>org.ow2.chameleon.fuchsia.base.json-rpc-bundle</artifactId>
-                    <version>0.0.2-SNAPSHOT</version>
+                    <groupId>org.ow2.chameleon.fuchsia.base.json-rpc</groupId>
+                    <artifactId>org.ow2.chameleon.fuchsia.base.json-rpc.json-rpc-bundle</artifactId>
+                    <version>${project.version}</version>
                 </dependency>
                 <dependency>
                     <groupId>com.fasterxml.jackson.core</groupId>
