@@ -106,6 +106,7 @@
             <modules>
                 <module>distribution</module>
                 <module>core</module>
+                <module>core-it</module>
                 <module>bases</module>
                 <module>importers</module>
                 <module>exporters</module>
