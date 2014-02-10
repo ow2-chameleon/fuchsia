@@ -11,7 +11,7 @@
 
     <groupId>org.ow2.chameleon.fuchsia.tools</groupId>
     <artifactId>fuchsia-grid</artifactId>
-    <name>OW2 Chameleon - Fuchsia Grid</name>
+    <name>OW2 Chameleon - Fuchsia Tool Grid</name>
     <packaging>bundle</packaging>
 
     <dependencies>

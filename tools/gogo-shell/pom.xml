@@ -11,7 +11,7 @@
 
     <groupId>org.ow2.chameleon.fuchsia.tools</groupId>
     <artifactId>fuchsia-gogo-shell</artifactId>
-    <name>OW2 Chameleon - Fuchsia Gogo command</name>
+    <name>OW2 Chameleon - Fuchsia Tool Gogo command</name>
     <packaging>bundle</packaging>
 
     <dependencies>
