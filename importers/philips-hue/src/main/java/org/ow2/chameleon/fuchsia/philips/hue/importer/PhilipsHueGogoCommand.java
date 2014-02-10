@@ -43,7 +43,7 @@ public class PhilipsHueGogoCommand {
     }
 
     @Descriptor  (value = "Change light parameters, for a specific lamp or for all light plugged into the bridge")
-    public void phset(@Descriptor("[-name NAME] [-on true|false] [-i 0<=INTENSITY<=255] [-tt TRANSITION_TIME_IN_CENTISECONDS] [-r 0<=RED<=255] [-g 0<=GREEN<=255] [-b 0<=BLUE<=255]") String... parameters) {
+    public void phset(@Descriptor("[-name NAME] [-on true|false] [-i 0<=INTENSITY<=255] [-tt TRANSITION_TIME_IN_DECISECONDS] [-r 0<=RED<=255] [-g 0<=GREEN<=255] [-b 0<=BLUE<=255]") String... parameters) {
 
         String valueStr=getArgumentValue("-on",parameters);
         String nameStr=getArgumentValue("-name",parameters);
