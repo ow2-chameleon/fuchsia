@@ -15,8 +15,11 @@ import org.ow2.chameleon.fuchsia.core.component.ExporterService;
 import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
+
 
 @Component(immediate = true)
 @Instantiate
@@ -35,14 +38,16 @@ public class FuchsiaGogoCommand {
     @ServiceProperty(name = "osgi.command.function", value = "{}")
     String[] m_function = new String[]{"declaration", "linker", "discovery","importer","exporter","sendmessage"};
 
+    @Requires
+    EventAdmin eventAdmin;
+
+    private Logger log= LoggerFactory.getLogger(this.getClass());
+
     private BundleContext m_context = null;
 
     public FuchsiaGogoCommand(BundleContext context) {
         this.m_context = context;
     }
-
-    @Requires
-    EventAdmin eventAdmin;
 
     @Descriptor("Gets info about the importation declaration available")
     public void declaration(@Descriptor("declaration [--type import|export]") String... parameters) {
@@ -60,7 +65,7 @@ public class FuchsiaGogoCommand {
 
                 if (importDeclarationsRef!=null) {
 
-                    List<ServiceReference> references=Arrays.asList(importDeclarationsRef);
+                    List<ServiceReference> references = Arrays.asList(importDeclarationsRef);
 
                     for (ServiceReference reference : references) {
 
@@ -100,24 +105,10 @@ public class FuchsiaGogoCommand {
             }
 
         } catch (Exception e) {
-            System.out.println("failed to execute the command with the message: " + e.getMessage());
+            log.error("failed to execute command",e);
+            System.out.println("failed to execute the command");
         }
 
-    }
-
-    private void displayDeclarationMetadata(ServiceReference reference, Map<String, Object> metadata){
-
-                displayServiceProperties(reference);
-
-                System.out.println("\tMetadata");
-
-                for(Map.Entry<String,Object> entry:metadata.entrySet()){
-                    System.out.println(String.format("\t\t%s=%s",entry.getKey(),entry.getValue()));
-                }
-
-                if(metadata.entrySet().size()==0){
-                    System.out.println("\tEMPTY");
-                }
     }
 
     @Descriptor("Gets the importation/exportation linker available")
@@ -132,29 +123,30 @@ public class FuchsiaGogoCommand {
             if (exportationLinkerRef!=null || importationLinkerRef!=null) {
 
                 if(exportationLinkerRef!=null)
-                for (ServiceReference reference : exportationLinkerRef) {
+                    for (ServiceReference reference : exportationLinkerRef) {
 
-                    displayServiceInfo("Exportation Linker", reference);
+                        displayServiceInfo("Exportation Linker", reference);
 
-                    displayServiceProperties(reference);
+                        displayServiceProperties(reference);
 
-                }
+                    }
 
                 if(importationLinkerRef!=null)
-                for (ServiceReference reference : importationLinkerRef) {
+                    for (ServiceReference reference : importationLinkerRef) {
 
-                    displayServiceInfo("Importation Linker", reference);
+                        displayServiceInfo("Importation Linker", reference);
 
-                    displayServiceProperties(reference);
+                        displayServiceProperties(reference);
 
-                }
+                    }
 
             } else {
                 System.out.println("No linkers available.");
             }
 
         } catch (InvalidSyntaxException e) {
-            System.out.println("failed to execute the command with the message: " + e.getMessage());
+            log.error("invalid LDAP filter syntax",e);
+            System.out.println("failed to execute the command");
         }
 
     }
@@ -180,7 +172,8 @@ public class FuchsiaGogoCommand {
             }
 
         } catch (InvalidSyntaxException e) {
-            System.out.println("failed to execute the command with the message: " + e.getMessage());
+            log.error("invalid ldap filter syntax",e);
+            System.out.println("failed to execute the command");
         }
 
     }
@@ -210,7 +203,8 @@ public class FuchsiaGogoCommand {
             }
 
         } catch (InvalidSyntaxException e) {
-            System.out.println("failed to execute the command with the message: " + e.getMessage());
+            log.error("invalid ldap filter syntax",e);
+            System.out.println("failed to execute the command");
         }
 
     }
@@ -240,13 +234,14 @@ public class FuchsiaGogoCommand {
             }
 
         } catch (InvalidSyntaxException e) {
-            System.out.println("failed to execute the command with the message: " + e.getMessage());
+            log.error("invalid ldap filter syntax",e);
+            System.out.println("failed to execute the command");
         }
 
     }
 
     @Descriptor("Send event admin messages")
-    public void sendmessage(@Descriptor("sendmessage BUS [KEY=VALUE]*") String... parameters){
+    public void sendmessage(@Descriptor("sendmessage BUS [KEY=VALUE ]*") String... parameters){
 
         assert parameters[0]!=null;
 
@@ -272,9 +267,25 @@ public class FuchsiaGogoCommand {
 
         System.out.println(String.format("Sending message to the bus %s with the arguments %s", bus, eventAdminPayload));
 
-        System.out.println("Authorization request sent");
+        System.out.println("Event admin message sent");
 
         eventAdmin.sendEvent(eventAdminMessage);
+
+    }
+
+    private void displayDeclarationMetadata(ServiceReference reference, Map<String, Object> metadata){
+
+        displayServiceProperties(reference);
+
+        System.out.println("\tMetadata");
+
+        for(Map.Entry<String,Object> entry:metadata.entrySet()){
+            System.out.println(String.format("\t\t%s=%s",entry.getKey(),entry.getValue()));
+        }
+
+        if(metadata.entrySet().size()==0){
+            System.out.println("\tEMPTY");
+        }
 
     }
 
