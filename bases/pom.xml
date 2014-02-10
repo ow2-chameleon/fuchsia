@@ -18,6 +18,7 @@
         <module>bluetooth</module>
         <module>json-rpc</module>
         <module>mqtt</module>
+        <module>push</module>
         <module>jax-ws</module>
         <module>philips-hue</module>
     </modules>

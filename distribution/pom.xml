@@ -130,7 +130,7 @@
         </profile>
 
         <profile>
-            <id>push</id>
+            <id>importer-push</id>
             <dependencies>
                 <dependency>
                     <groupId>org.osgi</groupId>
@@ -160,26 +160,10 @@
                     <groupId>rome</groupId>
                     <artifactId>rome</artifactId>
                     <version>1.0</version>
-                    <!--<version>1.00325</version> -->
                 </dependency>
                 <dependency>
                     <groupId>commons-io</groupId>
                     <artifactId>commons-io</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>org.ow2.chameleon.fuchsia.push</groupId>
-                    <artifactId>fuchsia-push-hub</artifactId>
-                    <version>${project.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.ow2.chameleon.fuchsia.push</groupId>
-                    <artifactId>fuchsia-push-publisher</artifactId>
-                    <version>${project.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.ow2.chameleon.fuchsia.push</groupId>
-                    <artifactId>fuchsia-push-subscriber</artifactId>
-                    <version>${project.version}</version>
                 </dependency>
                 <dependency>
                     <groupId>org.apache.httpcomponents</groupId>
@@ -199,6 +183,26 @@
                 <dependency>
                     <groupId>org.apache.felix</groupId>
                     <artifactId>org.apache.felix.eventadmin</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.ow2.chameleon.fuchsia.base.push</groupId>
+                    <artifactId>fuchsia-push-hub</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.ow2.chameleon.fuchsia.base.push</groupId>
+                    <artifactId>fuchsia-push-publisher</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.ow2.chameleon.fuchsia.base.push</groupId>
+                    <artifactId>fuchsia-push-publisher</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.ow2.chameleon.fuchsia.importer.push</groupId>
+                    <artifactId>push</artifactId>
+                    <version>${project.version}</version>
                 </dependency>
             </dependencies>
         </profile>
