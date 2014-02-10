@@ -11,6 +11,7 @@ import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.exceptions.ImporterException;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,7 +32,7 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
     @Mock
     private LogEntry logEntry;
 
-
+    private final Logger log=LoggerFactory.getLogger(getClass().getName());
 
     /**
      * Done some initializations.
@@ -189,6 +190,7 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
             importer.addImportDeclaration(iDec);
         } catch (ImporterException e) {
             fail("Cannot give the importDeclaration to the importer", e);
+            log.error("Failed to add import declaration",e);
         }
 
         // un-import the logService
