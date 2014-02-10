@@ -6,6 +6,8 @@ import com.sun.syndication.io.SyndFeedOutput;
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.http.HttpService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -23,6 +25,8 @@ public class Publisher extends HttpServlet {
     @Requires
     HttpService http;
 
+    private static final Logger log= LoggerFactory.getLogger(Publisher.class);
+
     BundleContext context;
 
     private static String PUBLISHER_URL="/publisher/main";
@@ -32,7 +36,7 @@ public class Publisher extends HttpServlet {
     }
 
     public Publisher(BundleContext context){
-          this.context=context;
+        this.context=context;
     }
 
     @Validate
@@ -40,16 +44,17 @@ public class Publisher extends HttpServlet {
         try {
 
             http.registerServlet(PUBLISHER_URL,new Publisher(),null,null);
-            //http.registerServlet("/publish",new ServerPublishServlet(),null,null);
 
         } catch (Exception e) {
-            e.printStackTrace();
+
+            log.error("Failed to publish Publisher URL",e);
+
         }
     }
 
     @Invalidate
     public void stop(){
-         http.unregister(PUBLISHER_URL);
+        http.unregister(PUBLISHER_URL);
     }
 
     @Override
@@ -96,7 +101,7 @@ public class Publisher extends HttpServlet {
             output.output(feed,resp.getWriter());
             resp.getWriter().close();
         } catch (FeedException e) {
-            e.printStackTrace();
+            log.error("Failed to create feed",e);
         }
 
         resp.getWriter().write(feed.createWireFeed().toString());

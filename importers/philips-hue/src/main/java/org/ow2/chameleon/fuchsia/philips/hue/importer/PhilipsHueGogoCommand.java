@@ -69,19 +69,19 @@ public class PhilipsHueGogoCommand {
 
                 if(ttStr!=null){
                     System.out.println("transition time:"+ttStr);
-                    lightState.setTransitionTime(new Integer(ttStr));
+                    lightState.setTransitionTime(Integer.valueOf(ttStr));
                 }
 
                 if(iStr!=null){
                     System.out.println("brightness:"+iStr);
-                    lightState.setBrightness(new Integer(iStr));
+                    lightState.setBrightness(Integer.valueOf(iStr));
                 }
 
                 if(rStr!=null||gStr!=null||bStr!=null){
 
-                    int r=rStr!=null?new Integer(rStr):0;
-                    int g=gStr!=null?new Integer(gStr):0;
-                    int b=bStr!=null?new Integer(bStr):0;
+                    int r=rStr!=null?Integer.valueOf(rStr):0;
+                    int g=gStr!=null?Integer.valueOf(gStr):0;
+                    int b=bStr!=null?Integer.valueOf(bStr):0;
 
                     System.out.println(String.format("color %s %s %s",r,g,b));
 

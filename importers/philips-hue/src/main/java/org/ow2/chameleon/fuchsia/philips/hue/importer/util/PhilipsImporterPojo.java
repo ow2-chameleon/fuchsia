@@ -2,8 +2,6 @@ package org.ow2.chameleon.fuchsia.philips.hue.importer.util;
 
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 
-import java.util.HashMap;
-
 public class PhilipsImporterPojo {
 
     private String id;
@@ -18,8 +16,6 @@ public class PhilipsImporterPojo {
     public static PhilipsImporterPojo create(ImportDeclaration importDeclaration){
 
         PhilipsImporterPojo dto=new PhilipsImporterPojo();
-
-        HashMap<String, Object> metadata = new HashMap<String, Object>();
 
         dto.id=importDeclaration.getMetadata().get("id").toString();
         dto.name=importDeclaration.getMetadata().get("discovery.philips.device.name").toString();

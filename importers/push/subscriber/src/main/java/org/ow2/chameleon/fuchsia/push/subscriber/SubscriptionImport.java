@@ -92,7 +92,7 @@ public class SubscriptionImport extends AbstractImporterComponent implements Sub
             super.addImportDeclaration(importDeclaration);
 
         } catch (Exception e) {
-            logger.error("failed to import declaration, with the message: "+e.getMessage());
+            logger.error("failed to import declaration, with the message: "+e.getMessage(),e);
         }
 
     }
@@ -127,7 +127,7 @@ public class SubscriptionImport extends AbstractImporterComponent implements Sub
                     super.getImportDeclarations().remove(importDeclaration);
 
                 } catch (Exception e) {
-                    logger.error("Callback {} failed to be removed from the subscriber with the message {}", callback, e.getMessage());
+                    logger.error("Callback "+callback+" failed to be removed from the subscriber with the message",e);
                 }
 
                 break;

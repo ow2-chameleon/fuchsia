@@ -117,13 +117,10 @@ public class CxfExporterFactory extends AbstractExporterComponent {
 
         try {
             http.registerServlet(Constants.CXF_SERVLET, cxfServlet, null, null);
-
         } catch (ServletException e) {
-            logger.error("Failed registering CXF servlet, with the message {}",e.getMessage());
-            e.printStackTrace();
+            logger.error("Failed registering CXF servlet",e);
         } catch (NamespaceException e) {
-            logger.error("Failed registering CXF servlet, with the message {}",e.getMessage());
-            e.printStackTrace();
+            logger.error("Failed registering CXF servlet",e);
         }
 
         cxfbus = cxfServlet.getBus();

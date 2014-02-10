@@ -9,7 +9,6 @@ import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.pubsubhub.hub.dto.SubscriptionConfirmationRequest;
-import org.ow2.chameleon.fuchsia.pubsubhub.hub.exception.InvalidContentNotification;
 import org.ow2.chameleon.fuchsia.push.subscriber.SubscriberInput;
 import org.ow2.chameleon.fuchsia.push.subscriber.SubscriberOutput;
 import org.ow2.chameleon.fuchsia.push.subscriber.exception.ActionNotRequestedByTheSubscriberException;
@@ -22,7 +21,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.ClassLoader;
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -32,6 +30,8 @@ public class CallbackServlet extends HttpServlet implements SubscriberInput
 {
 
     enum MessageStatus { ERROR, OK_Challenge, OK };
+
+    private static final Logger log=LoggerFactory.getLogger(CallbackServlet.class);
 
     private ImportDeclaration importDeclaration;
 
@@ -95,6 +95,7 @@ public class CallbackServlet extends HttpServlet implements SubscriberInput
             response.getWriter().print(scr.getChallenge());
             response.setStatus(HttpServletResponse.SC_OK);
         } catch (Exception invalidContentNotification) {
+            log.error("Invalid content notification.",invalidContentNotification);
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             invalidContentNotification.printStackTrace();
         }
@@ -134,7 +135,7 @@ public class CallbackServlet extends HttpServlet implements SubscriberInput
 
                 TopicUpdated(hubtopic, feed);
             } catch (FeedException e) {
-                e.printStackTrace();
+                log.error("Failed in creating feed response.",e);
             } finally {
                 Thread.currentThread().setContextClassLoader(cl);
             }
