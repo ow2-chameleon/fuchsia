@@ -8,8 +8,8 @@ import org.ow2.chameleon.fuchsia.core.component.DiscoveryService;
 import org.ow2.chameleon.fuchsia.core.declaration.Constants;
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclarationBuilder;
-import org.ow2.chameleon.fuchsia.discovery.filebased.monitor.Deployer;
 import org.ow2.chameleon.fuchsia.discovery.filebased.monitor.DirectoryMonitor;
+import org.ow2.chameleon.fuchsia.discovery.filebased.monitor.ExporterDeployer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,7 +17,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.*;
-
 
 import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
 
@@ -30,9 +29,9 @@ import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
  * @author morgan.martinet@imag.fr
  */
 
-@Component()
-@Provides(specifications = {DiscoveryService.class, Deployer.class})
-public class FileBasedDiscoveryExportBridge extends AbstractDiscoveryComponent implements Deployer {
+@Component
+@Provides(specifications = {DiscoveryService.class, ExporterDeployer.class})
+public class FileBasedDiscoveryExportBridge extends AbstractDiscoveryComponent implements ExporterDeployer {
 
     @ServiceProperty(name = INSTANCE_NAME_PROPERTY)
     private String name;
@@ -60,7 +59,7 @@ public class FileBasedDiscoveryExportBridge extends AbstractDiscoveryComponent i
 
     private void startMonitorDirectory(String directory, Long poolTime) {
         try {
-            DirectoryMonitor dm = new DirectoryMonitor(directory, pollingTime, this);
+            DirectoryMonitor dm = new DirectoryMonitor(directory, pollingTime, ExporterDeployer.class.getName());
             dm.start(getBundleContext());
         } catch (Exception e) {
             getLogger().error("Failed to start "+DirectoryMonitor.class.getName()+" for the directory "+directory+" and polling time "+poolTime.toString(),e);
@@ -83,7 +82,15 @@ public class FileBasedDiscoveryExportBridge extends AbstractDiscoveryComponent i
     }
 
     public boolean accept(File file) {
-        return true;
+
+        System.out.println("file:"+file);
+
+        boolean accept=!file.exists()||(!file.isHidden()&&file.isFile());
+
+        System.out.println("accept export??"+accept);
+
+        return accept;
+
     }
 
     private Properties parseFile(File file) throws Exception {
@@ -117,7 +124,8 @@ public class FileBasedDiscoveryExportBridge extends AbstractDiscoveryComponent i
                     getLogger().warn("ExportDeclaration: replacing metadata key {}, that contained the value {} by the new value {}", new Object[]{element.getKey(), replacedObject, element.getValue()});
                 }
             }
-            createAndRegisterExportDeclaration(metadata);
+            ExportDeclaration declaration=createAndRegisterExportDeclaration(metadata);
+            exportDeclarationsFile.put(file.getAbsolutePath(), declaration);
         } catch (Exception e) {
             getLogger().error(e.getMessage(),e);
         }
@@ -167,9 +175,9 @@ public class FileBasedDiscoveryExportBridge extends AbstractDiscoveryComponent i
                 throw new IllegalStateException("The given ExportDeclaration has already been registered.");
             }
             Dictionary<String, Object> props = new Hashtable<String, Object>();
-            String clazzes[] = new String[]{ExportDeclaration.class.getName()};
-            ServiceRegistration registration;
-            registration = super.getBundleContext().registerService(clazzes, declaration, props);
+
+            ServiceRegistration registration = super.getBundleContext().registerService(ExportDeclaration.class.getName(), declaration, props);
+
             exportDeclarationsRegistered.put(declaration, registration);
         }
     }

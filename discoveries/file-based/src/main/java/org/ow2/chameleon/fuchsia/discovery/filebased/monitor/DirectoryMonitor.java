@@ -1,7 +1,6 @@
 package org.ow2.chameleon.fuchsia.discovery.filebased.monitor;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.commons.io.monitor.FileAlterationListenerAdaptor;
 import org.apache.commons.io.monitor.FileAlterationMonitor;
@@ -53,11 +52,12 @@ public class DirectoryMonitor implements BundleActivator,ServiceTrackerCustomize
      */
     private ServiceTracker tracker;
     private BundleContext context;
+    private String trackedClassName;
 
-    public DirectoryMonitor(String directorypath, long polling, Deployer deployer) {
+    public DirectoryMonitor(String directorypath, long polling, String classname) {
 
         this.directory=new File(directorypath);
-
+        this.trackedClassName=classname;
         this.polling = polling;
         this.log = LoggerFactory.getLogger(DirectoryMonitor.class.getName() + "[" + directory.getName() + "]");
 
@@ -72,7 +72,6 @@ public class DirectoryMonitor implements BundleActivator,ServiceTrackerCustomize
         observer.addListener(new FileMonitor());
         monitor = new FileAlterationMonitor(polling, observer);
 
-        deployers.add(deployer);
     }
 
     /**
@@ -128,7 +127,7 @@ public class DirectoryMonitor implements BundleActivator,ServiceTrackerCustomize
     public void start(final BundleContext context) throws Exception {
         this.context = context;
         log.info("Starting installing bundles from {}", directory.getAbsolutePath());
-        this.tracker = new ServiceTracker(context, Deployer.class.getName(), this);
+        this.tracker = new ServiceTracker(context, this.trackedClassName, this);
 
         // To avoid concurrency, we take the write lock here.
         try {
@@ -151,7 +150,7 @@ public class DirectoryMonitor implements BundleActivator,ServiceTrackerCustomize
             // Per extension, open deployer.
             Collection<File> files = FileUtils.listFiles(directory, null, true);
             for (File file : files) {
-                for (Deployer  deployer : deployers) {
+                for (Deployer deployer : deployers) {
                     if (deployer.accept(file)) {
                         deployer.open(files);
                     }
@@ -194,7 +193,6 @@ public class DirectoryMonitor implements BundleActivator,ServiceTrackerCustomize
 
     public Object addingService(ServiceReference reference) {
 
-        /*
         Deployer deployer = (Deployer) context.getService(reference);
 
         try {
@@ -213,8 +211,6 @@ public class DirectoryMonitor implements BundleActivator,ServiceTrackerCustomize
         }
 
         return deployer;
-        */
-        return null;
 
     }
 

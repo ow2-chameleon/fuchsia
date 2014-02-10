@@ -7,7 +7,7 @@ import org.ow2.chameleon.fuchsia.core.component.DiscoveryService;
 import org.ow2.chameleon.fuchsia.core.declaration.Constants;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclarationBuilder;
-import org.ow2.chameleon.fuchsia.discovery.filebased.monitor.Deployer;
+import org.ow2.chameleon.fuchsia.discovery.filebased.monitor.ImporterDeployer;
 import org.ow2.chameleon.fuchsia.discovery.filebased.monitor.DirectoryMonitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,9 +31,9 @@ import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
  * @author morgan.martinet@imag.fr
  */
 
-@Component()
-@Provides(specifications = {DiscoveryService.class, Deployer.class})
-public class FileBasedDiscoveryImportBridge extends AbstractDiscoveryComponent implements Deployer {
+@Component
+@Provides(specifications = {DiscoveryService.class, ImporterDeployer.class})
+public class FileBasedDiscoveryImportBridge extends AbstractDiscoveryComponent implements ImporterDeployer {
 
     @ServiceProperty(name = INSTANCE_NAME_PROPERTY)
     private String name;
@@ -59,7 +59,7 @@ public class FileBasedDiscoveryImportBridge extends AbstractDiscoveryComponent i
 
     private void startMonitorDirectory(String directory, Long poolTime) {
         try {
-            DirectoryMonitor dm = new DirectoryMonitor(directory, pollingTime, this);
+            DirectoryMonitor dm = new DirectoryMonitor(directory, pollingTime, ImporterDeployer.class.getName());
             dm.start(getBundleContext());
         } catch (Exception e) {
             getLogger().error("Failed to start "+DirectoryMonitor.class.getName()+" for the directory "+directory+" and polling time",e);
@@ -82,7 +82,15 @@ public class FileBasedDiscoveryImportBridge extends AbstractDiscoveryComponent i
     }
 
     public boolean accept(File file) {
-        return true;
+
+        System.out.println("file:"+file);
+
+        boolean accept=!file.exists()||(!file.isHidden()&&file.isFile());
+
+        System.out.println("accept import??"+accept);
+
+        return accept;
+
     }
 
     private Properties parseFile(File file) throws Exception {
