@@ -22,7 +22,7 @@ public class JSONRPCExporterPojo {
         String url=(String)exportDeclaration.getMetadata().get("fuchsia.export.jsonrpc.url.context");
 
 
-        if(url!=null||url.equals("null")){
+        if(url!=null && url.equals("null")){
             dto.urlContext=url;
         }else {
             dto.urlContext="/JSONRPC";

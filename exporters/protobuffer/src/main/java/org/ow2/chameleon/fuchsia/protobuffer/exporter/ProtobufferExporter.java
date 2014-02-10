@@ -16,6 +16,8 @@ import org.ow2.chameleon.fuchsia.core.FuchsiaUtils;
 import org.ow2.chameleon.fuchsia.core.component.AbstractExporterComponent;
 import org.ow2.chameleon.fuchsia.core.component.ExporterService;
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 
@@ -24,6 +26,8 @@ import java.util.Collection;
 public class ProtobufferExporter extends AbstractExporterComponent {
 
     private Bus cxfbus;
+
+    private static final Logger log= LoggerFactory.getLogger(ProtobufferExporter.class);
 
     @Requires
     HttpService http;
@@ -40,15 +44,12 @@ public class ProtobufferExporter extends AbstractExporterComponent {
     @Override
     protected void useExportDeclaration(ExportDeclaration exportDeclaration) {
 
-        System.out.println("initiating exportation...");
+        log.info("initiating exportation...");
 
         String id = exportDeclaration.getMetadata().get("id").toString();
         String server = exportDeclaration.getMetadata().get("rpc.export.address").toString();
         String exporterClass = exportDeclaration.getMetadata().get("rpc.export.class").toString();
         String exporterMessage = exportDeclaration.getMetadata().get("rpc.export.message").toString();
-
-        //String specification=exportDeclaration.getMetadata().get("rpc.export.specification").toString();
-        //String filter=exportDeclaration.getMetadata().get("rpc.export.filter").toString();
 
         try {
 
@@ -61,7 +62,7 @@ public class ProtobufferExporter extends AbstractExporterComponent {
 
             if (protobuffReferences.size() == 0) {
 
-                System.out.println("nothing to be exported was found");
+                log.info("nothing to be exported was found");
 
             } else if (protobuffReferences.size() == 1) {
 
@@ -95,20 +96,19 @@ public class ProtobufferExporter extends AbstractExporterComponent {
 
                     Thread.currentThread().setContextClassLoader(loader);
 
-                    System.out.println("exporting the service with the id:" + id);
+                    log.info("exporting the service with the id:" + id);
 
 
                 }
 
             } else if (protobuffReferences.size() > 1) {
-                System.out.println("more than one were found to be exported");
+                log.info("more than one were found to be exported");
             }
 
-
         } catch (InvalidSyntaxException e) {
-            e.printStackTrace();
+            log.error("Invalid filter exception",e);
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            log.error("Class not found",e);
         }
 
     }
@@ -118,22 +118,6 @@ public class ProtobufferExporter extends AbstractExporterComponent {
 
         System.setProperty("org.apache.cxf.nofastinfoset", "true");
 
-        /*
-
-        CXFNonSpringServlet cxfServlet = new CXFNonSpringServlet();
-
-        try {
-            http.registerServlet("/cxf", cxfServlet, null, null);
-        } catch (ServletException e) {
-            e.printStackTrace();
-        } catch (NamespaceException e) {
-            e.printStackTrace();
-        }
-
-        cxfbus = cxfServlet.getBus();
-
-        */
-
     }
 
     @Override
@@ -142,6 +126,6 @@ public class ProtobufferExporter extends AbstractExporterComponent {
     }
 
     public String getName() {
-        return this.getClass().getName();  //To change body of implemented methods use File | Settings | File Templates.
+        return this.getClass().getName();
     }
 }

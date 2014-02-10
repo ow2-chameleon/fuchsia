@@ -62,7 +62,7 @@ public class FileBasedDiscoveryImportBridge extends AbstractDiscoveryComponent i
             DirectoryMonitor dm = new DirectoryMonitor(directory, pollingTime, this);
             dm.start(getBundleContext());
         } catch (Exception e) {
-            getLogger().error("Failed to start {} for the directory {} and polling time {}, with the message '{}'", new String[]{DirectoryMonitor.class.getName(), directory, poolTime.toString(), e.getMessage()});
+            getLogger().error("Failed to start "+DirectoryMonitor.class.getName()+" for the directory "+directory+" and polling time",e);
         }
     }
 
@@ -87,11 +87,16 @@ public class FileBasedDiscoveryImportBridge extends AbstractDiscoveryComponent i
 
     private Properties parseFile(File file) throws Exception {
         Properties properties = new Properties();
+        InputStream is = null;
         try {
-            InputStream is = new FileInputStream(file);
+            is = new FileInputStream(file);
             properties.load(is);
         } catch (Exception e) {
             throw new Exception(String.format("Error reading import declaration file %s", file.getAbsoluteFile()));
+        } finally {
+            if(is!=null){
+                is.close();
+            }
         }
 
         if (!properties.containsKey(Constants.ID)) {
@@ -114,7 +119,7 @@ public class FileBasedDiscoveryImportBridge extends AbstractDiscoveryComponent i
             ImportDeclaration declaration = createAndRegisterImportDeclaration(metadata);
             importDeclarationsFile.put(file.getAbsolutePath(), declaration);
         } catch (Exception e) {
-            getLogger().error(e.getMessage());
+            getLogger().error(e.getMessage(),e);
         }
     }
 
@@ -139,7 +144,7 @@ public class FileBasedDiscoveryImportBridge extends AbstractDiscoveryComponent i
         try {
             unregisterImportDeclaration(declaration);
         } catch (IllegalStateException e) {
-            getLogger().error("Failed to unregister import declaration file {},  it did not existed before.", declaration.getMetadata());
+            getLogger().error("Failed to unregister import declaration file {},  it did not existed before.", declaration.getMetadata(),e);
         }
     }
 

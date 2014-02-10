@@ -96,16 +96,13 @@ public class JSONRPCExporter extends AbstractExporterComponent {
             logger.info("JSONRPC-exporter, publishing object exporter at: {}",endpointURL);
 
         } catch (InvalidSyntaxException e) {
-            logger.error("LDAP filter specified on the linker is not valid, recheck your LDAP filters for the linker and exporter. {}",e.getLocalizedMessage());
-            e.printStackTrace();
+            logger.error("LDAP filter specified on the linker is not valid, recheck your LDAP filters for the linker and exporter. ",e);
         } catch (ClassNotFoundException e) {
-            logger.error("The class to be exporter could not be loaded. {}",e.getLocalizedMessage());
-            e.printStackTrace();
+            logger.error("The class to be exporter could not be loaded.",e);
         } catch (NamespaceException e) {
-            e.printStackTrace();
+            logger.error("Namespace failure",e);
         } catch (ServletException e) {
-            logger.error("Failed registering the servlet to respond the RPC request. {}",e.getLocalizedMessage());
-            e.printStackTrace();
+            logger.error("Failed registering the servlet to respond the RPC request.",e);
         } finally {
             logger.info("JSONRPC exporter finished to process exportation request.");
         }
