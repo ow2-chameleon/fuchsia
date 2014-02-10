@@ -87,7 +87,7 @@ public class AMQPOutputRouter implements Runnable {
 
         } catch (Exception e) {
 
-            getLogger().error("Failed to monitor AMPQ Queue named '{}' duo to {}", queue,e.getMessage());
+            getLogger().error("Failed to monitor AMPQ Queue named '{}'", queue,e);
 
         }
 

@@ -56,14 +56,15 @@ public class HubImpl implements Hub {
         try {
 
             http.registerServlet("/hub/subscribe", new SubscriptionServlet(this), null, null);
+
             http.registerServlet("/hub/main", new ContentUpdatedNotificationServlet(this), null, null);
 
             logger.info("Hub started.");
 
-        } catch (ServletException e) {
-            e.printStackTrace();
-        } catch (NamespaceException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+
+            logger.error("Failed to startup hub urls",e);
+
         }
     }
 
@@ -205,9 +206,7 @@ public class HubImpl implements Hub {
 
         } catch (IOException e) {
 
-            logger.info("(Hub) -> Publisher, Failed to fetched from publisher");
-
-            e.printStackTrace();
+            logger.info("(Hub) -> Publisher, Failed to fetched from publisher",e);
         }
 
         return null;
@@ -242,7 +241,7 @@ public class HubImpl implements Hub {
 
             } catch (Exception e) {
 
-                logger.info("Failed distributing content to subscribers caused by {}",e.getMessage());
+                logger.info("Failed distributing content to subscribers",e);
 
             }
         }
