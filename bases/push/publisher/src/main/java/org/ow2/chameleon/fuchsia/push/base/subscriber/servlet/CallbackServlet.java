@@ -97,7 +97,6 @@ public class CallbackServlet extends HttpServlet implements SubscriberInput
         } catch (Exception invalidContentNotification) {
             log.error("Invalid content notification.",invalidContentNotification);
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            invalidContentNotification.printStackTrace();
         }
 
     }

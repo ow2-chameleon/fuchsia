@@ -75,7 +75,7 @@ public class PhilipsHueImporter extends AbstractImporterComponent {
             bridges.put(pojo.getId(),bridgeService);
 
         } catch (ClassNotFoundException e) {
-            log.error("Failed to load type {}, importing process aborted.",pojo.getType());
+            log.error("Failed to load type {}, importing process aborted.",pojo.getType(),e);
         }
 
 

@@ -137,7 +137,7 @@ public class DNSSDDiscovery extends AbstractDiscoveryComponent implements Networ
                 current.addServiceListener(dnssdServiceType, this);
 
             } catch (IOException e) {
-                e.printStackTrace();
+                getLogger().error("Failed to publish in mDNS",e);
             }
 
         }

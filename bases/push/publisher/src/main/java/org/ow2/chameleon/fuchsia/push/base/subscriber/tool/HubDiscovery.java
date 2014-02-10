@@ -10,6 +10,8 @@ import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
@@ -18,6 +20,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.*;
 
 public class HubDiscovery {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(HubDiscovery.class);
 
 	public String hasHub(Document doc) throws Exception {
 		String hub = null;
@@ -41,6 +45,7 @@ public class HubDiscovery {
 			return hub;
 		
 		} catch (XPathExpressionException e) {
+            LOGGER.error("XPathExpression invalid",e);
 			return null;
 		}
 	}
@@ -66,6 +71,7 @@ public class HubDiscovery {
 			return topic;
 			
 		} catch (XPathExpressionException e) {
+            LOGGER.error("Invalid XpathExpression",e);
 		    return null;
 		}
 		
@@ -104,6 +110,7 @@ public class HubDiscovery {
 			try {
 				hashtable.put(feedurl, getHub(feedurl));
 			} catch (Exception e) {
+                LOGGER.error("Failed to fetch hubs",e);
 			}
 		}
 		return hashtable;

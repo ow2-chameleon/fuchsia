@@ -91,7 +91,7 @@ public class CXFImporterComp extends AbstractImporterComponent {
         try {
             klass = loadClass(context, (String) importDeclaration.getMetadata().get(CLASSNAME));
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            logger.error("Failed to load class",e);
             return;
         }
 

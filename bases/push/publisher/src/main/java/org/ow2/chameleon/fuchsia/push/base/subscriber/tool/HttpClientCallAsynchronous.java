@@ -7,6 +7,8 @@ import org.apache.http.client.methods.HttpPost;
 
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HttpClientCallAsynchronous extends Thread {
 
@@ -14,6 +16,7 @@ public class HttpClientCallAsynchronous extends Thread {
 	private final HttpContext context;
 	private final HttpPost httppost;
 	public HttpResponse httpresponse = null;
+    private static final Logger LOGGER= LoggerFactory.getLogger(HttpClientCallAsynchronous.class);
 
 	public HttpClientCallAsynchronous(HttpClient httpClient, HttpPost httppost) {
 		this.httpClient = httpClient;
@@ -30,6 +33,7 @@ public class HttpClientCallAsynchronous extends Thread {
 				entity.consumeContent();
 			}
 		} catch (Exception ex) {
+            LOGGER.error("Failed to create assynchronous response",ex);
 			this.httppost.abort();
 		}
 	}

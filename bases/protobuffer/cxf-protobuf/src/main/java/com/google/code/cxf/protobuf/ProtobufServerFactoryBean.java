@@ -125,10 +125,8 @@ public class ProtobufServerFactoryBean extends AbstractEndpointFactory {
     protected Endpoint createEndpoint() throws BusException, EndpointException {
         serviceFactory.setServiceBean(serviceBean);
 
-        Service service = serviceFactory.getService();
-
-        if (service == null) {
-            service = serviceFactory.create();
+        if (serviceFactory.getService() == null) {
+            serviceFactory.create();
         }
 
         EndpointInfo ei = createEndpointInfo();
@@ -212,7 +210,7 @@ public class ProtobufServerFactoryBean extends AbstractEndpointFactory {
             setBindingFactory(bindingFactory);
             return bindingFactory.createBindingInfo(serviceFactory.getService(), binding, bindingConfig);
         } catch (BusException ex) {
-            log.error("Failed to create CXF bus with the message {}",ex.getMessage());
+            log.error("Failed to create CXF bus ",ex);
         }
         return null;
     }

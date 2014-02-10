@@ -73,7 +73,7 @@ public class JSONRPCExporter extends AbstractExporterComponent {
             try{
                 klass = FuchsiaUtils.loadClass(context, jp.getInstanceClass());
             }catch (ClassNotFoundException e){
-                logger.warn("Failed to load from the own bundle, loading externally");
+                logger.warn("Failed to load from the own bundle, loading externally",e);
                 klass=context.getBundle().loadClass(jp.getInstanceClass());
             }
 

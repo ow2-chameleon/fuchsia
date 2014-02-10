@@ -119,7 +119,7 @@ public class SimpleRpcDispatcher implements RpcDispatcher {
                             try {
                                 method.setAccessible(true);
                             } catch (Exception ex) {
-                                log.log(Level.SEVERE,"Error accessing RPC method");
+                                log.log(Level.SEVERE,"Error accessing RPC method",ex);
                             }
 
                             targetMethod = method;

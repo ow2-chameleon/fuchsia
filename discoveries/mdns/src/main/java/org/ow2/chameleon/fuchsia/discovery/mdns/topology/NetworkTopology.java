@@ -1,5 +1,8 @@
 package org.ow2.chameleon.fuchsia.discovery.mdns.topology;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.jmdns.NetworkTopologyDiscovery;
 import java.net.Inet6Address;
 import java.net.InetAddress;
@@ -10,6 +13,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class NetworkTopology implements NetworkTopologyDiscovery {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(NetworkTopology.class);
 
     public InetAddress[] getInetAddresses() {
 
@@ -27,7 +32,7 @@ public class NetworkTopology implements NetworkTopologyDiscovery {
             return addresses.toArray(new InetAddress[0]);
 
         } catch (SocketException e) {
-            e.printStackTrace();
+            LOGGER.error("Socket exception",e);
         }
 
         return null;

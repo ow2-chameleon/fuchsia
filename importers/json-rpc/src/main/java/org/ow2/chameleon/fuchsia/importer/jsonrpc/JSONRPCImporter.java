@@ -109,13 +109,13 @@ public class JSONRPCImporter extends AbstractImporterComponent {
             try {
                 componentInstance = defaultProxyFactory.createComponentInstance(props);
             } catch (UnacceptableConfiguration unacceptableConfiguration) {
-                unacceptableConfiguration.printStackTrace();
+                logger.error("Invalid configuration exception",unacceptableConfiguration);
                 return;
             } catch (MissingHandlerException e) {
-                e.printStackTrace();
+                logger.error("Missing handler exception",e);
                 return;
             } catch (ConfigurationException e) {
-                e.printStackTrace();
+                logger.error("Configuration exception",e);
                 return;
             }
             componentInstances.put(id, componentInstance);

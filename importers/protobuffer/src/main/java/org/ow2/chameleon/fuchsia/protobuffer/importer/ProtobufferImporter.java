@@ -78,10 +78,10 @@ public class ProtobufferImporter extends AbstractImporterComponent {
             Dictionary<String, Object> serviceProperties = new Hashtable<String, Object>();
             serviceProperties.put("fuchsia.importer.id", id);
 
-            ServiceRegistration registrationTicket = context.registerService(bufferService.getName(), service, serviceProperties);
+            context.registerService(bufferService.getName(), service, serviceProperties);
 
         } catch (Exception e) {
-            log.error("Fail to import Protobuffer RPC service with the message '{}'", e.getMessage());
+            log.error("Fail to import Protobuffer RPC service with the message '{}'", e.getMessage(),e);
         }
 
     }
