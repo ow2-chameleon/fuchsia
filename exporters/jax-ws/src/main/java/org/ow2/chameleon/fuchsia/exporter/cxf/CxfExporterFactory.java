@@ -13,6 +13,8 @@ import org.ow2.chameleon.fuchsia.core.FuchsiaUtils;
 import org.ow2.chameleon.fuchsia.core.component.AbstractExporterComponent;
 import org.ow2.chameleon.fuchsia.core.component.ExporterService;
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
+import org.ow2.chameleon.fuchsia.exporter.cxf.internal.Constants;
+import org.ow2.chameleon.fuchsia.exporter.cxf.internal.CxfExporterPojo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +42,6 @@ public class CxfExporterFactory extends AbstractExporterComponent {
     @ServiceProperty(name = "target")
     private String filter;
 
-
     public CxfExporterFactory(BundleContext context){
         this.context=context;
     }
@@ -50,33 +51,34 @@ public class CxfExporterFactory extends AbstractExporterComponent {
 
         logger.info("exporting {}",exportDeclaration.getMetadata());
 
-        final String classname = (String) exportDeclaration.getMetadata().get(Constants.CXF_EXPORT_TYPE);
-        final String webcontext = (String) exportDeclaration.getMetadata().get(Constants.CXF_EXPORT_WEB_CONTEXT);
-        final Object instance = exportDeclaration.getMetadata().get(Constants.CXF_EXPORT_INSTANCE);
-
-        //ClassLoader loader = Thread.currentThread().getContextClassLoader();
-
-        //Thread.currentThread().setContextClassLoader(CXFNonSpringServlet.class.getClassLoader());
+        CxfExporterPojo pojo=CxfExporterPojo.create(exportDeclaration);
 
         try {
 
             ServerFactoryBean srvFactory = new ServerFactoryBean();
 
-            Class ref = FuchsiaUtils.loadClass(this.context,classname);
+            Class ref = FuchsiaUtils.loadClass(this.context,pojo.getClazz());
 
             srvFactory.setServiceClass(ref);
 
             srvFactory.setBus(cxfbus);
 
+            Object instance=null;
+            ServiceReference[] protobuffReferences = context.getAllServiceReferences(pojo.getClazz(),pojo.getFilter());
+
+            if(protobuffReferences==null){
+                logger.warn("instance not found to be exported, ignoring exportation request, filter:"+pojo.getFilter());
+            }
+
             srvFactory.setServiceBean(instance);
 
-            srvFactory.setAddress(webcontext);
+            srvFactory.setAddress(pojo.getWebcontext());
 
             Server endpoint = srvFactory.create();
 
             exportDeclaration.handle(serviceReference);
 
-            exportedDeclaration.put(webcontext,endpoint);
+            exportedDeclaration.put(pojo.getWebcontext(),endpoint);
 
             logger.info("Pushing CXF endpoint: {}",endpoint.getEndpoint().getEndpointInfo().getAddress());
 
@@ -86,8 +88,6 @@ public class CxfExporterFactory extends AbstractExporterComponent {
             throw new RuntimeException(e);
 
         }
-
-        //Thread.currentThread().setContextClassLoader(loader);
 
     }
 
@@ -123,6 +123,8 @@ public class CxfExporterFactory extends AbstractExporterComponent {
     @Validate
     public void start() {
 
+        super.start();
+
         System.setProperty("org.apache.cxf.nofastinfoset", "true");
 
         CXFNonSpringServlet cxfServlet = new CXFNonSpringServlet();
@@ -141,6 +143,8 @@ public class CxfExporterFactory extends AbstractExporterComponent {
 
     @Invalidate
     public void stop(){
+
+        super.stop();
 
         http.unregister(Constants.CXF_SERVLET);
 

@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.protobuffer.exporter;
+package org.ow2.chameleon.fuchsia.protobuffer.exporter.testing;
 
 import org.apache.felix.ipojo.configuration.Configuration;
 import org.apache.felix.ipojo.configuration.Instance;

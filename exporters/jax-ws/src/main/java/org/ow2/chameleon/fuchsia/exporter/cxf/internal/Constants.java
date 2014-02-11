@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.exporter.cxf;
+package org.ow2.chameleon.fuchsia.exporter.cxf.internal;
 
 public class Constants {
 

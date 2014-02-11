@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.protobuffer.exporter;
+package org.ow2.chameleon.fuchsia.protobuffer.exporter.testing;
 
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;

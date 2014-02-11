@@ -15,12 +15,15 @@ import org.ow2.chameleon.fuchsia.core.FuchsiaUtils;
 import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.exceptions.ImporterException;
+import org.ow2.chameleon.fuchsia.protobuffer.importer.internal.ProtobufferImporterPojo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Map;
 
 @Component(name = "ProtobufferImporterFactory")
 @Provides(specifications = {org.ow2.chameleon.fuchsia.core.component.ImporterService.class})
@@ -31,6 +34,8 @@ public class ProtobufferImporter extends AbstractImporterComponent {
     private ServiceReference serviceReference;
 
     private Logger log = LoggerFactory.getLogger(this.getClass().getName());
+
+    private Map<String,ServiceRegistration> registeredImporter=new HashMap<String,ServiceRegistration>();
 
     @ServiceProperty(name = "instance.name")
     private String name;
@@ -47,20 +52,23 @@ public class ProtobufferImporter extends AbstractImporterComponent {
     }
 
     @Validate
-    public void validate() {
+    public void start() {
+        super.start();
+        log.info("Protobuffer Importer RPC is up and running");
+    }
+
+    @Invalidate
+    public void stop() {
+        super.stop();
         log.info("Protobuffer Importer RPC is up and running");
     }
 
     @Override
     protected void useImportDeclaration(ImportDeclaration importDeclaration) throws ImporterException {
 
-        String id = importDeclaration.getMetadata().get("id").toString();
-        String serverHostname = importDeclaration.getMetadata().get("rpc.server.address").toString();
-        String protoclass = importDeclaration.getMetadata().get("rpc.proto.class").toString();
-        String protoservice = importDeclaration.getMetadata().get("rpc.proto.service").toString();
-        String protomessage = importDeclaration.getMetadata().get("rpc.proto.message").toString();
+        ProtobufferImporterPojo pojo=ProtobufferImporterPojo.create(importDeclaration);
 
-        log.info("Importing declaration with ID {}", id);
+        log.info("Importing declaration with ID {}", pojo.getId());
 
         try {
 
@@ -68,22 +76,24 @@ public class ProtobufferImporter extends AbstractImporterComponent {
             BindingFactoryManager mgr = cxfbus.getExtension(BindingFactoryManager.class);
             mgr.registerBindingFactory(ProtobufBindingFactory.PROTOBUF_BINDING_ID, new ProtobufBindingFactory(cxfbus));
 
-            Class<?> bufferService = FuchsiaUtils.loadClass(context, String.format("%s$%s", protoclass, protoservice));
+            Class<?> bufferService = FuchsiaUtils.loadClass(context, String.format("%s$%s", pojo.getClazz(), pojo.getService()));
 
-            Class<?> bufferMessage = FuchsiaUtils.loadClass(context, String.format("%s$%s", protoclass, protomessage));
+            Class<?> bufferMessage = FuchsiaUtils.loadClass(context, String.format("%s$%s", pojo.getClazz(), pojo.getMessage()));
 
             Class<? extends Message> generic = bufferMessage.asSubclass(Message.class);
 
-            RpcChannel channel = new SimpleRpcChannel(serverHostname, generic);
+            RpcChannel channel = new SimpleRpcChannel(pojo.getAddress(), generic);
 
             Method method = bufferService.getMethod("newStub", RpcChannel.class);
 
             Object service = method.invoke(bufferService, channel);
 
             Dictionary<String, Object> serviceProperties = new Hashtable<String, Object>();
-            serviceProperties.put("fuchsia.importer.id", id);
+            serviceProperties.put("fuchsia.importer.id", pojo.getId());
 
-            context.registerService(bufferService.getName(), service, serviceProperties);
+            ServiceRegistration sr=context.registerService(bufferService.getName(), service, serviceProperties);
+
+            registeredImporter.put(pojo.getId(),sr);
 
             importDeclaration.handle(serviceReference);
 
@@ -98,7 +108,17 @@ public class ProtobufferImporter extends AbstractImporterComponent {
 
         importDeclaration.unhandle(serviceReference);
 
-        // Don't care mama!
+        ProtobufferImporterPojo pojo=ProtobufferImporterPojo.create(importDeclaration);
+
+        ServiceRegistration sr=registeredImporter.get(pojo.getId());
+
+        if(sr!=null){
+            log.info("unregistering service with id:"+pojo.getId());
+            sr.unregister();
+        }else {
+            log.warn("no service found to be unregistered with id:"+pojo.getId());
+        }
+
 
     }
 

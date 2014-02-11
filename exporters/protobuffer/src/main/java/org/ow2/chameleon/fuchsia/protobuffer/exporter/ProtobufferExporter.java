@@ -6,6 +6,7 @@ import com.google.protobuf.Service;
 import org.apache.cxf.Bus;
 import org.apache.cxf.BusFactory;
 import org.apache.cxf.binding.BindingFactoryManager;
+import org.apache.cxf.endpoint.Server;
 import org.apache.felix.ipojo.annotations.*;
 import org.eclipse.jetty.util.component.Container;
 import org.osgi.framework.BundleContext;
@@ -16,18 +17,21 @@ import org.ow2.chameleon.fuchsia.core.FuchsiaUtils;
 import org.ow2.chameleon.fuchsia.core.component.AbstractExporterComponent;
 import org.ow2.chameleon.fuchsia.core.component.ExporterService;
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
+import org.ow2.chameleon.fuchsia.protobuffer.exporter.internal.ProtobufferExporterPojo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component(name = "ProtobufferExporterFactory")
 @Provides(specifications = {ExporterService.class})
 public class ProtobufferExporter extends AbstractExporterComponent {
 
-    private Bus cxfbus;
+    private static final Logger log = LoggerFactory.getLogger(ProtobufferExporter.class);
 
-    private static final Logger log= LoggerFactory.getLogger(ProtobufferExporter.class);
+    private Map<String,Server> serverPublished=new HashMap<String,Server>();
 
     @Requires
     HttpService http;
@@ -35,12 +39,21 @@ public class ProtobufferExporter extends AbstractExporterComponent {
     @ServiceProperty(name = "target")
     private String filter;
 
-    private final BundleContext context;
-
-    private ServiceReference serviceReference;
+    BundleContext context;
 
     public ProtobufferExporter(BundleContext context) {
         this.context = context;
+    }
+
+    @Validate
+    public void start() {
+        System.setProperty("org.apache.cxf.nofastinfoset", "true");
+        super.start();
+    }
+
+    @Invalidate
+    public void stop(){
+        super.stop();
     }
 
     @Override
@@ -48,17 +61,16 @@ public class ProtobufferExporter extends AbstractExporterComponent {
 
         log.info("initiating exportation...");
 
-        String id = exportDeclaration.getMetadata().get("id").toString();
-        String server = exportDeclaration.getMetadata().get("rpc.export.address").toString();
-        String exporterClass = exportDeclaration.getMetadata().get("rpc.export.class").toString();
-        String exporterMessage = exportDeclaration.getMetadata().get("rpc.export.message").toString();
+        ProtobufferExporterPojo pojo=ProtobufferExporterPojo.create(exportDeclaration);
 
         try {
 
-            Class inter = FuchsiaUtils.loadClass(context, exporterClass);
-            Class messageClass = FuchsiaUtils.loadClass(context, exporterMessage);
+            Class inter = FuchsiaUtils.loadClass(context, pojo.getClazz());
+            Class messageClass = FuchsiaUtils.loadClass(context, pojo.getMessage());
 
-            Collection<ServiceReference<Service>> protobuffReferences = context.getServiceReferences(inter, null);
+            Collection<ServiceReference<Service>> protobuffReferences = context.getServiceReferences(inter, pojo.getFilter());
+
+            log.info("using filter "+pojo.getFilter()+" to find instance");
 
             if (protobuffReferences.size() == 0) {
 
@@ -75,15 +87,13 @@ public class ProtobufferExporter extends AbstractExporterComponent {
                     mgr.registerBindingFactory(ProtobufBindingFactory.PROTOBUF_BINDING_ID, new ProtobufBindingFactory(cxfbus));
 
                     ProtobufServerFactoryBean serverFactoryBean = new ProtobufServerFactoryBean();
+
                     //serverFactoryBean.setAddress("http://localhost:8889/AddressBookService");
-
-                    //serverFactoryBean.setBus(cxfbus);
-
-                    serverFactoryBean.setAddress(server);
-
                     //serverFactoryBean.setAddress("http://localhost:8889/cxf/AddressBookService/");
-
                     //serverFactoryBean.setServiceBean(new AddressBookProtos.AddressBookServiceImpl());
+
+                    serverFactoryBean.setAddress(pojo.getAddress());
+
                     serverFactoryBean.setServiceBean(inter.cast(protobufferService));
 
                     serverFactoryBean.setMessageClass(messageClass);
@@ -92,16 +102,15 @@ public class ProtobufferExporter extends AbstractExporterComponent {
 
                     Thread.currentThread().setContextClassLoader(Container.class.getClassLoader());
 
-                    serverFactoryBean.create();
+                    Server server=serverFactoryBean.create();
+
+                    serverPublished.put(pojo.getId(),server);
 
                     Thread.currentThread().setContextClassLoader(loader);
 
-                    log.info("exporting the service with the id:" + id);
-
+                    log.info("exporting the service with the id:" + pojo.getId());
 
                 }
-
-                exportDeclaration.handle(serviceReference);
 
             } else if (protobuffReferences.size() > 1) {
                 log.info("more than one were found to be exported");
@@ -115,24 +124,20 @@ public class ProtobufferExporter extends AbstractExporterComponent {
 
     }
 
-
-    @PostRegistration
-    protected void registration(ServiceReference serviceReference) {
-        this.serviceReference = serviceReference;
-    }
-
-    @Validate
-    public void start() {
-
-        System.setProperty("org.apache.cxf.nofastinfoset", "true");
-
-    }
-
     @Override
     protected void denyExportDeclaration(ExportDeclaration exportDeclaration) {
-        exportDeclaration.unhandle(serviceReference);
 
-        // Don't care papa
+        ProtobufferExporterPojo pojo=ProtobufferExporterPojo.create(exportDeclaration);
+
+        Server server=serverPublished.get(pojo.getId());
+
+        if(server!=null){
+            log.info("Destroying endpoint:"+server.getEndpoint().getEndpointInfo().getAddress());
+            server.destroy();
+        }else {
+            log.warn("nothing to destroy");
+        }
+
     }
 
     public String getName() {
