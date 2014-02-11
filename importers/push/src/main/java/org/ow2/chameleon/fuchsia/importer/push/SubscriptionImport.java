@@ -42,20 +42,14 @@ public class SubscriptionImport extends AbstractImporterComponent implements Sub
 
 	@Validate
     public void start() {
-
         logger.info("PuSH importer started.");
-
+        super.start();
 	}
 
     @Invalidate
     public void stop(){
-
         logger.info("PuSH importer stopped.");
-
-        for(String callback:callbacksRegistered){
-            httpService.unregister(callback);
-        }
-
+        super.stop();
     }
 
     public String getName() {
@@ -173,7 +167,6 @@ public class SubscriptionImport extends AbstractImporterComponent implements Sub
             }
 
             callbacksRegistered.add(callback);
-            super.addImportDeclaration(importDeclaration);
 
         } catch (Exception e) {
             logger.error("failed to import declaration, with the message: "+e.getMessage(),e);
@@ -204,8 +197,6 @@ public class SubscriptionImport extends AbstractImporterComponent implements Sub
                     unsubscribe(hub, hub_topic, targetCallback, null);
 
                     logger.info("Callback {} removed from the subscriber",callback);
-
-                    super.getImportDeclarations().remove(importDeclaration);
 
                 } catch (Exception e) {
                     logger.error("Callback "+callback+" failed to be removed from the subscriber with the message",e);
