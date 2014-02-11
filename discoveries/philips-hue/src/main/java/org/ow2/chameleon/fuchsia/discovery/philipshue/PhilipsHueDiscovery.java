@@ -138,7 +138,7 @@ public class PhilipsHueDiscovery extends AbstractDiscoveryComponent implements P
                         try {
                             preferences.flush();
                         } catch (BackingStoreException e) {
-                            log.error("failed to store username in java preferences, this will force you to push the bridge button everytime to authenticate");
+                            log.error("failed to store username in java preferences, this will force you to push the bridge button everytime to authenticate",e);
                         }
                     }
 
@@ -147,7 +147,7 @@ public class PhilipsHueDiscovery extends AbstractDiscoveryComponent implements P
                     PHHueSDK.getInstance().connect(ap);
 
                 }catch(PHHueException e){
-                    //log.debug("Failed to connect to the Philips Hue AP with the message {}", e.getMessage());
+                    log.debug("Failed to connect to the Philips Hue AP with the message {}", e.getMessage(),e);
                 }
 
                 PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();

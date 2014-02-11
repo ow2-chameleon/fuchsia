@@ -94,7 +94,7 @@ public class FileBasedDiscoveryImportBridge extends AbstractDiscoveryComponent i
             is = new FileInputStream(file);
             properties.load(is);
         } catch (Exception e) {
-            throw new Exception(String.format("Error reading import declaration file %s", file.getAbsoluteFile()));
+            throw new Exception(String.format("Error reading import declaration file %s", file.getAbsoluteFile()),e);
         } finally {
             if(is!=null){
                 is.close();

@@ -71,7 +71,7 @@ public class GridWebView {
 
     private List<ImportationLinkerIntrospection> fetchLinkerIntrospections(){
 
-        List<ImportationLinkerIntrospection> linkers=new ArrayList<ImportationLinkerIntrospection>();
+        List<ImportationLinkerIntrospection> linkers=null;
 
         try {
 
@@ -87,7 +87,7 @@ public class GridWebView {
             }
 
         } catch (InvalidSyntaxException e) {
-            logger.error("Failed with the message {}",e.getMessage());
+            logger.error("Failed with the message {}",e.getMessage(),e);
         }
 
         return linkers;
@@ -141,7 +141,7 @@ public class GridWebView {
            try {
                templateRT.process(generateTemplateModel(), out);
            } catch (TemplateException e) {
-               logger.error("Failed with the message {}",e.getMessage());
+               logger.error("Failed with the message {}",e.getMessage(),e);
            }
 
        }

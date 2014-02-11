@@ -13,7 +13,6 @@ import java.util.Hashtable;
 import java.util.Map;
 
 @Component
-@Instantiate
 public class ExportDeclaration {
 
     BundleContext context;
@@ -38,7 +37,8 @@ public class ExportDeclaration {
         Dictionary<String, Object> props = new Hashtable<String, Object>();
 
         String clazzes[] = new String[]{org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration.class.getName()};
-        ServiceRegistration registration = context.registerService(clazzes, declaration, props);
+
+        context.registerService(clazzes, declaration, props);
 
     }
 

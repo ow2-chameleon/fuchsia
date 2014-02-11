@@ -58,8 +58,6 @@ public class ProtobufferExporter extends AbstractExporterComponent {
             Class inter = FuchsiaUtils.loadClass(context, exporterClass);
             Class messageClass = FuchsiaUtils.loadClass(context, exporterMessage);
 
-            Class<? extends Service> interpar = inter.asSubclass(Service.class);
-
             Collection<ServiceReference<Service>> protobuffReferences = context.getServiceReferences(inter, null);
 
             if (protobuffReferences.size() == 0) {
