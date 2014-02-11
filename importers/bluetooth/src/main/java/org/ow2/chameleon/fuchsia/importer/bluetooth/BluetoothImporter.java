@@ -17,6 +17,7 @@ import static org.ow2.chameleon.fuchsia.core.declaration.Constants.PROTOCOL_NAME
 @Component()
 @Provides(specifications = org.ow2.chameleon.fuchsia.core.component.ImporterService.class)
 // FIXME ADD LOCKS !!
+// FIXME DESTROY PROXIES
 public class BluetoothImporter extends AbstractImporterComponent {
     // FIXME scope metadata
     @ServiceProperty(name = TARGET_FILTER_PROPERTY, value = "(&(" + PROTOCOL_NAME + "=bluetooth)(scope=generic))")
@@ -26,6 +27,8 @@ public class BluetoothImporter extends AbstractImporterComponent {
     private String name;
 
     private final BundleContext m_bundleContext;
+
+    private ServiceReference serviceReference;
     /**
      * logger
      */
@@ -46,6 +49,11 @@ public class BluetoothImporter extends AbstractImporterComponent {
         bluetoothProxiesFactories = new HashMap<String, Factory>();
         unresolvedImportDeclarations = new HashSet<ImportDeclaration>();
         resolvedImportDeclarations = new HashMap<ImportDeclaration, ComponentInstance>();
+    }
+
+    @PostRegistration
+    protected void registration(ServiceReference serviceReference){
+        this.serviceReference = serviceReference;
     }
 
     @Override
@@ -74,7 +82,9 @@ public class BluetoothImporter extends AbstractImporterComponent {
         Factory factory = bluetoothProxiesFactories.get(fn);
         if (factory != null) {
             ComponentInstance proxy = createProxy(importDeclaration, factory);
+            importDeclaration.handle(this.serviceReference);
             resolvedImportDeclarations.put(importDeclaration, proxy);
+
         } else {
             unresolvedImportDeclarations.add(importDeclaration);
         }
@@ -132,6 +142,7 @@ public class BluetoothImporter extends AbstractImporterComponent {
             String fn = (String) iDec.getMetadata().get("bluetooth.device.friendlyname");
             if (fn.startsWith(friendlyName)) {
                 ComponentInstance proxy = createProxy(iDec, f);
+                iDec.handle(this.serviceReference);
                 iterator.remove();
                 resolvedImportDeclarations.put(iDec, proxy);
             }

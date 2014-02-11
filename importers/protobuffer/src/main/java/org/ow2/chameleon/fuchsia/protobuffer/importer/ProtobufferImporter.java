@@ -7,11 +7,9 @@ import com.google.protobuf.RpcChannel;
 import org.apache.cxf.Bus;
 import org.apache.cxf.BusFactory;
 import org.apache.cxf.binding.BindingFactoryManager;
-import org.apache.felix.ipojo.annotations.Component;
-import org.apache.felix.ipojo.annotations.Provides;
-import org.apache.felix.ipojo.annotations.ServiceProperty;
-import org.apache.felix.ipojo.annotations.Validate;
+import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.ow2.chameleon.fuchsia.core.FuchsiaUtils;
 import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
@@ -30,6 +28,8 @@ public class ProtobufferImporter extends AbstractImporterComponent {
 
     private final BundleContext context;
 
+    private ServiceReference serviceReference;
+
     private Logger log = LoggerFactory.getLogger(this.getClass().getName());
 
     @ServiceProperty(name = "instance.name")
@@ -39,6 +39,11 @@ public class ProtobufferImporter extends AbstractImporterComponent {
 
     public ProtobufferImporter(BundleContext context) {
         this.context = context;
+    }
+
+    @PostRegistration
+    protected void registration(ServiceReference serviceReference) {
+        this.serviceReference = serviceReference;
     }
 
     @Validate
@@ -80,6 +85,8 @@ public class ProtobufferImporter extends AbstractImporterComponent {
 
             context.registerService(bufferService.getName(), service, serviceProperties);
 
+            importDeclaration.handle(serviceReference);
+
         } catch (Exception e) {
             log.error("Fail to import Protobuffer RPC service with the message '{}'", e.getMessage(),e);
         }
@@ -88,6 +95,8 @@ public class ProtobufferImporter extends AbstractImporterComponent {
 
     @Override
     protected void denyImportDeclaration(ImportDeclaration importDeclaration) throws ImporterException {
+
+        importDeclaration.unhandle(serviceReference);
 
         // Don't care mama!
 

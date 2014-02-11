@@ -57,6 +57,8 @@ public class JSONRPCExporter extends AbstractExporterComponent {
 
     private final BundleContext context;
 
+    private ServiceReference serviceReference;
+
     public JSONRPCExporter(BundleContext pContext) {
         context = pContext;
     }
@@ -91,6 +93,8 @@ public class JSONRPCExporter extends AbstractExporterComponent {
 
             web.registerServlet(endpointURL, gs, new Hashtable(), null);
 
+            exportDeclaration.handle(serviceReference);
+
             registeredServlets.add(endpointURL);
 
             logger.info("JSONRPC-exporter, publishing object exporter at: {}",endpointURL);
@@ -116,12 +120,19 @@ public class JSONRPCExporter extends AbstractExporterComponent {
 
         final String endpointURL=String.format("%s/%s",jp.getUrlContext(),jp.getInstanceName()).toString();
 
+        exportDeclaration.unhandle(serviceReference);
+
         web.unregister(endpointURL);
 
     }
 
     public String getName() {
         return name;
+    }
+
+    @PostRegistration
+    protected void registration(ServiceReference serviceReference) {
+        this.serviceReference = serviceReference;
     }
 
     /*

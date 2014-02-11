@@ -5,6 +5,7 @@ import com.googlecode.jsonrpc4j.ProxyUtil;
 import org.apache.felix.ipojo.*;
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.ow2.chameleon.fuchsia.core.FuchsiaUtils;
 import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
@@ -48,12 +49,15 @@ public class JSONRPCImporter extends AbstractImporterComponent {
 
     private final BundleContext context;
 
+    private ServiceReference serviceReference;
+
     /**
      * Map which contains the clients and theirs Client.
      */
     private final Map<String, JsonRpcHttpClient> clients = new HashMap<String, JsonRpcHttpClient>();
     private final Map<String, ServiceRegistration> registrations = new HashMap<String, ServiceRegistration>();
     private final Map<String, ComponentInstance> componentInstances = new HashMap<String, ComponentInstance>();
+
 
     public JSONRPCImporter(BundleContext pContext) {
         context = pContext;
@@ -100,6 +104,8 @@ public class JSONRPCImporter extends AbstractImporterComponent {
             proxy = ProxyUtil.createClientProxy(klass.getClassLoader(), klass, client);
             ServiceRegistration sReg = context.registerService(klassName, proxy, props);
 
+            importDeclaration.handle(serviceReference);
+
             // Add the registration to the registration list
             registrations.put(id, sReg);
         } else {
@@ -109,15 +115,16 @@ public class JSONRPCImporter extends AbstractImporterComponent {
             try {
                 componentInstance = defaultProxyFactory.createComponentInstance(props);
             } catch (UnacceptableConfiguration unacceptableConfiguration) {
-                logger.error("Invalid configuration exception",unacceptableConfiguration);
+                logger.error("Invalid configuration exception", unacceptableConfiguration);
                 return;
             } catch (MissingHandlerException e) {
-                logger.error("Missing handler exception",e);
+                logger.error("Missing handler exception", e);
                 return;
             } catch (ConfigurationException e) {
-                logger.error("Configuration exception",e);
+                logger.error("Configuration exception", e);
                 return;
             }
+            importDeclaration.handle(serviceReference);
             componentInstances.put(id, componentInstance);
         }
 
@@ -135,6 +142,7 @@ public class JSONRPCImporter extends AbstractImporterComponent {
                 ServiceRegistration sReg = registrations.remove(id);
                 if (sReg != null) {
                     sReg.unregister();
+                    importDeclaration.unhandle(serviceReference);
                 } else {
                     // FIXME : fail
                 }
@@ -142,6 +150,7 @@ public class JSONRPCImporter extends AbstractImporterComponent {
                 ComponentInstance componentInstance = componentInstances.remove(id);
                 if (componentInstance != null) {
                     componentInstance.dispose();
+                    importDeclaration.unhandle(serviceReference);
                 }
             }
             // Remove the client
@@ -163,6 +172,11 @@ public class JSONRPCImporter extends AbstractImporterComponent {
     /*------------------------------------------*
      *  Component LifeCycle method              *
      *------------------------------------------*/
+
+    @PostRegistration
+    protected void registration(ServiceReference serviceReference) {
+        this.serviceReference = serviceReference;
+    }
 
     /*
      * (non-Javadoc)

@@ -37,6 +37,8 @@ public class ProtobufferExporter extends AbstractExporterComponent {
 
     private final BundleContext context;
 
+    private ServiceReference serviceReference;
+
     public ProtobufferExporter(BundleContext context) {
         this.context = context;
     }
@@ -101,6 +103,8 @@ public class ProtobufferExporter extends AbstractExporterComponent {
 
                 }
 
+                exportDeclaration.handle(serviceReference);
+
             } else if (protobuffReferences.size() > 1) {
                 log.info("more than one were found to be exported");
             }
@@ -113,6 +117,12 @@ public class ProtobufferExporter extends AbstractExporterComponent {
 
     }
 
+
+    @PostRegistration
+    protected void registration(ServiceReference serviceReference) {
+        this.serviceReference = serviceReference;
+    }
+
     @Validate
     public void start() {
 
@@ -122,6 +132,8 @@ public class ProtobufferExporter extends AbstractExporterComponent {
 
     @Override
     protected void denyExportDeclaration(ExportDeclaration exportDeclaration) {
+        exportDeclaration.unhandle(serviceReference);
+
         // Don't care papa
     }
 

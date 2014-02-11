@@ -3,6 +3,7 @@ package org.ow2.chameleon.fuchsia.mqtt.importer.amqp;
 import org.apache.felix.ipojo.Factory;
 import org.apache.felix.ipojo.InstanceManager;
 import org.apache.felix.ipojo.annotations.*;
+import org.osgi.framework.ServiceReference;
 import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
 import org.ow2.chameleon.fuchsia.core.declaration.Constants;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
@@ -27,6 +28,13 @@ public class AMQPImporter extends AbstractImporterComponent {
 
     Map<String,InstanceManager> managedInstances=new HashMap<String, InstanceManager>();
 
+    private ServiceReference serviceReference;
+
+    @PostRegistration
+    protected void registration(ServiceReference serviceReference) {
+        this.serviceReference = serviceReference;
+    }
+
     @Override
     protected void useImportDeclaration(ImportDeclaration importDeclaration) throws ImporterException {
 
@@ -41,6 +49,8 @@ public class AMQPImporter extends AbstractImporterComponent {
             InstanceManager im=(InstanceManager)jointFactory.createComponentInstance(instanceProperties);
 
             String id=(String)importDeclaration.getMetadata().get(Constants.ID);
+
+            importDeclaration.handle(serviceReference);
 
             managedInstances.put(id, im);
 
@@ -64,6 +74,7 @@ public class AMQPImporter extends AbstractImporterComponent {
 
         if(instance!=null){
             instance.dispose();
+            importDeclaration.unhandle(serviceReference);
         }else {
             getLogger().warn("Failed to destroy managed instance {}, such instance was not registered by this importer",id);
         }

@@ -6,6 +6,7 @@ import org.apache.cxf.interceptor.LoggingOutInterceptor;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
@@ -42,6 +43,8 @@ public class CXFImporterComp extends AbstractImporterComponent {
 
     private final BundleContext context;
 
+    private ServiceReference serviceReference;
+
     /**
      * logger
      */
@@ -50,6 +53,11 @@ public class CXFImporterComp extends AbstractImporterComponent {
     public CXFImporterComp(BundleContext pContext) {
         context=pContext;
         map = new HashMap<ImportDeclaration, ServiceRegistration>();
+    }
+
+    @PostRegistration
+    protected void registration(ServiceReference serviceReference){
+        this.serviceReference = serviceReference;
     }
 
     @Override
@@ -126,6 +134,9 @@ public class CXFImporterComp extends AbstractImporterComponent {
             //create the proxy
             objectProxy = factory.create();
 
+            // set the importDeclaration has handled
+            importDeclaration.handle(serviceReference);
+
             //Publish object
             map.put(importDeclaration,registerProxy(objectProxy,klass));
         } finally {
@@ -154,6 +165,10 @@ public class CXFImporterComp extends AbstractImporterComponent {
         logger.debug("CXFImporter destroy a proxy for " + importDeclaration);
         ServiceRegistration serviceRegistration = map.get(importDeclaration);
         serviceRegistration.unregister();
+
+        // set the importDeclaration has unhandled
+        importDeclaration.unhandle(serviceReference);
+
         map.remove(importDeclaration);
     }
 

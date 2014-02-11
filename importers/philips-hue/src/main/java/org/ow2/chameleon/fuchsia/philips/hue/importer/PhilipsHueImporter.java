@@ -2,6 +2,7 @@ package org.ow2.chameleon.fuchsia.philips.hue.importer;
 
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.ow2.chameleon.fuchsia.core.FuchsiaUtils;
 import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
@@ -19,6 +20,8 @@ public class PhilipsHueImporter extends AbstractImporterComponent {
 
     private final BundleContext context;
 
+    private ServiceReference serviceReference;
+
     private Logger log = LoggerFactory.getLogger(this.getClass().getName());
 
     private Map<String,ServiceRegistration> lamps=new HashMap<String, ServiceRegistration>();
@@ -29,6 +32,11 @@ public class PhilipsHueImporter extends AbstractImporterComponent {
 
     public PhilipsHueImporter(BundleContext context) {
         this.context = context;
+    }
+
+    @PostRegistration
+    protected void registration(ServiceReference serviceReference) {
+        this.serviceReference = serviceReference;
     }
 
     @Validate
@@ -71,6 +79,8 @@ public class PhilipsHueImporter extends AbstractImporterComponent {
             ServiceRegistration lampService=context.registerService(pojo.getType(),pojo.getObject(),props);
             ServiceRegistration bridgeService=context.registerService(pojo.getBridgeType(),pojo.getBridgeObject(),props);
 
+            importDeclaration.handle(serviceReference);
+
             lamps.put(pojo.getId(),lampService);
             bridges.put(pojo.getId(),bridgeService);
 
@@ -97,6 +107,7 @@ public class PhilipsHueImporter extends AbstractImporterComponent {
         }catch(IllegalStateException e){
             log.error("failed unregistering bridge",e);
         }
+        importDeclaration.unhandle(serviceReference);
     }
 
     @Override

@@ -6,6 +6,7 @@ import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.transport.servlet.CXFNonSpringServlet;
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.http.NamespaceException;
 import org.ow2.chameleon.fuchsia.core.FuchsiaUtils;
@@ -26,6 +27,8 @@ public class CxfExporterFactory extends AbstractExporterComponent {
     private Bus cxfbus;
 
     private final BundleContext context;
+
+    private ServiceReference serviceReference;
 
     private Logger logger=LoggerFactory.getLogger(this.getClass());
 
@@ -71,6 +74,8 @@ public class CxfExporterFactory extends AbstractExporterComponent {
 
             Server endpoint = srvFactory.create();
 
+            exportDeclaration.handle(serviceReference);
+
             exportedDeclaration.put(webcontext,endpoint);
 
             logger.info("Pushing CXF endpoint: {}",endpoint.getEndpoint().getEndpointInfo().getAddress());
@@ -93,6 +98,8 @@ public class CxfExporterFactory extends AbstractExporterComponent {
 
         final String webcontext = (String) exportDeclaration.getMetadata().get(Constants.CXF_EXPORT_WEB_CONTEXT);
 
+        exportDeclaration.unhandle(serviceReference);
+
         Server exported=exportedDeclaration.get(webcontext);
 
         if(exported!=null){
@@ -106,6 +113,11 @@ public class CxfExporterFactory extends AbstractExporterComponent {
 
     public String getName() {
         return this.getClass().getSimpleName();
+    }
+
+    @PostRegistration
+    protected void registration(ServiceReference serviceReference) {
+        this.serviceReference = serviceReference;
     }
 
     @Validate

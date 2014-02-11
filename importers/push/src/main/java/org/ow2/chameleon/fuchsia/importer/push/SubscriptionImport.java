@@ -8,6 +8,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
+import org.osgi.framework.ServiceReference;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.service.http.HttpService;
 import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
@@ -39,6 +40,13 @@ public class SubscriptionImport extends AbstractImporterComponent implements Sub
 
     @Requires
     EventAdmin eventAdmin;
+
+    private ServiceReference serviceReference;
+
+    @PostRegistration
+    protected void registration(ServiceReference serviceReference) {
+        this.serviceReference = serviceReference;
+    }
 
 	@Validate
     public void start() {
@@ -168,6 +176,7 @@ public class SubscriptionImport extends AbstractImporterComponent implements Sub
 
             callbacksRegistered.add(callback);
 
+            importDeclaration.handle(serviceReference);
         } catch (Exception e) {
             logger.error("failed to import declaration, with the message: "+e.getMessage(),e);
         }
@@ -183,6 +192,8 @@ public class SubscriptionImport extends AbstractImporterComponent implements Sub
         String hub = data.get("push.hub.url").toString();//"http://localhost:8080/subscribe";
         String hub_topic = data.get("push.hub.topic").toString();//"http://blogname.blogspot.com/feeds/posts/default";
         String targetCallback=data.get("push.subscriber.callback").toString();
+
+        importDeclaration.unhandle(serviceReference);
 
         for(String callback:callbacksRegistered){
 
