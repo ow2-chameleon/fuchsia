@@ -25,7 +25,7 @@ public class CxfExporterFactory extends AbstractExporterComponent {
 
     private Bus cxfbus;
 
-    private BundleContext context;
+    private final BundleContext context;
 
     private Logger logger=LoggerFactory.getLogger(this.getClass());
 

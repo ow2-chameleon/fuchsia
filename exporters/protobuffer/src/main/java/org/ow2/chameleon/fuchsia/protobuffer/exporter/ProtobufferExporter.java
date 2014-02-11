@@ -35,7 +35,7 @@ public class ProtobufferExporter extends AbstractExporterComponent {
     @ServiceProperty(name = "target")
     private String filter;
 
-    BundleContext context;
+    private final BundleContext context;
 
     public ProtobufferExporter(BundleContext context) {
         this.context = context;

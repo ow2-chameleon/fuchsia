@@ -17,7 +17,7 @@ import java.util.*;
 @Provides(specifications = {org.ow2.chameleon.fuchsia.core.component.ImporterService.class})
 public class PhilipsHueImporter extends AbstractImporterComponent {
 
-    private BundleContext context;
+    private final BundleContext context;
 
     private Logger log = LoggerFactory.getLogger(this.getClass().getName());
 

@@ -40,7 +40,7 @@ public class CXFImporterComp extends AbstractImporterComponent {
     @ServiceProperty(name = "instance.name")
     private String name;
 
-    private BundleContext context;
+    private final BundleContext context;
 
     /**
      * logger
