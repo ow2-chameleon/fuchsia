@@ -125,20 +125,79 @@ public class ImportDeclarationTest {
 
         mocks.put(0, mock(ServiceReference.class));
         mocks.put(1, mock(ServiceReference.class));
-        assertThat(id.getStatus().getServiceReferences()).hasSize(0);
+        mocks.put(2, mock(ServiceReference.class));
+        assertThat(id.getStatus().getServiceReferencesBounded()).hasSize(0);
 
         id.bind(mocks.get(0));
-        assertThat(id.getStatus().getServiceReferences()).hasSize(1);
+        assertThat(id.getStatus().getServiceReferencesBounded()).hasSize(1);
 
         id.bind(mocks.get(1));
-        assertThat(id.getStatus().getServiceReferences()).hasSize(2);
+        assertThat(id.getStatus().getServiceReferencesBounded()).hasSize(2);
+
+        try {
+            id.getStatus().getServiceReferencesBounded().add(mocks.get(2));
+            failBecauseExceptionWasNotThrown(UnsupportedOperationException.class);
+        } catch (Exception e) {
+            assertThat(e).isInstanceOf(UnsupportedOperationException.class)
+                    .hasNoCause();
+        }
+        assertThat(id.getStatus().getServiceReferencesHandled()).hasSize(0);
+
+        id.handle(mocks.get(0));
+        assertThat(id.getStatus().getServiceReferencesHandled()).hasSize(1);
+
+        id.handle(mocks.get(1));
+        assertThat(id.getStatus().getServiceReferencesHandled()).hasSize(2);
+
+        try {
+            id.getStatus().getServiceReferencesHandled().add(mocks.get(2));
+            failBecauseExceptionWasNotThrown(UnsupportedOperationException.class);
+        } catch (Exception e) {
+            assertThat(e).isInstanceOf(UnsupportedOperationException.class)
+                    .hasNoCause();
+        }
+        assertThat(id.getStatus().getServiceReferencesHandled()).hasSize(2);
+
+        id.unhandle(mocks.get(0));
+        assertThat(id.getStatus().getServiceReferencesHandled()).hasSize(1);
 
         id.unbind(mocks.get(0));
-        assertThat(id.getStatus().getServiceReferences()).hasSize(1);
+        assertThat(id.getStatus().getServiceReferencesBounded()).hasSize(1);
+
+        id.unhandle(mocks.get(1));
+        assertThat(id.getStatus().getServiceReferencesHandled()).hasSize(0);
 
         id.unbind(mocks.get(1));
-        assertThat(id.getStatus().getServiceReferences()).hasSize(0);
+        assertThat(id.getStatus().getServiceReferencesBounded()).hasSize(0);
     }
 
+    @Test(expected = IllegalStateException.class)
+    public void testHandleFail() {
+        Map<String, Object> md = new HashMap<String, Object>();
+        md.put("md", "value");
+        ImportDeclaration id = ImportDeclarationBuilder.fromMetadata(md).build();
 
+        id.handle(mock(ServiceReference.class));
+    }
+
+    @Test
+    public void testHandle() {
+        Map<String, Object> md = new HashMap<String, Object>();
+        md.put("md", "value");
+        ImportDeclaration id = ImportDeclarationBuilder.fromMetadata(md).build();
+        ServiceReference mock = mock(ServiceReference.class);
+        id.bind(mock);
+        id.handle(mock);
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testUnbindFail() {
+        Map<String, Object> md = new HashMap<String, Object>();
+        md.put("md", "value");
+        ImportDeclaration id = ImportDeclarationBuilder.fromMetadata(md).build();
+        ServiceReference mock = mock(ServiceReference.class);
+        id.bind(mock);
+        id.handle(mock);
+        id.unbind(mock);
+    }
 }

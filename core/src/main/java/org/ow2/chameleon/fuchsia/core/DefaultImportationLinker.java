@@ -182,7 +182,7 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
             return;
         }
         for (ImportDeclaration importDeclaration : declarationsManager.getMatchedImportDeclaration()) {
-            boolean isAlreadyLinked = importDeclaration.getStatus().getServiceReferences().contains(serviceReference);
+            boolean isAlreadyLinked = importDeclaration.getStatus().getServiceReferencesBounded().contains(serviceReference);
             boolean canBeLinked = canBeLinked(importDeclaration, serviceReference);
             if (isAlreadyLinked && !canBeLinked) {
                 unlink(importDeclaration, serviceReference);
@@ -426,7 +426,7 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
          */
         void removeLinks(ServiceReference<ImportDeclaration> importDeclarationSRef) {
             ImportDeclaration importDeclaration = getImportDeclaration(importDeclarationSRef);
-            for (ServiceReference serviceReference : importDeclaration.getStatus().getServiceReferences()) {
+            for (ServiceReference serviceReference : importDeclaration.getStatus().getServiceReferencesBounded()) {
                 // FIXME : In case of multiples Linker, we will remove the link of all the ServiceReference
                 // FIXME : event the ones which dun know nothing about
                 unlink(importDeclaration, serviceReference);
@@ -609,7 +609,7 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
          */
         void removeLinks(ServiceReference<ImporterService> importerServiceSRef) {
             for (ImportDeclaration importDeclaration : declarationsManager.getMatchedImportDeclaration()) {
-                if (importDeclaration.getStatus().getServiceReferences().contains(importerServiceSRef)) {
+                if (importDeclaration.getStatus().getServiceReferencesBounded().contains(importerServiceSRef)) {
                     unlink(importDeclaration, importerServiceSRef);
                 }
             }

@@ -132,11 +132,11 @@ public class ExportDeclarationTest {
         // 5
         statusList.add(id.getStatus());
 
-        assertThat(statusList.remove(0).getServiceReferences().size()).isEqualTo(0);
-        assertThat(statusList.remove(0).getServiceReferences().size()).isEqualTo(1);
-        assertThat(statusList.remove(0).getServiceReferences().size()).isEqualTo(2);
-        assertThat(statusList.remove(0).getServiceReferences().size()).isEqualTo(1);
-        assertThat(statusList.remove(0).getServiceReferences().size()).isEqualTo(0);
+        assertThat(statusList.remove(0).getServiceReferencesBounded().size()).isEqualTo(0);
+        assertThat(statusList.remove(0).getServiceReferencesBounded().size()).isEqualTo(1);
+        assertThat(statusList.remove(0).getServiceReferencesBounded().size()).isEqualTo(2);
+        assertThat(statusList.remove(0).getServiceReferencesBounded().size()).isEqualTo(1);
+        assertThat(statusList.remove(0).getServiceReferencesBounded().size()).isEqualTo(0);
     }
 
 

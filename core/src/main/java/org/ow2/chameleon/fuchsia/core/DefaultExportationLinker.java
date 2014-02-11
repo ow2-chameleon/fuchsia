@@ -167,7 +167,7 @@ public class DefaultExportationLinker implements ExportationLinker {
         LOGGER.debug(linkerName + " : Unbind the ExporterService " + exporterService);
         synchronized (lock) {
             for (ExportDeclaration exportDeclaration : exportDeclarations) {
-                if (exportDeclaration.getStatus().getServiceReferences().contains(exporterService)) {
+                if (exportDeclaration.getStatus().getServiceReferencesBounded().contains(exporterService)) {
                     tryToUnbind(exportDeclaration, serviceReference);
                 }
             }
@@ -208,7 +208,7 @@ public class DefaultExportationLinker implements ExportationLinker {
     void unbindExportDeclaration(ExportDeclaration exportDeclaration) {
         LOGGER.debug(linkerName + " : Unbind the ExportDeclaration " + exportDeclaration);
         synchronized (lock) {
-            for (ServiceReference serviceReference : exportDeclaration.getStatus().getServiceReferences()) {
+            for (ServiceReference serviceReference : exportDeclaration.getStatus().getServiceReferencesBounded()) {
                 tryToUnbind(exportDeclaration, serviceReference);
             }
             exportDeclarations.remove(exportDeclaration);

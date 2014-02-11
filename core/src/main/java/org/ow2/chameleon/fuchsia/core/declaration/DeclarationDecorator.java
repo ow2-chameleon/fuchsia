@@ -52,6 +52,14 @@ class DeclarationDecorator implements Declaration, ImportDeclaration, ExportDecl
         declaration.unbind(serviceReference);
     }
 
+    public void handle(ServiceReference serviceReference) {
+        declaration.handle(serviceReference);
+    }
+
+    public void unhandle(ServiceReference serviceReference) {
+        declaration.unhandle(serviceReference);
+    }
+
     public String toString() {
         return declaration.toString() + "+extraMetadata";
     }

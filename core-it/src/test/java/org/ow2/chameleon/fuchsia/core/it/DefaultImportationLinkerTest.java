@@ -24,7 +24,6 @@ import org.ow2.chameleon.fuchsia.testing.CommonTest;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -295,10 +294,10 @@ public class DefaultImportationLinkerTest extends CommonTest {
 
         ServiceRegistration iDReg = registerImportDeclaration(iD);
         assertThat(iDReg).isNotNull();
-        assertThat(iD.getStatus().getServiceReferences()).containsOnly(sr.getReference());
+        assertThat(iD.getStatus().getServiceReferencesBounded()).containsOnly(sr.getReference());
 
         iDReg.unregister();
-        assertThat(iD.getStatus().getServiceReferences()).doesNotContain(sr.getReference());
+        assertThat(iD.getStatus().getServiceReferencesBounded()).doesNotContain(sr.getReference());
         assertThat(importationLinkerIntrospection.getImportDeclarations()).isEmpty();
 
         sr.unregister();
@@ -331,10 +330,10 @@ public class DefaultImportationLinkerTest extends CommonTest {
         assertThat(iDReg).isNotNull();
         verify(importer1).addImportDeclaration(iD);
 
-        assertThat(iD.getStatus().getServiceReferences()).containsOnly(sr.getReference());
+        assertThat(iD.getStatus().getServiceReferencesBounded()).containsOnly(sr.getReference());
 
         sr.unregister();
-        assertThat(iD.getStatus().getServiceReferences()).isEmpty();
+        assertThat(iD.getStatus().getServiceReferencesBounded()).isEmpty();
 
         iDReg.unregister();
         assertThat(importationLinkerIntrospection.getImportDeclarations()).isEmpty();
@@ -499,7 +498,7 @@ public class DefaultImportationLinkerTest extends CommonTest {
         assertThat(is2).isNotNull();
         verify(importer2).addImportDeclaration(iD1);
 
-        assertThat(iD1.getStatus().getServiceReferences()).containsOnly(sr1.getReference(), sr2.getReference());
+        assertThat(iD1.getStatus().getServiceReferencesBounded()).containsOnly(sr1.getReference(), sr2.getReference());
 
         // reconfigure the ImporterService filter of the linker :
         Dictionary<String, Object> linkerProps = new Hashtable<String, Object>();
@@ -508,7 +507,7 @@ public class DefaultImportationLinkerTest extends CommonTest {
         importationLinkerCI.reconfigure(linkerProps);
 
         verify(importer2).removeImportDeclaration(iD1);
-        assertThat(iD1.getStatus().getServiceReferences()).containsOnly(sr1.getReference());
+        assertThat(iD1.getStatus().getServiceReferencesBounded()).containsOnly(sr1.getReference());
 
         // reconfigure the ImporterService filter of the linker :
         linkerProps = new Hashtable<String, Object>();
@@ -518,7 +517,7 @@ public class DefaultImportationLinkerTest extends CommonTest {
 
         verify(importer1).removeImportDeclaration(iD1);
         verify(importer1).addImportDeclaration(iD1);
-        assertThat(iD1.getStatus().getServiceReferences()).containsOnly(sr2.getReference());
+        assertThat(iD1.getStatus().getServiceReferencesBounded()).containsOnly(sr2.getReference());
     }
 
 
@@ -562,7 +561,7 @@ public class DefaultImportationLinkerTest extends CommonTest {
         verify(importer1, never()).removeImportDeclaration(iD1);
         verify(importer1, times(1)).addImportDeclaration(iD1);
 
-        assertThat(iD1.getStatus().getServiceReferences()).containsOnly(sr1.getReference());
+        assertThat(iD1.getStatus().getServiceReferencesBounded()).containsOnly(sr1.getReference());
         // reconfigure the importer
         importerProps = new Hashtable<String, Object>();
         importerProps.put(INSTANCE_NAME_PROPERTY, "importer1-instance");

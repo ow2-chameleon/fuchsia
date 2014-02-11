@@ -40,7 +40,7 @@ public interface Declaration {
      * This method should only be called by a ImportationLinker.
      * The linker must call this method when it give the Declaration to the ImporterService.
      *
-     * @param serviceReference the ServiceReference the Declaration is bind to.
+     * @param serviceReference the ServiceReference of the ImporterService the Declaration is bind to.
      */
     void bind(ServiceReference serviceReference);
 
@@ -51,9 +51,31 @@ public interface Declaration {
      * This method should only be called by a ImportationLinker.
      * The linker must call this method when it remove the Declaration of the ImporterService.
      *
-     * @param serviceReference the ServiceReference the Declaration is unbind to.
+     * @param serviceReference the ServiceReference of the ImporterService the Declaration is unbind to.
      */
     void unbind(ServiceReference serviceReference);
 
+
+    /**
+     * Set the Declaration as handled by the given ImporterService.
+     * This method stock the ImporterService to remember the handling.
+     * <p/>
+     * This method should only be called by the ImporterService which handle the Declaration.
+     * The ImporterService must call this method when it uses with the Declaration.
+     *
+     * @param serviceReference the ServiceReference of the ImporterService that handle the Declaration.
+     */
+    public void handle(ServiceReference serviceReference);
+
+    /**
+     * Set the Declaration as unhandled by the given ImporterService.
+     * This method remove the ImporterService to forget the handling.
+     * <p/>
+     * This method should only be called by the ImporterService which unhandle the Declaration.
+     * The ImporterService must call this method when it stops to use the Declaration.
+     *
+     * @param serviceReference the ServiceReference of the ImporterService that unhandle the Declaration.
+     */
+    public void unhandle(ServiceReference serviceReference);
 
 }
