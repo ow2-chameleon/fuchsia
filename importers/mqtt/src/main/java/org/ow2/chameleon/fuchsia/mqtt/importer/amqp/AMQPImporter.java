@@ -52,13 +52,7 @@ public class AMQPImporter extends AbstractImporterComponent {
 
     @Invalidate
     public void stop(){
-
-        for(Map.Entry<String,InstanceManager> entry:managedInstances.entrySet()){
-
-            entry.getValue().dispose();
-
-        }
-
+        super.stop();
     }
 
     @Override
