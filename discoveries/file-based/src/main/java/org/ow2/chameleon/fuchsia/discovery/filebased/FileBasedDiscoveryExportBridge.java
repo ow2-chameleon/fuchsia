@@ -83,13 +83,7 @@ public class FileBasedDiscoveryExportBridge extends AbstractDiscoveryComponent i
 
     public boolean accept(File file) {
 
-        System.out.println("file:"+file);
-
-        boolean accept=!file.exists()||(!file.isHidden()&&file.isFile());
-
-        System.out.println("accept export??"+accept);
-
-        return accept;
+        return !file.exists()||(!file.isHidden()&&file.isFile());
 
     }
 
