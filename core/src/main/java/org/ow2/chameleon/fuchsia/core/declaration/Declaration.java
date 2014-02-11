@@ -12,7 +12,7 @@ import java.util.Map;
  *
  * @author Morgan Martinet
  */
-interface Declaration {
+public interface Declaration {
 
     /**
      * @return the metadata of the Declaration
