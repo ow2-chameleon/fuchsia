@@ -37,6 +37,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.ow2.chameleon.fuchsia.core.declaration.Constants.ID;
 import static org.ow2.chameleon.fuchsia.discovery.bluetooth.BluetoothConstants.BLUETOOTH_DEVICE_ADDRESS;
 import static org.ow2.chameleon.fuchsia.discovery.bluetooth.BluetoothConstants.BLUETOOTH_DEVICE_FRIENDLYNAME;
 import static org.ow2.chameleon.fuchsia.core.declaration.Constants.PROTOCOL_NAME;
@@ -69,14 +70,18 @@ public class BluetoothDiscovery extends AbstractDiscoveryComponent {
     @Bind(aggregate = true, optional = true)
     public void bindRemoteNamedDevice(RemoteDevice device) {
         ImportDeclaration iDec = null;
+        String ba = null;
+        String name = null;
         try {
-            String ba = device.getBluetoothAddress();
+            ba = device.getBluetoothAddress();
+            name = device.getFriendlyName(false);
             logger.debug("Building declaration for device " + ba);
 
             iDec = ImportDeclarationBuilder.empty()
+                    .key(ID).value(ba)
                     .key(PROTOCOL_NAME).value("bluetooth")
-                    .key(BLUETOOTH_DEVICE_ADDRESS).value(device.getBluetoothAddress())
-                    .key(BLUETOOTH_DEVICE_FRIENDLYNAME).value(device.getFriendlyName(false))
+                    .key(BLUETOOTH_DEVICE_ADDRESS).value(ba)
+                    .key(BLUETOOTH_DEVICE_FRIENDLYNAME).value(name)
                     // FIXME scope metadata
                     .key("scope").value("generic")
                     .build();
@@ -85,8 +90,7 @@ public class BluetoothDiscovery extends AbstractDiscoveryComponent {
             logger.error("Can't get description from the device, maybe is already gone.");
             return;
         }
-        String ba = (String) iDec.getMetadata().get(BLUETOOTH_DEVICE_ADDRESS);
-        String name = (String) iDec.getMetadata().get(BLUETOOTH_DEVICE_FRIENDLYNAME);
+
         logger.debug("Add declaration for the device " + ba + "(" + name + ")");
 
         registerImportDeclaration(iDec);
