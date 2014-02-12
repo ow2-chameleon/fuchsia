@@ -22,6 +22,8 @@ import java.util.Map;
         })
 public class DefaultJSONRPCProxy implements ProxyFacetInvokable {
 
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultJSONRPCProxy.class);
+
     @ServiceProperty(name = "metadata", immutable = false, mandatory = true)
     private Map proxy_metadata;
 
@@ -31,12 +33,11 @@ public class DefaultJSONRPCProxy implements ProxyFacetInvokable {
     @ServiceProperty(name = "client", immutable = false, mandatory = true)
     private JsonRpcHttpClient client;
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     public Object invoke(String method, Object... args) {
         try {
             return client.invoke(method, args, Object.class);
         } catch (Throwable throwable) {
-            logger.error("Invokation throw an exception",throwable);
+            LOG.error("Invokation throw an exception", throwable);
         }
         return null;
     }

@@ -36,6 +36,8 @@ import static org.ow2.chameleon.fuchsia.core.declaration.Constants.*;
 @Provides(specifications = {ImporterService.class})
 public class JSONRPCImporter extends AbstractImporterComponent {
 
+    private static final Logger LOG = LoggerFactory.getLogger(JSONRPCImporter.class);
+
     @ServiceProperty(name = INSTANCE_NAME_PROPERTY)
     private String name;
 
@@ -44,8 +46,6 @@ public class JSONRPCImporter extends AbstractImporterComponent {
 
     @Requires(filter = "(factory.name=org.ow2.chameleon.fuchsia.importer.jsonrpc.DefaultJSONRPCProxy)", optional = false)
     Factory defaultProxyFactory;
-
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final BundleContext context;
 
@@ -79,7 +79,7 @@ public class JSONRPCImporter extends AbstractImporterComponent {
         try {
             client = new JsonRpcHttpClient(new java.net.URL(uri));
         } catch (MalformedURLException e) {
-            logger.error("Error during connection to " + uri, e);
+            LOG.error("Error during connection to " + uri, e);
             return; //FIXME
         }
         clients.put(id, client);
@@ -115,20 +115,20 @@ public class JSONRPCImporter extends AbstractImporterComponent {
             try {
                 componentInstance = defaultProxyFactory.createComponentInstance(props);
             } catch (UnacceptableConfiguration unacceptableConfiguration) {
-                logger.error("Invalid configuration exception", unacceptableConfiguration);
+                LOG.error("Invalid configuration exception", unacceptableConfiguration);
                 return;
             } catch (MissingHandlerException e) {
-                logger.error("Missing handler exception", e);
+                LOG.error("Missing handler exception", e);
                 return;
             } catch (ConfigurationException e) {
-                logger.error("Configuration exception", e);
+                LOG.error("Configuration exception", e);
                 return;
             }
             importDeclaration.handle(serviceReference);
             componentInstances.put(id, componentInstance);
         }
 
-        logger.debug("JsonRPC Proxy successfully created and registered in OSGi " + uri + "");
+        LOG.debug("JsonRPC Proxy successfully created and registered in OSGi " + uri + "");
     }
 
     @Override
@@ -161,7 +161,7 @@ public class JSONRPCImporter extends AbstractImporterComponent {
     }
 
     protected Logger getLogger() {
-        return logger;
+        return LOG;
     }
 
     public String getName() {

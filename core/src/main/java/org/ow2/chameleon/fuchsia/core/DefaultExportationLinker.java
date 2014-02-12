@@ -48,6 +48,11 @@ import static org.ow2.chameleon.fuchsia.core.FuchsiaUtils.getFilter;
 @Provides(specifications = ExportationLinker.class)
 public class DefaultExportationLinker implements ExportationLinker {
 
+    /**
+     * Logger
+     */
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultExportationLinker.class);
+
     //@Controller
     private boolean state;
 
@@ -76,7 +81,7 @@ public class DefaultExportationLinker implements ExportationLinker {
             exportDeclarationFilter = getFilter(filterProperty);
             state = true;
         } catch (InvalidFilterException invalidFilterException) {
-            LOGGER.debug("The value of the Property " + FILTER_EXPORTDECLARATION_PROPERTY + " is invalid,"
+            LOG.debug("The value of the Property " + FILTER_EXPORTDECLARATION_PROPERTY + " is invalid,"
                     + " the recuperation of the Filter has failed. The instance gonna stop.", invalidFilterException);
             state = false;
         }
@@ -90,19 +95,14 @@ public class DefaultExportationLinker implements ExportationLinker {
 
     private final Set<ExportDeclaration> exportDeclarations = new HashSet<ExportDeclaration>();
 
-    /**
-     * LOGGER
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultExportationLinker.class);
-
     @Validate
     public void start() {
-        LOGGER.debug(linkerName + " starting");
+        LOG.debug(linkerName + " starting");
     }
 
     @Invalidate
     public void stop() {
-        LOGGER.debug(linkerName + " stopping");
+        LOG.debug(linkerName + " stopping");
     }
 
     public DefaultExportationLinker(BundleContext context) {
@@ -131,20 +131,20 @@ public class DefaultExportationLinker implements ExportationLinker {
             return;
         }
 
-        LOGGER.debug(linkerName + " : Bind the ExporterService " + exporterService);
+        LOG.debug(linkerName + " : Bind the ExporterService " + exporterService);
 
         Filter filter = null;
         try {
             filter = getFilter(properties.get("target"));
         } catch (InvalidFilterException invalidFilterException) {
-            LOGGER.error("The ServiceProperty \"target\" of the ExporterService " + exporterService
+            LOG.error("The ServiceProperty \"target\" of the ExporterService " + exporterService
                     + " doesn't provides a valid Filter."
                     + " To be used, it must provides a correct \"target\" ServiceProperty.", invalidFilterException);
             return;
         }
 
         synchronized (lock) {
-            LOGGER.debug(linkerName + " : Add the ExporterService " + exporterService
+            LOG.debug(linkerName + " : Add the ExporterService " + exporterService
                     + " with filter " + filter.toString());
 
             exporterServices.put(exporterService, filter);
@@ -164,7 +164,7 @@ public class DefaultExportationLinker implements ExportationLinker {
 
         ExporterService exporterService=(ExporterService)bundleContext.getService(serviceReference);
 
-        LOGGER.debug(linkerName + " : Unbind the ExporterService " + exporterService);
+        LOG.debug(linkerName + " : Unbind the ExporterService " + exporterService);
         synchronized (lock) {
             for (ExportDeclaration exportDeclaration : exportDeclarations) {
                 if (exportDeclaration.getStatus().getServiceReferencesBounded().contains(exporterService)) {
@@ -190,7 +190,7 @@ public class DefaultExportationLinker implements ExportationLinker {
         if (!exportDeclarationFilter.matches(exportDeclaration.getMetadata())) {
             return;
         }
-        LOGGER.debug(linkerName + " : Bind the ExportDeclaration " + exportDeclaration);
+        LOG.debug(linkerName + " : Bind the ExportDeclaration " + exportDeclaration);
 
         synchronized (lock) {
             exportDeclarations.add(exportDeclaration);
@@ -206,7 +206,7 @@ public class DefaultExportationLinker implements ExportationLinker {
      */
     @Unbind(id = "exportDeclarations")
     void unbindExportDeclaration(ExportDeclaration exportDeclaration) {
-        LOGGER.debug(linkerName + " : Unbind the ExportDeclaration " + exportDeclaration);
+        LOG.debug(linkerName + " : Unbind the ExportDeclaration " + exportDeclaration);
         synchronized (lock) {
             for (ServiceReference serviceReference : exportDeclaration.getStatus().getServiceReferencesBounded()) {
                 tryToUnbind(exportDeclaration, serviceReference);
@@ -234,15 +234,15 @@ public class DefaultExportationLinker implements ExportationLinker {
             try {
                 exporterService.addExportDeclaration(exportDeclaration);
             } catch (Exception e) {
-                LOGGER.debug(exporterService + " throw an exception with giving to it the ExportDeclaration "
+                LOG.debug(exporterService + " throw an exception with giving to it the ExportDeclaration "
                         + exportDeclaration, e);
                 return false;
             }
-            LOGGER.debug(exportDeclaration + " match the filter of " + exporterService + " : bind them together");
+            LOG.debug(exportDeclaration + " match the filter of " + exporterService + " : bind them together");
             exportDeclaration.bind(exporterServiceReference);
             return true;
         }
-        LOGGER.debug(exportDeclaration + " doesn't match the filter of " + exporterService
+        LOG.debug(exportDeclaration + " doesn't match the filter of " + exporterService
                 + "(" + exportDeclaration.getMetadata().toString() + ")");
         return false;
     }
@@ -261,7 +261,7 @@ public class DefaultExportationLinker implements ExportationLinker {
         try {
             exporterService.removeExportDeclaration(exportDeclaration);
         } catch (Exception e) {
-            LOGGER.debug(exporterService + " throw an exception with removing of it the ExportDeclaration "
+            LOG.debug(exporterService + " throw an exception with removing of it the ExportDeclaration "
                     + exportDeclaration, e);
             return false;
         }

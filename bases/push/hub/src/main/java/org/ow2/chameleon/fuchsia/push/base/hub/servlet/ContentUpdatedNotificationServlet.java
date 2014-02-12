@@ -14,7 +14,7 @@ import java.io.IOException;
 
 public class ContentUpdatedNotificationServlet extends HttpServlet {
 
-    private final Logger log = LoggerFactory.getLogger(this.getClass());
+    private static final Logger LOG = LoggerFactory.getLogger(ContentUpdatedNotificationServlet.class);
 
     private HubInput hub;
 
@@ -35,12 +35,12 @@ public class ContentUpdatedNotificationServlet extends HttpServlet {
             //Receiving notification from the publisher
             ContentNotification cn = ContentNotification.from(req);
 
-            log.info("Publisher -> (Hub), new content notification received for the topic {}", cn.getUrl());
+            LOG.info("Publisher -> (Hub), new content notification received for the topic {}", cn.getUrl());
 
             hub.ContentNotificationReceived(cn);
 
         } catch (InvalidContentNotification invalidContentNotification) {
-            log.error("Failed to parse notification",invalidContentNotification);
+            LOG.error("Failed to parse notification", invalidContentNotification);
             resp.setStatus(400); //bad request
         } finally {
             resp.setStatus(204); //no content (notification accepted)

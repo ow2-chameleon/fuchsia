@@ -46,17 +46,17 @@ public class FoolDiscovery extends AbstractDiscoveryComponent {
     /**
      * logger
      */
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private static final Logger LOG = LoggerFactory.getLogger(FoolDiscovery.class);
 
     public FoolDiscovery(BundleContext bundleContext) {
         super(bundleContext);
-        logger.debug("Creating fool discovery !");
+        LOG.debug("Creating fool discovery !");
     }
 
     @Validate
     public void start() {
         super.start();
-        logger.debug("Start fool discovery !");
+        LOG.debug("Start fool discovery !");
         for (int i = 0; i < 2; i++) {
             Map<String, Object> metadata = new HashMap<String, Object>();
             metadata.put("fool", "fool");
@@ -82,7 +82,7 @@ public class FoolDiscovery extends AbstractDiscoveryComponent {
 
     @Override
     public Logger getLogger() {
-        return logger;
+        return LOG;
     }
 
     public String getName() {
@@ -94,8 +94,6 @@ public class FoolDiscovery extends AbstractDiscoveryComponent {
 
         final Random random = new Random();
 
-        private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
         public void run() {
             while (index_importDeclaration_register < importDeclarations.size()) {
                 try {
@@ -103,7 +101,7 @@ public class FoolDiscovery extends AbstractDiscoveryComponent {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                logger.debug("Registrator : " + index_importDeclaration_register);
+                LOG.debug("Registrator : " + index_importDeclaration_register);
                 registerImportDeclaration(importDeclarations.get(index_importDeclaration_register + 1));
                 index_importDeclaration_register = index_importDeclaration_register + 1;
             }
@@ -115,8 +113,6 @@ public class FoolDiscovery extends AbstractDiscoveryComponent {
 
         final Random random = new Random();
 
-        private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
         public void run() {
             while (index_importDeclaration_unregister < importDeclarations.size()) {
                 while (index_importDeclaration_unregister.equals(index_importDeclaration_register)) {
@@ -126,7 +122,7 @@ public class FoolDiscovery extends AbstractDiscoveryComponent {
                         e.printStackTrace();
                     }
                 }
-                logger.debug("Unregistrator : " + index_importDeclaration_unregister);
+                LOG.debug("Unregistrator : " + index_importDeclaration_unregister);
 
                 unregisterImportDeclaration(importDeclarations.get(index_importDeclaration_unregister + 1));
                 index_importDeclaration_unregister = index_importDeclaration_unregister + 1;

@@ -49,16 +49,16 @@ import static org.ow2.chameleon.fuchsia.core.declaration.Constants.PROTOCOL_NAME
 @Provides(specifications = DiscoveryService.class)
 public class BluetoothDiscovery extends AbstractDiscoveryComponent {
 
+    /**
+     * Logger
+     */
+    private static final Logger LOG = LoggerFactory.getLogger(BluetoothDiscovery.class);
+
     @ServiceProperty(name = "instance.name")
     private String name;
 
     @Requires
     private BluetoothController bluetoothController;
-
-    /**
-     * logger
-     */
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final Map<String, ImportDeclaration> bluetoothDevices;
 
@@ -75,7 +75,7 @@ public class BluetoothDiscovery extends AbstractDiscoveryComponent {
         try {
             ba = device.getBluetoothAddress();
             name = device.getFriendlyName(false);
-            logger.debug("Building declaration for device " + ba);
+            LOG.debug("Building declaration for device " + ba);
 
             iDec = ImportDeclarationBuilder.empty()
                     .key(ID).value(ba)
@@ -87,11 +87,11 @@ public class BluetoothDiscovery extends AbstractDiscoveryComponent {
                     .build();
 
         } catch (IOException e) {
-            logger.error("Can't get description from the device, maybe is already gone.");
+            LOG.error("Can't get description from the device, maybe is already gone.");
             return;
         }
 
-        logger.debug("Add declaration for the device " + ba + "(" + name + ")");
+        LOG.debug("Add declaration for the device " + ba + "(" + name + ")");
 
         registerImportDeclaration(iDec);
         bluetoothDevices.put(ba, iDec);
@@ -100,7 +100,7 @@ public class BluetoothDiscovery extends AbstractDiscoveryComponent {
     @Unbind
     public void unbindRemoteNamedDevice(RemoteDevice device) {
         String ba = device.getBluetoothAddress();
-        logger.debug("Remove declaration for the device " + ba);
+        LOG.debug("Remove declaration for the device " + ba);
 
         unregisterImportDeclaration(bluetoothDevices.remove(ba));
     }
@@ -111,7 +111,7 @@ public class BluetoothDiscovery extends AbstractDiscoveryComponent {
      */
     @Validate
     public void start() {
-        logger.debug("Starting Bluetooth Discovery...");
+        LOG.debug("Starting Bluetooth Discovery...");
 
         if (bluetoothDevices.size() > 0) {
             // FIXME : complete message
@@ -124,7 +124,7 @@ public class BluetoothDiscovery extends AbstractDiscoveryComponent {
      */
     @Invalidate
     public void stop() {
-        logger.debug("Stopping Bluetooth Discovery...");
+        LOG.debug("Stopping Bluetooth Discovery...");
         for (ImportDeclaration iDec : bluetoothDevices.values()) {
             unregisterImportDeclaration(iDec);
         }
@@ -133,7 +133,7 @@ public class BluetoothDiscovery extends AbstractDiscoveryComponent {
 
     @Override
     public Logger getLogger() {
-        return logger;
+        return LOG;
     }
 
 

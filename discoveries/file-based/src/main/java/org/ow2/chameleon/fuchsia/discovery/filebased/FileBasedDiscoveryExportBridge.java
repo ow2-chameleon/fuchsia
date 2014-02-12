@@ -33,6 +33,8 @@ import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
 @Provides(specifications = {DiscoveryService.class, ExporterDeployer.class})
 public class FileBasedDiscoveryExportBridge extends AbstractDiscoveryComponent implements ExporterDeployer {
 
+    private static final Logger LOG = LoggerFactory.getLogger(FileBasedDiscoveryExportBridge.class);
+
     @ServiceProperty(name = INSTANCE_NAME_PROPERTY)
     private String name;
 
@@ -54,7 +56,7 @@ public class FileBasedDiscoveryExportBridge extends AbstractDiscoveryComponent i
     public void start() {
         super.start();
         startMonitorDirectory(monitoredExportDirectory, pollingTime);
-        getLogger().info("Filebased Export discovery up and running.");
+        LOG.info("Filebased Export discovery up and running.");
     }
 
     private void startMonitorDirectory(String directory, Long poolTime) {
@@ -62,19 +64,19 @@ public class FileBasedDiscoveryExportBridge extends AbstractDiscoveryComponent i
             DirectoryMonitor dm = new DirectoryMonitor(directory, pollingTime, ExporterDeployer.class.getName());
             dm.start(getBundleContext());
         } catch (Exception e) {
-            getLogger().error("Failed to start "+DirectoryMonitor.class.getName()+" for the directory "+directory+" and polling time "+poolTime.toString(),e);
+            LOG.error("Failed to start " + DirectoryMonitor.class.getName() + " for the directory " + directory + " and polling time " + poolTime.toString(), e);
         }
     }
 
     @Invalidate
     public void stop() {
         super.stop();
-        getLogger().info("Filebased Export discovery stopped.");
+        LOG.info("Filebased Export discovery stopped.");
     }
 
     @Override
     public Logger getLogger() {
-        return LoggerFactory.getLogger(this.getClass());
+        return LOG;
     }
 
     public String getName() {
@@ -108,46 +110,46 @@ public class FileBasedDiscoveryExportBridge extends AbstractDiscoveryComponent i
     }
 
     public void onFileCreate(File file) {
-        getLogger().info("New file detected : {}", file.getAbsolutePath());
+        LOG.info("New file detected : {}", file.getAbsolutePath());
         try {
             Properties properties = parseFile(file);
             HashMap<String, Object> metadata = new HashMap<String, Object>();
             for (Map.Entry<Object, Object> element : properties.entrySet()) {
                 Object replacedObject = metadata.put(element.getKey().toString(), element.getValue());
                 if (replacedObject != null) {
-                    getLogger().warn("ExportDeclaration: replacing metadata key {}, that contained the value {} by the new value {}", new Object[]{element.getKey(), replacedObject, element.getValue()});
+                    LOG.warn("ExportDeclaration: replacing metadata key {}, that contained the value {} by the new value {}", new Object[]{element.getKey(), replacedObject, element.getValue()});
                 }
             }
             ExportDeclaration declaration=createAndRegisterExportDeclaration(metadata);
             exportDeclarationsFile.put(file.getAbsolutePath(), declaration);
         } catch (Exception e) {
-            getLogger().error(e.getMessage(),e);
+            LOG.error(e.getMessage(), e);
         }
     }
 
     // FIXME : this have to be rechecked, this is an pessimist approach
     public void onFileChange(File file) {
-        getLogger().info("File updated : {}", file.getAbsolutePath());
+        LOG.info("File updated : {}", file.getAbsolutePath());
         onFileDelete(file);
         onFileCreate(file);
     }
 
     public void onFileDelete(File file) {
-        getLogger().info("File removed : {}", file.getAbsolutePath());
+        LOG.info("File removed : {}", file.getAbsolutePath());
         ExportDeclaration declaration = exportDeclarationsFile.get(file.getAbsolutePath());
 
         if (declaration == null) return;
 
         if (exportDeclarationsFile.remove(file.getAbsolutePath()) == null) {
-            getLogger().error("Failed to unregister export declaration file mapping ({}),  it did not existed before.", file.getAbsolutePath());
+            LOG.error("Failed to unregister export declaration file mapping ({}),  it did not existed before.", file.getAbsolutePath());
         } else {
-            getLogger().info("import declaration file mapping removed.");
+            LOG.info("import declaration file mapping removed.");
         }
 
         try {
             unregisterExportDeclaration(declaration);
         } catch (IllegalStateException e) {
-            getLogger().error("Failed to unregister export declaration file "+declaration.getMetadata()+",  it did not existed before.",e);
+            LOG.error("Failed to unregister export declaration file " + declaration.getMetadata() + ",  it did not existed before.", e);
         }
     }
 

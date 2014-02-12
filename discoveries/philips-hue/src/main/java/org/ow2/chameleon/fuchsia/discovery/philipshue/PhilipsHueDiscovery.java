@@ -7,7 +7,6 @@ import com.philips.lighting.hue.sdk.PHSDKListener;
 import com.philips.lighting.hue.sdk.connection.impl.PHBridgeInternal;
 import com.philips.lighting.hue.sdk.exception.PHHueException;
 import com.philips.lighting.model.PHBridge;
-import com.philips.lighting.model.PHBridgeConfiguration;
 import com.philips.lighting.model.PHBridgeResourcesCache;
 import com.philips.lighting.model.PHLight;
 import org.apache.felix.ipojo.annotations.*;
@@ -31,13 +30,13 @@ import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
 @Instantiate
 public class PhilipsHueDiscovery extends AbstractDiscoveryComponent implements PHSDKListener, Runnable {
 
+    private static final Logger LOG = LoggerFactory.getLogger(PhilipsHueDiscovery.class);
+
     @ServiceProperty(name = INSTANCE_NAME_PROPERTY)
     private String name;
 
     @ServiceProperty(name = "philips.hue.discovery.pooling",value = "5000")
     private Long DISCOVERY_POLLING_TIME;
-
-    private Logger log = LoggerFactory.getLogger(this.getClass().getName());
 
     private PHAccessPoint ap;
 
@@ -52,7 +51,7 @@ public class PhilipsHueDiscovery extends AbstractDiscoveryComponent implements P
     @Validate
     public void start() {
 
-        log.info("Philips Hue discovery is up and running.");
+        LOG.info("Philips Hue discovery is up and running.");
 
         PHHueSDK.getInstance().getNotificationManager().registerSDKListener(this);
 
@@ -80,26 +79,26 @@ public class PhilipsHueDiscovery extends AbstractDiscoveryComponent implements P
 
 
     public void onCacheUpdated(int i, PHBridge phBridge) {
-        //log.info("cache updated");
+        //LOG.info("cache updated");
     }
 
     public void onBridgeConnected(PHBridge phBridge) {
 
         PHHueSDK.getInstance().setSelectedBridge(phBridge);
         PHHueSDK.getInstance().enableHeartbeat(phBridge, DISCOVERY_POLLING_TIME);
-        log.info("bridge connected");
+        LOG.info("bridge connected");
 
     }
 
     public void onAuthenticationRequired(PHAccessPoint phAccessPoint) {
 
-        log.warn("authentication required, you have 30 seconds to push the button on the bridge");
+        LOG.warn("authentication required, you have 30 seconds to push the button on the bridge");
 
         PHHueSDK.getInstance().startPushlinkAuthentication(phAccessPoint);
     }
 
     public void onAccessPointsFound(List<PHAccessPoint> phAccessPoints) {
-        //log.info("access point found {}",phAccessPoints);
+        //LOG.info("access point found {}",phAccessPoints);
 
         ap=phAccessPoints.get(phAccessPoints.size()-1);
 
@@ -110,11 +109,11 @@ public class PhilipsHueDiscovery extends AbstractDiscoveryComponent implements P
     }
 
     public void onConnectionResumed(PHBridge phBridge) {
-        //log.info("connection resumed");
+        //LOG.info("connection resumed");
     }
 
     public void onConnectionLost(PHAccessPoint phAccessPoint) {
-        log.info("connection lost");
+        LOG.info("connection lost");
     }
 
     public void run() {
@@ -138,7 +137,7 @@ public class PhilipsHueDiscovery extends AbstractDiscoveryComponent implements P
                         try {
                             preferences.flush();
                         } catch (BackingStoreException e) {
-                            log.error("failed to store username in java preferences, this will force you to push the bridge button everytime to authenticate",e);
+                            LOG.error("failed to store username in java preferences, this will force you to push the bridge button everytime to authenticate", e);
                         }
                     }
 
@@ -147,7 +146,7 @@ public class PhilipsHueDiscovery extends AbstractDiscoveryComponent implements P
                     PHHueSDK.getInstance().connect(ap);
 
                 }catch(PHHueException e){
-                    log.debug("Failed to connect to the Philips Hue AP with the message {}", e.getMessage(),e);
+                    LOG.debug("Failed to connect to the Philips Hue AP with the message {}", e.getMessage(), e);
                 }
 
                 PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
@@ -169,7 +168,7 @@ public class PhilipsHueDiscovery extends AbstractDiscoveryComponent implements P
             try {
                 Thread.sleep(DISCOVERY_POLLING_TIME);
             } catch (InterruptedException e) {
-                log.error("failed to put in wait state");
+                LOG.error("failed to put in wait state");
             }
 
 

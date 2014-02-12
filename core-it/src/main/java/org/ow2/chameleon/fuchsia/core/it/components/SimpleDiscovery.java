@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 @Provides(specifications = {SimulateBindingInterface.class, DiscoveryService.class})
 public class SimpleDiscovery extends AbstractDiscoveryComponent implements SimulateBindingInterface {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private static final Logger LOG = LoggerFactory.getLogger(SimpleDiscovery.class);
 
     public SimpleDiscovery(BundleContext bundleContext) {
         super(bundleContext);
@@ -44,7 +44,7 @@ public class SimpleDiscovery extends AbstractDiscoveryComponent implements Simul
 
     @Override
     public Logger getLogger() {
-        return logger;
+        return LOG;
     }
 
     public String getName() {

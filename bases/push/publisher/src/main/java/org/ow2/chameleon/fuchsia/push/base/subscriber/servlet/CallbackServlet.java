@@ -31,7 +31,7 @@ public class CallbackServlet extends HttpServlet implements SubscriberInput
 
     enum MessageStatus { ERROR, OK_Challenge, OK };
 
-    private static final Logger log=LoggerFactory.getLogger(CallbackServlet.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CallbackServlet.class);
 
     private ImportDeclaration importDeclaration;
 
@@ -43,15 +43,13 @@ public class CallbackServlet extends HttpServlet implements SubscriberInput
         this.subscriberOutput=subscriberOutput;
     }
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
     private EventAdmin eventAdmin;
 
     public void TopicUpdated(String hubtopic, SyndFeed feed) {
 
         String queue=importDeclaration.getMetadata().get("push.eventAdmin.queue").toString();
 
-        logger.info("(subscriber), received updated content for {}, sending through eventAdmin in the queue {}",hubtopic,queue);
+        LOG.info("(subscriber), received updated content for {}, sending through eventAdmin in the queue {}",hubtopic,queue);
 
         Dictionary properties = new Hashtable();
         properties.put("topic",hubtopic);
@@ -73,7 +71,7 @@ public class CallbackServlet extends HttpServlet implements SubscriberInput
                     + null; //The last parameter should be checked
 
             if(!subscriberOutput.getApprovedActions().contains(action)){
-                logger.info("{} not requested by this subscriber, at least not the action {} (the only approved actions are {})",new Object[]{cr.getMode(),action,subscriberOutput.getApprovedActions()});
+                LOG.info("{} not requested by this subscriber, at least not the action {} (the only approved actions are {})",new Object[]{cr.getMode(),action,subscriberOutput.getApprovedActions()});
 
                 throw new ActionNotRequestedByTheSubscriberException("action not approved");
             }else {
@@ -95,7 +93,7 @@ public class CallbackServlet extends HttpServlet implements SubscriberInput
             response.getWriter().print(scr.getChallenge());
             response.setStatus(HttpServletResponse.SC_OK);
         } catch (Exception invalidContentNotification) {
-            log.error("Invalid content notification.",invalidContentNotification);
+            LOG.error("Invalid content notification.", invalidContentNotification);
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         }
 
@@ -134,7 +132,7 @@ public class CallbackServlet extends HttpServlet implements SubscriberInput
 
                 TopicUpdated(hubtopic, feed);
             } catch (FeedException e) {
-                log.error("Failed in creating feed response.",e);
+                LOG.error("Failed in creating feed response.", e);
             } finally {
                 Thread.currentThread().setContextClassLoader(cl);
             }

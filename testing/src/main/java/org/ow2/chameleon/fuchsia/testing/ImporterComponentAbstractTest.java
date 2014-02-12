@@ -33,7 +33,7 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
     @Mock
     private LogEntry logEntry;
 
-    private final Logger log=LoggerFactory.getLogger(getClass().getName());
+    private static final Logger LOG = LoggerFactory.getLogger(ImporterComponentAbstractTest.class);
 
     /**
      * Done some initializations.
@@ -200,7 +200,7 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
             importer.addImportDeclaration(iDec);
         } catch (ImporterException e) {
             fail("Cannot give the importDeclaration to the importer", e);
-            log.error("Failed to add import declaration",e);
+            LOG.error("Failed to add import declaration", e);
         }
 
         // un-import the logService

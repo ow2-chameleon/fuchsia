@@ -2,7 +2,6 @@ package org.ow2.chameleon.fuchsia.push.base.hub.servlet;
 
 import org.ow2.chameleon.fuchsia.push.base.hub.HubInput;
 import org.ow2.chameleon.fuchsia.push.base.hub.dto.SubscriptionRequest;
-import org.ow2.chameleon.fuchsia.push.base.hub.dto.SubscriptionRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,7 +15,7 @@ public  class SubscriptionServlet extends HttpServlet {
 
     private HubInput hub;
 
-    private static final Logger log= LoggerFactory.getLogger(SubscriptionServlet.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SubscriptionServlet.class);
 
     public SubscriptionServlet(HubInput hub){
         this.hub=hub;
@@ -39,7 +38,7 @@ public  class SubscriptionServlet extends HttpServlet {
 
             resp.setStatus(400);
 
-            log.error("Failed to created response to the request",exception);
+            LOG.error("Failed to created response to the request", exception);
 
         }
 

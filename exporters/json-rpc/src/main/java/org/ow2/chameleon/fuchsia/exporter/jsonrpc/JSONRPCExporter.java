@@ -42,6 +42,8 @@ import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
 @Provides(specifications = {ExporterService.class})
 public class JSONRPCExporter extends AbstractExporterComponent {
 
+    private static final Logger LOG = LoggerFactory.getLogger(JSONRPCExporter.class);
+
     @ServiceProperty(name = INSTANCE_NAME_PROPERTY)
     private String name;
 
@@ -52,8 +54,6 @@ public class JSONRPCExporter extends AbstractExporterComponent {
     HttpService web;
 
     private Set<String> registeredServlets=new HashSet<String>();
-
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final BundleContext context;
 
@@ -75,7 +75,7 @@ public class JSONRPCExporter extends AbstractExporterComponent {
             try{
                 klass = FuchsiaUtils.loadClass(context, jp.getInstanceClass());
             }catch (ClassNotFoundException e){
-                logger.warn("Failed to load from the own bundle, loading externally",e);
+                LOG.warn("Failed to load from the own bundle, loading externally", e);
                 klass=context.getBundle().loadClass(jp.getInstanceClass());
             }
 
@@ -97,18 +97,18 @@ public class JSONRPCExporter extends AbstractExporterComponent {
 
             registeredServlets.add(endpointURL);
 
-            logger.info("JSONRPC-exporter, publishing object exporter at: {}",endpointURL);
+            LOG.info("JSONRPC-exporter, publishing object exporter at: {}", endpointURL);
 
         } catch (InvalidSyntaxException e) {
-            logger.error("LDAP filter specified on the linker is not valid, recheck your LDAP filters for the linker and exporter. ",e);
+            LOG.error("LDAP filter specified on the linker is not valid, recheck your LDAP filters for the linker and exporter. ", e);
         } catch (ClassNotFoundException e) {
-            logger.error("The class to be exporter could not be loaded.",e);
+            LOG.error("The class to be exporter could not be loaded.", e);
         } catch (NamespaceException e) {
-            logger.error("Namespace failure",e);
+            LOG.error("Namespace failure", e);
         } catch (ServletException e) {
-            logger.error("Failed registering the servlet to respond the RPC request.",e);
+            LOG.error("Failed registering the servlet to respond the RPC request.", e);
         } finally {
-            logger.info("JSONRPC exporter finished to process exportation request.");
+            LOG.info("JSONRPC exporter finished to process exportation request.");
         }
 
     }
@@ -152,7 +152,7 @@ public class JSONRPCExporter extends AbstractExporterComponent {
 
         for(String endpoint:registeredServlets){
             web.unregister(endpoint);
-            logger.info("endpoint {} unregistered",endpoint);
+            LOG.info("endpoint {} unregistered", endpoint);
         }
 
     }

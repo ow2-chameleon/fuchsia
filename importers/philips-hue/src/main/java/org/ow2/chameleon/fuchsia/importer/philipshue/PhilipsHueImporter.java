@@ -18,11 +18,11 @@ import java.util.*;
 @Provides(specifications = {org.ow2.chameleon.fuchsia.core.component.ImporterService.class})
 public class PhilipsHueImporter extends AbstractImporterComponent {
 
+    private static final Logger LOG = LoggerFactory.getLogger(PhilipsHueImporter.class);
+
     private final BundleContext context;
 
     private ServiceReference serviceReference;
-
-    private Logger log = LoggerFactory.getLogger(this.getClass().getName());
 
     private Map<String,ServiceRegistration> lamps=new HashMap<String, ServiceRegistration>();
     private Map<String,ServiceRegistration> bridges=new HashMap<String, ServiceRegistration>();
@@ -41,13 +41,13 @@ public class PhilipsHueImporter extends AbstractImporterComponent {
 
     @Validate
     public void validate() {
-        log.info("Philips hue Importer RPC is up and running");
+        LOG.info("Philips hue Importer RPC is up and running");
     }
 
     @Invalidate
     public void invalidate() {
 
-        log.info("Cleaning up instances into Philips hue Importer");
+        LOG.info("Cleaning up instances into Philips hue Importer");
 
     }
 
@@ -66,7 +66,7 @@ public class PhilipsHueImporter extends AbstractImporterComponent {
     @Override
     protected void useImportDeclaration(ImportDeclaration importDeclaration) throws ImporterException {
 
-        log.info("philips hue importer triggered");
+        LOG.info("philips hue importer triggered");
 
         PhilipsImporterPojo pojo=PhilipsImporterPojo.create(importDeclaration);
 
@@ -85,7 +85,7 @@ public class PhilipsHueImporter extends AbstractImporterComponent {
             bridges.put(pojo.getId(),bridgeService);
 
         } catch (ClassNotFoundException e) {
-            log.error("Failed to load type {}, importing process aborted.",pojo.getType(),e);
+            LOG.error("Failed to load type {}, importing process aborted.", pojo.getType(), e);
         }
 
 
@@ -99,20 +99,20 @@ public class PhilipsHueImporter extends AbstractImporterComponent {
         try {
             lamps.get(pojo.getId()).unregister();
         }catch(IllegalStateException e){
-            log.error("failed unregistering lamp",e);
+            LOG.error("failed unregistering lamp", e);
         }
 
         try {
             bridges.get(pojo.getId()).unregister();
         }catch(IllegalStateException e){
-            log.error("failed unregistering bridge",e);
+            LOG.error("failed unregistering bridge", e);
         }
         importDeclaration.unhandle(serviceReference);
     }
 
     @Override
     protected Logger getLogger() {
-        return log;
+        return LOG;
     }
 
 

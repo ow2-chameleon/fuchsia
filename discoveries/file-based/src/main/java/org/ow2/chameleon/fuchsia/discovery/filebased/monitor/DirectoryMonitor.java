@@ -23,9 +23,10 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class DirectoryMonitor implements BundleActivator,ServiceTrackerCustomizer {
 
     /**
-     * A log.
+     * logger.
      */
-    protected final Logger log;
+    private static final Logger LOG = LoggerFactory.getLogger(DirectoryMonitor.class);
+
     /**
      * List of deployers
      */
@@ -59,10 +60,9 @@ public class DirectoryMonitor implements BundleActivator,ServiceTrackerCustomize
         this.directory=new File(directorypath);
         this.trackedClassName=classname;
         this.polling = polling;
-        this.log = LoggerFactory.getLogger(DirectoryMonitor.class.getName() + "[" + directory.getName() + "]");
 
         if (!directory.isDirectory()) {
-            log.info("Monitored directory {} not existing - creating directory", directory.getAbsolutePath());
+            LOG.info("Monitored directory {} not existing - creating directory", directory.getAbsolutePath());
             this.directory.mkdirs();
         }
 
@@ -126,7 +126,7 @@ public class DirectoryMonitor implements BundleActivator,ServiceTrackerCustomize
 
     public void start(final BundleContext context) throws Exception {
         this.context = context;
-        log.info("Starting installing bundles from {}", directory.getAbsolutePath());
+        LOG.info("Starting installing bundles from {}", directory.getAbsolutePath());
         this.tracker = new ServiceTracker(context, this.trackedClassName, this);
 
         // To avoid concurrency, we take the write lock here.
@@ -163,11 +163,11 @@ public class DirectoryMonitor implements BundleActivator,ServiceTrackerCustomize
 
     private void startFileMonitoring() throws Exception {
         if (polling == -1l) {
-            log.debug("No file monitoring for {}", directory.getAbsolutePath());
+            LOG.debug("No file monitoring for {}", directory.getAbsolutePath());
             return;
         }
 
-        log.info("Starting file monitoring for {} - polling : {} ms", directory.getName(), polling);
+        LOG.info("Starting file monitoring for {} - polling : {} ms", directory.getName(), polling);
         monitor.start();
     }
 
@@ -177,7 +177,7 @@ public class DirectoryMonitor implements BundleActivator,ServiceTrackerCustomize
             acquireWriteLockIfNotHeld();
             this.tracker.close();
             if (monitor != null) {
-                log.debug("Stopping file monitoring of {}", directory.getAbsolutePath());
+                LOG.debug("Stopping file monitoring of {}", directory.getAbsolutePath());
                 monitor.stop(5); // Wait 5 milliseconds.
             }
         } finally {
@@ -237,7 +237,7 @@ public class DirectoryMonitor implements BundleActivator,ServiceTrackerCustomize
          */
         @Override
         public void onFileCreate(File file) {
-            log.info("File " + file + " created in " + directory);
+            LOG.info("File " + file + " created in " + directory);
             List<Deployer> depl = new ArrayList<Deployer>();
             try {
                 acquireReadLockIfNotHeld();
@@ -255,14 +255,14 @@ public class DirectoryMonitor implements BundleActivator,ServiceTrackerCustomize
                 try {
                     deployer.onFileCreate(file);
                 } catch (Exception e) {
-                    log.error("Error during the management of " + file.getAbsolutePath() + " (created) by " + deployer, e);
+                    LOG.error("Error during the management of " + file.getAbsolutePath() + " (created) by " + deployer, e);
                 }
             }
         }
 
         @Override
         public void onFileChange(File file) {
-            log.info("File " + file + " from " + directory + " changed");
+            LOG.info("File " + file + " from " + directory + " changed");
 
             List<Deployer> depl = new ArrayList<Deployer>();
             try {
@@ -280,7 +280,7 @@ public class DirectoryMonitor implements BundleActivator,ServiceTrackerCustomize
                 try {
                     deployer.onFileChange(file);
                 } catch (Exception e) {
-                    log.error("Error during the management of " + file.getAbsolutePath() + " (change) by " + deployer,
+                    LOG.error("Error during the management of " + file.getAbsolutePath() + " (change) by " + deployer,
                             e);
                 }
             }
@@ -288,7 +288,7 @@ public class DirectoryMonitor implements BundleActivator,ServiceTrackerCustomize
 
         @Override
         public void onFileDelete(File file) {
-            log.info("File " + file + " deleted from " + directory);
+            LOG.info("File " + file + " deleted from " + directory);
 
             List<Deployer> depl = new ArrayList<Deployer>();
             try {
@@ -306,7 +306,7 @@ public class DirectoryMonitor implements BundleActivator,ServiceTrackerCustomize
                 try {
                     deployer.onFileDelete(file);
                 } catch (Exception e) {
-                    log.error("Error during the management of " + file.getAbsolutePath() + " (delete) by " + deployer, e);
+                    LOG.error("Error during the management of " + file.getAbsolutePath() + " (delete) by " + deployer, e);
                 }
             }
         }

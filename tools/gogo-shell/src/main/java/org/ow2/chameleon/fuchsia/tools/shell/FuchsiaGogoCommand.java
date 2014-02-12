@@ -34,6 +34,8 @@ import static org.ow2.chameleon.fuchsia.core.declaration.Constants.PROTOCOL_NAME
  */
 public class FuchsiaGogoCommand {
 
+    private static final Logger LOG = LoggerFactory.getLogger(FuchsiaGogoCommand.class);
+
     @ServiceProperty(name = "osgi.command.scope", value = "fuchsia")
     String m_scope;
 
@@ -42,8 +44,6 @@ public class FuchsiaGogoCommand {
 
     @Requires
     EventAdmin eventAdmin;
-
-    private Logger log = LoggerFactory.getLogger(this.getClass());
 
     private BundleContext m_context = null;
 
@@ -67,7 +67,7 @@ public class FuchsiaGogoCommand {
                 displayDeclarationList(allServiceRef);
             }
         } catch (Exception e) {
-            log.error("failed to execute command", e);
+            LOG.error("failed to execute command", e);
             System.out.println("failed to execute the command");
         }
     }
@@ -115,7 +115,7 @@ public class FuchsiaGogoCommand {
         try {
             filter = FrameworkUtil.createFilter(filterString);
         } catch (InvalidSyntaxException e) {
-            log.error("Failed to create the appropriate filter.", e);
+            LOG.error("Failed to create the appropriate filter.", e);
             return;
         }
 
@@ -143,7 +143,7 @@ public class FuchsiaGogoCommand {
         System.out.println("Declaration : " + identifier);
         Map<String, Object> metadata = declaration.getMetadata();
         if (metadata.size() == 0) {
-            log.error("Malformated declaration, metadata are empty.");
+            LOG.error("Malformated declaration, metadata are empty.");
         } else {
             for (Map.Entry<String, Object> entry : metadata.entrySet()) {
                 System.out.println(String.format("\t%s\t\t= %s", entry.getKey(), entry.getValue()));
@@ -177,7 +177,7 @@ public class FuchsiaGogoCommand {
                 System.out.println("No linkers available.");
             }
         } catch (InvalidSyntaxException e) {
-            log.error("invalid LDAP filter syntax", e);
+            LOG.error("invalid LDAP filter syntax", e);
             System.out.println("failed to execute the command");
         }
     }
@@ -198,7 +198,7 @@ public class FuchsiaGogoCommand {
                 System.out.println("No discovery available.");
             }
         } catch (InvalidSyntaxException e) {
-            log.error("invalid ldap filter syntax", e);
+            LOG.error("invalid ldap filter syntax", e);
             System.out.println("failed to execute the command");
         }
     }
@@ -221,7 +221,7 @@ public class FuchsiaGogoCommand {
                 System.out.println("No importers available.");
             }
         } catch (InvalidSyntaxException e) {
-            log.error("invalid ldap filter syntax", e);
+            LOG.error("invalid ldap filter syntax", e);
             System.out.println("failed to execute the command");
         }
     }
@@ -244,7 +244,7 @@ public class FuchsiaGogoCommand {
                 System.out.println("No exporter available.");
             }
         } catch (InvalidSyntaxException e) {
-            log.error("invalid ldap filter syntax", e);
+            LOG.error("invalid ldap filter syntax", e);
             System.out.println("failed to execute the command");
         }
     }
@@ -279,7 +279,7 @@ public class FuchsiaGogoCommand {
         try {
             importDeclarationsRef = m_context.getAllServiceReferences(klass.getName(), null);
         } catch (InvalidSyntaxException e) {
-            log.error("Failed to retrieved services " + klass.getName(), e);
+            LOG.error("Failed to retrieved services " + klass.getName(), e);
             return new ArrayList<ServiceReference>();
         }
         if (importDeclarationsRef != null) {

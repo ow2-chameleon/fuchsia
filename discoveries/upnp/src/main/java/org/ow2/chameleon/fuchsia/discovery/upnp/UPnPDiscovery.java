@@ -27,6 +27,8 @@ import java.util.Set;
 @Provides(specifications = {DiscoveryService.class})
 public class UPnPDiscovery extends AbstractDiscoveryComponent {
 
+    private static final Logger LOG = LoggerFactory.getLogger(UPnPDiscovery.class);
+
     private final HashMap<String, ImportDeclaration> importDeclarations = new HashMap<String, ImportDeclaration>();
 
     @ServiceProperty(name = "instance.name")
@@ -34,12 +36,12 @@ public class UPnPDiscovery extends AbstractDiscoveryComponent {
 
     public UPnPDiscovery(BundleContext bundleContext) {
         super(bundleContext);
-        getLogger().debug("UPnP discovery: loading..");
+        LOG.debug("UPnP discovery: loading..");
     }
 
     @Validate
     public void start() {
-        getLogger().debug("UPnP discovery: up and running.");
+        LOG.debug("UPnP discovery: up and running.");
     }
 
     @Invalidate
@@ -48,12 +50,12 @@ public class UPnPDiscovery extends AbstractDiscoveryComponent {
 
         importDeclarations.clear();
 
-        getLogger().debug("UPnP discovery: stopped.");
+        LOG.debug("UPnP discovery: stopped.");
     }
 
     @Override
     public Logger getLogger() {
-        return LoggerFactory.getLogger(this.getClass());
+        return LOG;
     }
 
     public String getName() {

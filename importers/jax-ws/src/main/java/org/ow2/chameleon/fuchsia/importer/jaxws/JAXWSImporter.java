@@ -32,6 +32,11 @@ public class JAXWSImporter extends AbstractImporterComponent {
 
     private static final String CLASSNAME = "className";
 
+    /**
+     * logger
+     */
+    private static final Logger LOG = LoggerFactory.getLogger(JAXWSImporter.class);
+
     private final Map<ImportDeclaration, ServiceRegistration> map;
 
     @ServiceProperty(name = "target", value = "(jax-ws.importer.interfaces=*)")
@@ -43,11 +48,6 @@ public class JAXWSImporter extends AbstractImporterComponent {
     private final BundleContext context;
 
     private ServiceReference serviceReference;
-
-    /**
-     * logger
-     */
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public JAXWSImporter(BundleContext pContext) {
         context=pContext;
@@ -62,14 +62,14 @@ public class JAXWSImporter extends AbstractImporterComponent {
     @Override
     @Invalidate
     protected void stop() {
-        logger.info("STOP CXF IMPORTER SERVICE");
+        LOG.info("STOP CXF IMPORTER SERVICE");
         super.stop();
     }
 
     @Override
     @Validate
     protected void start() {
-        logger.info("START CXF IMPORTER SERVICE");
+        LOG.info("START CXF IMPORTER SERVICE");
         super.start();
     }
 
@@ -88,7 +88,7 @@ public class JAXWSImporter extends AbstractImporterComponent {
 
     @Override
     protected void useImportDeclaration(ImportDeclaration importDeclaration) {
-        logger.debug("Create proxy" + importDeclaration.getMetadata());
+        LOG.debug("Create proxy" + importDeclaration.getMetadata());
         ClientProxyFactoryBean factory;
         String endPointURL;
         Object objectProxy;
@@ -98,14 +98,14 @@ public class JAXWSImporter extends AbstractImporterComponent {
         try {
             klass = loadClass(context, (String) importDeclaration.getMetadata().get(CLASSNAME));
         } catch (ClassNotFoundException e) {
-            logger.error("Failed to load class",e);
+            LOG.error("Failed to load class", e);
             return;
         }
 
         final ClassLoader origin = Thread.currentThread().getContextClassLoader();
         try {
             Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader());
-            logger.debug(String.valueOf(klass));
+            LOG.debug(String.valueOf(klass));
             //use annotations if present
             if (klass.isAnnotationPresent(WebService.class)){
                 factory = new JaxWsProxyFactoryBean();
@@ -127,8 +127,8 @@ public class JAXWSImporter extends AbstractImporterComponent {
             endPointURL = (String) importDeclaration.getMetadata().get(ENDPOINT_URL);
             factory.setAddress(endPointURL);
 
-            logger.debug(String.valueOf(factory.getAddress()));
-            logger.debug(String.valueOf(factory.getServiceFactory()));
+            LOG.debug(String.valueOf(factory.getAddress()));
+            LOG.debug(String.valueOf(factory.getServiceFactory()));
 
             //create the proxy
             objectProxy = factory.create();
@@ -161,7 +161,7 @@ public class JAXWSImporter extends AbstractImporterComponent {
      */
     @Override
     protected void denyImportDeclaration(ImportDeclaration importDeclaration) {
-        logger.debug("CXFImporter destroy a proxy for " + importDeclaration);
+        LOG.debug("CXFImporter destroy a proxy for " + importDeclaration);
         ServiceRegistration serviceRegistration = map.get(importDeclaration);
         serviceRegistration.unregister();
 
@@ -173,6 +173,6 @@ public class JAXWSImporter extends AbstractImporterComponent {
 
     @Override
     protected Logger getLogger() {
-        return logger;
+        return LOG;
     }
 }

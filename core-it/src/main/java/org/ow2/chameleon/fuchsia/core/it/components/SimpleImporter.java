@@ -11,6 +11,9 @@ import org.slf4j.LoggerFactory;
 @Component(name = "SimpleImporterFactory")
 @Provides(specifications = {ImporterService.class})
 public class SimpleImporter extends AbstractImporterComponent {
+
+    private static final Logger LOG = LoggerFactory.getLogger(SimpleImporter.class);
+
     @Override
     public void useImportDeclaration(ImportDeclaration importDeclaration) {
         //
@@ -23,7 +26,7 @@ public class SimpleImporter extends AbstractImporterComponent {
 
     @Override
     protected Logger getLogger() {
-        return LoggerFactory.getLogger(this.getClass());
+        return LOG;
     }
 
     public String getName() {

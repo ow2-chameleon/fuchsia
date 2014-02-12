@@ -26,11 +26,12 @@ import java.util.*;
 @Provides
 public class SubscriptionImporter extends AbstractImporterComponent implements SubscriberOutput {
 
+    private static final Logger LOG = LoggerFactory.getLogger(SubscriptionImporter.class);
+
     static List<String> approvedActions = new Vector<String>();
 
     private List<String> callbacksRegistered=new ArrayList<String>();
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @ServiceProperty(name = "target", value = "(push.hub.url=*)")
     private String filter;
@@ -50,13 +51,13 @@ public class SubscriptionImporter extends AbstractImporterComponent implements S
 
 	@Validate
     public void start() {
-        logger.info("PuSH importer started.");
+        LOG.info("PuSH importer started.");
         super.start();
 	}
 
     @Invalidate
     public void stop(){
-        logger.info("PuSH importer stopped.");
+        LOG.info("PuSH importer stopped.");
         super.stop();
     }
 
@@ -150,7 +151,7 @@ public class SubscriptionImporter extends AbstractImporterComponent implements S
     @Override
     protected void useImportDeclaration(ImportDeclaration importDeclaration) throws ImporterException {
 
-        logger.info("adding import declaration {}", importDeclaration);
+        LOG.info("adding import declaration {}", importDeclaration);
 
         try {
 
@@ -167,18 +168,18 @@ public class SubscriptionImporter extends AbstractImporterComponent implements S
             int statusCode = subscribe(hub, hub_topic,callback, null, null);
 
             if (statusCode == 204){
-                logger.info("the status code of the subscription is 204: the request was verified and that the subscription is active");
+                LOG.info("the status code of the subscription is 204: the request was verified and that the subscription is active");
             } else if (statusCode == 202){
-                logger.info("the status code of the subscription is 202: the subscription has yet to be verified (asynchronous verification)");
+                LOG.info("the status code of the subscription is 202: the subscription has yet to be verified (asynchronous verification)");
             } else{
-                logger.info("the status code of the subscription is {}", statusCode);
+                LOG.info("the status code of the subscription is {}", statusCode);
             }
 
             callbacksRegistered.add(callback);
 
             importDeclaration.handle(serviceReference);
         } catch (Exception e) {
-            logger.error("failed to import declaration, with the message: "+e.getMessage(),e);
+            LOG.error("failed to import declaration, with the message: " + e.getMessage(), e);
         }
 
     }
@@ -186,7 +187,7 @@ public class SubscriptionImporter extends AbstractImporterComponent implements S
     @Override
     protected void denyImportDeclaration(ImportDeclaration importDeclaration) throws ImporterException {
 
-        logger.info("removing import declaration {}", importDeclaration);
+        LOG.info("removing import declaration {}", importDeclaration);
 
         Map<String,Object> data=importDeclaration.getMetadata();
         String hub = data.get("push.hub.url").toString();//"http://localhost:8080/subscribe";
@@ -199,7 +200,7 @@ public class SubscriptionImporter extends AbstractImporterComponent implements S
 
             if(callback.equals(targetCallback)){
 
-                logger.info("Removing callback {}",callback);
+                LOG.info("Removing callback {}", callback);
 
                 httpService.unregister(callback);
 
@@ -207,10 +208,10 @@ public class SubscriptionImporter extends AbstractImporterComponent implements S
 
                     unsubscribe(hub, hub_topic, targetCallback, null);
 
-                    logger.info("Callback {} removed from the subscriber",callback);
+                    LOG.info("Callback {} removed from the subscriber", callback);
 
                 } catch (Exception e) {
-                    logger.error("Callback "+callback+" failed to be removed from the subscriber with the message",e);
+                    LOG.error("Callback " + callback + " failed to be removed from the subscriber with the message", e);
                 }
 
                 break;
@@ -222,6 +223,6 @@ public class SubscriptionImporter extends AbstractImporterComponent implements S
 
     @Override
     protected Logger getLogger() {
-        return logger;
+        return LOG;
     }
 }

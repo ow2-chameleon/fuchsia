@@ -22,8 +22,7 @@ public class FoolImporter extends AbstractImporterComponent {
     /**
      * logger
      */
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
+    private static final Logger LOG = LoggerFactory.getLogger(FoolImporter.class);
 
     @ServiceProperty(name = TARGET_FILTER_PROPERTY, value = "(&(fool-number=1)(fool=fool))")
     private String filter;
@@ -33,17 +32,17 @@ public class FoolImporter extends AbstractImporterComponent {
 
     @Override
     protected void useImportDeclaration(ImportDeclaration importDeclaration) throws ImporterException {
-        logger.debug("FoolImporter create a proxy for " + importDeclaration);
+        LOG.debug("FoolImporter create a proxy for " + importDeclaration);
     }
 
     @Override
     protected void denyImportDeclaration(ImportDeclaration importDeclaration) throws ImporterException {
-        logger.debug("FoolImporter destroy a proxy for " + importDeclaration);
+        LOG.debug("FoolImporter destroy a proxy for " + importDeclaration);
     }
 
     @Override
     protected Logger getLogger() {
-        return logger;
+        return LOG;
     }
 
     @Override

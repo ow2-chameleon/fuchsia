@@ -29,11 +29,11 @@ import java.util.Map;
 @Provides(specifications = {org.ow2.chameleon.fuchsia.core.component.ImporterService.class})
 public class ProtobufferImporter extends AbstractImporterComponent {
 
+    private static final Logger LOG = LoggerFactory.getLogger(ProtobufferImporter.class);
+
     private final BundleContext context;
 
     private ServiceReference serviceReference;
-
-    private Logger log = LoggerFactory.getLogger(this.getClass().getName());
 
     private Map<String,ServiceRegistration> registeredImporter=new HashMap<String,ServiceRegistration>();
 
@@ -54,13 +54,13 @@ public class ProtobufferImporter extends AbstractImporterComponent {
     @Validate
     public void start() {
         super.start();
-        log.info("Protobuffer Importer RPC is up and running");
+        LOG.info("Protobuffer Importer RPC is up and running");
     }
 
     @Invalidate
     public void stop() {
         super.stop();
-        log.info("Protobuffer Importer RPC is up and running");
+        LOG.info("Protobuffer Importer RPC is up and running");
     }
 
     @Override
@@ -68,7 +68,7 @@ public class ProtobufferImporter extends AbstractImporterComponent {
 
         ProtobufferImporterPojo pojo=ProtobufferImporterPojo.create(importDeclaration);
 
-        log.info("Importing declaration with ID {}", pojo.getId());
+        LOG.info("Importing declaration with ID {}", pojo.getId());
 
         try {
 
@@ -98,7 +98,7 @@ public class ProtobufferImporter extends AbstractImporterComponent {
             importDeclaration.handle(serviceReference);
 
         } catch (Exception e) {
-            log.error("Fail to import Protobuffer RPC service with the message '{}'", e.getMessage(),e);
+            LOG.error("Fail to import Protobuffer RPC service with the message '{}'", e.getMessage(), e);
         }
 
     }
@@ -113,10 +113,10 @@ public class ProtobufferImporter extends AbstractImporterComponent {
         ServiceRegistration sr=registeredImporter.get(pojo.getId());
 
         if(sr!=null){
-            log.info("unregistering service with id:"+pojo.getId());
+            LOG.info("unregistering service with id:" + pojo.getId());
             sr.unregister();
         }else {
-            log.warn("no service found to be unregistered with id:"+pojo.getId());
+            LOG.warn("no service found to be unregistered with id:" + pojo.getId());
         }
 
 
@@ -124,7 +124,7 @@ public class ProtobufferImporter extends AbstractImporterComponent {
 
     @Override
     protected Logger getLogger() {
-        return log;
+        return LOG;
     }
 
     public String getName() {

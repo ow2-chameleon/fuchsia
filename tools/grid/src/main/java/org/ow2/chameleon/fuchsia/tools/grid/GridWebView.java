@@ -8,7 +8,6 @@ import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.http.HttpContext;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.http.NamespaceException;
 import org.ow2.chameleon.fuchsia.core.ImportationLinkerIntrospection;
@@ -25,9 +24,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,7 +39,8 @@ public class GridWebView {
     private static final String TEMPLATE_FILE="/index.html";
     private static final String TEMPLATE_ENCODING="UTF-8";
     private static final String TEMPLATE_FILE_REPOSITORY="/";
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    private static final Logger LOG = LoggerFactory.getLogger(GridWebView.class);
 
     private final BundleContext bundleContext;
 
@@ -87,7 +84,7 @@ public class GridWebView {
             }
 
         } catch (InvalidSyntaxException e) {
-            logger.error("Failed with the message {}",e.getMessage(),e);
+            LOG.error("Failed with the message {}", e.getMessage(), e);
         }
 
         return linkers;
@@ -141,7 +138,7 @@ public class GridWebView {
            try {
                templateRT.process(generateTemplateModel(), out);
            } catch (TemplateException e) {
-               logger.error("Failed with the message {}",e.getMessage(),e);
+               LOG.error("Failed with the message {}", e.getMessage(), e);
            }
 
        }

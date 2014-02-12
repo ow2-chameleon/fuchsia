@@ -29,7 +29,7 @@ import java.util.Map;
 @Provides(specifications = {ExporterService.class})
 public class ProtobufferExporter extends AbstractExporterComponent {
 
-    private static final Logger log = LoggerFactory.getLogger(ProtobufferExporter.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ProtobufferExporter.class);
 
     private Map<String,Server> serverPublished=new HashMap<String,Server>();
 
@@ -59,7 +59,7 @@ public class ProtobufferExporter extends AbstractExporterComponent {
     @Override
     protected void useExportDeclaration(ExportDeclaration exportDeclaration) {
 
-        log.info("initiating exportation...");
+        LOG.info("initiating exportation...");
 
         ProtobufferExporterPojo pojo=ProtobufferExporterPojo.create(exportDeclaration);
 
@@ -70,11 +70,11 @@ public class ProtobufferExporter extends AbstractExporterComponent {
 
             Collection<ServiceReference<Service>> protobuffReferences = context.getServiceReferences(inter, pojo.getFilter());
 
-            log.info("using filter "+pojo.getFilter()+" to find instance");
+            LOG.info("using filter " + pojo.getFilter() + " to find instance");
 
             if (protobuffReferences.size() == 0) {
 
-                log.info("nothing to be exported was found");
+                LOG.info("nothing to be exported was found");
 
             } else if (protobuffReferences.size() == 1) {
 
@@ -108,18 +108,18 @@ public class ProtobufferExporter extends AbstractExporterComponent {
 
                     Thread.currentThread().setContextClassLoader(loader);
 
-                    log.info("exporting the service with the id:" + pojo.getId());
+                    LOG.info("exporting the service with the id:" + pojo.getId());
 
                 }
 
             } else if (protobuffReferences.size() > 1) {
-                log.info("more than one were found to be exported");
+                LOG.info("more than one were found to be exported");
             }
 
         } catch (InvalidSyntaxException e) {
-            log.error("Invalid filter exception",e);
+            LOG.error("Invalid filter exception", e);
         } catch (ClassNotFoundException e) {
-            log.error("Class not found",e);
+            LOG.error("Class not found", e);
         }
 
     }
@@ -132,10 +132,10 @@ public class ProtobufferExporter extends AbstractExporterComponent {
         Server server=serverPublished.get(pojo.getId());
 
         if(server!=null){
-            log.info("Destroying endpoint:"+server.getEndpoint().getEndpointInfo().getAddress());
+            LOG.info("Destroying endpoint:" + server.getEndpoint().getEndpointInfo().getAddress());
             server.destroy();
         }else {
-            log.warn("nothing to destroy");
+            LOG.warn("nothing to destroy");
         }
 
     }

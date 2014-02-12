@@ -26,13 +26,13 @@ import java.util.Map;
 @Provides(specifications = {ExporterService.class})
 public class JAXWSExporter extends AbstractExporterComponent {
 
+    private static final Logger LOG = LoggerFactory.getLogger(JAXWSExporter.class);
+
     private Bus cxfbus;
 
     private final BundleContext context;
 
     private ServiceReference serviceReference;
-
-    private Logger logger=LoggerFactory.getLogger(this.getClass());
 
     private Map<String,Server> exportedDeclaration=new HashMap<String,Server>();
 
@@ -49,7 +49,7 @@ public class JAXWSExporter extends AbstractExporterComponent {
     @Override
     public void useExportDeclaration(ExportDeclaration exportDeclaration) {
 
-        logger.info("exporting {}",exportDeclaration.getMetadata());
+        LOG.info("exporting {}", exportDeclaration.getMetadata());
 
         CxfExporterPojo pojo=CxfExporterPojo.create(exportDeclaration);
 
@@ -67,7 +67,7 @@ public class JAXWSExporter extends AbstractExporterComponent {
             ServiceReference[] protobuffReferences = context.getAllServiceReferences(pojo.getClazz(),pojo.getFilter());
 
             if(protobuffReferences==null){
-                logger.warn("instance not found to be exported, ignoring exportation request, filter:"+pojo.getFilter());
+                LOG.warn("instance not found to be exported, ignoring exportation request, filter:" + pojo.getFilter());
             }
 
             srvFactory.setServiceBean(instance);
@@ -80,11 +80,11 @@ public class JAXWSExporter extends AbstractExporterComponent {
 
             exportedDeclaration.put(pojo.getWebcontext(),endpoint);
 
-            logger.info("Pushing CXF endpoint: {}",endpoint.getEndpoint().getEndpointInfo().getAddress());
+            LOG.info("Pushing CXF endpoint: {}", endpoint.getEndpoint().getEndpointInfo().getAddress());
 
         } catch (Exception e) {
 
-            logger.error("Failed exporting in CXF, with the message {}",e.getMessage());
+            LOG.error("Failed exporting in CXF, with the message {}", e.getMessage());
             throw new RuntimeException(e);
 
         }
@@ -94,7 +94,7 @@ public class JAXWSExporter extends AbstractExporterComponent {
     @Override
     protected void denyExportDeclaration(ExportDeclaration exportDeclaration) {
 
-        logger.info("destroying exportation {}",exportDeclaration.getMetadata());
+        LOG.info("destroying exportation {}", exportDeclaration.getMetadata());
 
         final String webcontext = (String) exportDeclaration.getMetadata().get(Constants.CXF_EXPORT_WEB_CONTEXT);
 
@@ -104,9 +104,9 @@ public class JAXWSExporter extends AbstractExporterComponent {
 
         if(exported!=null){
             exported.destroy();
-            logger.info("Endpoint destroyed: {}",webcontext);
+            LOG.info("Endpoint destroyed: {}", webcontext);
         }else {
-            logger.warn("Error destroying endpoint {}, is was not registered before.",webcontext);
+            LOG.warn("Error destroying endpoint {}, is was not registered before.", webcontext);
         }
 
     }
@@ -132,9 +132,9 @@ public class JAXWSExporter extends AbstractExporterComponent {
         try {
             http.registerServlet(Constants.CXF_SERVLET, cxfServlet, null, null);
         } catch (ServletException e) {
-            logger.error("Failed registering CXF servlet",e);
+            LOG.error("Failed registering CXF servlet", e);
         } catch (NamespaceException e) {
-            logger.error("Failed registering CXF servlet",e);
+            LOG.error("Failed registering CXF servlet", e);
         }
 
         cxfbus = cxfServlet.getBus();

@@ -17,6 +17,8 @@ import java.util.*;
 @Provides
 public class MQTTImporter extends AbstractImporterComponent {
 
+    private static final Logger LOG = LoggerFactory.getLogger(MQTTImporter.class);
+
     @ServiceProperty(name = "instance.name")
     private String name;
 
@@ -76,7 +78,7 @@ public class MQTTImporter extends AbstractImporterComponent {
             instance.dispose();
             importDeclaration.unhandle(serviceReference);
         }else {
-            getLogger().warn("Failed to destroy managed instance {}, such instance was not registered by this importer",id);
+            LOG.warn("Failed to destroy managed instance {}, such instance was not registered by this importer",id);
         }
 
     }
@@ -86,7 +88,7 @@ public class MQTTImporter extends AbstractImporterComponent {
     }
 
     public Logger getLogger() {
-        return LoggerFactory.getLogger(this.getClass());
+        return LOG;
     }
 
 }

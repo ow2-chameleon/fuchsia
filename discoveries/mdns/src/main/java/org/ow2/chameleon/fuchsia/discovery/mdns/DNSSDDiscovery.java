@@ -21,6 +21,8 @@ import java.util.HashMap;
 @Provides(specifications = DiscoveryService.class)
 public class DNSSDDiscovery extends AbstractDiscoveryComponent implements NetworkTopologyDiscovery.Factory.ClassDelegate, ServiceListener {
 
+    private static final Logger LOG = LoggerFactory.getLogger(DNSSDDiscovery.class);
+
     private final HashMap<String, ImportDeclaration> importDeclarations = new HashMap<String, ImportDeclaration>();
 
     @Property(name = "dnssd.service.type",value = MDNSConstants.DNSSD_SERVICE_TYPE)
@@ -42,7 +44,7 @@ public class DNSSDDiscovery extends AbstractDiscoveryComponent implements Networ
     @Invalidate
     public void stop(){
 
-        getLogger().info("stopping service of mDNS/DNSsd discovery");
+        LOG.info("stopping service of mDNS/DNSsd discovery");
 
         for(ImportDeclaration declaration:importDeclarations.values()){
                super.unregisterImportDeclaration(declaration);
@@ -55,7 +57,7 @@ public class DNSSDDiscovery extends AbstractDiscoveryComponent implements Networ
     }
 
     public void serviceAdded(ServiceEvent event) {
-        getLogger().info("adding declaration for the mDNS/DNSsd service {}", event.getName());
+        LOG.info("adding declaration for the mDNS/DNSsd service {}", event.getName());
 
         createImportationDeclaration(event);
 
@@ -63,21 +65,21 @@ public class DNSSDDiscovery extends AbstractDiscoveryComponent implements Networ
 
     public void serviceRemoved(ServiceEvent event) {
 
-        getLogger().info("removing declaration for the mDNS/DNSsd service {}",event.getName());
+        LOG.info("removing declaration for the mDNS/DNSsd service {}", event.getName());
 
         ImportDeclaration declaration=importDeclarations.remove(event.getName());
         if(declaration!=null) {
             unregisterImportDeclaration(declaration);
-            getLogger().info("import declaration removed for the mDNS/DNSsd service {}",event.getName());
+            LOG.info("import declaration removed for the mDNS/DNSsd service {}", event.getName());
         }else {
-            getLogger().info("Impossible to remove declaration {}, it was not registered by the discovery",event.getName());
+            LOG.info("Impossible to remove declaration {}, it was not registered by the discovery", event.getName());
         }
 
     }
 
     public void serviceResolved(ServiceEvent event) {
-        getLogger().info("resolving declaration for the mDNS/DNSsd service {}", event.getName());
-        getLogger().warn("no action implemented for this kind of event");
+        LOG.info("resolving declaration for the mDNS/DNSsd service {}", event.getName());
+        LOG.warn("no action implemented for this kind of event");
     }
 
     public String getName() {
@@ -137,7 +139,7 @@ public class DNSSDDiscovery extends AbstractDiscoveryComponent implements Networ
                 current.addServiceListener(dnssdServiceType, this);
 
             } catch (IOException e) {
-                getLogger().error("Failed to publish in mDNS",e);
+                LOG.error("Failed to publish in mDNS", e);
             }
 
         }
@@ -145,6 +147,6 @@ public class DNSSDDiscovery extends AbstractDiscoveryComponent implements Networ
 
     @Override
     public Logger getLogger() {
-        return LoggerFactory.getLogger(this.getClass());
+        return LOG;
     }
 }

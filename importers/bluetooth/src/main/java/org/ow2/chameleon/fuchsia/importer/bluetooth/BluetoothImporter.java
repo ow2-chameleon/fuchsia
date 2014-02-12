@@ -18,6 +18,11 @@ import static org.ow2.chameleon.fuchsia.core.declaration.Constants.PROTOCOL_NAME
 @Provides(specifications = org.ow2.chameleon.fuchsia.core.component.ImporterService.class)
 // FIXME ADD LOCKS !!
 public class BluetoothImporter extends AbstractImporterComponent {
+    /**
+     * logger
+     */
+    private static final Logger LOG = LoggerFactory.getLogger(BluetoothImporter.class);
+
     // FIXME scope metadata
     @ServiceProperty(name = TARGET_FILTER_PROPERTY, value = "(&(" + PROTOCOL_NAME + "=bluetooth)(scope=generic))")
     private String filter;
@@ -28,10 +33,6 @@ public class BluetoothImporter extends AbstractImporterComponent {
     private final BundleContext m_bundleContext;
 
     private ServiceReference serviceReference;
-    /**
-     * logger
-     */
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final Map<String, Factory> bluetoothProxiesFactories;
 
@@ -60,14 +61,14 @@ public class BluetoothImporter extends AbstractImporterComponent {
     @Override
     @Invalidate
     protected void stop() {
-        logger.info("Stop Dynamo Fuchsia Importer");
+        LOG.info("Stop Dynamo Fuchsia Importer");
         super.stop();
     }
 
     @Override
     @Validate
     protected void start() {
-        logger.info("Start Dynamo Fuchsia Importer");
+        LOG.info("Start Dynamo Fuchsia Importer");
         super.start();
     }
 
@@ -78,7 +79,7 @@ public class BluetoothImporter extends AbstractImporterComponent {
      */
     @Override
     protected void useImportDeclaration(ImportDeclaration importDeclaration) {
-        logger.warn("useImportDeclaration called for : " + importDeclaration.toString());
+        LOG.warn("useImportDeclaration called for : " + importDeclaration.toString());
         String fn = (String) importDeclaration.getMetadata().get("bluetooth.device.friendlyname");
         Factory factory = bluetoothProxiesFactories.get(fn);
         if (factory != null) {
@@ -92,7 +93,7 @@ public class BluetoothImporter extends AbstractImporterComponent {
     }
 
     private ComponentInstance createProxy(ImportDeclaration importDeclaration, Factory f) {
-        logger.warn("CreateProxy called for : " + importDeclaration.toString());
+        LOG.warn("CreateProxy called for : " + importDeclaration.toString());
 
         ComponentInstance ci = null;
         Dictionary conf = new Hashtable();
@@ -102,11 +103,11 @@ public class BluetoothImporter extends AbstractImporterComponent {
             try {
                 ci = f.createComponentInstance(conf);
             } catch (UnacceptableConfiguration unacceptableConfiguration) {
-                logger.error("Cannot create instance of Factory " + " : ", unacceptableConfiguration);
+                LOG.error("Cannot create instance of Factory " + " : ", unacceptableConfiguration);
             } catch (MissingHandlerException e) {
-                logger.error("Cannot create instance of Factory " + " : ", e);
+                LOG.error("Cannot create instance of Factory " + " : ", e);
             } catch (ConfigurationException e) {
-                logger.error("Cannot create instance of Factory " + " : ", e);
+                LOG.error("Cannot create instance of Factory " + " : ", e);
             }
         }
         return ci;
@@ -120,7 +121,7 @@ public class BluetoothImporter extends AbstractImporterComponent {
      */
     @Override
     protected void denyImportDeclaration(ImportDeclaration importDeclaration) {
-        logger.debug("Bluetooth Importer  destroy a proxy for " + importDeclaration);
+        LOG.debug("Bluetooth Importer  destroy a proxy for " + importDeclaration);
         String fn = (String) importDeclaration.getMetadata().get("bluetooth.device.friendlyname");
         if(unresolvedImportDeclarations.remove(fn) == null){
             ImportDeclaration idec = resolvedImportDeclarations.remove(fn);
@@ -133,13 +134,13 @@ public class BluetoothImporter extends AbstractImporterComponent {
 
     @Override
     protected Logger getLogger() {
-        return logger;
+        return LOG;
     }
 
 
     @Bind(aggregate = true, optional = true, filter = "(protocol=bluetooth)")
     private void bindBluetoothProxyFactories(Factory f, ServiceReference<Factory> sr) {
-        logger.warn("Found one factory : " + f.getName());
+        LOG.warn("Found one factory : " + f.getName());
         String friendlyName = (String) sr.getProperty("device_name");
         if(friendlyName == null){
             return;

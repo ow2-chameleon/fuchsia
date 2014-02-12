@@ -17,6 +17,8 @@ import java.util.Hashtable;
 @Provides
 public class MQTTOutputRouter implements Runnable {
 
+    private static final Logger LOG = LoggerFactory.getLogger(MQTTOutputRouter.class);
+
     @Requires
     EventAdmin eventAdmin;
 
@@ -61,7 +63,7 @@ public class MQTTOutputRouter implements Runnable {
 
         try {
 
-            getLogger().info("Monitoring AMPQ Queue named '{}'", queue);
+            LOG.info("Monitoring AMPQ Queue named '{}'", queue);
 
             QueueingConsumer consumer = new QueueingConsumer(channel);
 
@@ -72,22 +74,22 @@ public class MQTTOutputRouter implements Runnable {
                 QueueingConsumer.Delivery delivery = consumer.nextDelivery();
                 String message = new String(delivery.getBody());
 
-                getLogger().info("AMQP: message '{}' received,", message);
+                LOG.info("AMQP: message '{}' received,", message);
 
-                getLogger().info("Forwarding ..");
+                LOG.info("Forwarding ..");
 
                 Hashtable metatable=new Hashtable();
                 metatable.put("content", message);
 
                 eventAdmin.sendEvent(getEventAdminMessage(metatable));
 
-                getLogger().info("EventAdmin: message '{}' queue '{}' sent", message,queue);
+                LOG.info("EventAdmin: message '{}' queue '{}' sent", message,queue);
 
             }
 
         } catch (Exception e) {
 
-            getLogger().error("Failed to monitor AMPQ Queue named '{}'", queue,e);
+            LOG.error("Failed to monitor AMPQ Queue named '{}'", queue,e);
 
         }
 
@@ -103,10 +105,6 @@ public class MQTTOutputRouter implements Runnable {
 
     public boolean validate(ImportDeclaration declaration) {
         return false;
-    }
-
-    public Logger getLogger() {
-        return LoggerFactory.getLogger(this.getClass());
     }
 
 }

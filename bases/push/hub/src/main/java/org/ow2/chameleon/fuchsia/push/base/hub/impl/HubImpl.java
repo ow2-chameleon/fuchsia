@@ -20,12 +20,6 @@ import org.ow2.chameleon.fuchsia.push.base.hub.exception.SubscriptionOriginVerif
 import org.ow2.chameleon.fuchsia.push.base.hub.servlet.ContentUpdatedNotificationServlet;
 import org.ow2.chameleon.fuchsia.push.base.hub.servlet.SubscriptionServlet;
 import org.ow2.chameleon.fuchsia.push.base.hub.Hub;
-import org.ow2.chameleon.fuchsia.push.base.hub.Hub;
-import org.ow2.chameleon.fuchsia.push.base.hub.dto.SubscriptionConfirmationRequest;
-import org.ow2.chameleon.fuchsia.push.base.hub.dto.SubscriptionRequest;
-import org.ow2.chameleon.fuchsia.push.base.hub.exception.SubscriptionOriginVerificationException;
-import org.ow2.chameleon.fuchsia.push.base.hub.servlet.ContentUpdatedNotificationServlet;
-import org.ow2.chameleon.fuchsia.push.base.hub.servlet.SubscriptionServlet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,14 +34,14 @@ import java.util.Map;
 @Component(name="PuSHHubFactory")
 public class HubImpl implements Hub {
 
+    private static final Logger LOG = LoggerFactory.getLogger(HubImpl.class);
+
     @Requires
     HttpService http;
 
     BundleContext context;
 
     Map<String, List<String>> topicCallbackSubscriptionMap = new HashMap<String, List<String>>();
-
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public HubImpl() {}
 
@@ -63,11 +57,11 @@ public class HubImpl implements Hub {
 
             http.registerServlet("/hub/main", new ContentUpdatedNotificationServlet(this), null, null);
 
-            logger.info("Hub started.");
+            LOG.info("Hub started.");
 
         } catch (Exception e) {
 
-            logger.error("Failed to startup hub urls",e);
+            LOG.error("Failed to startup hub urls", e);
 
         }
     }
@@ -79,7 +73,7 @@ public class HubImpl implements Hub {
      */
     public void ContentNotificationReceived(ContentNotification cn) {
 
-        logger.info("Publisher -> (Hub), notification of new content available for the topic {}.",cn.getUrl());
+        LOG.info("Publisher -> (Hub), notification of new content available for the topic {}.", cn.getUrl());
 
         NotifySubscriberCallback(cn);
 
@@ -91,17 +85,17 @@ public class HubImpl implements Hub {
      */
     public void SubscriptionRequestReceived(SubscriptionRequest sr) throws SubscriptionException {
 
-        logger.info("Subscriber -> (Hub), new subscription request received.",sr.getCallback());
+        LOG.info("Subscriber -> (Hub), new subscription request received.", sr.getCallback());
 
         try {
 
             VerifySubscriberRequestedSubscription(sr);
 
             if(sr.getMode().equals("subscribe")){
-                logger.info("Adding callback {} to the topic {}",sr.getCallback(),sr.getTopic());
+                LOG.info("Adding callback {} to the topic {}", sr.getCallback(), sr.getTopic());
                 addCallbackToTopic(sr.getCallback(),sr.getTopic());
             }else if(sr.getMode().equals("unsubscribe")){
-                logger.info("Removing callback {} from the topic {}",sr.getCallback(),sr.getTopic());
+                LOG.info("Removing callback {} from the topic {}", sr.getCallback(), sr.getTopic());
                 removeCallbackToTopic(sr.getCallback(),sr.getTopic());
             }
 
@@ -121,7 +115,7 @@ public class HubImpl implements Hub {
      */
     public Boolean VerifySubscriberRequestedSubscription(SubscriptionRequest sr) throws SubscriptionOriginVerificationException, URISyntaxException, IOException {
 
-        logger.info("(Hub) -> Subscriber, sending notification to verify the origin of the subscription {}.", sr.getCallback());
+        LOG.info("(Hub) -> Subscriber, sending notification to verify the origin of the subscription {}.", sr.getCallback());
 
         SubscriptionConfirmationRequest sc = new SubscriptionConfirmationRequest(sr.getMode(),
                 sr.getTopic(), "challenge", "0");
@@ -134,7 +128,7 @@ public class HubImpl implements Hub {
 
         CloseableHttpResponse response1 = httpclient.execute(httpGet);
 
-        logger.info("Subscriber replied with the http code {}.",response1.getStatusLine().getStatusCode());
+        LOG.info("Subscriber replied with the http code {}.", response1.getStatusLine().getStatusCode());
 
         Integer returnedCode=response1.getStatusLine().getStatusCode();
 
@@ -183,16 +177,16 @@ public class HubImpl implements Hub {
         Boolean removedFromList=callbacks.remove(callback);
 
         if(removedFromList){
-            logger.info("Hub, callback {} removed from the topic {}",callback,topic);
+            LOG.info("Hub, callback {} removed from the topic {}", callback, topic);
         }else {
-            logger.info("Hub, callback {} was not present for the topic {}",callback,topic);
+            LOG.info("Hub, callback {} was not present for the topic {}", callback, topic);
         }
 
     }
 
     private String fetchContentFromPublisher(ContentNotification cn) {
 
-        logger.info("(Hub) -> Publisher, fetching content from the publisher on the url {}", cn.getUrl());
+        LOG.info("(Hub) -> Publisher, fetching content from the publisher on the url {}", cn.getUrl());
 
         HttpGet httpGet = new HttpGet(cn.getUrl());
 
@@ -204,13 +198,13 @@ public class HubImpl implements Hub {
 
             String contentReceived=inputStreamToString(response.getEntity().getContent());
 
-            logger.info("(Hub) -> Publisher, Content fetched from publisher \n{}\n",contentReceived);
+            LOG.info("(Hub) -> Publisher, Content fetched from publisher \n{}\n", contentReceived);
 
             return contentReceived;
 
         } catch (IOException e) {
 
-            logger.info("(Hub) -> Publisher, Failed to fetched from publisher",e);
+            LOG.info("(Hub) -> Publisher, Failed to fetched from publisher", e);
         }
 
         return null;
@@ -237,15 +231,15 @@ public class HubImpl implements Hub {
 
                 CloseableHttpClient httpclient = HttpClients.createDefault();
 
-                logger.info("(Hub) -> Subscriber, send content to subscriber {}",callback);
+                LOG.info("(Hub) -> Subscriber, send content to subscriber {}", callback);
 
                 CloseableHttpResponse response=httpclient.execute(httpPost);
 
-                logger.info("(Hub) -> Subscriber, subcribers response {}",response.getStatusLine().getStatusCode());
+                LOG.info("(Hub) -> Subscriber, subcribers response {}", response.getStatusLine().getStatusCode());
 
             } catch (Exception e) {
 
-                logger.info("Failed distributing content to subscribers",e);
+                LOG.info("Failed distributing content to subscribers", e);
 
             }
         }

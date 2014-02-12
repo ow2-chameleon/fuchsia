@@ -46,6 +46,11 @@ import static org.ow2.chameleon.fuchsia.core.component.ImporterService.TARGET_FI
 @Provides(specifications = {ImportationLinker.class,ImportationLinkerIntrospection.class})
 public class DefaultImportationLinker implements ImportationLinker, ImportationLinkerIntrospection {
 
+    /**
+     * Logger
+     */
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultImportationLinker.class);
+
     // The OSGi BundleContext, injected by OSGi in the constructor
     private final BundleContext bundleContext;
 
@@ -77,7 +82,7 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
         try {
             importerServiceFilter = getFilter(importerServiceFilterProperty);
         } catch (InvalidFilterException invalidFilterException) {
-            LOGGER.debug("The value of the Property " + FILTER_IMPORTERSERVICE_PROPERTY + " is invalid,"
+            LOG.debug("The value of the Property " + FILTER_IMPORTERSERVICE_PROPERTY + " is invalid,"
                     + " the recuperation of the Filter has failed. The instance gonna stop.", invalidFilterException);
             state = false;
             return;
@@ -86,7 +91,7 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
         try {
             importDeclarationFilter = getFilter(importDeclarationFilterProperty);
         } catch (InvalidFilterException invalidFilterException) {
-            LOGGER.debug("The value of the Property " + FILTER_IMPORTDECLARATION_PROPERTY + " is invalid,"
+            LOG.debug("The value of the Property " + FILTER_IMPORTDECLARATION_PROPERTY + " is invalid,"
                     + " the recuperation of the Filter has failed. The instance gonna stop.", invalidFilterException);
             state = false;
             return;
@@ -115,19 +120,14 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
 
     private final DeclarationsManager declarationsManager = new DeclarationsManager();
 
-    /**
-     * LOGGER
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultImportationLinker.class);
-
     @Validate
     public void start() {
-        LOGGER.debug(linkerName + " starting");
+        LOG.debug(linkerName + " starting");
     }
 
     @Invalidate
     public void stop() {
-        LOGGER.debug(linkerName + " stopping");
+        LOG.debug(linkerName + " stopping");
     }
 
     public DefaultImportationLinker(BundleContext bundleContext) {
@@ -147,7 +147,7 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
             try {
                 importersManager.add(serviceReference);
             } catch (InvalidFilterException invalidFilterException) {
-                LOGGER.error("The ServiceProperty \"" + TARGET_FILTER_PROPERTY + "\" of the ImporterService "
+                LOG.error("The ServiceProperty \"" + TARGET_FILTER_PROPERTY + "\" of the ImporterService "
                         + bundleContext.getService(serviceReference) + " doesn't provides a valid Filter."
                         + " To be used, it must provides a correct \"" + TARGET_FILTER_PROPERTY + "\" ServiceProperty.",
                         invalidFilterException);
@@ -156,7 +156,7 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
             if (!importersManager.matched(serviceReference)) {
                 return;
             }
-            LOGGER.debug(linkerName + " : Bind the ImporterService "
+            LOG.debug(linkerName + " : Bind the ImporterService "
                     + importersManager.getImporterService(serviceReference)
                     + " with filter " + importersManager.getTargetFilter(serviceReference));
             importersManager.createLinks(serviceReference);
@@ -174,7 +174,7 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
         try {
             importersManager.modified(serviceReference);
         } catch (InvalidFilterException invalidFilterException) {
-            LOGGER.error("The ServiceProperty \"" + TARGET_FILTER_PROPERTY + "\" of the ImporterService "
+            LOG.error("The ServiceProperty \"" + TARGET_FILTER_PROPERTY + "\" of the ImporterService "
                     + bundleContext.getService(serviceReference) + " doesn't provides a valid Filter."
                     + " To be used, it must provides a correct \"" + TARGET_FILTER_PROPERTY + "\" ServiceProperty.",
                     invalidFilterException);
@@ -197,7 +197,7 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
      */
     @Unbind(id = "importerServices")
     void unbindImporterService(ServiceReference<ImporterService> serviceReference) {
-        LOGGER.debug(linkerName + " : Unbind the ImporterService " + importersManager.getImporterService(serviceReference));
+        LOG.debug(linkerName + " : Unbind the ImporterService " + importersManager.getImporterService(serviceReference));
         synchronized (lock) {
             importersManager.removeLinks(serviceReference);
             importersManager.remove(serviceReference);
@@ -214,7 +214,7 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
     void bindImportDeclaration(ServiceReference<ImportDeclaration> importDeclarationSRef) {
         synchronized (lock) {
             declarationsManager.add(importDeclarationSRef);
-            LOGGER.debug(linkerName + " : Bind the ImportDeclaration "
+            LOG.debug(linkerName + " : Bind the ImportDeclaration "
                     + declarationsManager.getImportDeclaration(importDeclarationSRef));
 
             if (!declarationsManager.matched(importDeclarationSRef)) {
@@ -230,7 +230,7 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
      */
     @Modified(id = "importDeclarations")
     void modifiedImportDeclaration(ServiceReference<ImportDeclaration> importDeclarationSRef) {
-        LOGGER.debug(linkerName + " : Modify the ImportDeclaration "
+        LOG.debug(linkerName + " : Modify the ImportDeclaration "
                 + declarationsManager.getImportDeclaration(importDeclarationSRef));
 
         synchronized (lock) {
@@ -248,7 +248,7 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
      */
     @Unbind(id = "importDeclarations")
     void unbindImportDeclaration(ServiceReference<ImportDeclaration> importDeclarationSRef) {
-        LOGGER.debug(linkerName + " : Unbind the ImportDeclaration "
+        LOG.debug(linkerName + " : Unbind the ImportDeclaration "
                 + declarationsManager.getImportDeclaration(importDeclarationSRef));
 
         synchronized (lock) {
@@ -283,11 +283,11 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
         try {
             importerService.addImportDeclaration(importDeclaration);
         } catch (ImporterException e) {
-            LOGGER.debug(importerService + " throw an exception when giving to it the ImportDeclaration "
+            LOG.debug(importerService + " throw an exception when giving to it the ImportDeclaration "
                     + importDeclaration, e);
             return false;
         }
-        LOGGER.debug(importDeclaration + " match the filter of " + importerService + " : bind them together");
+        LOG.debug(importDeclaration + " match the filter of " + importerService + " : bind them together");
         importDeclaration.bind(importerServiceSRef);
         return true;
     }
@@ -306,7 +306,7 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
         try {
             importerService.removeImportDeclaration(importDeclaration);
         } catch (ImporterException e) {
-            LOGGER.debug(importerService + " throw an exception when removing of it the ImportDeclaration "
+            LOG.debug(importerService + " throw an exception when removing of it the ImportDeclaration "
                     + importDeclaration, e);
             return false;
         }
