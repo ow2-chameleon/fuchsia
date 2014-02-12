@@ -17,7 +17,6 @@ import static org.ow2.chameleon.fuchsia.core.declaration.Constants.PROTOCOL_NAME
 @Component()
 @Provides(specifications = org.ow2.chameleon.fuchsia.core.component.ImporterService.class)
 // FIXME ADD LOCKS !!
-// FIXME DESTROY PROXIES
 public class BluetoothImporter extends AbstractImporterComponent {
     // FIXME scope metadata
     @ServiceProperty(name = TARGET_FILTER_PROPERTY, value = "(&(" + PROTOCOL_NAME + "=bluetooth)(scope=generic))")
@@ -36,8 +35,9 @@ public class BluetoothImporter extends AbstractImporterComponent {
 
     private final Map<String, Factory> bluetoothProxiesFactories;
 
-    private final Set<ImportDeclaration> unresolvedImportDeclarations;
-    private final Map<ImportDeclaration, ComponentInstance> resolvedImportDeclarations;
+    private final Map<String, ImportDeclaration> unresolvedImportDeclarations;
+    private final Map<String, ImportDeclaration> resolvedImportDeclarations;
+    private final Map<ImportDeclaration, ComponentInstance> proxyComponentInstances;
 
     /**
      * Constructor in order to have the bundle context injected
@@ -47,8 +47,9 @@ public class BluetoothImporter extends AbstractImporterComponent {
     public BluetoothImporter(BundleContext bundleContext) {
         m_bundleContext = bundleContext;
         bluetoothProxiesFactories = new HashMap<String, Factory>();
-        unresolvedImportDeclarations = new HashSet<ImportDeclaration>();
-        resolvedImportDeclarations = new HashMap<ImportDeclaration, ComponentInstance>();
+        unresolvedImportDeclarations = new HashMap<String, ImportDeclaration>();
+        resolvedImportDeclarations = new HashMap<String, ImportDeclaration>();
+        proxyComponentInstances = new HashMap<ImportDeclaration, ComponentInstance>();
     }
 
     @PostRegistration
@@ -83,10 +84,10 @@ public class BluetoothImporter extends AbstractImporterComponent {
         if (factory != null) {
             ComponentInstance proxy = createProxy(importDeclaration, factory);
             importDeclaration.handle(this.serviceReference);
-            resolvedImportDeclarations.put(importDeclaration, proxy);
-
+            resolvedImportDeclarations.put(fn, importDeclaration);
+            proxyComponentInstances.put(importDeclaration, proxy);
         } else {
-            unresolvedImportDeclarations.add(importDeclaration);
+            unresolvedImportDeclarations.put(fn, importDeclaration);
         }
     }
 
@@ -120,7 +121,14 @@ public class BluetoothImporter extends AbstractImporterComponent {
     @Override
     protected void denyImportDeclaration(ImportDeclaration importDeclaration) {
         logger.debug("Bluetooth Importer  destroy a proxy for " + importDeclaration);
-        // FIXME : destroy proxy
+        String fn = (String) importDeclaration.getMetadata().get("bluetooth.device.friendlyname");
+        if(unresolvedImportDeclarations.remove(fn) == null){
+            ImportDeclaration idec = resolvedImportDeclarations.remove(fn);
+            ComponentInstance proxy = proxyComponentInstances.remove(idec);
+
+            idec.unhandle(serviceReference);
+            proxy.dispose();
+        }
     }
 
     @Override
@@ -133,26 +141,39 @@ public class BluetoothImporter extends AbstractImporterComponent {
     private void bindBluetoothProxyFactories(Factory f, ServiceReference<Factory> sr) {
         logger.warn("Found one factory : " + f.getName());
         String friendlyName = (String) sr.getProperty("device_name");
+        if(friendlyName == null){
+            return;
+        }
         bluetoothProxiesFactories.put(friendlyName, f);
+        Map.Entry<String, ImportDeclaration> unresolvedImportDeclaration;
         ImportDeclaration iDec = null;
-        Iterator<ImportDeclaration> iterator = unresolvedImportDeclarations.iterator();
+        String fn = null;
+        Iterator<Map.Entry<String,ImportDeclaration>> iterator = unresolvedImportDeclarations.entrySet().iterator();
         while (iterator.hasNext()) {
-            iDec = iterator.next();
-            // FIXME remove magic string
-            String fn = (String) iDec.getMetadata().get("bluetooth.device.friendlyname");
+            unresolvedImportDeclaration = iterator.next();
+            fn = unresolvedImportDeclaration.getKey();
             if (fn.startsWith(friendlyName)) {
+                iDec = unresolvedImportDeclaration.getValue();
                 ComponentInstance proxy = createProxy(iDec, f);
                 iDec.handle(this.serviceReference);
                 iterator.remove();
-                resolvedImportDeclarations.put(iDec, proxy);
+                resolvedImportDeclarations.put(fn, iDec);
+                proxyComponentInstances.put(iDec, proxy);
             }
         }
     }
 
     @Unbind
     private void unbindBluetoothProxyFactories(Factory f, ServiceReference<Factory> sr) {
-        bluetoothProxiesFactories.remove((String) sr.getProperty("device_name"));
-        // FIXME destroy proxy
+        String name = (String) sr.getProperty("device_name");
+        bluetoothProxiesFactories.remove(name);
+        ImportDeclaration idec = resolvedImportDeclarations.remove(name);
+        ComponentInstance proxy = proxyComponentInstances.remove(idec);
+
+        idec.unhandle(serviceReference);
+        proxy.dispose();
+
+        unresolvedImportDeclarations.put(name, idec);
     }
 
     public String getName() {
