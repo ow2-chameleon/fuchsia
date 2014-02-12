@@ -13,7 +13,7 @@ import static org.ow2.chameleon.fuchsia.core.ImportationLinker.FILTER_IMPORTERSE
 public class CXFExporterInitializer {
 
     Instance cxfexporter = instance()
-            .of("CxfExporterFactory")
+            .of("org.ow2.chameleon.fuchsia.exporter.jaxws.JAXWSExporter")
             .with("target").setto("(fuchsia.export.cxf.instance=*)");
 
     Instance cxfexporterlinker = instance()

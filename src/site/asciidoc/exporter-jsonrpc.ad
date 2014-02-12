@@ -24,7 +24,7 @@ Exporter instantiation
 [source,java]
 ----
        Instance jsonRPCExporter = instance()
-                .of("Fuchsia-Exporter:JSON-RPC")
+                .of("org.ow2.chameleon.fuchsia.exporter.jsonrpc.JSONRPCExporter")
                 .with("target").setto("(fuchsia.export.jsonrpc.instance=*)");
 ----
 

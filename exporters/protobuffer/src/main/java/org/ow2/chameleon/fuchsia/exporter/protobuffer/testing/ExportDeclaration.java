@@ -1,10 +1,8 @@
-package org.ow2.chameleon.fuchsia.protobuffer.exporter.testing;
+package org.ow2.chameleon.fuchsia.exporter.protobuffer.testing;
 
 import org.apache.felix.ipojo.annotations.Component;
-import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Validate;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceRegistration;
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclarationBuilder;
 
 import java.util.Dictionary;

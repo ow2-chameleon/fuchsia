@@ -446,7 +446,7 @@ As you should have seen in previous sections, the *exporter* (for our case) and 
 @Configuration
 public class Config {
     Instance ProtobufferExporter = instance()
-            .of("ProtobufferExporterFactory")
+            .of("org.ow2.chameleon.fuchsia.exporter.protobuffer.ProtobufferExporter")
             .with("target").setto("(rpc.export.address=*)");
 
     Instance ProtobufferExporterLinker = instance()

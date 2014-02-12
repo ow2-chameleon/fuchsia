@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.exporter.cxf.internal;
+package org.ow2.chameleon.fuchsia.exporter.jaxws.internal;
 
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
 

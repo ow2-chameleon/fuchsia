@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.protobuffer.exporter;
+package org.ow2.chameleon.fuchsia.exporter.protobuffer;
 
 import com.google.code.cxf.protobuf.ProtobufServerFactoryBean;
 import com.google.code.cxf.protobuf.binding.ProtobufBindingFactory;
@@ -17,7 +17,7 @@ import org.ow2.chameleon.fuchsia.core.FuchsiaUtils;
 import org.ow2.chameleon.fuchsia.core.component.AbstractExporterComponent;
 import org.ow2.chameleon.fuchsia.core.component.ExporterService;
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
-import org.ow2.chameleon.fuchsia.protobuffer.exporter.internal.ProtobufferExporterPojo;
+import org.ow2.chameleon.fuchsia.exporter.protobuffer.internal.ProtobufferExporterPojo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +25,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-@Component(name = "ProtobufferExporterFactory")
+@Component
 @Provides(specifications = {ExporterService.class})
 public class ProtobufferExporter extends AbstractExporterComponent {
 

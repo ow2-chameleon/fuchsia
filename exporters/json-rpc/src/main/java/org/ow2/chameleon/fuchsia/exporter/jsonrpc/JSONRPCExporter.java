@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.jsonrpc.exporter;
+package org.ow2.chameleon.fuchsia.exporter.jsonrpc;
 
 import com.googlecode.jsonrpc4j.JsonRpcServer;
 import org.apache.felix.ipojo.annotations.*;
@@ -13,7 +13,7 @@ import org.ow2.chameleon.fuchsia.core.component.ExporterService;
 import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
-import org.ow2.chameleon.fuchsia.jsonrpc.exporter.model.JSONRPCExporterPojo;
+import org.ow2.chameleon.fuchsia.exporter.jsonrpc.model.JSONRPCExporterPojo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +38,7 @@ import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
  * <p/>
  * TODO : Improves the client management, only one client should be created for a given uri.
  */
-@Component(name = "Fuchsia-Exporter:JSON-RPC")
+@Component
 @Provides(specifications = {ExporterService.class})
 public class JSONRPCExporter extends AbstractExporterComponent {
 

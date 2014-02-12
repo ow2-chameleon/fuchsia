@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.protobuffer.exporter.testing;
+package org.ow2.chameleon.fuchsia.exporter.protobuffer.testing;
 
 import org.apache.felix.ipojo.configuration.Configuration;
 import org.apache.felix.ipojo.configuration.Instance;
@@ -11,7 +11,7 @@ import static org.apache.felix.ipojo.configuration.Instance.instance;
 public class Config {
 
     Instance ProtobufferExporter = instance()
-            .of("ProtobufferExporterFactory")
+            .of("org.ow2.chameleon.fuchsia.exporter.protobuffer.ProtobufferExporter")
             .with("target").setto("(rpc.export.address=*)");
 
     Instance ProtobufferExporterLinker = instance()

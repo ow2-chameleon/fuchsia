@@ -24,7 +24,7 @@ Exporter instantiation
 [source,java]
 ----
     Instance cxfexporter = instance()
-            .of("CxfExporterFactory")
+            .of("org.ow2.chameleon.fuchsia.exporter.jaxws.JAXWSExporter")
             .with("target").setto("(fuchsia.export.cxf.instance=*)");
 ----
 

@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.jsonrpc.exporter.model;
+package org.ow2.chameleon.fuchsia.exporter.jsonrpc.model;
 
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
 

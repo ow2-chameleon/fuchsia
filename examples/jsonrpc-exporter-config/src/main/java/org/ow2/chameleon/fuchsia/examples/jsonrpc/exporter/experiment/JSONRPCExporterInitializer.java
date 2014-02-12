@@ -15,7 +15,7 @@ import static org.apache.felix.ipojo.configuration.Instance.instance;
 public class JSONRPCExporterInitializer {
 
         Instance jsonRPCExporter = instance()
-                .of("Fuchsia-Exporter:JSON-RPC")
+                .of("org.ow2.chameleon.fuchsia.exporter.jsonrpc.JSONRPCExporter")
                 .with("target").setto("(fuchsia.export.jsonrpc.instance=*)");
 
         Instance jsonRPCExporterLinker = instance()

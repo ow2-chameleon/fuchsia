@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.exporter.cxf;
+package org.ow2.chameleon.fuchsia.exporter.jaxws;
 
 import org.apache.cxf.Bus;
 import org.apache.cxf.endpoint.Server;
@@ -13,8 +13,8 @@ import org.ow2.chameleon.fuchsia.core.FuchsiaUtils;
 import org.ow2.chameleon.fuchsia.core.component.AbstractExporterComponent;
 import org.ow2.chameleon.fuchsia.core.component.ExporterService;
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
-import org.ow2.chameleon.fuchsia.exporter.cxf.internal.Constants;
-import org.ow2.chameleon.fuchsia.exporter.cxf.internal.CxfExporterPojo;
+import org.ow2.chameleon.fuchsia.exporter.jaxws.internal.Constants;
+import org.ow2.chameleon.fuchsia.exporter.jaxws.internal.CxfExporterPojo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,9 +22,9 @@ import javax.servlet.ServletException;
 import java.util.HashMap;
 import java.util.Map;
 
-@Component(name = "CxfExporterFactory")
+@Component
 @Provides(specifications = {ExporterService.class})
-public class CxfExporterFactory extends AbstractExporterComponent {
+public class JAXWSExporter extends AbstractExporterComponent {
 
     private Bus cxfbus;
 
@@ -42,7 +42,7 @@ public class CxfExporterFactory extends AbstractExporterComponent {
     @ServiceProperty(name = "target")
     private String filter;
 
-    public CxfExporterFactory(BundleContext context){
+    public JAXWSExporter(BundleContext context){
         this.context=context;
     }
 
