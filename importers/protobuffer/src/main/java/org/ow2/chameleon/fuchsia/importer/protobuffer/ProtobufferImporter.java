@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.protobuffer.importer;
+package org.ow2.chameleon.fuchsia.importer.protobuffer;
 
 import com.google.code.cxf.protobuf.binding.ProtobufBindingFactory;
 import com.google.code.cxf.protobuf.client.SimpleRpcChannel;
@@ -15,7 +15,7 @@ import org.ow2.chameleon.fuchsia.core.FuchsiaUtils;
 import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.exceptions.ImporterException;
-import org.ow2.chameleon.fuchsia.protobuffer.importer.internal.ProtobufferImporterPojo;
+import org.ow2.chameleon.fuchsia.importer.protobuffer.internal.ProtobufferImporterPojo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
-@Component(name = "ProtobufferImporterFactory")
+@Component
 @Provides(specifications = {org.ow2.chameleon.fuchsia.core.component.ImporterService.class})
 public class ProtobufferImporter extends AbstractImporterComponent {
 

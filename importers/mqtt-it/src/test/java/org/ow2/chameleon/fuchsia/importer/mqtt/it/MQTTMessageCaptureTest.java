@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.mqtt.test;
+package org.ow2.chameleon.fuchsia.importer.mqtt.it;
 
 import org.apache.felix.ipojo.ComponentInstance;
 import org.apache.felix.ipojo.Factory;
@@ -19,8 +19,8 @@ import org.osgi.service.event.EventHandler;
 import org.ow2.chameleon.fuchsia.core.FuchsiaConstants;
 import org.ow2.chameleon.fuchsia.core.declaration.Constants;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
-import org.ow2.chameleon.fuchsia.mqtt.test.dao.MessageHandler;
-import org.ow2.chameleon.fuchsia.mqtt.test.util.RabbitMQTestSuite;
+import org.ow2.chameleon.fuchsia.importer.mqtt.it.dao.MessageHandler;
+import org.ow2.chameleon.fuchsia.importer.mqtt.it.util.RabbitMQTestSuite;
 import org.ow2.chameleon.fuchsia.tools.shell.FuchsiaGogoCommand;
 import org.ow2.chameleon.testing.helpers.IPOJOHelper;
 
@@ -63,7 +63,7 @@ public class MQTTMessageCaptureTest extends RabbitMQTestSuite {
 
         Properties linker=new Properties();
         linker.put(FILTER_IMPORTDECLARATION_PROPERTY,"(id=*)");
-        linker.put(FILTER_IMPORTERSERVICE_PROPERTY,"(instance.name=AMQPImporter)");
+        linker.put(FILTER_IMPORTERSERVICE_PROPERTY,"(instance.name=MQTTImporter)");
         linker.put(Factory.INSTANCE_NAME_PROPERTY,"MQTTLinker");
 
         linkerComponentInstance=ipojoHelper.createComponentInstance(FuchsiaConstants.DEFAULT_IMPORTATION_LINKER_FACTORY_NAME,linker);
@@ -71,9 +71,9 @@ public class MQTTMessageCaptureTest extends RabbitMQTestSuite {
         Properties importer=new Properties();
         importer.put(FILTER_IMPORTDECLARATION_PROPERTY,"(id=*)");
         importer.put("target","(id=*)");
-        importer.put(Factory.INSTANCE_NAME_PROPERTY,"AMQPImporter");
+        importer.put(Factory.INSTANCE_NAME_PROPERTY,"MQTTImporter");
 
-        importerComponentInstance=ipojoHelper.createComponentInstance("AMQPImporterFactory",importer);
+        importerComponentInstance=ipojoHelper.createComponentInstance("org.ow2.chameleon.fuchsia.importer.mqtt.MQTTImporter",importer);
 
     }
 

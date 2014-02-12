@@ -18,7 +18,7 @@ public class MqttLinkerInitializer {
             .with(FILTER_IMPORTERSERVICE_PROPERTY).setto("(instance.name=AMQPImporter)");
 
     Instance pushSubscriber = instance()
-            .of("AMQPImporterFactory")
+            .of("org.ow2.chameleon.fuchsia.importer.mqtt.MQTTImporter")
             .named("AMQPImporter")
             .with("target").setto("(&(id=*)(mqtt.queue=*))");
 

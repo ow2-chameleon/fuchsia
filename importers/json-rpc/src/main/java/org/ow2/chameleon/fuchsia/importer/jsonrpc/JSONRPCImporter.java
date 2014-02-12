@@ -32,7 +32,7 @@ import static org.ow2.chameleon.fuchsia.core.declaration.Constants.*;
  * <p/>
  * TODO : Improves the client management, only one client should be created for a given uri.
  */
-@Component()
+@Component
 @Provides(specifications = {ImporterService.class})
 public class JSONRPCImporter extends AbstractImporterComponent {
 
@@ -42,7 +42,7 @@ public class JSONRPCImporter extends AbstractImporterComponent {
     @ServiceProperty(name = TARGET_FILTER_PROPERTY, value = "(&(" + PROTOCOL_NAME + "=jsonrpc)(scope=generic))")
     private String filter;
 
-    @Requires(filter = "(factory.name=JSONRPCDefaultProxy-Factory)", optional = false)
+    @Requires(filter = "(factory.name=org.ow2.chameleon.fuchsia.importer.jsonrpc.DefaultJSONRPCProxy)", optional = false)
     Factory defaultProxyFactory;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());

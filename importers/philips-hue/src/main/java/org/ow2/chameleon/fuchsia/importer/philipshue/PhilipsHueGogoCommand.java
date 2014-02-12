@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.philips.hue.importer;
+package org.ow2.chameleon.fuchsia.importer.philipshue;
 
 import com.philips.lighting.hue.sdk.utilities.PHUtilities;
 import com.philips.lighting.model.PHBridge;
@@ -11,7 +11,7 @@ import org.osgi.framework.BundleContext;
 import java.util.Random;
 import java.util.Set;
 
-@Component(immediate = true)
+@Component
 @Instantiate
 @Provides
 public class PhilipsHueGogoCommand {

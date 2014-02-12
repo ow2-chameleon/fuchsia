@@ -50,14 +50,14 @@ After create your project, we have couple tasks to accomplish before be able to 
 Preparation
 ^^^^^^^^^^^
 
-One step at a time, so lets first instantiate our importer, we first need to find out the name of our importer JAX-WS, which is _Fuchsia_importer.cxf_, with that in mind we can instantiate it indicating what are the *Declarations* that he should consider as a declaration that concerns it. 
+One step at a time, so lets first instantiate our importer, we first need to find out the name of our importer JAX-WS, which is _org.ow2.chameleon.fuchsia.importer.jaxws.JAXWSImporter_, with that in mind we can instantiate it indicating what are the *Declarations* that he should consider as a declaration that concerns it. 
 
 In our case we may say that, any declaration containing a value for the key *endpoint.url*, is a valid declaration to be processed by this importer, thus this give us:
 
 [source]
 --
     Instance cxfimporter = Instance.instance()
-            .of("Fuchsia_importer.cxf")
+            .of("org.ow2.chameleon.fuchsia.importer.jaxws.JAXWSImporter")
             .with("target").setto("(endpoint.url=*)");
 --
 
@@ -84,7 +84,7 @@ You can check that everything is up and running by typing *importer* on the cons
 Importer [cxfimporter] provided by bundle org.ow2.chameleon.fuchsia.importer.jax-rs (46)
 	*importer name = cxfimporter
 	Service properties:
-		factory.name = Fuchsia_importer.cxf
+		factory.name = org.ow2.chameleon.fuchsia.importer.jaxws.JAXWSImporter
 		instance.name = cxfimporter
 		objectClass = [Ljava.lang.String;@191c428
 		service.id = 335
@@ -529,7 +529,7 @@ This step is mandatory for use of *processors* (importer, exporter). From the mo
 @Configuration
 public class ProtobufferImporterConfig {
 	    Instance ProtobufferRPCImporter = instance()
-		    .of("ProtobufferImporterFactory")
+		    .of("org.ow2.chameleon.fuchsia.importer.protobuffer.ProtobufferImporter")
 		    .with("target").setto("(&(rpc.server.address=*)(rpc.proto.class=*)(rpc.proto.service=*)(rpc.proto.message=*))");
 
 	    Instance ProtobufferRPCLinker = instance()

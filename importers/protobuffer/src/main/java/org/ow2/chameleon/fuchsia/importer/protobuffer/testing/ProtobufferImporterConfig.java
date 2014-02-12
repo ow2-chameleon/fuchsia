@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.protobuffer.importer.testing;
+package org.ow2.chameleon.fuchsia.importer.protobuffer.testing;
 
 import org.apache.felix.ipojo.configuration.Configuration;
 import org.apache.felix.ipojo.configuration.Instance;
@@ -11,7 +11,7 @@ import static org.apache.felix.ipojo.configuration.Instance.instance;
 public class ProtobufferImporterConfig {
 
     Instance ProtobufferRPCImporter = instance()
-            .of("ProtobufferImporterFactory")
+            .of("org.ow2.chameleon.fuchsia.importer.protobuffer.ProtobufferImporter")
             .with("target").setto("(&(rpc.server.address=*)(rpc.proto.class=*)(rpc.proto.service=*)(rpc.proto.message=*))");
 
 

@@ -26,7 +26,7 @@ import java.util.prefs.Preferences;
 
 import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
 
-@Component()
+@Component
 @Provides(specifications = {DiscoveryService.class})
 @Instantiate
 public class PhilipsHueDiscovery extends AbstractDiscoveryComponent implements PHSDKListener, Runnable {

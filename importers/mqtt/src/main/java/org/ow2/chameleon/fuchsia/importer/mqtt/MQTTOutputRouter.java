@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.mqtt.importer.amqp;
+package org.ow2.chameleon.fuchsia.importer.mqtt;
 
 
 import com.rabbitmq.client.*;
@@ -13,9 +13,9 @@ import java.io.IOException;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
-@Component(name = "AMQPJointFactory")
+@Component
 @Provides
-public class AMQPOutputRouter implements Runnable {
+public class MQTTOutputRouter implements Runnable {
 
     @Requires
     EventAdmin eventAdmin;

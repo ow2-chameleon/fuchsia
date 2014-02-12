@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.mqtt.test;
+package org.ow2.chameleon.fuchsia.importer.mqtt.it;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -10,7 +10,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.InOrder;
 import org.ops4j.pax.exam.junit.PaxExam;
 import org.ops4j.pax.exam.spi.reactors.ExamReactorStrategy;
 import org.ops4j.pax.exam.spi.reactors.PerMethod;
@@ -21,8 +20,8 @@ import org.osgi.service.event.EventHandler;
 import org.ow2.chameleon.fuchsia.core.FuchsiaConstants;
 import org.ow2.chameleon.fuchsia.core.declaration.Constants;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
-import org.ow2.chameleon.fuchsia.mqtt.test.dao.MessageHandler;
-import org.ow2.chameleon.fuchsia.mqtt.test.util.RabbitMQTestSuite;
+import org.ow2.chameleon.fuchsia.importer.mqtt.it.dao.MessageHandler;
+import org.ow2.chameleon.fuchsia.importer.mqtt.it.util.RabbitMQTestSuite;
 import org.ow2.chameleon.fuchsia.tools.shell.FuchsiaGogoCommand;
 import org.ow2.chameleon.testing.helpers.IPOJOHelper;
 
@@ -63,7 +62,7 @@ public class AMPQMessageCaptureTest extends RabbitMQTestSuite {
 
         Properties linker=new Properties();
         linker.put(FILTER_IMPORTDECLARATION_PROPERTY,"(id=*)");
-        linker.put(FILTER_IMPORTERSERVICE_PROPERTY,"(instance.name=AMQPImporter)");
+        linker.put(FILTER_IMPORTERSERVICE_PROPERTY,"(instance.name=MQTTImporter)");
         linker.put(Factory.INSTANCE_NAME_PROPERTY,"MQTTLinker");
 
         linkerComponentInstance=ipojoHelper.createComponentInstance(FuchsiaConstants.DEFAULT_IMPORTATION_LINKER_FACTORY_NAME,linker);
@@ -71,9 +70,9 @@ public class AMPQMessageCaptureTest extends RabbitMQTestSuite {
         Properties importer=new Properties();
         importer.put(FILTER_IMPORTDECLARATION_PROPERTY,"(id=*)");
         importer.put("target","(id=*)");
-        importer.put(Factory.INSTANCE_NAME_PROPERTY,"AMQPImporter");
+        importer.put(Factory.INSTANCE_NAME_PROPERTY,"MQTTImporter");
 
-        importerComponentInstance=ipojoHelper.createComponentInstance("AMQPImporterFactory",importer);
+        importerComponentInstance=ipojoHelper.createComponentInstance("org.ow2.chameleon.fuchsia.importer.mqtt.MQTTImporter",importer);
 
     }
 
@@ -97,7 +96,7 @@ public class AMPQMessageCaptureTest extends RabbitMQTestSuite {
     @Test
     public void ImporterCreated()  {
 
-        ComponentInstance importerInstance = ipojoHelper.getInstanceByName("AMQPImporter");
+        ComponentInstance importerInstance = ipojoHelper.getInstanceByName("MQTTImporter");
 
         assertThat(importerInstance).isNotNull();
         assertThat(importerInstance.getState()).isEqualTo(ComponentInstance.VALID);

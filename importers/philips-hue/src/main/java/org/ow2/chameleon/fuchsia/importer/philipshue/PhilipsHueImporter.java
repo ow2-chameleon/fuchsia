@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.philips.hue.importer;
+package org.ow2.chameleon.fuchsia.importer.philipshue;
 
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
@@ -8,13 +8,13 @@ import org.ow2.chameleon.fuchsia.core.FuchsiaUtils;
 import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.exceptions.ImporterException;
-import org.ow2.chameleon.fuchsia.philips.hue.importer.util.PhilipsImporterPojo;
+import org.ow2.chameleon.fuchsia.importer.philipshue.util.PhilipsImporterPojo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
-@Component(name = "PhilipsHueImporterFactory")
+@Component
 @Provides(specifications = {org.ow2.chameleon.fuchsia.core.component.ImporterService.class})
 public class PhilipsHueImporter extends AbstractImporterComponent {
 

@@ -22,9 +22,9 @@ import org.slf4j.LoggerFactory;
 import java.net.URI;
 import java.util.*;
 
-@Component  (name = "PuShImporterFactory")
+@Component
 @Provides
-public class SubscriptionImport extends AbstractImporterComponent implements SubscriberOutput {
+public class SubscriptionImporter extends AbstractImporterComponent implements SubscriberOutput {
 
     static List<String> approvedActions = new Vector<String>();
 

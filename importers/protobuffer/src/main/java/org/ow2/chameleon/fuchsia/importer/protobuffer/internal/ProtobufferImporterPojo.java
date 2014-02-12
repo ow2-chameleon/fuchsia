@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.protobuffer.importer.internal;
+package org.ow2.chameleon.fuchsia.importer.protobuffer.internal;
 
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 

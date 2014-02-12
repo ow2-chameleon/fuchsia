@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.ws.internal;
+package org.ow2.chameleon.fuchsia.importer.jaxws;
 
 import org.apache.cxf.frontend.ClientProxyFactoryBean;
 import org.apache.cxf.interceptor.LoggingInInterceptor;
@@ -24,10 +24,9 @@ import static org.ow2.chameleon.fuchsia.core.FuchsiaUtils.loadClass;
  * @author Jonathan Bardin <jonathan.bardin@imag.fr>
  * @Edited Jeremy.Savonet@gmail.com
  */
-@Component(name="Fuchsia_importer.cxf")
-@Provides(specifications = {org.ow2.chameleon.fuchsia.core.component.ImporterService.class, CXFImporterComp.class})
-//@Instantiate (name="Fuchsia_importer_cxf")
-public class CXFImporterComp extends AbstractImporterComponent {
+@Component
+@Provides(specifications = {org.ow2.chameleon.fuchsia.core.component.ImporterService.class})
+public class JAXWSImporter extends AbstractImporterComponent {
 
     public static final String ENDPOINT_URL = "endpoint.url"; //TODO FIXME
 
@@ -50,7 +49,7 @@ public class CXFImporterComp extends AbstractImporterComponent {
      */
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public CXFImporterComp(BundleContext pContext) {
+    public JAXWSImporter(BundleContext pContext) {
         context=pContext;
         map = new HashMap<ImportDeclaration, ServiceRegistration>();
     }

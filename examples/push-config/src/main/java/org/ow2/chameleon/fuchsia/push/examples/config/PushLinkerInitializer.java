@@ -18,7 +18,7 @@ public class PushLinkerInitializer {
             .with(FILTER_IMPORTERSERVICE_PROPERTY).setto("(instance.name=PuShHubImporter)");
 
     Instance pushSubscriber = instance()
-            .of("PuShImporterFactory")
+            .of("org.ow2.chameleon.fuchsia.importer.push.SubscriptionImporter")
             .named("PuShHubImporter")
             .with("target").setto("(push.hub.url=*)");
 

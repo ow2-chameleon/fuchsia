@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.mqtt.importer.amqp;
+package org.ow2.chameleon.fuchsia.importer.mqtt;
 
 import org.apache.felix.ipojo.Factory;
 import org.apache.felix.ipojo.InstanceManager;
@@ -13,9 +13,9 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
-@Component(name="AMQPImporterFactory")
+@Component
 @Provides
-public class AMQPImporter extends AbstractImporterComponent {
+public class MQTTImporter extends AbstractImporterComponent {
 
     @ServiceProperty(name = "instance.name")
     private String name;
@@ -23,7 +23,7 @@ public class AMQPImporter extends AbstractImporterComponent {
     @ServiceProperty(name = "target", value = "(id=*)")
     private String filter;
 
-    @Requires(filter = "(factory.name=AMQPJointFactory)")
+    @Requires(filter = "(factory.name=org.ow2.chameleon.fuchsia.importer.mqtt.MQTTOutputRouter)")
     Factory jointFactory;
 
     Map<String,InstanceManager> managedInstances=new HashMap<String, InstanceManager>();

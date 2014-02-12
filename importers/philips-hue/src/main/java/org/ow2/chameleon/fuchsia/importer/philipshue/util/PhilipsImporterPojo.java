@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.philips.hue.importer.util;
+package org.ow2.chameleon.fuchsia.importer.philipshue.util;
 
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 

@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.mqtt.test.dao;
+package org.ow2.chameleon.fuchsia.importer.mqtt.it.dao;
 
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;

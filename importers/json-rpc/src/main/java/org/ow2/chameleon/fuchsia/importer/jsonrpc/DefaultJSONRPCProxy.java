@@ -14,7 +14,7 @@ import java.security.InvalidParameterException;
 import java.util.Map;
 
 
-@Component(name = "JSONRPCDefaultProxy-Factory")
+@Component
 @Provides(
         specifications = FuchsiaProxy.class,
         properties = {

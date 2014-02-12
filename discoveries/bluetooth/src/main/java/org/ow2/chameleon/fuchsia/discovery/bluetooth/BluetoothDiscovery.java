@@ -45,7 +45,7 @@ import static org.ow2.chameleon.fuchsia.core.declaration.Constants.PROTOCOL_NAME
 /**
  * @author Morgan Martinet
  */
-@Component()
+@Component
 @Provides(specifications = DiscoveryService.class)
 public class BluetoothDiscovery extends AbstractDiscoveryComponent {
 

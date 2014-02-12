@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.mqtt.test.util;
+package org.ow2.chameleon.fuchsia.importer.mqtt.it.util;
 
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;

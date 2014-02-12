@@ -17,7 +17,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 
 
-@Component()
+@Component
 @Provides(specifications = DiscoveryService.class)
 public class DNSSDDiscovery extends AbstractDiscoveryComponent implements NetworkTopologyDiscovery.Factory.ClassDelegate, ServiceListener {
 

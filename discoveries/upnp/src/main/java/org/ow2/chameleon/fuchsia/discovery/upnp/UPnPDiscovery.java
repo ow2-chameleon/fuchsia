@@ -23,7 +23,7 @@ import java.util.Set;
  * @author jeremy.savonet@gmail.com
  * @author jander nascimento (botelho at imag.fr)
  */
-@Component()
+@Component
 @Provides(specifications = {DiscoveryService.class})
 public class UPnPDiscovery extends AbstractDiscoveryComponent {
 

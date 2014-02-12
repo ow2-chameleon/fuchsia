@@ -11,7 +11,7 @@ import static org.apache.felix.ipojo.configuration.Instance.instance;
 public class PhilipsHueImporterConfig {
 
     Instance philipsImporter = instance()
-            .of("PhilipsHueImporterFactory")
+            .of("org.ow2.chameleon.fuchsia.importer.philipshue.PhilipsHueImporter")
             .with("target").setto("(discovery.philips.device.name=*)");
 
     Instance philipsLinker = instance()
