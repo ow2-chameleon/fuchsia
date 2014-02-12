@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogEntry;
 import org.osgi.service.log.LogService;
 import org.ow2.chameleon.fuchsia.core.component.ImporterService;
@@ -61,9 +62,9 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
         return false;
     }
 
-    protected ImporterService waitForImporterService() {
+    protected ServiceReference<ImporterService> waitForImporterService() {
         String filter = "(" + INSTANCE_NAME_PROPERTY + "=" + getImporterServiceInstanceName() + ")";
-        return osgiHelper.waitForService(ImporterService.class, filter, 0);
+        return osgiHelper.waitForService(ImporterService.class.getName(), filter, 0);
     }
 
     /**
@@ -72,7 +73,8 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
     @Test
     public void testAvailability() {
         //wait for the service to be available.
-        ImporterService importer = waitForImporterService();
+        ServiceReference serviceReference = waitForImporterService();
+        ImporterService importer = (ImporterService) osgiHelper.getServiceObject(serviceReference);
 
         //Check that the importer != null
         assertThat(importer).isNotNull();
@@ -85,12 +87,14 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
     @Test
     public void testImportService() {
         //wait for the service to be available.
-        ImporterService importer = waitForImporterService();
+        ServiceReference serviceReference = waitForImporterService();
+        ImporterService importer = (ImporterService) osgiHelper.getServiceObject(serviceReference);
 
         //create an importDeclaration for logService
         ImportDeclaration iDec = createImportDeclaration("testImportService", LogService.class, logService);
 
         //import the logService
+        iDec.bind(serviceReference);
         try {
             importer.addImportDeclaration(iDec);
         } catch (ImporterException e) {
@@ -112,12 +116,14 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
     @Test
     public void testImportServiceNoVoid() {
         //wait for the service to be available.
-        ImporterService importer = waitForImporterService();
+        ServiceReference serviceReference = waitForImporterService();
+        ImporterService importer = (ImporterService) osgiHelper.getServiceObject(serviceReference);
 
         //create an endpoint for logService
         ImportDeclaration iDec = createImportDeclaration("testImportServiceNoVoid", LogEntry.class, logEntry);
 
         //import the logService
+        iDec.bind(serviceReference);
         try {
             importer.addImportDeclaration(iDec);
         } catch (ImporterException e) {
@@ -144,12 +150,14 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
     public void testRemoveImportService() {
         LogService proxy = null;
         //wait for the service to be available.
-        ImporterService importer = waitForImporterService();
+        ServiceReference serviceReference = waitForImporterService();
+        ImporterService importer = (ImporterService) osgiHelper.getServiceObject(serviceReference);
 
         //create an endpoint for logService
         ImportDeclaration iDec = createImportDeclaration("testRemoveImportService", LogService.class, logService);
 
         //import the logService
+        iDec.bind(serviceReference);
         try {
             importer.addImportDeclaration(iDec);
         } catch (ImporterException e) {
@@ -167,7 +175,7 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
         } catch (ImporterException e) {
             fail("Cannot take the importDeclaration of the importer", e);
         }
-
+        iDec.unbind(serviceReference);
         //get the client
         proxy = (LogService) osgiHelper.getServiceObject(LogService.class);
 
@@ -180,12 +188,14 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
     @Test
     public void testReImportService() {
         //wait for the service to be available.
-        ImporterService importer = waitForImporterService();
+        ServiceReference serviceReference = waitForImporterService();
+        ImporterService importer = (ImporterService) osgiHelper.getServiceObject(serviceReference);
 
         //create an endpoint for logService
         ImportDeclaration iDec = createImportDeclaration("testReImportService", LogService.class, logService);
 
         //import the logService
+        iDec.bind(serviceReference);
         try {
             importer.addImportDeclaration(iDec);
         } catch (ImporterException e) {
@@ -199,8 +209,10 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
         } catch (ImporterException e) {
             fail("Cannot take back the importDeclaration of the importer", e);
         }
+        iDec.unbind(serviceReference);
 
         // re import the logService
+        iDec.bind(serviceReference);
         try {
             importer.addImportDeclaration(iDec);
         } catch (ImporterException e) {
