@@ -4,11 +4,11 @@ import com.googlecode.jsonrpc4j.JsonRpcServer;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
+import org.apache.felix.ipojo.ComponentInstance;
 import org.junit.After;
 import org.junit.Before;
 import org.ops4j.pax.exam.CoreOptions;
 import org.ops4j.pax.exam.Option;
-import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclarationBuilder;
 import org.ow2.chameleon.fuchsia.testing.ImporterComponentAbstractTest;
@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.concurrent.Executors;
 
 import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
+import static org.assertj.core.api.Assertions.fail;
 import static org.ops4j.pax.exam.CoreOptions.*;
 import static org.ow2.chameleon.fuchsia.core.component.ImporterService.TARGET_FILTER_PROPERTY;
 import static org.ow2.chameleon.fuchsia.core.declaration.Constants.*;
@@ -44,16 +45,20 @@ public class JSONRPCImporterTest extends ImporterComponentAbstractTest {
 
     @Before
     public void setUpFinal() {
+        // instantiate the importer
         Dictionary<String, String> conf = new Hashtable<String, String>();
         conf.put(INSTANCE_NAME_PROPERTY, IMPORTER_NAME);
         conf.put(TARGET_FILTER_PROPERTY, "(" + CONFIGS + "=jsonrpc)");
-        ipojoHelper.createComponentInstance("org.ow2.chameleon.fuchsia.importer.jsonrpc.JSONRPCImporter", conf);
+        ComponentInstance importer = ipojoHelper.createComponentInstance("org.ow2.chameleon.fuchsia.importer.jsonrpc.JSONRPCImporter", conf);
+        if(importer == null){
+            fail("Fail to create the JSONRPC Importer.");
+        }
 
         // create HttpServer
         try {
             httpServer = HttpServer.create(new InetSocketAddress(HTTP_PORT), 0);
         } catch (IOException e) {
-            e.printStackTrace();
+            fail("Creation of httpServer fail", e);
         }
         httpServer.setExecutor(Executors.newCachedThreadPool());
         httpServer.start();
@@ -61,9 +66,14 @@ public class JSONRPCImporterTest extends ImporterComponentAbstractTest {
 
     @After
     public void tearDownFinal() {
-        ipojoHelper.getInstanceByName(IMPORTER_NAME).dispose();
-        httpServer.stop(0);
-        httpServer = null;
+        ComponentInstance importer = ipojoHelper.getInstanceByName(IMPORTER_NAME);
+        if (importer != null) {
+            importer.dispose();
+        }
+        if (httpServer != null) {
+            httpServer.stop(0);
+            httpServer = null;
+        }
     }
 
     @Override
@@ -136,7 +146,6 @@ public class JSONRPCImporterTest extends ImporterComponentAbstractTest {
 
         return ImportDeclarationBuilder.fromMetadata(props).build();
     }
-
 }
 
 
