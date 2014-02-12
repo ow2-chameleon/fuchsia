@@ -43,6 +43,7 @@
         <module>fake-importer-config</module>
         <module>proto-class</module>
         <module>proto-client</module>
+        <module>proto-config</module>
 <!--
         <module>jax-ws</module>
 -->
