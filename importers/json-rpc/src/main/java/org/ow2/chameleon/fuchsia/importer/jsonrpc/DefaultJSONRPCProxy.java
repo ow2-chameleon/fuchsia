@@ -7,6 +7,7 @@ import org.apache.felix.ipojo.annotations.ServiceProperty;
 import org.apache.felix.ipojo.annotations.StaticServiceProperty;
 import org.ow2.chameleon.fuchsia.tools.proxiesutils.FuchsiaProxy;
 import org.ow2.chameleon.fuchsia.tools.proxiesutils.ProxyFacetInvokable;
+import org.ow2.chameleon.fuchsia.tools.proxiesutils.ProxyInvokationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,13 +34,12 @@ public class DefaultJSONRPCProxy implements ProxyFacetInvokable {
     @ServiceProperty(name = "client", immutable = false, mandatory = true)
     private JsonRpcHttpClient client;
 
-    public Object invoke(String method, Object... args) {
+    public Object invoke(String method, Object... args) throws ProxyInvokationException {
         try {
             return client.invoke(method, args, Object.class);
         } catch (Throwable throwable) {
-            LOG.error("Invokation throw an exception", throwable);
+            throw new ProxyInvokationException("Invoke method throw a Throwable", throwable);
         }
-        return null;
     }
 
     public void invoke(String method, Integer transactionID, Object callback, Object... args) {

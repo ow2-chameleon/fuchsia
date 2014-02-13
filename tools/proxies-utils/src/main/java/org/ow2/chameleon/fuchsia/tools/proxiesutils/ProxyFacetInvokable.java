@@ -9,7 +9,7 @@ public interface ProxyFacetInvokable extends FuchsiaProxy  {
      * @param args
      * @return
      */
-    public Object invoke(String method, Object... args);
+    public Object invoke(String method, Object... args) throws ProxyInvokationException;
 
     /**
      * Async
@@ -19,6 +19,6 @@ public interface ProxyFacetInvokable extends FuchsiaProxy  {
      * @param callback
      * @param args
      */
-    public void invoke(String method, Integer transactionID, Object callback, Object... args);
+    public void invoke(String method, Integer transactionID, Object callback, Object... args) throws ProxyInvokationException;
 
 }
