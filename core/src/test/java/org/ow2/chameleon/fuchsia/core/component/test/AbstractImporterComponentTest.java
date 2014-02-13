@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -67,6 +68,22 @@ public class AbstractImporterComponentTest {
         assertThat(testedClass.nbProxies()).isEqualTo(1); //Check that the importer handle correctly the duplication
     }
 
+    @Test(expected = IllegalStateException.class)
+    public void testRemoveImportDeclarationNotAdded() throws ImporterException {
+        ImportDeclaration idec = mock(ImportDeclaration.class);
+        testedClass.removeImportDeclaration(idec);
+    }
+
+    @Test
+    public void testGetImportDeclaration() throws ImporterException {
+        ImportDeclaration idec = mock(ImportDeclaration.class);
+        testedClass.addImportDeclaration(idec);
+
+        Set<ImportDeclaration> importDeclarations = testedClass.getImportDeclarations();
+        assertThat(importDeclarations).containsExactly(idec);
+    }
+
+
     @Test
     public void testMultiplesImportDeclaration() throws ImporterException {
         Collection<ImportDeclaration> decs = new HashSet<ImportDeclaration>();
@@ -86,6 +103,30 @@ public class AbstractImporterComponentTest {
         assertThat(testedClass.nbProxies()).isEqualTo(0); //Check that denyImportDeclaration has been called
     }
 
+
+    @Test
+    public void testStop() throws ImporterException {
+        Collection<ImportDeclaration> decs = new HashSet<ImportDeclaration>();
+
+        for (int i = 0; i < IMPORT_MAX; i++) {
+            ImportDeclaration idec = mock(ImportDeclaration.class);
+            testedClass.addImportDeclaration(idec);
+            assertThat(testedClass.nbProxies()).isEqualTo(i + 1); //Check that useImportDeclaration has been called
+
+            decs.add(idec);
+        }
+
+        testedClass.stop();
+
+        assertThat(testedClass.nbProxies()).isEqualTo(0); //Check that denyImportDeclaration has been called
+    }
+
+    @Test
+    public void testToString() throws ImporterException {
+        String ts = testedClass.toString();
+        assertThat(ts).isEqualTo("name");
+
+    }
     public class TestedClass extends AbstractImporterComponent {
 
         private final Collection<ImportDeclaration> decs = new HashSet<ImportDeclaration>();
