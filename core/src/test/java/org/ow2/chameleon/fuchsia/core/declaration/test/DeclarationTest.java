@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.osgi.framework.ServiceReference;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclarationBuilder;
+import org.ow2.chameleon.fuchsia.core.declaration.Status;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,79 +13,10 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Fail.failBecauseExceptionWasNotThrown;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 
-public class ImportDeclarationTest {
-
-    @Test
-    public void testBuildEmpty() {
-        ImportDeclaration id = ImportDeclarationBuilder.empty()
-                .key("md").value("value")
-                .build();
-
-        assertThat(id).isNotNull();
-        assertThat(id.getMetadata()).containsEntry("md", "value");
-        assertThat(id.getMetadata()).hasSize(1);
-    }
-
-    @Test
-    public void testBuildSimple() {
-        Map<String, Object> md = new HashMap<String, Object>();
-        md.put("md", "value");
-        ImportDeclaration id = ImportDeclarationBuilder.fromMetadata(md).build();
-
-        assertThat(id).isNotNull();
-        assertThat(id.getMetadata()).containsEntry("md", "value");
-        assertThat(id.getMetadata()).hasSize(1);
-    }
-
-    @Test
-    public void testBuildFromADeclaration() {
-        Map<String, Object> md = new HashMap<String, Object>();
-        md.put("md", "value");
-        ImportDeclaration id = ImportDeclarationBuilder.fromMetadata(md).build();
-
-        ImportDeclaration id2 = ImportDeclarationBuilder.fromImportDeclaration(id).build();
-
-        assertThat(id2).isNotNull();
-        assertThat(id2.getMetadata()).containsEntry("md", "value");
-        assertThat(id2.getMetadata()).hasSize(1);
-    }
-
-    @Test
-    public void testBuildFromADeclarationWithExtraMetadata() {
-        Map<String, Object> md = new HashMap<String, Object>();
-        md.put("md", "value");
-        ImportDeclaration id = ImportDeclarationBuilder.fromMetadata(md).build();
-
-        Map<String, Object> emd = new HashMap<String, Object>();
-        emd.put("emd", "value2");
-        ImportDeclaration id2 = ImportDeclarationBuilder.fromImportDeclaration(id).withExtraMetadata(emd).build();
-
-        assertThat(id2).isNotNull();
-        assertThat(id2.getMetadata()).containsEntry("md", "value");
-        assertThat(id2.getMetadata()).hasSize(1);
-
-        assertThat(id2.getExtraMetadata()).containsEntry("emd", "value2");
-        assertThat(id2.getExtraMetadata()).hasSize(1);
-    }
-
-
-    @Test
-    public void testBuildFromADeclarationAddingExtraMetadata() {
-        Map<String, Object> md = new HashMap<String, Object>();
-        md.put("md", "value");
-        ImportDeclaration id = ImportDeclarationBuilder.fromMetadata(md).build();
-
-        ImportDeclaration id2 = ImportDeclarationBuilder.fromImportDeclaration(id).extraKey("emd").value("value2").build();
-
-        assertThat(id2).isNotNull();
-        assertThat(id2.getMetadata()).containsEntry("md", "value");
-        assertThat(id2.getMetadata()).hasSize(1);
-
-        assertThat(id2.getExtraMetadata()).containsEntry("emd", "value2");
-        assertThat(id2.getExtraMetadata()).hasSize(1);
-    }
-
+public class DeclarationTest {
 
     @Test
     public void testImmutability() {
@@ -171,6 +103,38 @@ public class ImportDeclarationTest {
         assertThat(id.getStatus().getServiceReferencesBounded()).hasSize(0);
     }
 
+    @Test
+    public void testDecoratorCalls(){
+        Map<String, Object> md = new HashMap<String, Object>();
+        md.put("md", "value");
+        ImportDeclaration id = ImportDeclarationBuilder.fromMetadata(md).build();
+        ImportDeclaration spyId = spy(id);
+
+        Map<String, Object> emd = new HashMap<String, Object>();
+        emd.put("emd", "value2");
+        ImportDeclaration id2 = ImportDeclarationBuilder.fromImportDeclaration(spyId).withExtraMetadata(emd).build();
+
+        ServiceReference mock = mock(ServiceReference.class);
+
+        id2.bind(mock);
+        verify(spyId).bind(mock);
+
+        id2.handle(mock);
+        verify(spyId).handle(mock);
+
+        Status status = id2.getStatus();
+        verify(spyId).getStatus();
+        assertThat(status.isBound()).isTrue();
+        assertThat(status.getServiceReferencesHandled()).containsExactly(mock);
+        assertThat(status.getServiceReferencesBounded()).containsExactly(mock);
+
+        id2.unhandle(mock);
+        verify(spyId).unhandle(mock);
+
+        id2.unbind(mock);
+        verify(spyId).unbind(mock);
+    }
+
     @Test(expected = IllegalStateException.class)
     public void testHandleFail() {
         Map<String, Object> md = new HashMap<String, Object>();
@@ -199,5 +163,18 @@ public class ImportDeclarationTest {
         id.bind(mock);
         id.handle(mock);
         id.unbind(mock);
+    }
+
+    @Test
+    public void testToString(){
+        Map<String, Object> md = new HashMap<String, Object>();
+        md.put("md", "value");
+        ImportDeclaration id = ImportDeclarationBuilder.fromMetadata(md).build();
+
+        ImportDeclaration id2 = ImportDeclarationBuilder.fromImportDeclaration(id).extraKey("emd").value("value2").build();
+
+        String output = id2.toString();
+        int nbLines = output.split(System.getProperty("line.separator")).length;
+        assertThat(nbLines).isEqualTo(6);
     }
 }

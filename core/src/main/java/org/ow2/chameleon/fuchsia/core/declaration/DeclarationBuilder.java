@@ -65,9 +65,6 @@ class DeclarationBuilder<BUILDER extends DeclarationBuilder<BUILDER,DECLARATION>
     }
 
     private void addMetadata(String key, Object value) {
-        if (declaration != null) {
-            throw new IllegalStateException();
-        }
         if (metadata == null) {
             metadata = new HashMap<String, Object>();
         }
@@ -75,9 +72,6 @@ class DeclarationBuilder<BUILDER extends DeclarationBuilder<BUILDER,DECLARATION>
     }
 
     private void addExtraMetadata(String key, Object value) {
-        if (declaration == null) {
-            throw new IllegalStateException();
-        }
         extraMetadata.put(key, value);
     }
 

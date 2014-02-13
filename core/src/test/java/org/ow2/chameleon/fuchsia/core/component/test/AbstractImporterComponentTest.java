@@ -55,6 +55,18 @@ public class AbstractImporterComponentTest {
         assertThat(testedClass.nbProxies()).isEqualTo(0); //Check that denyImportDeclaration has been called
     }
 
+    @Test(expected = IllegalStateException.class)
+    public void testDuplicateImportDeclaration() throws ImporterException {
+        ImportDeclaration idec = mock(ImportDeclaration.class);
+        testedClass.addImportDeclaration(idec);
+
+        assertThat(testedClass.nbProxies()).isEqualTo(1); //Check that useImportDeclaration has been called
+
+        testedClass.addImportDeclaration(idec);
+
+        assertThat(testedClass.nbProxies()).isEqualTo(1); //Check that the importer handle correctly the duplication
+    }
+
     @Test
     public void testMultiplesImportDeclaration() throws ImporterException {
         Collection<ImportDeclaration> decs = new HashSet<ImportDeclaration>();

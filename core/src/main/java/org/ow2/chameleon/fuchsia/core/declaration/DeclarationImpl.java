@@ -3,11 +3,7 @@ package org.ow2.chameleon.fuchsia.core.declaration;
 import org.apache.felix.ipojo.Factory;
 import org.osgi.framework.ServiceReference;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * {@link DeclarationImpl} is the reference implementation of the {@link Declaration} interface of Fuchsia
@@ -21,11 +17,11 @@ class DeclarationImpl implements Declaration, ImportDeclaration, ExportDeclarati
     private final Object lock;
 
     // List of importerServices bind to this Declaration
-    private final List<ServiceReference> serviceReferencesBound;
+    private final Set<ServiceReference> serviceReferencesBound;
 
     // List of importerServices which are currently doing something with this Declaration
     // i.e. the importerService has created a proxy from the declaration
-    private final List<ServiceReference> serviceReferencesHandled;
+    private final Set<ServiceReference> serviceReferencesHandled;
 
     // The metadata of the Declaration
     private final Map<String, Object> metadata;
@@ -41,8 +37,8 @@ class DeclarationImpl implements Declaration, ImportDeclaration, ExportDeclarati
         }
         this.metadata = Collections.unmodifiableMap(new HashMap<String, Object>(metadata));
         this.extraMetadata = Collections.unmodifiableMap(new HashMap<String, Object>());
-        this.serviceReferencesBound = new ArrayList<ServiceReference>();
-        this.serviceReferencesHandled = new ArrayList<ServiceReference>();
+        this.serviceReferencesBound = new HashSet<ServiceReference>();
+        this.serviceReferencesHandled = new HashSet<ServiceReference>();
         this.lock = new Object();
     }
 
@@ -95,7 +91,17 @@ class DeclarationImpl implements Declaration, ImportDeclaration, ExportDeclarati
     }
 
     public String toString() {
-        //TODO Implement this for debug purposes
-        return super.toString();
+        StringBuilder sg = new StringBuilder();
+        sg.append("Declaration Metadata : \n");
+        for(Map.Entry<String,Object> entry: metadata.entrySet()){
+            sg.append(String.format("  %s\t\t= %s\n",entry.getKey(),entry.getValue()));
+        }
+        sg.append("Declaration ExtraMetadata : \n");
+        for(Map.Entry<String,Object> entry: extraMetadata.entrySet()){
+            sg.append(String.format("  %s\t\t= %s\n",entry.getKey(),entry.getValue()));
+        }
+        sg.append("Declaration binded to "+serviceReferencesBound.size()+" services.\n");
+        sg.append("Declaration handled by "+serviceReferencesHandled.size()+" services.\n");
+        return sg.toString();
     }
 }
