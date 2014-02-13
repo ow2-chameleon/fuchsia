@@ -12,7 +12,7 @@
 
     <artifactId>proto-client</artifactId>
     <groupId>org.ow2.chameleon.fuchsia.examples</groupId>
-    <name>OW2 Chameleon - Protobuffer Example Proto Client</name>
+    <name>OW2 Chameleon - Fuchsia Example Protobuffer Proto Client</name>
     <packaging>bundle</packaging>
 
     <dependencies>

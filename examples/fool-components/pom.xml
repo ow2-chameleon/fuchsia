@@ -21,8 +21,8 @@
     </parent>
 
 
-    <artifactId>fuchsia-fool-components</artifactId>
-    <name>OW2 Chameleon - Fuchsia Fool Components</name>
+    <artifactId>fool-components</artifactId>
+    <name>OW2 Chameleon - Fuchsia Example Fool Components</name>
     <packaging>bundle</packaging>
 
     <dependencies>

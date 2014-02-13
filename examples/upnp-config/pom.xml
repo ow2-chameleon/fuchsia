@@ -11,7 +11,7 @@
 
 
     <artifactId>upnp-config</artifactId>
-    <name>OW2 Chameleon - Fuchsia UPnP Configuration</name>
+    <name>OW2 Chameleon - Fuchsia Example UPnP Configuration</name>
     <packaging>bundle</packaging>
 
     <dependencies>

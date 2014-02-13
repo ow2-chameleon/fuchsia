@@ -11,7 +11,7 @@
 
 
     <artifactId>mqtt-config</artifactId>
-    <name>OW2 Chameleon - Fuchsia MQTT Configuration</name>
+    <name>OW2 Chameleon - Fuchsia Example MQTT Configuration</name>
     <packaging>bundle</packaging>
 
     <dependencies>

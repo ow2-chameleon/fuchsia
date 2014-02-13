@@ -11,7 +11,7 @@
 
 
     <artifactId>cxf-exporter-config</artifactId>
-    <name>OW2 Chameleon - Fuchsia CXF Exporter Configuration</name>
+    <name>OW2 Chameleon - Fuchsia Example CXF Exporter Configuration</name>
     <packaging>bundle</packaging>
 
     <dependencies>

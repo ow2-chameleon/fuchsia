@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>fake-importer-config</artifactId>
-    <name>OW2 Chameleon - Fuchsia Fake Importer Configuration</name>
+    <name>OW2 Chameleon - Fuchsia Example Fake Importer Configuration</name>
     <packaging>bundle</packaging>
 
     <dependencies>

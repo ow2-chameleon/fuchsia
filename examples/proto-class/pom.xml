@@ -12,7 +12,7 @@
 
     <artifactId>proto-class</artifactId>
     <groupId>org.ow2.chameleon.fuchsia.examples</groupId>
-    <name>OW2 Chameleon - Protobuffer Example Proto Class</name>
+    <name>OW2 Chameleon - Fuchsia Example Protobuffer Proto Class</name>
     <packaging>bundle</packaging>
 
     <dependencies>

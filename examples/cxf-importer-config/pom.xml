@@ -11,7 +11,7 @@
 
 
     <artifactId>cxf-importer-config</artifactId>
-    <name>OW2 Chameleon - Fuchsia CXF Importer Configuration</name>
+    <name>OW2 Chameleon - Fuchsia Example CXF Importer Configuration</name>
     <packaging>bundle</packaging>
 
     <dependencies>

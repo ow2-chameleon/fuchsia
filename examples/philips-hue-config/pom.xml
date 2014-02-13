@@ -11,7 +11,7 @@
 
 
     <artifactId>philips-hue-config</artifactId>
-    <name>OW2 Chameleon - Fuchsia PhilipsHue Configuration</name>
+    <name>OW2 Chameleon - Fuchsia Example PhilipsHue Configuration</name>
     <packaging>bundle</packaging>
 
     <dependencies>

@@ -11,7 +11,7 @@
 
 
     <artifactId>jsonrpc-exporter-config</artifactId>
-    <name>OW2 Chameleon - Fuchsia JSONRPC Base interface for the examples</name>
+    <name>OW2 Chameleon - Fuchsia Example JSONRPC Base interface</name>
     <packaging>bundle</packaging>
 
     <dependencies>

@@ -11,7 +11,7 @@
 
 
     <artifactId>mdns-config</artifactId>
-    <name>OW2 Chameleon - Fuchsia DNS-SD Configuration</name>
+    <name>OW2 Chameleon - Fuchsia Example DNS-SD Configuration</name>
     <packaging>bundle</packaging>
 
     <dependencies>

@@ -29,7 +29,7 @@
 
     <modules>
         <module>fool-components</module>
-        <module>upnp-samples</module>
+        <module>upnp-components</module>
         <module>upnp-config</module>
         <module>push-config</module>
         <module>mdns-config</module>

@@ -11,7 +11,7 @@
 
 
     <artifactId>push-config</artifactId>
-    <name>OW2 Chameleon - Fuchsia PuSH Configuration</name>
+    <name>OW2 Chameleon - Fuchsia Example PuSH Configuration</name>
     <packaging>bundle</packaging>
 
     <dependencies>

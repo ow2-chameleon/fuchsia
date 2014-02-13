@@ -11,7 +11,7 @@
 
 
     <artifactId>cxf-base</artifactId>
-    <name>OW2 Chameleon - Fuchsia CXF Base interface for the examples</name>
+    <name>OW2 Chameleon - Fuchsia Example CXF Base interface</name>
     <packaging>bundle</packaging>
 
     <dependencies>

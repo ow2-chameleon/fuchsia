@@ -11,7 +11,7 @@
 
 
     <artifactId>cxf-client</artifactId>
-    <name>OW2 Chameleon - Fuchsia CXF Client</name>
+    <name>OW2 Chameleon - Fuchsia Example CXF Client</name>
     <packaging>bundle</packaging>
 
     <dependencies>
