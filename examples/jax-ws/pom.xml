@@ -10,13 +10,13 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <name>OW2 Chameleon - Fuchsia JAX-WS examples</name>
+    <name>OW2 Chameleon - Fuchsia Example JAX-WS</name>
     <artifactId>jax-ws-examples</artifactId>
 
     <packaging>pom</packaging>
 
     <modules>
-         <module>importerHelloWs</module>
+        <module>importerHelloWs</module>
         <module>weatherForecast</module>
     </modules>
 

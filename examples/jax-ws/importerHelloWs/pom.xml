@@ -5,12 +5,12 @@
     <parent>
         <artifactId>jax-ws-examples</artifactId>
         <groupId>org.ow2.chameleon.fuchsia.examples</groupId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.0.2-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <name>OW2 Chameleon - Fuchsia JAX-WS examples</name>
+    <name>OW2 Chameleon - Fuchsia Example JAX-WS Hello</name>
     <artifactId>importerHelloWs</artifactId>
     <packaging>pom</packaging>
 
