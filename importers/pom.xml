@@ -21,6 +21,7 @@
         <module>jax-ws</module>
         <module>json-rpc</module>
         <module>json-rpc-it</module>
+        <module>raspberrypi</module>
     </modules>
 
     <profiles>
