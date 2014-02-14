@@ -1,0 +1,179 @@
+package org.ow2.chameleon.fuchsia.core.component.test;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
+import org.ow2.chameleon.fuchsia.core.component.AbstractDiscoveryComponent;
+import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
+import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclarationBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
+
+public class AbstractDiscoveryComponentTest {
+
+
+    @Mock
+    BundleContext bundleContext;
+
+    @Before
+    public void setUp() {
+        MockitoAnnotations.initMocks(this); //initialize the object with mocks annotations
+    }
+
+    @After
+    public void tearDown() {
+
+    }
+
+    @Test
+    public void testInstantiation(){
+        TestedClass testedClass = new TestedClass(bundleContext);
+        testedClass.start();
+    }
+
+    @Test
+    public void testRegisterImportDeclaration(){
+        TestedClass testedClass = new TestedClass(bundleContext);
+        testedClass.start();
+
+        Map<String, Object> md = new HashMap<String, Object>();
+        md.put("md", "value");
+        ImportDeclaration id = ImportDeclarationBuilder.fromMetadata(md).build();
+
+        testedClass.addIdec(id);
+        Dictionary <String, Object> props = new Hashtable<String, Object>();
+        String clazzes[] = new String[]{ImportDeclaration.class.getName()};
+        verify(bundleContext).registerService(clazzes, id, props);
+
+        assertThat(testedClass.getImportDeclarations()).containsExactly(id);
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testRegisterTwoTimesImportDeclaration(){
+        TestedClass testedClass = new TestedClass(bundleContext);
+        testedClass.start();
+
+        Map<String, Object> md = new HashMap<String, Object>();
+        md.put("md", "value");
+        ImportDeclaration id = ImportDeclarationBuilder.fromMetadata(md).build();
+
+        testedClass.addIdec(id);
+        testedClass.addIdec(id);
+    }
+
+    @Test
+    public void testUnregisterImportDeclaration(){
+        TestedClass testedClass = new TestedClass(bundleContext);
+        testedClass.start();
+
+        Map<String, Object> md = new HashMap<String, Object>();
+        md.put("md", "value");
+        ImportDeclaration id = ImportDeclarationBuilder.fromMetadata(md).build();
+
+        ServiceRegistration mockSR = mock(ServiceRegistration.class);
+        Dictionary <String, Object> props = new Hashtable<String, Object>();
+        String clazzes[] = new String[]{ImportDeclaration.class.getName()};
+        when(bundleContext.registerService(clazzes, id, props)).thenReturn(mockSR);
+
+        testedClass.addIdec(id);
+        testedClass.removeIdec(id);
+
+        assertThat(testedClass.getImportDeclarations()).isEmpty();
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testUnregisterTwoTimesImportDeclaration(){
+        TestedClass testedClass = new TestedClass(bundleContext);
+        testedClass.start();
+
+        Map<String, Object> md = new HashMap<String, Object>();
+        md.put("md", "value");
+        ImportDeclaration id = ImportDeclarationBuilder.fromMetadata(md).build();
+
+        ServiceRegistration mockSR = mock(ServiceRegistration.class);
+        Dictionary <String, Object> props = new Hashtable<String, Object>();
+        String clazzes[] = new String[]{ImportDeclaration.class.getName()};
+        when(bundleContext.registerService(clazzes, id, props)).thenReturn(mockSR);
+
+        testedClass.addIdec(id);
+        testedClass.removeIdec(id);
+        testedClass.removeIdec(id);
+    }
+
+    @Test
+    public void testStop(){
+        TestedClass testedClass = new TestedClass(bundleContext);
+        testedClass.start();
+
+        Map<String, Object> md = new HashMap<String, Object>();
+        md.put("md", "value");
+        ImportDeclaration id = ImportDeclarationBuilder.fromMetadata(md).build();
+
+        ServiceRegistration mockSR = mock(ServiceRegistration.class);
+        Dictionary <String, Object> props = new Hashtable<String, Object>();
+        String clazzes[] = new String[]{ImportDeclaration.class.getName()};
+        when(bundleContext.registerService(clazzes, id, props)).thenReturn(mockSR);
+
+        testedClass.addIdec(id);
+        testedClass.stop();
+
+        assertThat(testedClass.getImportDeclarations()).isEmpty();
+    }
+
+    @Test
+    public void testToString(){
+        TestedClass testedClass = new TestedClass(bundleContext);
+        testedClass.start();
+
+        String string = testedClass.toString();
+        assertThat(string).isEqualTo("name");
+    }
+
+
+
+    public class TestedClass extends AbstractDiscoveryComponent{
+
+        protected TestedClass(BundleContext bundleContext) {
+            super(bundleContext);
+        }
+
+        @Override
+        public Logger getLogger() {
+            return LoggerFactory.getLogger(this.getClass());
+        }
+
+        public String getName() {
+            return "name";
+        }
+
+        @Override
+        protected void start() {
+            super.start();
+        }
+
+        @Override
+        protected void stop() {
+            super.stop();
+        }
+
+        public void addIdec(ImportDeclaration importDeclaration){
+            registerImportDeclaration(importDeclaration);
+        }
+
+        public void removeIdec(ImportDeclaration importDeclaration){
+            unregisterImportDeclaration(importDeclaration);
+        }
+    }
+}
