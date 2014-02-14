@@ -14,11 +14,13 @@ public class DeclarationBuilderTest {
     public void testBuildEmptyImport() {
         ImportDeclaration id = ImportDeclarationBuilder.empty()
                 .key("md").value("value")
+                .key("md2").value("value2")
                 .build();
 
         assertThat(id).isNotNull();
         assertThat(id.getMetadata()).containsEntry("md", "value");
-        assertThat(id.getMetadata()).hasSize(1);
+        assertThat(id.getMetadata()).containsEntry("md2", "value2");
+        assertThat(id.getMetadata()).hasSize(2);
     }
 
     @Test

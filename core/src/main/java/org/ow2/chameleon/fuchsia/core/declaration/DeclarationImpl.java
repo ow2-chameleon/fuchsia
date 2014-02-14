@@ -97,7 +97,7 @@ class DeclarationImpl implements Declaration, ImportDeclaration, ExportDeclarati
             sg.append(String.format("  %s\t\t= %s\n",entry.getKey(),entry.getValue()));
         }
         sg.append("Declaration ExtraMetadata : \n");
-        for(Map.Entry<String,Object> entry: extraMetadata.entrySet()){
+        for(Map.Entry<String,Object> entry: getExtraMetadata().entrySet()){
             sg.append(String.format("  %s\t\t= %s\n",entry.getKey(),entry.getValue()));
         }
         sg.append("Declaration binded to "+serviceReferencesBound.size()+" services.\n");
