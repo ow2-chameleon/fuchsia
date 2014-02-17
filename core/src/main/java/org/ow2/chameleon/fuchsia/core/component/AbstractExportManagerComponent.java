@@ -2,14 +2,9 @@ package org.ow2.chameleon.fuchsia.core.component;
 
 
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceRegistration;
+import org.ow2.chameleon.fuchsia.core.component.manager.DeclarationRegistrationManager;
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
 import org.slf4j.Logger;
-
-import java.util.Dictionary;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
 
 /**
  * Abstract implementation of an export manager component which provides an {@link ExportManagerService}.
@@ -20,14 +15,14 @@ import java.util.Map;
  */
 public abstract class AbstractExportManagerComponent implements ExportManagerService {
 
-    private final Map<ExportDeclaration, ServiceRegistration> exportDeclarationsRegistered;
+    private final DeclarationRegistrationManager<ExportDeclaration> declarationRegistrationManager;
 
     private final BundleContext bundleContext;
 
 
     protected AbstractExportManagerComponent(BundleContext bundleContext) {
-        this.exportDeclarationsRegistered = new HashMap<ExportDeclaration, ServiceRegistration>();
         this.bundleContext = bundleContext;
+        declarationRegistrationManager = new DeclarationRegistrationManager<ExportDeclaration>(bundleContext, ExportDeclaration.class);
     }
 
     /**
@@ -42,16 +37,8 @@ public abstract class AbstractExportManagerComponent implements ExportManagerSer
      * Must be override !
      */
     protected void stop() {
-        synchronized (exportDeclarationsRegistered) {
-            for (ServiceRegistration registration : exportDeclarationsRegistered.values()) {
-                if (registration != null) {
-                    registration.unregister();
-                }
-            }
-            exportDeclarationsRegistered.clear();
-        }
+        declarationRegistrationManager.unregisterAll();
     }
-
 
     /**
      * Utility method to register an ExportDeclaration has a Service in OSGi.
@@ -60,15 +47,8 @@ public abstract class AbstractExportManagerComponent implements ExportManagerSer
      * @param exportDeclaration the ExportDeclaration to register
      */
     protected void registerExportDeclaration(ExportDeclaration exportDeclaration) {
-        Dictionary<String, Object> props = new Hashtable<String, Object>();
-        String clazzes[] = new String[]{ExportDeclaration.class.getName()};
-        ServiceRegistration registration;
-        registration = bundleContext.registerService(clazzes, exportDeclaration, props);
-        synchronized (exportDeclarationsRegistered) {
-            exportDeclarationsRegistered.put(exportDeclaration, registration);
-        }
+        declarationRegistrationManager.registerDeclaration(exportDeclaration);
     }
-
 
     /**
      * Utility method to unregister an ExportDeclaration of OSGi.
@@ -77,13 +57,7 @@ public abstract class AbstractExportManagerComponent implements ExportManagerSer
      * @param exportDeclaration the ExportDeclaration to unregister
      */
     protected void unregisterExportDeclaration(ExportDeclaration exportDeclaration) {
-        ServiceRegistration registration;
-        synchronized (exportDeclarationsRegistered) {
-            registration = exportDeclarationsRegistered.remove(exportDeclaration);
-        }
-        if (registration != null) {
-            registration.unregister();
-        }
+        declarationRegistrationManager.unregisterDeclaration(exportDeclaration);
     }
 
     @Override
