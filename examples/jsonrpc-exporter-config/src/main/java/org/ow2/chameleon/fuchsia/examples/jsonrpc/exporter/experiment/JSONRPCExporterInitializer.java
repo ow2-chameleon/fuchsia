@@ -4,7 +4,7 @@ import org.apache.felix.ipojo.configuration.Configuration;
 import org.apache.felix.ipojo.configuration.Instance;
 import org.ow2.chameleon.fuchsia.core.ExportationLinker;
 import org.ow2.chameleon.fuchsia.core.FuchsiaConstants;
-import org.ow2.chameleon.fuchsia.core.component.ImporterService;
+import org.ow2.chameleon.fuchsia.core.component.manager.DeclarationBinder;
 
 import static org.ow2.chameleon.fuchsia.core.ImportationLinker.FILTER_IMPORTDECLARATION_PROPERTY;
 import static org.ow2.chameleon.fuchsia.core.ImportationLinker.FILTER_IMPORTERSERVICE_PROPERTY;
@@ -26,7 +26,7 @@ public class JSONRPCExporterInitializer {
 
         Instance jsonRPCImporter = instance()
             .of("Fuchsia-Importer:JSON-RPC")
-            .with(ImporterService.TARGET_FILTER_PROPERTY).setto("(configs=jsonrpc)");
+            .with(DeclarationBinder.TARGET_FILTER_PROPERTY).setto("(configs=jsonrpc)");
 
         Instance jsonRPCImporterLinker = instance()
             .of(FuchsiaConstants.DEFAULT_IMPORTATION_LINKER_FACTORY_NAME)

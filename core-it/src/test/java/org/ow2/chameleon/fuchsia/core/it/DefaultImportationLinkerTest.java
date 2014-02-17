@@ -15,6 +15,7 @@ import org.ow2.chameleon.fuchsia.core.ImportationLinker;
 import org.ow2.chameleon.fuchsia.core.ImportationLinkerIntrospection;
 import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
 import org.ow2.chameleon.fuchsia.core.component.ImporterService;
+import org.ow2.chameleon.fuchsia.core.component.manager.DeclarationBinder;
 import org.ow2.chameleon.fuchsia.core.declaration.Constants;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclarationBuilder;
@@ -151,7 +152,7 @@ public class DefaultImportationLinkerTest extends CommonTest {
 
         Dictionary<String, Object> props = new Hashtable<String, Object>();
         props.put(INSTANCE_NAME_PROPERTY, "importer1-instance");
-        props.put(ImporterService.TARGET_FILTER_PROPERTY, "(" + Constants.ID + "=test)");
+        props.put(DeclarationBinder.TARGET_FILTER_PROPERTY, "(" + Constants.ID + "=test)");
 
         ServiceRegistration<ImporterService> sr1 = context.registerService(ImporterService.class, importer1, props);
 
@@ -162,7 +163,7 @@ public class DefaultImportationLinkerTest extends CommonTest {
 
         Dictionary<String, Object> props2 = new Hashtable<String, Object>();
         props2.put(INSTANCE_NAME_PROPERTY, "importer2-instance");
-        props2.put(ImporterService.TARGET_FILTER_PROPERTY, "(" + Constants.ID + "=test)");
+        props2.put(DeclarationBinder.TARGET_FILTER_PROPERTY, "(" + Constants.ID + "=test)");
         ServiceRegistration<ImporterService> sr2 = context.registerService(ImporterService.class, importer2, props2);
 
         ImporterService is2 = osgiHelper.waitForService(ImporterService.class, "(" + INSTANCE_NAME_PROPERTY + "=importer2-instance)", 0);
@@ -187,7 +188,7 @@ public class DefaultImportationLinkerTest extends CommonTest {
 
         Dictionary<String, Object> props = new Hashtable<String, Object>();
         props.put("no.instance.name", "importer1-instance");
-        props.put(ImporterService.TARGET_FILTER_PROPERTY, "(" + Constants.ID + "=test)");
+        props.put(DeclarationBinder.TARGET_FILTER_PROPERTY, "(" + Constants.ID + "=test)");
 
         ServiceRegistration<ImporterService> sr1 = context.registerService(ImporterService.class, importer1, props);
 
@@ -208,7 +209,7 @@ public class DefaultImportationLinkerTest extends CommonTest {
 
         Dictionary<String, Object> props = new Hashtable<String, Object>();
         props.put(INSTANCE_NAME_PROPERTY, "importer-instance");
-        props.put(ImporterService.TARGET_FILTER_PROPERTY, "(" + Constants.ID + "=test)");
+        props.put(DeclarationBinder.TARGET_FILTER_PROPERTY, "(" + Constants.ID + "=test)");
 
         ServiceRegistration<ImporterService> sr = context.registerService(ImporterService.class, importer1, props);
 
@@ -223,10 +224,10 @@ public class DefaultImportationLinkerTest extends CommonTest {
 
         ServiceRegistration iDReg = registerImportDeclaration(iD);
         assertThat(iDReg).isNotNull();
-        verify(importer1).addImportDeclaration(iD);
+        verify(importer1).addDeclaration(iD);
 
         iDReg.unregister();
-        verify(importer1).removeImportDeclaration(iD);
+        verify(importer1).removeDeclaration(iD);
         assertThat(importationLinkerIntrospection.getImportDeclarations()).isEmpty();
 
         sr.unregister();
@@ -242,7 +243,7 @@ public class DefaultImportationLinkerTest extends CommonTest {
 
         Dictionary<String, Object> props = new Hashtable<String, Object>();
         props.put(INSTANCE_NAME_PROPERTY, "importer-instance");
-        props.put(ImporterService.TARGET_FILTER_PROPERTY, "(" + Constants.ID + "=test)");
+        props.put(DeclarationBinder.TARGET_FILTER_PROPERTY, "(" + Constants.ID + "=test)");
 
         ServiceRegistration<ImporterService> sr = context.registerService(ImporterService.class, importer1, props);
 
@@ -257,10 +258,10 @@ public class DefaultImportationLinkerTest extends CommonTest {
 
         ServiceRegistration iDReg = registerImportDeclaration(iD);
         assertThat(iDReg).isNotNull();
-        verify(importer1, never()).addImportDeclaration(iD);
+        verify(importer1, never()).addDeclaration(iD);
 
         iDReg.unregister();
-        verify(importer1, never()).removeImportDeclaration(iD);
+        verify(importer1, never()).removeDeclaration(iD);
         assertThat(importationLinkerIntrospection.getImportDeclarations()).isEmpty();
 
         sr.unregister();
@@ -279,7 +280,7 @@ public class DefaultImportationLinkerTest extends CommonTest {
 
         Dictionary<String, Object> props = new Hashtable<String, Object>();
         props.put(INSTANCE_NAME_PROPERTY, "importer-instance");
-        props.put(ImporterService.TARGET_FILTER_PROPERTY, "(" + Constants.ID + "=test)");
+        props.put(DeclarationBinder.TARGET_FILTER_PROPERTY, "(" + Constants.ID + "=test)");
 
         ServiceRegistration<ImporterService> sr = context.registerService(ImporterService.class, importer1, props);
 
@@ -314,7 +315,7 @@ public class DefaultImportationLinkerTest extends CommonTest {
 
         Dictionary<String, Object> props = new Hashtable<String, Object>();
         props.put(INSTANCE_NAME_PROPERTY, "importer-instance");
-        props.put(ImporterService.TARGET_FILTER_PROPERTY, "(" + Constants.ID + "=test)");
+        props.put(DeclarationBinder.TARGET_FILTER_PROPERTY, "(" + Constants.ID + "=test)");
 
         ServiceRegistration<ImporterService> sr = context.registerService(ImporterService.class, importer1, props);
         ImporterService is = osgiHelper.waitForService(ImporterService.class, "(" + INSTANCE_NAME_PROPERTY + "=importer-instance)", 0);
@@ -328,7 +329,7 @@ public class DefaultImportationLinkerTest extends CommonTest {
 
         ServiceRegistration iDReg = registerImportDeclaration(iD);
         assertThat(iDReg).isNotNull();
-        verify(importer1).addImportDeclaration(iD);
+        verify(importer1).addDeclaration(iD);
 
         assertThat(iD.getStatus().getServiceReferencesBounded()).containsOnly(sr.getReference());
 
@@ -396,12 +397,12 @@ public class DefaultImportationLinkerTest extends CommonTest {
         // register the importer1
         Dictionary<String, Object> props = new Hashtable<String, Object>();
         props.put(INSTANCE_NAME_PROPERTY, "importer1-instance");
-        props.put(ImporterService.TARGET_FILTER_PROPERTY, "(" + Constants.ID + "=test)");
+        props.put(DeclarationBinder.TARGET_FILTER_PROPERTY, "(" + Constants.ID + "=test)");
         ServiceRegistration<ImporterService> sr1 = context.registerService(ImporterService.class, importer1, props);
 
         ImporterService is1 = osgiHelper.waitForService(ImporterService.class, "(" + INSTANCE_NAME_PROPERTY + "=importer1-instance)", 0);
         assertThat(is1).isNotNull();
-        verify(importer1).addImportDeclaration(iD1);
+        verify(importer1).addDeclaration(iD1);
 
         // reconfigure the ImportDeclaration filter of the linker :
         Dictionary<String, Object> linkerProps = new Hashtable<String, Object>();
@@ -409,8 +410,8 @@ public class DefaultImportationLinkerTest extends CommonTest {
         linkerProps.put(ImportationLinker.FILTER_IMPORTERSERVICE_PROPERTY, "(" + INSTANCE_NAME_PROPERTY + "=*)");
         importationLinkerCI.reconfigure(linkerProps);
 
-        verify(importer1).removeImportDeclaration(iD1);
-        verify(importer1).addImportDeclaration(iD2);
+        verify(importer1).removeDeclaration(iD1);
+        verify(importer1).addDeclaration(iD2);
     }
 
     @Test
@@ -420,7 +421,7 @@ public class DefaultImportationLinkerTest extends CommonTest {
         // register the importer1
         Dictionary<String, Object> props = new Hashtable<String, Object>();
         props.put(INSTANCE_NAME_PROPERTY, "importer1-instance");
-        props.put(ImporterService.TARGET_FILTER_PROPERTY, "(" + Constants.ID + "=test)");
+        props.put(DeclarationBinder.TARGET_FILTER_PROPERTY, "(" + Constants.ID + "=test)");
         ServiceRegistration<ImporterService> sr1 = context.registerService(ImporterService.class, importer1, props);
 
         ImporterService is1 = osgiHelper.waitForService(ImporterService.class, "(" + INSTANCE_NAME_PROPERTY + "=importer1-instance)", 0);
@@ -431,7 +432,7 @@ public class DefaultImportationLinkerTest extends CommonTest {
         // register the importer2
         Dictionary<String, Object> props2 = new Hashtable<String, Object>();
         props2.put(INSTANCE_NAME_PROPERTY, "importer2-instance");
-        props2.put(ImporterService.TARGET_FILTER_PROPERTY, "(" + Constants.ID + "=test)");
+        props2.put(DeclarationBinder.TARGET_FILTER_PROPERTY, "(" + Constants.ID + "=test)");
         ServiceRegistration<ImporterService> sr2 = context.registerService(ImporterService.class, importer2, props2);
 
         ImporterService is2 = osgiHelper.waitForService(ImporterService.class, "(" + INSTANCE_NAME_PROPERTY + "=importer2-instance)", 0);
@@ -481,22 +482,22 @@ public class DefaultImportationLinkerTest extends CommonTest {
         // register the importer1
         Dictionary<String, Object> props = new Hashtable<String, Object>();
         props.put(INSTANCE_NAME_PROPERTY, "importer1-instance");
-        props.put(ImporterService.TARGET_FILTER_PROPERTY, "(" + Constants.ID + "=test)");
+        props.put(DeclarationBinder.TARGET_FILTER_PROPERTY, "(" + Constants.ID + "=test)");
         ServiceRegistration<ImporterService> sr1 = context.registerService(ImporterService.class, importer1, props);
 
         ImporterService is1 = osgiHelper.waitForService(ImporterService.class, "(" + INSTANCE_NAME_PROPERTY + "=importer1-instance)", 0);
         assertThat(is1).isNotNull();
-        verify(importer1).addImportDeclaration(iD1);
+        verify(importer1).addDeclaration(iD1);
 
         // register the importer2
         Dictionary<String, Object> props2 = new Hashtable<String, Object>();
         props2.put(INSTANCE_NAME_PROPERTY, "importer2-instance");
-        props2.put(ImporterService.TARGET_FILTER_PROPERTY, "(" + Constants.ID + "=test)");
+        props2.put(DeclarationBinder.TARGET_FILTER_PROPERTY, "(" + Constants.ID + "=test)");
         ServiceRegistration<ImporterService> sr2 = context.registerService(ImporterService.class, importer2, props2);
 
         ImporterService is2 = osgiHelper.waitForService(ImporterService.class, "(" + INSTANCE_NAME_PROPERTY + "=importer2-instance)", 0);
         assertThat(is2).isNotNull();
-        verify(importer2).addImportDeclaration(iD1);
+        verify(importer2).addDeclaration(iD1);
 
         assertThat(iD1.getStatus().getServiceReferencesBounded()).containsOnly(sr1.getReference(), sr2.getReference());
 
@@ -506,7 +507,7 @@ public class DefaultImportationLinkerTest extends CommonTest {
         linkerProps.put(ImportationLinker.FILTER_IMPORTERSERVICE_PROPERTY, "(" + INSTANCE_NAME_PROPERTY + "=importer1*)");
         importationLinkerCI.reconfigure(linkerProps);
 
-        verify(importer2).removeImportDeclaration(iD1);
+        verify(importer2).removeDeclaration(iD1);
         assertThat(iD1.getStatus().getServiceReferencesBounded()).containsOnly(sr1.getReference());
 
         // reconfigure the ImporterService filter of the linker :
@@ -515,8 +516,8 @@ public class DefaultImportationLinkerTest extends CommonTest {
         linkerProps.put(ImportationLinker.FILTER_IMPORTERSERVICE_PROPERTY, "(" + INSTANCE_NAME_PROPERTY + "=importer2*)");
         importationLinkerCI.reconfigure(linkerProps);
 
-        verify(importer1).removeImportDeclaration(iD1);
-        verify(importer1).addImportDeclaration(iD1);
+        verify(importer1).removeDeclaration(iD1);
+        verify(importer1).addDeclaration(iD1);
         assertThat(iD1.getStatus().getServiceReferencesBounded()).containsOnly(sr2.getReference());
     }
 
@@ -544,32 +545,32 @@ public class DefaultImportationLinkerTest extends CommonTest {
         // register the importer
         Dictionary<String, Object> importerProps = new Hashtable<String, Object>();
         importerProps.put(INSTANCE_NAME_PROPERTY, "importer1-instance");
-        importerProps.put(ImporterService.TARGET_FILTER_PROPERTY, "(" + Constants.ID + "=test*)");
+        importerProps.put(DeclarationBinder.TARGET_FILTER_PROPERTY, "(" + Constants.ID + "=test*)");
         ServiceRegistration<ImporterService> sr1 = context.registerService(ImporterService.class, importer1, importerProps);
         ImporterService is1 = osgiHelper.waitForService(ImporterService.class, "(" + INSTANCE_NAME_PROPERTY + "=importer1-instance)", 0);
         assertThat(is1).isNotNull();
-        verify(importer1).addImportDeclaration(iD1);
-        verify(importer1).addImportDeclaration(iD2);
+        verify(importer1).addDeclaration(iD1);
+        verify(importer1).addDeclaration(iD2);
 
         // reconfigure the importer
         importerProps = new Hashtable<String, Object>();
         importerProps.put(INSTANCE_NAME_PROPERTY, "importer1-instance");
-        importerProps.put(ImporterService.TARGET_FILTER_PROPERTY, "(" + Constants.ID + "=test1)");
+        importerProps.put(DeclarationBinder.TARGET_FILTER_PROPERTY, "(" + Constants.ID + "=test1)");
         sr1.setProperties(importerProps);
 
-        verify(importer1).removeImportDeclaration(iD2);
-        verify(importer1, never()).removeImportDeclaration(iD1);
-        verify(importer1, times(1)).addImportDeclaration(iD1);
+        verify(importer1).removeDeclaration(iD2);
+        verify(importer1, never()).removeDeclaration(iD1);
+        verify(importer1, times(1)).addDeclaration(iD1);
 
         assertThat(iD1.getStatus().getServiceReferencesBounded()).containsOnly(sr1.getReference());
         // reconfigure the importer
         importerProps = new Hashtable<String, Object>();
         importerProps.put(INSTANCE_NAME_PROPERTY, "importer1-instance");
-        importerProps.put(ImporterService.TARGET_FILTER_PROPERTY, "(" + Constants.ID + "=test2)");
+        importerProps.put(DeclarationBinder.TARGET_FILTER_PROPERTY, "(" + Constants.ID + "=test2)");
         sr1.setProperties(importerProps);
 
-        verify(importer1).removeImportDeclaration(iD1);
-        verify(importer1, times(2)).addImportDeclaration(iD2);
+        verify(importer1).removeDeclaration(iD1);
+        verify(importer1, times(2)).addDeclaration(iD2);
     }
 
     @Test

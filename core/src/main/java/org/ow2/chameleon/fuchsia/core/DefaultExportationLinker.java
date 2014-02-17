@@ -1,26 +1,23 @@
 package org.ow2.chameleon.fuchsia.core;
 
-import org.apache.felix.ipojo.annotations.Bind;
-import org.apache.felix.ipojo.annotations.Component;
-import org.apache.felix.ipojo.annotations.Invalidate;
-import org.apache.felix.ipojo.annotations.Property;
-import org.apache.felix.ipojo.annotations.Provides;
-import org.apache.felix.ipojo.annotations.ServiceProperty;
-import org.apache.felix.ipojo.annotations.Unbind;
-import org.apache.felix.ipojo.annotations.Validate;
+import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
 import org.osgi.framework.ServiceReference;
 import org.ow2.chameleon.fuchsia.core.component.ExporterService;
+import org.ow2.chameleon.fuchsia.core.component.manager.LinkerBinderManager;
+import org.ow2.chameleon.fuchsia.core.component.manager.LinkerDeclarationsManager;
+import org.ow2.chameleon.fuchsia.core.component.manager.LinkerManagement;
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
 import org.ow2.chameleon.fuchsia.core.exceptions.InvalidFilterException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.Set;
 
 import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
 import static org.ow2.chameleon.fuchsia.core.FuchsiaUtils.getFilter;
+import static org.ow2.chameleon.fuchsia.core.component.manager.DeclarationBinder.TARGET_FILTER_PROPERTY;
 
 /**
  * The {@link DefaultExportationLinker} component is the default implementation of the interface
@@ -31,16 +28,6 @@ import static org.ow2.chameleon.fuchsia.core.FuchsiaUtils.getFilter;
  * {@link ExporterService} named {@literal {@link #FILTER_EXPORTERSERVICE_PROPERTY }}.
  * <p/>
  * The filters are String with the LDAP syntax OR {@link org.osgi.framework.Filter}.
- * <p/>
- * An optional ServiceProperty @literal {@link #UNIQUE_EXPORTATION_PROPERTY}} can disallow the DefaultExportationLinker
- * to give an {@link ExportDeclaration} to more than one {@link ExporterService}. This Property is set to False by
- * default.
- * WARNING : this property is actually based on the number of {@link ExporterService} actually bind to the
- * {@link ExportDeclaration}, if an other {@link ExportationLinker} has already bind the {@link ExportDeclaration} to an
- * {@link ExporterService}, the {@link DefaultExportationLinker} will not give the
- * {@link ExportDeclaration} to any of its {@link ExporterService}. The others {@link ExportationLinker} can bind theirs
- * {@link ExportDeclaration} to many {@link ExporterService} if they are not configured for an unique export by
- * {@link ExportDeclaration}.
  *
  * @author Morgan Martinet
  */
@@ -53,47 +40,73 @@ public class DefaultExportationLinker implements ExportationLinker {
      */
     private static final Logger LOG = LoggerFactory.getLogger(DefaultExportationLinker.class);
 
-    //@Controller
+    // The OSGi BundleContext, injected by OSGi in the constructor
+    private final BundleContext bundleContext;
+
+    @Controller
     private boolean state;
 
     @ServiceProperty(name = INSTANCE_NAME_PROPERTY)
     private String linkerName;
 
     @ServiceProperty(name = FILTER_EXPORTDECLARATION_PROPERTY, mandatory = true)
+    @Property(name = FILTER_EXPORTDECLARATION_PROPERTY, mandatory = true)
     private Object exportDeclarationFilterProperty;
-
-    @ServiceProperty(name = FILTER_EXPORTERSERVICE_PROPERTY, mandatory = true)
-    private Object exporterServiceFilterProperty;
-
-    @ServiceProperty(name = UNIQUE_EXPORTATION_PROPERTY, mandatory = false)
-    private boolean uniqueExportationProperty = false;
 
     private Filter exportDeclarationFilter;
 
-    private final BundleContext bundleContext;
 
-    @Property(name = FILTER_EXPORTDECLARATION_PROPERTY, mandatory = true)
-    public void computeExportDeclarationFilter(Object filterProperty) {
-        if (!state) {
+    @ServiceProperty(name = FILTER_EXPORTERSERVICE_PROPERTY, mandatory = true)
+    @Property(name = FILTER_EXPORTERSERVICE_PROPERTY, mandatory = true)
+    private Object exporterServiceFilterProperty;
+
+    private Filter exporterServiceFilter;
+
+    /**
+     * Get the filters ExporterServiceFilter and ExportDeclarationFilter from the properties, stop the instance if one of
+     * them is invalid.
+     */
+    private void processProperties() {
+        state = true;
+        try {
+            exporterServiceFilter = getFilter(exporterServiceFilterProperty);
+        } catch (InvalidFilterException invalidFilterException) {
+            LOG.debug("The value of the Property " + FILTER_EXPORTERSERVICE_PROPERTY + " is invalid,"
+                    + " the recuperation of the Filter has failed. The instance gonna stop.", invalidFilterException);
+            state = false;
             return;
         }
+
         try {
-            exportDeclarationFilter = getFilter(filterProperty);
-            state = true;
+            exportDeclarationFilter = getFilter(exportDeclarationFilterProperty);
         } catch (InvalidFilterException invalidFilterException) {
             LOG.debug("The value of the Property " + FILTER_EXPORTDECLARATION_PROPERTY + " is invalid,"
                     + " the recuperation of the Filter has failed. The instance gonna stop.", invalidFilterException);
             state = false;
+            return;
+        }
+    }
+
+    /**
+     * Called by iPOJO when the configuration of the DefaultExportationLinker is updated.
+     * <p/>
+     * Call #processProperties() to get the updated filters ExporterServiceFilter and ExportDeclarationFilter.
+     * Compute and apply the changes in the links relatives to the changes in the filters.
+     */
+    @Updated
+    public void updated() {
+        processProperties();
+        synchronized (lock) {
+            exportersManager.applyFilterChanges(exporterServiceFilter);
+            declarationsManager.applyFilterChanges(exportDeclarationFilter);
         }
     }
 
     private final Object lock = new Object();
 
-    private final Map<ExporterService, Filter> exporterServices = new HashMap<ExporterService, Filter>();
-
-    private final Map<ServiceReference, ExporterService> exporterServiceReferences = new HashMap<ServiceReference, ExporterService>();
-
-    private final Set<ExportDeclaration> exportDeclarations = new HashSet<ExportDeclaration>();
+    public final LinkerManagement<ExportDeclaration, ExporterService> linkerManagement;
+    public final LinkerBinderManager<ExportDeclaration, ExporterService> exportersManager;
+    public final LinkerDeclarationsManager<ExportDeclaration, ExporterService> declarationsManager;
 
     @Validate
     public void start() {
@@ -107,50 +120,66 @@ public class DefaultExportationLinker implements ExportationLinker {
 
     public DefaultExportationLinker(BundleContext context) {
         this.bundleContext=context;
+        processProperties();
+
+        linkerManagement = new LinkerManagement<ExportDeclaration, ExporterService>(bundleContext, exporterServiceFilter, exportDeclarationFilter);
+        exportersManager = linkerManagement.bindersManager;
+        declarationsManager = linkerManagement.declarationsManager;
     }
 
     /**
-     * Bind all the {@link ExporterService} matching the exporterServiceFilter.
+     * Bind the {@link ExporterService} matching the exporterServiceFilter.
      * <p/>
-     * Foreach {@link ExporterService}, check all the already bound exportDeclarations.
-     * If the metadata of the {@link ExportDeclaration} match the filter exposed by the exporter
-     * bind the {@link ExportDeclaration}  to the exporter
+     * Check all the already bound {@link ExportDeclaration}s, if the metadata of the ExportDeclaration match the filter
+     * exposed by the ExporterService, link them together.
      */
-    @Bind(id = "exporterServices", specification = "org.ow2.chameleon.fuchsia.core.component.ExporterService", optional = true, aggregate = true)
-    void bindExporterService(ServiceReference<ExporterService> serviceReference) throws InvalidFilterException {
-
-        ExporterService exporterService=bundleContext.getService(serviceReference);
-
-        Map<String,Object> properties=new HashMap<String, Object>();
-
-        for(String property:serviceReference.getPropertyKeys()){
-            properties.put(property,serviceReference.getProperty(property));
-        }
-
-        if (!getFilter(exporterServiceFilterProperty).matches(properties)) {
-            return;
-        }
-
-        LOG.debug(linkerName + " : Bind the ExporterService " + exporterService);
-
-        Filter filter = null;
-        try {
-            filter = getFilter(properties.get("target"));
-        } catch (InvalidFilterException invalidFilterException) {
-            LOG.error("The ServiceProperty \"target\" of the ExporterService " + exporterService
-                    + " doesn't provides a valid Filter."
-                    + " To be used, it must provides a correct \"target\" ServiceProperty.", invalidFilterException);
-            return;
-        }
-
+    @Bind(id = "exporterServices", specification = "org.ow2.chameleon.fuchsia.core.component.ExporterService", aggregate = true, optional = true)
+    void bindExporterService(ServiceReference<ExporterService> serviceReference) {
         synchronized (lock) {
-            LOG.debug(linkerName + " : Add the ExporterService " + exporterService
-                    + " with filter " + filter.toString());
+            try {
+                exportersManager.add(serviceReference);
+            } catch (InvalidFilterException invalidFilterException) {
+                LOG.error("The ServiceProperty \"" + TARGET_FILTER_PROPERTY + "\" of the ExporterService "
+                        + bundleContext.getService(serviceReference) + " doesn't provides a valid Filter."
+                        + " To be used, it must provides a correct \"" + TARGET_FILTER_PROPERTY + "\" ServiceProperty.",
+                        invalidFilterException);
+                return;
+            }
+            if (!exportersManager.matched(serviceReference)) {
+                return;
+            }
+            LOG.debug(linkerName + " : Bind the ExporterService "
+                    + exportersManager.getDeclarationBinder(serviceReference)
+                    + " with filter " + exportersManager.getTargetFilter(serviceReference));
+            exportersManager.createLinks(serviceReference);
+        }
+    }
 
-            exporterServices.put(exporterService, filter);
-            exporterServiceReferences.put(serviceReference, exporterService);
-            for (ExportDeclaration exportDeclaration : exportDeclarations) {
-                tryToBind(exportDeclaration, serviceReference);
+    /**
+     * Update the Target Filter of the ExporterService.
+     * Apply the induce modifications on the links of the ExporterService
+     *
+     * @param serviceReference
+     */
+    @Modified(id = "exporterServices")
+    void modifiedExporterService(ServiceReference<ExporterService> serviceReference) {
+        try {
+            exportersManager.modified(serviceReference);
+        } catch (InvalidFilterException invalidFilterException) {
+            LOG.error("The ServiceProperty \"" + TARGET_FILTER_PROPERTY + "\" of the ExporterService "
+                    + bundleContext.getService(serviceReference) + " doesn't provides a valid Filter."
+                    + " To be used, it must provides a correct \"" + TARGET_FILTER_PROPERTY + "\" ServiceProperty.",
+                    invalidFilterException);
+            exportersManager.removeLinks(serviceReference);
+            return;
+        }
+        for (ExportDeclaration exportDeclaration : declarationsManager.getMatchedDeclaration()) {
+            boolean isAlreadyLinked = exportDeclaration.getStatus().getServiceReferencesBounded().contains(serviceReference);
+            boolean canBeLinked = linkerManagement.canBeLinked(exportDeclaration, serviceReference);
+            if (isAlreadyLinked && !canBeLinked) {
+                linkerManagement.unlink(exportDeclaration, serviceReference);
+            } else if (!isAlreadyLinked && canBeLinked) {
+                linkerManagement.link(exportDeclaration, serviceReference);
             }
         }
     }
@@ -159,45 +188,50 @@ public class DefaultExportationLinker implements ExportationLinker {
      * Unbind the {@link ExporterService}.
      */
     @Unbind(id = "exporterServices")
-    void unbindExporterService(ServiceReference serviceReference) {
-
-
-        ExporterService exporterService=(ExporterService)bundleContext.getService(serviceReference);
-
-        LOG.debug(linkerName + " : Unbind the ExporterService " + exporterService);
+    void unbindExporterService(ServiceReference<ExporterService> serviceReference) {
+        LOG.debug(linkerName + " : Unbind the ExporterService " + exportersManager.getDeclarationBinder(serviceReference));
         synchronized (lock) {
-            for (ExportDeclaration exportDeclaration : exportDeclarations) {
-                if (exportDeclaration.getStatus().getServiceReferencesBounded().contains(exporterService)) {
-                    tryToUnbind(exportDeclaration, serviceReference);
-                }
-            }
-            exporterServices.remove(exporterService);
-            exporterServiceReferences.remove(serviceReference);
+            exportersManager.removeLinks(serviceReference);
+            exportersManager.remove(serviceReference);
         }
     }
 
     /**
-     * Bind all the {@link ExportDeclaration} matching the filter exportDeclarationFilter.
+     * Bind the {@link ExportDeclaration} matching the filter ExportDeclarationFilter.
      * <p/>
-     * Foreach {@link ExportDeclaration}, check if metadata match the filter given exposed by the
-     * {@link ExporterService} bound.
+     * Check if metadata of the ExportDeclaration match the filter exposed by the {@link ExporterService}s bound.
+     * If the ExportDeclaration matches the ExporterService filter, link them together.
      */
     @Bind(id = "exportDeclarations", specification = "org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration", aggregate = true, optional = true)
-    void bindExportDeclaration(ExportDeclaration exportDeclaration) throws InvalidFilterException {
+    void bindExportDeclaration(ServiceReference<ExportDeclaration> exportDeclarationSRef) {
+        synchronized (lock) {
+            declarationsManager.add(exportDeclarationSRef);
+            LOG.debug(linkerName + " : Bind the ExportDeclaration "
+                    + declarationsManager.getDeclaration(exportDeclarationSRef));
 
-        exportDeclarationFilter = getFilter(exportDeclarationFilterProperty);
-
-        if (!exportDeclarationFilter.matches(exportDeclaration.getMetadata())) {
-            return;
+            if (!declarationsManager.matched(exportDeclarationSRef)) {
+                return;
+            }
+            declarationsManager.createLinks(exportDeclarationSRef);
         }
-        LOG.debug(linkerName + " : Bind the ExportDeclaration " + exportDeclaration);
+    }
+
+
+    /**
+     * Unbind and bind the {@link ExportDeclaration}.
+     */
+    @Modified(id = "exportDeclarations")
+    void modifiedExportDeclaration(ServiceReference<ExportDeclaration> exportDeclarationSRef) {
+        LOG.debug(linkerName + " : Modify the ExportDeclaration "
+                + declarationsManager.getDeclaration(exportDeclarationSRef));
 
         synchronized (lock) {
-            exportDeclarations.add(exportDeclaration);
-            for (ServiceReference serviceReference : exporterServiceReferences.keySet()) {
-                tryToBind(exportDeclaration, serviceReference);
+            declarationsManager.removeLinks(exportDeclarationSRef);
+            declarationsManager.modified(exportDeclarationSRef);
+            if (!declarationsManager.matched(exportDeclarationSRef)) {
+                return;
             }
-
+            declarationsManager.createLinks(exportDeclarationSRef);
         }
     }
 
@@ -205,68 +239,14 @@ public class DefaultExportationLinker implements ExportationLinker {
      * Unbind the {@link ExportDeclaration}.
      */
     @Unbind(id = "exportDeclarations")
-    void unbindExportDeclaration(ExportDeclaration exportDeclaration) {
-        LOG.debug(linkerName + " : Unbind the ExportDeclaration " + exportDeclaration);
+    void unbindExportDeclaration(ServiceReference<ExportDeclaration> exportDeclarationSRef) {
+        LOG.debug(linkerName + " : Unbind the ExportDeclaration "
+                + declarationsManager.getDeclaration(exportDeclarationSRef));
+
         synchronized (lock) {
-            for (ServiceReference serviceReference : exportDeclaration.getStatus().getServiceReferencesBounded()) {
-                tryToUnbind(exportDeclaration, serviceReference);
-            }
-            exportDeclarations.remove(exportDeclaration);
+            declarationsManager.removeLinks(exportDeclarationSRef);
+            declarationsManager.remove(exportDeclarationSRef);
         }
-    }
-
-    /**
-     * Try to bind the {@link ExportDeclaration}  with the {@link ExporterService}  referenced by the
-     * {@link ServiceReference}, return true if they have been bind together, false otherwise.
-     *
-     * @param exportDeclaration        The ExportDeclaration
-     * @param exporterServiceReference The ServiceReference of the ExporterService
-     * @return true if they have been bind together, false otherwise.
-     */
-    private boolean tryToBind(ExportDeclaration exportDeclaration, ServiceReference exporterServiceReference) {
-        // if the uniqueExportationProperty is set to true and the exportDeclaration is already bind, just return.
-        if (uniqueExportationProperty && exportDeclaration.getStatus().isBound()) {
-            return false;
-        }
-        ExporterService exporterService = exporterServiceReferences.get(exporterServiceReference);
-        Filter filter = exporterServices.get(exporterService);
-        if (filter.matches(exportDeclaration.getMetadata())) {
-            try {
-                exportDeclaration.bind(exporterServiceReference);
-                exporterService.addExportDeclaration(exportDeclaration);
-            } catch (Exception e) {
-                LOG.debug(exporterService + " throw an exception with giving to it the ExportDeclaration "
-                        + exportDeclaration, e);
-                exportDeclaration.unbind(exporterServiceReference);
-                return false;
-            }
-            LOG.debug(exportDeclaration + " match the filter of " + exporterService + " : bind them together");
-            return true;
-        }
-        LOG.debug(exportDeclaration + " doesn't match the filter of " + exporterService
-                + "(" + exportDeclaration.getMetadata().toString() + ")");
-        return false;
-    }
-
-    /**
-     * Try to unbind the {@link ExportDeclaration} from the {@link ExporterService} referenced by the
-     * {@link ServiceReference}, return true if they have been cleanly unbind, false otherwise.
-     *
-     * @param exportDeclaration        The ExportDeclaration
-     * @param exporterServiceReference The ServiceReference of the ExporterService
-     * @return true if they have been cleanly unbind, false otherwise.
-     */
-    private boolean tryToUnbind(ExportDeclaration exportDeclaration, ServiceReference exporterServiceReference) {
-        ExporterService exporterService = exporterServiceReferences.get(exporterServiceReference);
-        exportDeclaration.unbind(exporterServiceReference);
-        try {
-            exporterService.removeExportDeclaration(exportDeclaration);
-        } catch (Exception e) {
-            LOG.debug(exporterService + " throw an exception with removing of it the ExportDeclaration "
-                    + exportDeclaration, e);
-            return false;
-        }
-        return true;
     }
 
     public String getName() {
@@ -276,18 +256,18 @@ public class DefaultExportationLinker implements ExportationLinker {
     /**
      * Return the exporterServices linked this DefaultExportationLinker
      *
-     * @return the exporterServices linked to this DefaultExportationLinker
+     * @return The exporterServices linked to this DefaultExportationLinker
      */
     public Set<ExporterService> getLinkedExporters() {
-        return new HashSet<ExporterService>(exporterServices.keySet());
+        return exportersManager.getMatchedDeclarationBinder();
     }
 
     /**
      * Return the exportDeclarations bind by this DefaultExportationLinker
      *
-     * @return the exportDeclarations bind by this DefaultExportationLinker
+     * @return The exportDeclarations bind by this DefaultExportationLinker
      */
     public Set<ExportDeclaration> getExportDeclarations() {
-        return new HashSet<ExportDeclaration>(exportDeclarations);
+        return declarationsManager.getMatchedDeclaration();
     }
 }

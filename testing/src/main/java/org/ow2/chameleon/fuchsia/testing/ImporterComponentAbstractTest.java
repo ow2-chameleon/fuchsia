@@ -81,7 +81,7 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
     }
 
     /**
-     * Test the {@link ImporterService#addImportDeclaration(ImportDeclaration)} with
+     * Test the {@link ImporterService#addDeclaration(ImportDeclaration)} with
      * a valid {@link ImportDeclaration}.
      */
     @Test
@@ -96,7 +96,7 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
         //import the logService
         iDec.bind(serviceReference);
         try {
-            importer.addImportDeclaration(iDec);
+            importer.addDeclaration(iDec);
         } catch (BinderException e) {
             fail("Cannot give the importDeclaration to the importer", e);
         }
@@ -125,7 +125,7 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
         //import the logService
         iDec.bind(serviceReference);
         try {
-            importer.addImportDeclaration(iDec);
+            importer.addDeclaration(iDec);
         } catch (BinderException e) {
             fail("Cannot give the importDeclaration to the importer", e);
         }
@@ -159,7 +159,7 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
         //import the logService
         iDec.bind(serviceReference);
         try {
-            importer.addImportDeclaration(iDec);
+            importer.addDeclaration(iDec);
         } catch (BinderException e) {
             fail("Cannot give the importDeclaration to the importer", e);
         }
@@ -171,7 +171,7 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
 
         // un-import the logService
         try {
-            importer.removeImportDeclaration(iDec);
+            importer.removeDeclaration(iDec);
         } catch (BinderException e) {
             fail("Cannot take the importDeclaration of the importer", e);
         }
@@ -197,7 +197,7 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
         //import the logService
         iDec.bind(serviceReference);
         try {
-            importer.addImportDeclaration(iDec);
+            importer.addDeclaration(iDec);
         } catch (BinderException e) {
             fail("Cannot give the importDeclaration to the importer", e);
             LOG.error("Failed to add import declaration", e);
@@ -205,7 +205,7 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
 
         // un-import the logService
         try {
-            importer.removeImportDeclaration(iDec);
+            importer.removeDeclaration(iDec);
         } catch (BinderException e) {
             fail("Cannot take back the importDeclaration of the importer", e);
         }
@@ -214,7 +214,7 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
         // re import the logService
         iDec.bind(serviceReference);
         try {
-            importer.addImportDeclaration(iDec);
+            importer.addDeclaration(iDec);
         } catch (BinderException e) {
             fail("Cannot give the importDeclaration to the importer a second time", e);
         }

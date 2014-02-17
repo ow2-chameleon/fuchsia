@@ -27,7 +27,7 @@ import java.util.concurrent.Executors;
 import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
 import static org.assertj.core.api.Assertions.fail;
 import static org.ops4j.pax.exam.CoreOptions.*;
-import static org.ow2.chameleon.fuchsia.core.component.ImporterService.TARGET_FILTER_PROPERTY;
+import static org.ow2.chameleon.fuchsia.core.component.manager.DeclarationBinder.TARGET_FILTER_PROPERTY;
 import static org.ow2.chameleon.fuchsia.core.declaration.Constants.*;
 
 /**

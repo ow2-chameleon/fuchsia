@@ -56,7 +56,7 @@ public abstract class AbstractImporterComponent implements ImporterService, Impo
      * @param importDeclaration The {@link ImportDeclaration} of the service to be imported.
      * @throws org.ow2.chameleon.fuchsia.core.exceptions.BinderException
      */
-    public void addImportDeclaration(final ImportDeclaration importDeclaration) throws BinderException {
+    public void addDeclaration(final ImportDeclaration importDeclaration) throws BinderException {
         declarationBindManager.addDeclaration(importDeclaration);
     }
 
@@ -68,7 +68,7 @@ public abstract class AbstractImporterComponent implements ImporterService, Impo
      * @param importDeclaration The {@link ImportDeclaration} of the service to stop to be imported.
      * @throws org.ow2.chameleon.fuchsia.core.exceptions.BinderException
      */
-    public void removeImportDeclaration(final ImportDeclaration importDeclaration) throws BinderException {
+    public void removeDeclaration(final ImportDeclaration importDeclaration) throws BinderException {
         declarationBindManager.removeDeclaration(importDeclaration);
     }
 

@@ -5,11 +5,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentMatcher;
-import org.mockito.Matchers;
-import org.osgi.framework.ServiceReference;
 import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
 import org.ow2.chameleon.fuchsia.core.component.ImporterService;
-import org.ow2.chameleon.fuchsia.core.declaration.Declaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclarationBuilder;
 import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
@@ -21,8 +18,6 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.argThat;
-import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
@@ -80,11 +75,11 @@ public class AbstractImporterComponentTest extends CommonTest {
     @Test
     public void testImportDeclarationAddAndRemove() throws BinderException {
         ImportDeclaration iDec = ImportDeclarationBuilder.empty().key("id").value("1").build();
-        spySimpleImporter.addImportDeclaration(iDec);
+        spySimpleImporter.addDeclaration(iDec);
         assertThat(simpleImporter.getImportDeclarations()).containsOnly(iDec);
         assertThat(simpleImporter.nbProxies()).isEqualTo(1);
 
-        spySimpleImporter.removeImportDeclaration(iDec);
+        spySimpleImporter.removeDeclaration(iDec);
         assertThat(simpleImporter.getImportDeclarations()).isEmpty();
         assertThat(simpleImporter.nbProxies()).isEqualTo(0);
     }
@@ -93,7 +88,7 @@ public class AbstractImporterComponentTest extends CommonTest {
     @Test
     public void testImportDeclarationAddAndStopServiceImporter() throws BinderException {
         ImportDeclaration iDec = ImportDeclarationBuilder.empty().key("id").value("1").build();
-        spySimpleImporter.addImportDeclaration(iDec);
+        spySimpleImporter.addDeclaration(iDec);
         assertThat(simpleImporter.getImportDeclarations()).containsOnly(iDec);
         assertThat(simpleImporter.nbProxies()).isEqualTo(1);
 

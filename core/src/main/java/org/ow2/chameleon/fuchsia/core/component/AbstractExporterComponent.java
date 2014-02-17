@@ -48,7 +48,7 @@ public abstract class AbstractExporterComponent implements ExporterService {
     /**
      * @param exportDeclaration The {@link ExportDeclaration} of the service to be exported.
      */
-    public void addExportDeclaration(ExportDeclaration exportDeclaration) throws BinderException {
+    public void addDeclaration(ExportDeclaration exportDeclaration) throws BinderException {
         declarationBindManager.addDeclaration(exportDeclaration);
     }
 
@@ -59,7 +59,7 @@ public abstract class AbstractExporterComponent implements ExporterService {
     /**
      * @param exportDeclaration The {@link ExportDeclaration} of the service to stop to be exported.
      */
-    public void removeExportDeclaration(ExportDeclaration exportDeclaration) throws BinderException {
+    public void removeDeclaration(ExportDeclaration exportDeclaration) throws BinderException {
         declarationBindManager.removeDeclaration(exportDeclaration);
     }
 

@@ -47,11 +47,11 @@ public class AbstractImporterComponentTest {
     @Test
     public void testImportDeclaration() throws BinderException {
         ImportDeclaration idec = mock(ImportDeclaration.class);
-        testedClass.addImportDeclaration(idec);
+        testedClass.addDeclaration(idec);
 
         assertThat(testedClass.nbProxies()).isEqualTo(1); //Check that useImportDeclaration has been called
 
-        testedClass.removeImportDeclaration(idec);
+        testedClass.removeDeclaration(idec);
 
         assertThat(testedClass.nbProxies()).isEqualTo(0); //Check that denyImportDeclaration has been called
     }
@@ -59,11 +59,11 @@ public class AbstractImporterComponentTest {
     @Test(expected = IllegalStateException.class)
     public void testDuplicateImportDeclaration() throws BinderException {
         ImportDeclaration idec = mock(ImportDeclaration.class);
-        testedClass.addImportDeclaration(idec);
+        testedClass.addDeclaration(idec);
 
         assertThat(testedClass.nbProxies()).isEqualTo(1); //Check that useImportDeclaration has been called
 
-        testedClass.addImportDeclaration(idec);
+        testedClass.addDeclaration(idec);
 
         assertThat(testedClass.nbProxies()).isEqualTo(1); //Check that the importer handle correctly the duplication
     }
@@ -71,13 +71,13 @@ public class AbstractImporterComponentTest {
     @Test(expected = IllegalStateException.class)
     public void testRemoveImportDeclarationNotAdded() throws BinderException {
         ImportDeclaration idec = mock(ImportDeclaration.class);
-        testedClass.removeImportDeclaration(idec);
+        testedClass.removeDeclaration(idec);
     }
 
     @Test
     public void testGetImportDeclaration() throws BinderException {
         ImportDeclaration idec = mock(ImportDeclaration.class);
-        testedClass.addImportDeclaration(idec);
+        testedClass.addDeclaration(idec);
 
         Set<ImportDeclaration> importDeclarations = testedClass.getImportDeclarations();
         assertThat(importDeclarations).containsExactly(idec);
@@ -90,14 +90,14 @@ public class AbstractImporterComponentTest {
 
         for (int i = 0; i < IMPORT_MAX; i++) {
             ImportDeclaration idec = mock(ImportDeclaration.class);
-            testedClass.addImportDeclaration(idec);
+            testedClass.addDeclaration(idec);
             assertThat(testedClass.nbProxies()).isEqualTo(i + 1); //Check that useImportDeclaration has been called
 
             decs.add(idec);
         }
 
         for (ImportDeclaration idec : decs) {
-            testedClass.removeImportDeclaration(idec);
+            testedClass.removeDeclaration(idec);
         }
 
         assertThat(testedClass.nbProxies()).isEqualTo(0); //Check that denyImportDeclaration has been called
@@ -110,7 +110,7 @@ public class AbstractImporterComponentTest {
 
         for (int i = 0; i < IMPORT_MAX; i++) {
             ImportDeclaration idec = mock(ImportDeclaration.class);
-            testedClass.addImportDeclaration(idec);
+            testedClass.addDeclaration(idec);
             assertThat(testedClass.nbProxies()).isEqualTo(i + 1); //Check that useImportDeclaration has been called
 
             decs.add(idec);
@@ -164,6 +164,7 @@ public class AbstractImporterComponentTest {
         public String getName() {
             return "name";
         }
+
     }
 
 }
