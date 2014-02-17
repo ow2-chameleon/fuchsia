@@ -8,20 +8,29 @@ import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collection;
+import java.util.HashSet;
+
 @Component(name = "SimpleImporterFactory")
-@Provides(specifications = {ImporterService.class})
+@Provides(specifications = {ImporterService.class, SimpleImporter.class})
 public class SimpleImporter extends AbstractImporterComponent {
 
     private static final Logger LOG = LoggerFactory.getLogger(SimpleImporter.class);
 
+    private final Collection<ImportDeclaration> decs = new HashSet<ImportDeclaration>();
+
     @Override
-    public void useImportDeclaration(ImportDeclaration importDeclaration) {
-        //
+    protected void useImportDeclaration(ImportDeclaration importDeclaration) {
+        decs.add(importDeclaration);
     }
 
     @Override
-    public void denyImportDeclaration(ImportDeclaration importDeclaration) {
-        //
+    protected void denyImportDeclaration(ImportDeclaration importDeclaration) {
+        decs.remove(importDeclaration);
+    }
+
+    public int nbProxies() {
+        return decs.size();
     }
 
     @Override

@@ -4,8 +4,12 @@ import org.apache.felix.ipojo.ComponentInstance;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentMatcher;
+import org.mockito.Matchers;
+import org.osgi.framework.ServiceReference;
 import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
 import org.ow2.chameleon.fuchsia.core.component.ImporterService;
+import org.ow2.chameleon.fuchsia.core.declaration.Declaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclarationBuilder;
 import org.ow2.chameleon.fuchsia.core.exceptions.ImporterException;
@@ -16,6 +20,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.argThat;
+import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
@@ -38,9 +45,10 @@ public class AbstractImporterComponentTest extends CommonTest {
     public void setUp() {
         testedCI = ipojoHelper.createComponentInstance("SimpleImporterFactory", "SimpleImporterInstance");
         assertThat(testedCI).isNotNull();
-
-        simpleImporter = (SimpleImporter) osgiHelper.getServiceObject(ImporterService.class);
+        simpleImporter = (SimpleImporter) ipojoHelper.getServiceObjectByName(ImporterService.class ,"SimpleImporterInstance");
         assertThat(simpleImporter).isNotNull();
+        assertThat(simpleImporter.getName()).isEqualTo("simpleImporter");
+        assertThat(simpleImporter).isInstanceOf(SimpleImporter.class);
 
         spySimpleImporter = spy(simpleImporter);
     }
@@ -69,30 +77,36 @@ public class AbstractImporterComponentTest extends CommonTest {
         assertThat(simpleImporter).isInstanceOf(ImporterService.class).isInstanceOf(AbstractImporterComponent.class);
     }
 
-
     @Test
     public void testImportDeclarationAddAndRemove() throws ImporterException {
         ImportDeclaration iDec = ImportDeclarationBuilder.empty().key("id").value("1").build();
         spySimpleImporter.addImportDeclaration(iDec);
         assertThat(simpleImporter.getImportDeclarations()).containsOnly(iDec);
-        verify(spySimpleImporter).useImportDeclaration(iDec);
+        assertThat(simpleImporter.nbProxies()).isEqualTo(1);
 
         spySimpleImporter.removeImportDeclaration(iDec);
         assertThat(simpleImporter.getImportDeclarations()).isEmpty();
-        verify(spySimpleImporter).denyImportDeclaration(iDec);
+        assertThat(simpleImporter.nbProxies()).isEqualTo(0);
     }
+
 
     @Test
     public void testImportDeclarationAddAndStopServiceImporter() throws ImporterException {
         ImportDeclaration iDec = ImportDeclarationBuilder.empty().key("id").value("1").build();
         spySimpleImporter.addImportDeclaration(iDec);
         assertThat(simpleImporter.getImportDeclarations()).containsOnly(iDec);
-        verify(spySimpleImporter).useImportDeclaration(iDec);
+        assertThat(simpleImporter.nbProxies()).isEqualTo(1);
 
         spySimpleImporter.stop();
-        verify(spySimpleImporter).denyImportDeclaration(iDec);
+        assertThat(simpleImporter.nbProxies()).isEqualTo(0);
         assertThat(simpleImporter.getImportDeclarations()).isEmpty();
     }
 
+
+    class anyDeclaration extends ArgumentMatcher<ImportDeclaration> {
+        public boolean matches(Object obj) {
+            return true; //(obj instanceof ImportDeclaration);
+        }
+    }
 
 }
