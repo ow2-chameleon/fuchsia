@@ -1,6 +1,14 @@
 package org.ow2.chameleon.fuchsia.exporter.cxf.examples.base;
 
-public class PojoSampleToBeExported implements PojoSampleToBeExportedIface{
+
+import org.apache.felix.ipojo.annotations.Component;
+import org.apache.felix.ipojo.annotations.Instantiate;
+import org.apache.felix.ipojo.annotations.Provides;
+
+@Component
+@Instantiate(name = "PojoSampleToBeExported")
+@Provides
+public class PojoSampleToBeExported implements PojoSampleToBeExportedIface {
 
     public void showMessage2(){
         System.out.println("ok");
