@@ -12,9 +12,7 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Fail.failBecauseExceptionWasNotThrown;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 public class DeclarationTest {
 
@@ -56,8 +54,11 @@ public class DeclarationTest {
         Map<Integer, ServiceReference> mocks = new HashMap<Integer, ServiceReference>();
 
         mocks.put(0, mock(ServiceReference.class));
+        when(mocks.get(0).getProperty(org.osgi.framework.Constants.SERVICE_ID)).thenReturn(new Long(0));
         mocks.put(1, mock(ServiceReference.class));
+        when(mocks.get(0).getProperty(org.osgi.framework.Constants.SERVICE_ID)).thenReturn(new Long(1));
         mocks.put(2, mock(ServiceReference.class));
+        when(mocks.get(0).getProperty(org.osgi.framework.Constants.SERVICE_ID)).thenReturn(new Long(2));
         assertThat(id.getStatus().getServiceReferencesBounded()).hasSize(0);
 
         id.bind(mocks.get(0));
