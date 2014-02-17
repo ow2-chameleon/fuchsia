@@ -280,15 +280,16 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
      */
     private boolean link(ImportDeclaration importDeclaration, ServiceReference<ImporterService> importerServiceSRef) {
         ImporterService importerService = importersManager.getImporterService(importerServiceSRef);
+        LOG.debug(importDeclaration + " match the filter of " + importerService + " : bind them together");
+        importDeclaration.bind(importerServiceSRef);
         try {
             importerService.addImportDeclaration(importDeclaration);
         } catch (ImporterException e) {
+            importDeclaration.unbind(importerServiceSRef);
             LOG.debug(importerService + " throw an exception when giving to it the ImportDeclaration "
                     + importDeclaration, e);
             return false;
         }
-        LOG.debug(importDeclaration + " match the filter of " + importerService + " : bind them together");
-        importDeclaration.bind(importerServiceSRef);
         return true;
     }
 
