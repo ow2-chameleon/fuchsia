@@ -35,7 +35,7 @@ public class PhilipsHueImporter extends AbstractImporterComponent {
     }
 
     @PostRegistration
-    protected void registration(ServiceReference serviceReference) {
+    public void registration(ServiceReference serviceReference) {
         this.serviceReference = serviceReference;
     }
 

@@ -45,7 +45,7 @@ public class SubscriptionImporter extends AbstractImporterComponent implements S
     private ServiceReference serviceReference;
 
     @PostRegistration
-    protected void registration(ServiceReference serviceReference) {
+    public void registration(ServiceReference serviceReference) {
         this.serviceReference = serviceReference;
     }
 

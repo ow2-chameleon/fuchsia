@@ -64,6 +64,7 @@ public class JAXWSExporter extends AbstractExporterComponent {
             srvFactory.setBus(cxfbus);
 
             Object instance=null;
+
             ServiceReference[] protobuffReferences = context.getAllServiceReferences(pojo.getClazz(),pojo.getFilter());
 
             if(protobuffReferences==null){
@@ -116,7 +117,7 @@ public class JAXWSExporter extends AbstractExporterComponent {
     }
 
     @PostRegistration
-    protected void registration(ServiceReference serviceReference) {
+    public void registration(ServiceReference serviceReference) {
         this.serviceReference = serviceReference;
     }
 
