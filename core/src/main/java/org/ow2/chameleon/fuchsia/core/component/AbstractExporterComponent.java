@@ -5,6 +5,10 @@ import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Abstract implementation of an exporter which provides an {@link ExporterService}.
  * Start must be call before registering the service !
@@ -14,6 +18,7 @@ import java.util.Set;
  */
 public abstract class AbstractExporterComponent implements ExporterService {
     private final Set<ExportDeclaration> exportDeclarations;
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractExporterComponent.class);
 
     public AbstractExporterComponent() {
         exportDeclarations = new HashSet<ExportDeclaration>();
@@ -24,13 +29,13 @@ public abstract class AbstractExporterComponent implements ExporterService {
      * <p/>
      * TODO : Does it should be able to throw an exception if there's problem ? which one ?
      */
-    protected abstract void useExportDeclaration(final ExportDeclaration exportDeclaration);
+    protected abstract void useExportDeclaration(final ExportDeclaration exportDeclaration) throws BinderException;
 
     /**
      * Abstract method, is called when the sub class must stop the export of the service describe in the given
      * ExportDeclaration.
      */
-    protected abstract void denyExportDeclaration(final ExportDeclaration exportDeclaration);
+    protected abstract void denyExportDeclaration(final ExportDeclaration exportDeclaration) throws BinderException;
 
     /**
      * Stop the exporter, iPOJO Invalidate instance callback.
@@ -41,7 +46,13 @@ public abstract class AbstractExporterComponent implements ExporterService {
         synchronized (exportDeclarations) {
             // destroy all the proxies
             for (ExportDeclaration exportDeclaration : exportDeclarations) {
-                denyExportDeclaration(exportDeclaration);
+                try {
+                    denyExportDeclaration(exportDeclaration);
+                } catch (BinderException e) {
+                    LOG.error("An exception has been thrown while denying the exportDeclaration "
+                            + exportDeclaration
+                            + "Stopping in progress.", e);
+                }
             }
             // Clear the map
             exportDeclarations.clear();
@@ -64,7 +75,7 @@ public abstract class AbstractExporterComponent implements ExporterService {
     /**
      * @param exportDeclaration The {@link ExportDeclaration} of the service to be exported.
      */
-    public void addExportDeclaration(ExportDeclaration exportDeclaration) {
+    public void addExportDeclaration(ExportDeclaration exportDeclaration) throws BinderException {
         synchronized (exportDeclarations) {
             if (exportDeclarations.contains(exportDeclaration)) {
                 // Already register
@@ -82,7 +93,7 @@ public abstract class AbstractExporterComponent implements ExporterService {
     /**
      * @param exportDeclaration The {@link ExportDeclaration} of the service to stop to be exported.
      */
-    public void removeExportDeclaration(ExportDeclaration exportDeclaration) {
+    public void removeExportDeclaration(ExportDeclaration exportDeclaration) throws BinderException {
         synchronized (exportDeclarations) {
             denyExportDeclaration(exportDeclaration);
             exportDeclarations.remove(exportDeclaration);

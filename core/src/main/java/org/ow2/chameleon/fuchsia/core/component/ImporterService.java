@@ -1,9 +1,8 @@
 package org.ow2.chameleon.fuchsia.core.component;
 
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
-import org.ow2.chameleon.fuchsia.core.exceptions.ImporterException;
-
 import java.util.List;
+import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
 
 /**
  * The components providing this service are capable of creating a proxy thanks to an {@link ImportDeclaration}.
@@ -20,14 +19,14 @@ public interface ImporterService {
      *
      * @param importDeclaration The {@link ImportDeclaration} of the service to be imported.
      */
-    void addImportDeclaration(final ImportDeclaration importDeclaration) throws ImporterException;
+    void addImportDeclaration(final ImportDeclaration importDeclaration) throws BinderException;
 
     /**
      * Stop the reification of the given importDeclaration
      *
      * @param importDeclaration The {@link ImportDeclaration} of the service to stop to be imported.
      */
-    void removeImportDeclaration(final ImportDeclaration importDeclaration) throws ImporterException;
+    void removeImportDeclaration(final ImportDeclaration importDeclaration) throws BinderException;
 
     String getName();
 

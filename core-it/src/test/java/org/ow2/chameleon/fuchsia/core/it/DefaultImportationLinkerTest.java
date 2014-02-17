@@ -18,7 +18,7 @@ import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 import org.ow2.chameleon.fuchsia.core.declaration.Constants;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclarationBuilder;
-import org.ow2.chameleon.fuchsia.core.exceptions.ImporterException;
+import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
 import org.ow2.chameleon.fuchsia.testing.CommonTest;
 
 import java.util.Dictionary;
@@ -203,7 +203,7 @@ public class DefaultImportationLinkerTest extends CommonTest {
      * Test that ImportDeclaration are given to matching ImporterService when filter of ImporterService match
      */
     @Test
-    public void testImportDeclarationToImporterService() throws ImporterException {
+    public void testImportDeclarationToImporterService() throws BinderException {
         osgiHelper.waitForService(ImportationLinker.class, "(" + INSTANCE_NAME_PROPERTY + "=" + linkerInstanceName + ")", 0);
 
         Dictionary<String, Object> props = new Hashtable<String, Object>();
@@ -237,7 +237,7 @@ public class DefaultImportationLinkerTest extends CommonTest {
      * Test that ImportDeclaration are not given to matching ImporterService when filter of ImporterService doesn't match
      */
     @Test
-    public void testImportDeclarationToImporterServiceDoesNotMatch() throws ImporterException {
+    public void testImportDeclarationToImporterServiceDoesNotMatch() throws BinderException {
         osgiHelper.waitForService(ImportationLinker.class, "(" + INSTANCE_NAME_PROPERTY + "=" + linkerInstanceName + ")", 0);
 
         Dictionary<String, Object> props = new Hashtable<String, Object>();
@@ -271,10 +271,10 @@ public class DefaultImportationLinkerTest extends CommonTest {
      * Test that bind() method is called when DefaultImportationLinker bind it with an ImporterService and
      * that unbind() is called when DefaultImportationLinker unbind it from an ImporterService.
      *
-     * @throws ImporterException
+     * @throws org.ow2.chameleon.fuchsia.core.exceptions.BinderException
      */
     @Test
-    public void testBindOnImportDeclaration() throws ImporterException {
+    public void testBindOnImportDeclaration() throws BinderException {
         osgiHelper.waitForService(ImportationLinker.class, "(" + INSTANCE_NAME_PROPERTY + "=" + linkerInstanceName + ")", 0);
 
         Dictionary<String, Object> props = new Hashtable<String, Object>();
@@ -309,7 +309,7 @@ public class DefaultImportationLinkerTest extends CommonTest {
      * ImporterService leave.
      */
     @Test
-    public void testRemoveImporterServiceBeforeImportDeclaration() throws ImporterException {
+    public void testRemoveImporterServiceBeforeImportDeclaration() throws BinderException {
         osgiHelper.waitForService(ImportationLinker.class, "(" + INSTANCE_NAME_PROPERTY + "=" + linkerInstanceName + ")", 0);
 
         Dictionary<String, Object> props = new Hashtable<String, Object>();
@@ -372,7 +372,7 @@ public class DefaultImportationLinkerTest extends CommonTest {
     }
 
     @Test
-    public void testReconfigureIDecFilterWithImporter() throws ImporterException {
+    public void testReconfigureIDecFilterWithImporter() throws BinderException {
         // begin with the filter  :  "(" + Constants.PROTOCOL_NAME + "=test)"
 
         // create ImportDeclaration1
@@ -466,7 +466,7 @@ public class DefaultImportationLinkerTest extends CommonTest {
 
 
     @Test
-    public void testReconfigureImportersFilterWithIDec() throws ImporterException {
+    public void testReconfigureImportersFilterWithIDec() throws BinderException {
         // begin with the filter  :  "(" + Constants.PROTOCOL_NAME + "=test)"
 
         // create ImportDeclaration1
@@ -522,7 +522,7 @@ public class DefaultImportationLinkerTest extends CommonTest {
 
 
     @Test
-    public void testReconfigureImporterTargetFilter() throws ImporterException {
+    public void testReconfigureImporterTargetFilter() throws BinderException {
         // create ImportDeclaration1
         Map<String, Object> metadata1 = new HashMap<String, Object>();
         metadata1.put(Constants.PROTOCOL_NAME, "test");

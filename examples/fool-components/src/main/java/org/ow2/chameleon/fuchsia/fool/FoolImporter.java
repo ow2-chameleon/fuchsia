@@ -9,7 +9,7 @@ import org.apache.felix.ipojo.annotations.Validate;
 import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
 import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
-import org.ow2.chameleon.fuchsia.core.exceptions.ImporterException;
+import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,12 +31,12 @@ public class FoolImporter extends AbstractImporterComponent {
     private String name;
 
     @Override
-    protected void useImportDeclaration(ImportDeclaration importDeclaration) throws ImporterException {
+    protected void useImportDeclaration(ImportDeclaration importDeclaration) throws BinderException {
         LOG.debug("FoolImporter create a proxy for " + importDeclaration);
     }
 
     @Override
-    protected void denyImportDeclaration(ImportDeclaration importDeclaration) throws ImporterException {
+    protected void denyImportDeclaration(ImportDeclaration importDeclaration) throws BinderException {
         LOG.debug("FoolImporter destroy a proxy for " + importDeclaration);
     }
 

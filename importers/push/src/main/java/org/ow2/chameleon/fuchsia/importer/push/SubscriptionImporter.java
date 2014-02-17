@@ -13,7 +13,7 @@ import org.osgi.service.event.EventAdmin;
 import org.osgi.service.http.HttpService;
 import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
-import org.ow2.chameleon.fuchsia.core.exceptions.ImporterException;
+import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
 import org.ow2.chameleon.fuchsia.push.base.subscriber.SubscriberOutput;
 import org.ow2.chameleon.fuchsia.push.base.subscriber.servlet.CallbackServlet;
 import org.slf4j.Logger;
@@ -149,7 +149,7 @@ public class SubscriptionImporter extends AbstractImporterComponent implements S
     }
 
     @Override
-    protected void useImportDeclaration(ImportDeclaration importDeclaration) throws ImporterException {
+    protected void useImportDeclaration(ImportDeclaration importDeclaration) throws BinderException {
 
         LOG.info("adding import declaration {}", importDeclaration);
 
@@ -185,7 +185,7 @@ public class SubscriptionImporter extends AbstractImporterComponent implements S
     }
 
     @Override
-    protected void denyImportDeclaration(ImportDeclaration importDeclaration) throws ImporterException {
+    protected void denyImportDeclaration(ImportDeclaration importDeclaration) throws BinderException {
 
         LOG.info("removing import declaration {}", importDeclaration);
 

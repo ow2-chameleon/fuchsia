@@ -2,12 +2,12 @@ package org.ow2.chameleon.fuchsia.raspberry.pi.importer;
 
 import org.apache.felix.ipojo.*;
 import org.apache.felix.ipojo.annotations.*;
+import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
 import org.ow2.chameleon.fuchsia.raspberry.pi.internal.GPIOPojo;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
-import org.ow2.chameleon.fuchsia.core.exceptions.ImporterException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,7 +58,7 @@ public class GpIOImporter extends AbstractImporterComponent {
     }
 
     @Override
-    protected void useImportDeclaration(ImportDeclaration importDeclaration) throws ImporterException {
+    protected void useImportDeclaration(ImportDeclaration importDeclaration) throws BinderException {
 
         GPIOPojo pojo= GPIOPojo.create(importDeclaration.getMetadata());
 
@@ -84,7 +84,7 @@ public class GpIOImporter extends AbstractImporterComponent {
     }
 
     @Override
-    protected void denyImportDeclaration(ImportDeclaration importDeclaration) throws ImporterException {
+    protected void denyImportDeclaration(ImportDeclaration importDeclaration) throws BinderException {
 
         GPIOPojo pojo= GPIOPojo.create(importDeclaration.getMetadata());
 

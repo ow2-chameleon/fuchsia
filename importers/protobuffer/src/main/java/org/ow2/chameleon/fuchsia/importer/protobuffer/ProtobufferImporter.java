@@ -14,7 +14,7 @@ import org.osgi.framework.ServiceRegistration;
 import org.ow2.chameleon.fuchsia.core.FuchsiaUtils;
 import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
-import org.ow2.chameleon.fuchsia.core.exceptions.ImporterException;
+import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
 import org.ow2.chameleon.fuchsia.importer.protobuffer.internal.ProtobufferImporterPojo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,7 +64,7 @@ public class ProtobufferImporter extends AbstractImporterComponent {
     }
 
     @Override
-    protected void useImportDeclaration(ImportDeclaration importDeclaration) throws ImporterException {
+    protected void useImportDeclaration(ImportDeclaration importDeclaration) throws BinderException {
 
         ProtobufferImporterPojo pojo=ProtobufferImporterPojo.create(importDeclaration);
 
@@ -104,7 +104,7 @@ public class ProtobufferImporter extends AbstractImporterComponent {
     }
 
     @Override
-    protected void denyImportDeclaration(ImportDeclaration importDeclaration) throws ImporterException {
+    protected void denyImportDeclaration(ImportDeclaration importDeclaration) throws BinderException {
 
         importDeclaration.unhandle(serviceReference);
 

@@ -1,7 +1,7 @@
 package org.ow2.chameleon.fuchsia.core.component;
 
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
-import org.ow2.chameleon.fuchsia.core.exceptions.ImporterException;
+import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
 import org.slf4j.Logger;
 
 import java.util.HashSet;
@@ -25,12 +25,12 @@ public abstract class AbstractImporterComponent implements ImporterService, Impo
     /**
      * Abstract method, called when a ImportDeclaration can be used by the implementation class.
      */
-    protected abstract void useImportDeclaration(final ImportDeclaration importDeclaration) throws ImporterException;
+    protected abstract void useImportDeclaration(final ImportDeclaration importDeclaration) throws BinderException;
 
     /**
      * Abstract method, is called when the implementation class must stop to use an ImportDeclaration.
      */
-    protected abstract void denyImportDeclaration(final ImportDeclaration importDeclaration) throws ImporterException;
+    protected abstract void denyImportDeclaration(final ImportDeclaration importDeclaration) throws BinderException;
 
     /**
      *
@@ -48,7 +48,7 @@ public abstract class AbstractImporterComponent implements ImporterService, Impo
             for (ImportDeclaration importDeclaration : importDeclarations) {
                 try {
                     denyImportDeclaration(importDeclaration);
-                } catch (ImporterException e) {
+                } catch (BinderException e) {
                     getLogger().error("An exception has been thrown while denying the importDeclaration "
                             + importDeclaration
                             + "Stopping in progress.", e);
@@ -74,9 +74,9 @@ public abstract class AbstractImporterComponent implements ImporterService, Impo
 
     /**
      * @param importDeclaration The {@link ImportDeclaration} of the service to be imported.
-     * @throws ImporterException
+     * @throws org.ow2.chameleon.fuchsia.core.exceptions.BinderException
      */
-    public void addImportDeclaration(final ImportDeclaration importDeclaration) throws ImporterException {
+    public void addImportDeclaration(final ImportDeclaration importDeclaration) throws BinderException {
         synchronized (importDeclarations) {
             if (importDeclarations.contains(importDeclaration)) {
                 // Already register
@@ -91,9 +91,9 @@ public abstract class AbstractImporterComponent implements ImporterService, Impo
 
     /**
      * @param importDeclaration The {@link ImportDeclaration} of the service to stop to be imported.
-     * @throws ImporterException
+     * @throws org.ow2.chameleon.fuchsia.core.exceptions.BinderException
      */
-    public void removeImportDeclaration(final ImportDeclaration importDeclaration) throws ImporterException {
+    public void removeImportDeclaration(final ImportDeclaration importDeclaration) throws BinderException {
         synchronized (importDeclarations) {
             if (!importDeclarations.contains(importDeclaration)) {
                 throw new IllegalStateException("The given ImportDeclaration has never been added"

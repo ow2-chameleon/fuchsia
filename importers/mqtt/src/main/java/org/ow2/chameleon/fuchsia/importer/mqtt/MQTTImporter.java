@@ -7,7 +7,7 @@ import org.osgi.framework.ServiceReference;
 import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
 import org.ow2.chameleon.fuchsia.core.declaration.Constants;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
-import org.ow2.chameleon.fuchsia.core.exceptions.ImporterException;
+import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +38,7 @@ public class MQTTImporter extends AbstractImporterComponent {
     }
 
     @Override
-    protected void useImportDeclaration(ImportDeclaration importDeclaration) throws ImporterException {
+    protected void useImportDeclaration(ImportDeclaration importDeclaration) throws BinderException {
 
         try {
 
@@ -57,7 +57,7 @@ public class MQTTImporter extends AbstractImporterComponent {
             managedInstances.put(id, im);
 
         } catch (Exception e) {
-            throw new ImporterException(e);
+            throw new BinderException(e);
         }
 
     }
@@ -68,7 +68,7 @@ public class MQTTImporter extends AbstractImporterComponent {
     }
 
     @Override
-    protected void denyImportDeclaration(ImportDeclaration importDeclaration) throws ImporterException {
+    protected void denyImportDeclaration(ImportDeclaration importDeclaration) throws BinderException {
 
         String id=(String)importDeclaration.getMetadata().get(Constants.ID);
 

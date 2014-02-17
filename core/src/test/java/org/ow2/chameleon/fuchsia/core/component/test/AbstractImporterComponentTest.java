@@ -9,7 +9,7 @@ import org.osgi.service.log.LogService;
 import org.ow2.chameleon.fuchsia.core.ImportationLinker;
 import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
-import org.ow2.chameleon.fuchsia.core.exceptions.ImporterException;
+import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,7 +45,7 @@ public class AbstractImporterComponentTest {
     }
 
     @Test
-    public void testImportDeclaration() throws ImporterException {
+    public void testImportDeclaration() throws BinderException {
         ImportDeclaration idec = mock(ImportDeclaration.class);
         testedClass.addImportDeclaration(idec);
 
@@ -57,7 +57,7 @@ public class AbstractImporterComponentTest {
     }
 
     @Test(expected = IllegalStateException.class)
-    public void testDuplicateImportDeclaration() throws ImporterException {
+    public void testDuplicateImportDeclaration() throws BinderException {
         ImportDeclaration idec = mock(ImportDeclaration.class);
         testedClass.addImportDeclaration(idec);
 
@@ -69,13 +69,13 @@ public class AbstractImporterComponentTest {
     }
 
     @Test(expected = IllegalStateException.class)
-    public void testRemoveImportDeclarationNotAdded() throws ImporterException {
+    public void testRemoveImportDeclarationNotAdded() throws BinderException {
         ImportDeclaration idec = mock(ImportDeclaration.class);
         testedClass.removeImportDeclaration(idec);
     }
 
     @Test
-    public void testGetImportDeclaration() throws ImporterException {
+    public void testGetImportDeclaration() throws BinderException {
         ImportDeclaration idec = mock(ImportDeclaration.class);
         testedClass.addImportDeclaration(idec);
 
@@ -85,7 +85,7 @@ public class AbstractImporterComponentTest {
 
 
     @Test
-    public void testMultiplesImportDeclaration() throws ImporterException {
+    public void testMultiplesImportDeclaration() throws BinderException {
         Collection<ImportDeclaration> decs = new HashSet<ImportDeclaration>();
 
         for (int i = 0; i < IMPORT_MAX; i++) {
@@ -105,7 +105,7 @@ public class AbstractImporterComponentTest {
 
 
     @Test
-    public void testStop() throws ImporterException {
+    public void testStop() throws BinderException {
         Collection<ImportDeclaration> decs = new HashSet<ImportDeclaration>();
 
         for (int i = 0; i < IMPORT_MAX; i++) {
@@ -122,7 +122,7 @@ public class AbstractImporterComponentTest {
     }
 
     @Test
-    public void testToString() throws ImporterException {
+    public void testToString() throws BinderException {
         String ts = testedClass.toString();
         assertThat(ts).isEqualTo("name");
 
