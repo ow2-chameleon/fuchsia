@@ -232,14 +232,15 @@ public class DefaultExportationLinker implements ExportationLinker {
         Filter filter = exporterServices.get(exporterService);
         if (filter.matches(exportDeclaration.getMetadata())) {
             try {
+                exportDeclaration.bind(exporterServiceReference);
                 exporterService.addExportDeclaration(exportDeclaration);
             } catch (Exception e) {
                 LOG.debug(exporterService + " throw an exception with giving to it the ExportDeclaration "
                         + exportDeclaration, e);
+                exportDeclaration.unbind(exporterServiceReference);
                 return false;
             }
             LOG.debug(exportDeclaration + " match the filter of " + exporterService + " : bind them together");
-            exportDeclaration.bind(exporterServiceReference);
             return true;
         }
         LOG.debug(exportDeclaration + " doesn't match the filter of " + exporterService

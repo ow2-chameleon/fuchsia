@@ -1,8 +1,10 @@
 package org.ow2.chameleon.fuchsia.core.declaration;
 
 import org.apache.felix.ipojo.Factory;
-import org.osgi.framework.ServiceReference;
+import org.osgi.framework.*;
 
+import javax.imageio.spi.ServiceRegistry;
+import java.lang.Integer;
 import java.util.*;
 
 /**
@@ -17,11 +19,11 @@ class DeclarationImpl implements Declaration, ImportDeclaration, ExportDeclarati
     private final Object lock;
 
     // List of importerServices bind to this Declaration
-    private final Set<ServiceReference> serviceReferencesBound;
+    private final Map<Long,ServiceReference> serviceReferencesBound;
 
     // List of importerServices which are currently doing something with this Declaration
     // i.e. the importerService has created a proxy from the declaration
-    private final Set<ServiceReference> serviceReferencesHandled;
+    private final Map<Long,ServiceReference> serviceReferencesHandled;
 
     // The metadata of the Declaration
     private final Map<String, Object> metadata;
@@ -37,8 +39,8 @@ class DeclarationImpl implements Declaration, ImportDeclaration, ExportDeclarati
         }
         this.metadata = Collections.unmodifiableMap(new HashMap<String, Object>(metadata));
         this.extraMetadata = Collections.unmodifiableMap(new HashMap<String, Object>());
-        this.serviceReferencesBound = new HashSet<ServiceReference>();
-        this.serviceReferencesHandled = new HashSet<ServiceReference>();
+        this.serviceReferencesBound = new HashMap<Long, ServiceReference>();
+        this.serviceReferencesHandled = new HashMap<Long, ServiceReference>();
         this.lock = new Object();
     }
 
@@ -52,19 +54,19 @@ class DeclarationImpl implements Declaration, ImportDeclaration, ExportDeclarati
 
     public Status getStatus() {
         synchronized (lock) {
-            return Status.from(serviceReferencesBound, serviceReferencesHandled);
+            return Status.from(serviceReferencesBound.values(), serviceReferencesHandled.values());
         }
     }
 
     public void bind(ServiceReference serviceReference) {
         synchronized (lock) {
-            serviceReferencesBound.add(serviceReference);
+            serviceReferencesBound.put(fetchServiceId(serviceReference),serviceReference);
         }
     }
 
     public void unbind(ServiceReference serviceReference) {
         synchronized (lock) {
-            if (!serviceReferencesHandled.contains(serviceReference)) {
+            if (!serviceReferencesHandled.containsKey(fetchServiceId(serviceReference))) {
                 serviceReferencesBound.remove(serviceReference);
             } else {
                 String name = (String) serviceReference.getProperty(Factory.INSTANCE_NAME_PROPERTY);
@@ -75,11 +77,16 @@ class DeclarationImpl implements Declaration, ImportDeclaration, ExportDeclarati
 
     public void handle(ServiceReference serviceReference) {
         synchronized (lock) {
-            if (serviceReferencesBound.contains(serviceReference)) {
-                serviceReferencesHandled.add(serviceReference);
+
+            if (serviceReferencesBound.containsKey(fetchServiceId(serviceReference))) {
+
+                registerHandledReference(serviceReference);
+
             } else {
+
                 String name = (String) serviceReference.getProperty(Factory.INSTANCE_NAME_PROPERTY);
                 throw new IllegalStateException(name + " cannot handle a declaration that it's not bound to it");
+
             }
         }
     }
@@ -104,4 +111,24 @@ class DeclarationImpl implements Declaration, ImportDeclaration, ExportDeclarati
         sg.append("Declaration handled by "+serviceReferencesHandled.size()+" services.\n");
         return sg.toString();
     }
+
+    /**
+     * Returns the service id with the propertype
+     * @param serviceReference
+     * @return long value for the service id
+     */
+    private Long fetchServiceId(ServiceReference serviceReference){
+        return (Long)serviceReference.getProperty(org.osgi.framework.Constants.SERVICE_ID);
+    }
+
+    /**
+     * Indicated that a given service reference is about to be bind
+     * @param serviceReference
+     */
+    private void registerHandledReference(ServiceReference serviceReference){
+
+        serviceReferencesBound.put(fetchServiceId(serviceReference),serviceReference);
+
+    }
+
 }
