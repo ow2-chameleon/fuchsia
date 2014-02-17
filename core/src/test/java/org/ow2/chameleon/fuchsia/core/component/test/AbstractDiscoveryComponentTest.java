@@ -3,11 +3,13 @@ package org.ow2.chameleon.fuchsia.core.component.test;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.ow2.chameleon.fuchsia.core.component.AbstractDiscoveryComponent;
+import org.ow2.chameleon.fuchsia.core.declaration.Declaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclarationBuilder;
 import org.slf4j.Logger;
@@ -30,6 +32,8 @@ public class AbstractDiscoveryComponentTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this); //initialize the object with mocks annotations
+        when(bundleContext.registerService(any(String[].class), any(Declaration.class), any(Dictionary.class)))
+                .thenReturn(mock(ServiceRegistration.class));
     }
 
     @After
@@ -53,9 +57,7 @@ public class AbstractDiscoveryComponentTest {
         ImportDeclaration id = ImportDeclarationBuilder.fromMetadata(md).build();
 
         testedClass.addIdec(id);
-        Dictionary <String, Object> props = new Hashtable<String, Object>();
-        String clazzes[] = new String[]{ImportDeclaration.class.getName()};
-        verify(bundleContext).registerService(clazzes, id, props);
+        verify(bundleContext,times(1)).registerService(any(String[].class), eq(id), any(Dictionary.class));
 
         assertThat(testedClass.getImportDeclarations()).containsExactly(id);
     }
@@ -83,9 +85,6 @@ public class AbstractDiscoveryComponentTest {
         ImportDeclaration id = ImportDeclarationBuilder.fromMetadata(md).build();
 
         ServiceRegistration mockSR = mock(ServiceRegistration.class);
-        Dictionary <String, Object> props = new Hashtable<String, Object>();
-        String clazzes[] = new String[]{ImportDeclaration.class.getName()};
-        when(bundleContext.registerService(clazzes, id, props)).thenReturn(mockSR);
 
         testedClass.addIdec(id);
         testedClass.removeIdec(id);
@@ -102,11 +101,6 @@ public class AbstractDiscoveryComponentTest {
         md.put("md", "value");
         ImportDeclaration id = ImportDeclarationBuilder.fromMetadata(md).build();
 
-        ServiceRegistration mockSR = mock(ServiceRegistration.class);
-        Dictionary <String, Object> props = new Hashtable<String, Object>();
-        String clazzes[] = new String[]{ImportDeclaration.class.getName()};
-        when(bundleContext.registerService(clazzes, id, props)).thenReturn(mockSR);
-
         testedClass.addIdec(id);
         testedClass.removeIdec(id);
         testedClass.removeIdec(id);
@@ -120,11 +114,6 @@ public class AbstractDiscoveryComponentTest {
         Map<String, Object> md = new HashMap<String, Object>();
         md.put("md", "value");
         ImportDeclaration id = ImportDeclarationBuilder.fromMetadata(md).build();
-
-        ServiceRegistration mockSR = mock(ServiceRegistration.class);
-        Dictionary <String, Object> props = new Hashtable<String, Object>();
-        String clazzes[] = new String[]{ImportDeclaration.class.getName()};
-        when(bundleContext.registerService(clazzes, id, props)).thenReturn(mockSR);
 
         testedClass.addIdec(id);
         testedClass.stop();
