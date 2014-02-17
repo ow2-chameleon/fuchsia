@@ -17,7 +17,13 @@ public class CxfExporterPojo {
 
         pojo.clazz=(String) exportDeclaration.getMetadata().get(Constants.CXF_EXPORT_TYPE);
         pojo.webcontext=(String) exportDeclaration.getMetadata().get(Constants.CXF_EXPORT_WEB_CONTEXT);
-        pojo.filter = (String) exportDeclaration.getMetadata().get(Constants.CXF_EXPORT_INSTANCE);
+
+        Object filterObject=exportDeclaration.getMetadata().get(Constants.CXF_EXPORT_FILTER);
+
+        if(filterObject!=null){
+            pojo.filter = filterObject.toString();
+        }
+
 
         return pojo;
     }
@@ -31,6 +37,8 @@ public class CxfExporterPojo {
     }
 
     public String getFilter() {
+
         return filter;
+
     }
 }
