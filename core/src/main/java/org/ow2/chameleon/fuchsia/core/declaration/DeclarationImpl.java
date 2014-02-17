@@ -1,11 +1,12 @@
 package org.ow2.chameleon.fuchsia.core.declaration;
 
 import org.apache.felix.ipojo.Factory;
-import org.osgi.framework.*;
+import org.osgi.framework.ServiceReference;
 
-import javax.imageio.spi.ServiceRegistry;
-import java.lang.Integer;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 
 /**
  * {@link DeclarationImpl} is the reference implementation of the {@link Declaration} interface of Fuchsia
@@ -19,11 +20,11 @@ class DeclarationImpl implements Declaration, ImportDeclaration, ExportDeclarati
     private final Object lock;
 
     // List of importerServices bind to this Declaration
-    private final Map<Long,ServiceReference> serviceReferencesBound;
+    private final Map<Long, ServiceReference> serviceReferencesBound;
 
     // List of importerServices which are currently doing something with this Declaration
     // i.e. the importerService has created a proxy from the declaration
-    private final Map<Long,ServiceReference> serviceReferencesHandled;
+    private final Map<Long, ServiceReference> serviceReferencesHandled;
 
     // The metadata of the Declaration
     private final Map<String, Object> metadata;
@@ -54,20 +55,21 @@ class DeclarationImpl implements Declaration, ImportDeclaration, ExportDeclarati
 
     public Status getStatus() {
         synchronized (lock) {
-            return Status.from(serviceReferencesBound.values(), serviceReferencesHandled.values());
+            return Status.from(new HashSet<ServiceReference>(serviceReferencesBound.values()),
+                    new HashSet<ServiceReference>(serviceReferencesHandled.values()));
         }
     }
 
     public void bind(ServiceReference serviceReference) {
         synchronized (lock) {
-            serviceReferencesBound.put(fetchServiceId(serviceReference),serviceReference);
+            serviceReferencesBound.put(fetchServiceId(serviceReference), serviceReference);
         }
     }
 
     public void unbind(ServiceReference serviceReference) {
         synchronized (lock) {
             if (!serviceReferencesHandled.containsKey(fetchServiceId(serviceReference))) {
-                serviceReferencesBound.remove(serviceReference);
+                serviceReferencesBound.remove(fetchServiceId(serviceReference));
             } else {
                 String name = (String) serviceReference.getProperty(Factory.INSTANCE_NAME_PROPERTY);
                 throw new IllegalStateException(name + " want to unbound a declaration that it is still handling.");
@@ -77,58 +79,44 @@ class DeclarationImpl implements Declaration, ImportDeclaration, ExportDeclarati
 
     public void handle(ServiceReference serviceReference) {
         synchronized (lock) {
-
             if (serviceReferencesBound.containsKey(fetchServiceId(serviceReference))) {
-
-                registerHandledReference(serviceReference);
-
+                serviceReferencesHandled.put(fetchServiceId(serviceReference), serviceReference);
             } else {
-
                 String name = (String) serviceReference.getProperty(Factory.INSTANCE_NAME_PROPERTY);
                 throw new IllegalStateException(name + " cannot handle a declaration that it's not bound to it");
-
             }
         }
     }
 
     public void unhandle(ServiceReference serviceReference) {
         synchronized (lock) {
-            serviceReferencesHandled.remove(serviceReference);
+            serviceReferencesHandled.remove(fetchServiceId(serviceReference));
         }
     }
 
     public String toString() {
         StringBuilder sg = new StringBuilder();
         sg.append("Declaration Metadata : \n");
-        for(Map.Entry<String,Object> entry: metadata.entrySet()){
-            sg.append(String.format("  %s\t\t= %s\n",entry.getKey(),entry.getValue()));
+        for (Map.Entry<String, Object> entry : metadata.entrySet()) {
+            sg.append(String.format("  %s\t\t= %s\n", entry.getKey(), entry.getValue()));
         }
         sg.append("Declaration ExtraMetadata : \n");
-        for(Map.Entry<String,Object> entry: getExtraMetadata().entrySet()){
-            sg.append(String.format("  %s\t\t= %s\n",entry.getKey(),entry.getValue()));
+        for (Map.Entry<String, Object> entry : getExtraMetadata().entrySet()) {
+            sg.append(String.format("  %s\t\t= %s\n", entry.getKey(), entry.getValue()));
         }
-        sg.append("Declaration binded to "+serviceReferencesBound.size()+" services.\n");
-        sg.append("Declaration handled by "+serviceReferencesHandled.size()+" services.\n");
+        sg.append("Declaration binded to " + serviceReferencesBound.size() + " services.\n");
+        sg.append("Declaration handled by " + serviceReferencesHandled.size() + " services.\n");
         return sg.toString();
     }
 
     /**
      * Returns the service id with the propertype
+     *
      * @param serviceReference
      * @return long value for the service id
      */
-    private Long fetchServiceId(ServiceReference serviceReference){
-        return (Long)serviceReference.getProperty(org.osgi.framework.Constants.SERVICE_ID);
-    }
-
-    /**
-     * Indicated that a given service reference is about to be bind
-     * @param serviceReference
-     */
-    private void registerHandledReference(ServiceReference serviceReference){
-
-        serviceReferencesBound.put(fetchServiceId(serviceReference),serviceReference);
-
+    private Long fetchServiceId(ServiceReference serviceReference) {
+        return (Long) serviceReference.getProperty(org.osgi.framework.Constants.SERVICE_ID);
     }
 
 }

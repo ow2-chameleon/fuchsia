@@ -37,7 +37,7 @@ public class Status {
      * @param serviceReferencesBound   the set of ServiceReference which are bound to the declaration.
      * @param serviceReferencesHandled the set of ServiceReference which are handling the declaration.
      */
-    private Status(Collection<ServiceReference> serviceReferencesBound, Collection<ServiceReference> serviceReferencesHandled) {
+    private Status(Set<ServiceReference> serviceReferencesBound, Set<ServiceReference> serviceReferencesHandled) {
         m_serviceReferencesBound = Collections.unmodifiableSet(new HashSet<ServiceReference>(serviceReferencesBound));
         m_serviceReferencesHandled = Collections.unmodifiableSet(new HashSet<ServiceReference>(serviceReferencesHandled));
     }
@@ -50,7 +50,7 @@ public class Status {
      * @param serviceReferencesHandled the set of ServiceReference which are handling the declaration.
      * @return the new instance of status
      */
-    public static Status from(Collection<ServiceReference> serviceReferencesBound, Collection<ServiceReference> serviceReferencesHandled) {
+    public static Status from(Set<ServiceReference> serviceReferencesBound, Set<ServiceReference> serviceReferencesHandled) {
         if (serviceReferencesBound == null && serviceReferencesHandled == null) {
             throw new IllegalArgumentException("Cannot create a status with serviceReferencesBound == null" +
                     "and serviceReferencesHandled == null");
