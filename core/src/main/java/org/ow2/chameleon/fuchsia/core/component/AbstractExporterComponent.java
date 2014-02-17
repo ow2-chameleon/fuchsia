@@ -1,13 +1,8 @@
 package org.ow2.chameleon.fuchsia.core.component;
 
+import org.ow2.chameleon.fuchsia.core.component.manager.DeclarationBindManager;
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
-
-import java.util.HashSet;
-import java.util.Set;
-
 import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Abstract implementation of an exporter which provides an {@link ExporterService}.
@@ -17,17 +12,14 @@ import org.slf4j.LoggerFactory;
  * @author Morgan Martinet
  */
 public abstract class AbstractExporterComponent implements ExporterService {
-    private final Set<ExportDeclaration> exportDeclarations;
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractExporterComponent.class);
+    private final DeclarationBindManager<ExportDeclaration> declarationBindManager;
 
     public AbstractExporterComponent() {
-        exportDeclarations = new HashSet<ExportDeclaration>();
+        declarationBindManager = new DeclarationBindManager<ExportDeclaration>(this);
     }
 
     /**
      * Abstract method, is called when the sub class must export the service describe in the given ExportDeclaration
-     * <p/>
-     * TODO : Does it should be able to throw an exception if there's problem ? which one ?
      */
     protected abstract void useExportDeclaration(final ExportDeclaration exportDeclaration) throws BinderException;
 
@@ -42,21 +34,7 @@ public abstract class AbstractExporterComponent implements ExporterService {
      * Must be override !
      */
     protected void stop() {
-
-        synchronized (exportDeclarations) {
-            // destroy all the proxies
-            for (ExportDeclaration exportDeclaration : exportDeclarations) {
-                try {
-                    denyExportDeclaration(exportDeclaration);
-                } catch (BinderException e) {
-                    LOG.error("An exception has been thrown while denying the exportDeclaration "
-                            + exportDeclaration
-                            + "Stopping in progress.", e);
-                }
-            }
-            // Clear the map
-            exportDeclarations.clear();
-        }
+        declarationBindManager.unbindAll();
     }
 
     /**
@@ -67,37 +45,26 @@ public abstract class AbstractExporterComponent implements ExporterService {
         //
     }
 
-
-	/*---------------------------------*
-     *  ExportService implementation *
-	 *---------------------------------*/
-
     /**
      * @param exportDeclaration The {@link ExportDeclaration} of the service to be exported.
      */
     public void addExportDeclaration(ExportDeclaration exportDeclaration) throws BinderException {
-        synchronized (exportDeclarations) {
-            if (exportDeclarations.contains(exportDeclaration)) {
-                // Already register
-                // FIXME :  Clone Registration ??
-                throw new UnsupportedOperationException("Duplicate ExportDeclaration are for the moment " +
-                        "not supported by the AbstractExporterComponent");
-            } else {
-                //First registration, create the proxy
-                useExportDeclaration(exportDeclaration);
-                exportDeclarations.add(exportDeclaration);
-            }
-        }
+        declarationBindManager.addDeclaration(exportDeclaration);
+    }
+
+    public void useDeclaration(ExportDeclaration declaration) throws BinderException {
+        useExportDeclaration(declaration);
     }
 
     /**
      * @param exportDeclaration The {@link ExportDeclaration} of the service to stop to be exported.
      */
     public void removeExportDeclaration(ExportDeclaration exportDeclaration) throws BinderException {
-        synchronized (exportDeclarations) {
-            denyExportDeclaration(exportDeclaration);
-            exportDeclarations.remove(exportDeclaration);
-        }
+        declarationBindManager.removeDeclaration(exportDeclaration);
+    }
+
+    public void denyDeclaration(ExportDeclaration declaration) throws BinderException {
+        denyExportDeclaration(declaration);
     }
 
     @Override

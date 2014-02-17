@@ -1,7 +1,7 @@
 package org.ow2.chameleon.fuchsia.core.component;
 
+import org.ow2.chameleon.fuchsia.core.component.manager.DeclarationBinder;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
-import java.util.List;
 import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
 
 /**
@@ -10,7 +10,7 @@ import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
  * @author barjo
  * @author Morgan Martinet
  */
-public interface ImporterService {
+public interface ImporterService extends DeclarationBinder<ImportDeclaration> {
 
     String TARGET_FILTER_PROPERTY = "target";
 

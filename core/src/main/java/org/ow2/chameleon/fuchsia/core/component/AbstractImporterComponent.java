@@ -1,10 +1,10 @@
 package org.ow2.chameleon.fuchsia.core.component;
 
+import org.ow2.chameleon.fuchsia.core.component.manager.DeclarationBindManager;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
 import org.slf4j.Logger;
 
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -12,14 +12,13 @@ import java.util.Set;
  * Start must be call before registering the service !
  * Stop must be called while the service is no more available !
  *
- * @author barjo
  * @author Morgan Martinet
  */
 public abstract class AbstractImporterComponent implements ImporterService, ImporterIntrospection {
-    private final Set<ImportDeclaration> importDeclarations;
+    private final DeclarationBindManager<ImportDeclaration> declarationBindManager;
 
     public AbstractImporterComponent() {
-        importDeclarations = new HashSet<ImportDeclaration>();
+        declarationBindManager = new DeclarationBindManager<ImportDeclaration>(this);
     }
 
     /**
@@ -42,21 +41,7 @@ public abstract class AbstractImporterComponent implements ImporterService, Impo
      * Must be override !
      */
     protected void stop() {
-
-        synchronized (importDeclarations) {
-            // deny all the ImportDeclarations
-            for (ImportDeclaration importDeclaration : importDeclarations) {
-                try {
-                    denyImportDeclaration(importDeclaration);
-                } catch (BinderException e) {
-                    getLogger().error("An exception has been thrown while denying the importDeclaration "
-                            + importDeclaration
-                            + "Stopping in progress.", e);
-                }
-            }
-            // Clear the map
-            importDeclarations.clear();
-        }
+        declarationBindManager.unbindAll();
     }
 
     /**
@@ -67,26 +52,16 @@ public abstract class AbstractImporterComponent implements ImporterService, Impo
         //
     }
 
-
-	/*---------------------------------*
-     *  ImportService implementation *
-	 *---------------------------------*/
-
     /**
      * @param importDeclaration The {@link ImportDeclaration} of the service to be imported.
      * @throws org.ow2.chameleon.fuchsia.core.exceptions.BinderException
      */
     public void addImportDeclaration(final ImportDeclaration importDeclaration) throws BinderException {
-        synchronized (importDeclarations) {
-            if (importDeclarations.contains(importDeclaration)) {
-                // Already register
-                throw new IllegalStateException("Duplicate ImportDeclaration : " +
-                        "this ImportDeclaration has already been treated.");
-            }
-            // First registration, give it to the implementation class and keep it in memory
-            useImportDeclaration(importDeclaration);
-            importDeclarations.add(importDeclaration);
-        }
+        declarationBindManager.addDeclaration(importDeclaration);
+    }
+
+    public void useDeclaration(ImportDeclaration declaration) throws BinderException {
+        useImportDeclaration(declaration);
     }
 
     /**
@@ -94,20 +69,15 @@ public abstract class AbstractImporterComponent implements ImporterService, Impo
      * @throws org.ow2.chameleon.fuchsia.core.exceptions.BinderException
      */
     public void removeImportDeclaration(final ImportDeclaration importDeclaration) throws BinderException {
-        synchronized (importDeclarations) {
-            if (!importDeclarations.contains(importDeclaration)) {
-                throw new IllegalStateException("The given ImportDeclaration has never been added"
-                        + "or have already been removed.");
-            }
-            importDeclarations.remove(importDeclaration);
-        }
-        denyImportDeclaration(importDeclaration);
+        declarationBindManager.removeDeclaration(importDeclaration);
+    }
+
+    public void denyDeclaration(ImportDeclaration declaration) throws BinderException {
+        denyImportDeclaration(declaration);
     }
 
     public Set<ImportDeclaration> getImportDeclarations() {
-        synchronized (importDeclarations) {
-            return new HashSet<ImportDeclaration>(importDeclarations);
-        }
+        return declarationBindManager.getDeclarations();
     }
 
     @Override
