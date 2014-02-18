@@ -6,6 +6,8 @@ import org.ow2.chameleon.fuchsia.core.component.manager.DeclarationRegistrationM
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
 import org.slf4j.Logger;
 
+import java.util.Set;
+
 /**
  * Abstract implementation of an export manager component which provides an {@link ExportManagerService}.
  * Start must be call before registering the service !
@@ -13,7 +15,7 @@ import org.slf4j.Logger;
  *
  * @author Morgan Martinet
  */
-public abstract class AbstractExportManagerComponent implements ExportManagerService {
+public abstract class AbstractExportManagerComponent implements ExportManagerService, ExportManagerIntrospection {
 
     private final DeclarationRegistrationManager<ExportDeclaration> declarationRegistrationManager;
 
@@ -70,4 +72,8 @@ public abstract class AbstractExportManagerComponent implements ExportManagerSer
     }
 
     public abstract Logger getLogger();
+
+    public Set<ExportDeclaration> getExportDeclarations() {
+        return declarationRegistrationManager.getDeclarations();
+    }
 }
