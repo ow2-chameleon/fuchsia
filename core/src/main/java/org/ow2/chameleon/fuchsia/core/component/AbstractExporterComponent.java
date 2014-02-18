@@ -4,6 +4,8 @@ import org.ow2.chameleon.fuchsia.core.component.manager.DeclarationBindManager;
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
 import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
 
+import java.util.Set;
+
 /**
  * Abstract implementation of an exporter which provides an {@link ExporterService}.
  * Start must be call before registering the service !
@@ -11,7 +13,7 @@ import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
  *
  * @author Morgan Martinet
  */
-public abstract class AbstractExporterComponent implements ExporterService {
+public abstract class AbstractExporterComponent implements ExporterService, ExporterIntrospection {
     private final DeclarationBindManager<ExportDeclaration> declarationBindManager;
 
     public AbstractExporterComponent() {
@@ -70,5 +72,9 @@ public abstract class AbstractExporterComponent implements ExporterService {
     @Override
     public String toString() {
         return getName();
+    }
+
+    public Set<ExportDeclaration> getExportDeclarations() {
+        return declarationBindManager.getDeclarations();
     }
 }
