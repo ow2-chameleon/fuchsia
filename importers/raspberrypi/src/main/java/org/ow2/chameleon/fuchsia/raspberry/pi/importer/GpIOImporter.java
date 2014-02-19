@@ -46,7 +46,6 @@ public class GpIOImporter extends AbstractImporterComponent {
     @Validate
     public void validate() {
         super.start();
-        System.out.println("------ importer gpio");
         LOG.info("GOIO importer is up and running");
     }
 
@@ -73,12 +72,12 @@ public class GpIOImporter extends AbstractImporterComponent {
 
             gpioPin.put(pojo.getId(), im);
 
-        } catch (UnacceptableConfiguration unacceptableConfiguration) {
-            unacceptableConfiguration.printStackTrace();
+        } catch (UnacceptableConfiguration e) {
+            LOG.error("Invalid configuration",e);
         } catch (MissingHandlerException e) {
-            e.printStackTrace();
+            LOG.error("Missing handle",e);
         } catch (ConfigurationException e) {
-            e.printStackTrace();
+            LOG.error("Configuration exception",e);
         }
 
     }
