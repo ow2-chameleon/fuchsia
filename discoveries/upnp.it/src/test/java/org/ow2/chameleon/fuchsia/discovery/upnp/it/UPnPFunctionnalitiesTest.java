@@ -6,7 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.ops4j.pax.exam.Option;
 import org.ow2.chameleon.fuchsia.core.FuchsiaConstants;
-import org.ow2.chameleon.fuchsia.core.ImportationLinker;
+import org.ow2.chameleon.fuchsia.core.component.ImportationLinker;
 import org.ow2.chameleon.testing.helpers.BaseTest;
 
 import java.util.Dictionary;

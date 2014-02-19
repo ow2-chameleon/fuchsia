@@ -1,10 +1,10 @@
-package org.ow2.chameleon.fuchsia.core;
+package org.ow2.chameleon.fuchsia.core.component;
 
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
 import org.osgi.framework.ServiceReference;
-import org.ow2.chameleon.fuchsia.core.component.ExporterService;
+import org.ow2.chameleon.fuchsia.core.FuchsiaConstants;
 import org.ow2.chameleon.fuchsia.core.component.manager.LinkerBinderManager;
 import org.ow2.chameleon.fuchsia.core.component.manager.LinkerDeclarationsManager;
 import org.ow2.chameleon.fuchsia.core.component.manager.LinkerManagement;

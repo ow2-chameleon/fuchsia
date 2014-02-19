@@ -10,7 +10,7 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.http.NamespaceException;
-import org.ow2.chameleon.fuchsia.core.ImportationLinkerIntrospection;
+import org.ow2.chameleon.fuchsia.core.component.ImportationLinkerIntrospection;
 import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.tools.grid.model.Edge;

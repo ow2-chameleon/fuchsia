@@ -1,6 +1,5 @@
-package org.ow2.chameleon.fuchsia.core;
+package org.ow2.chameleon.fuchsia.core.component;
 
-import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 
 import java.util.Set;

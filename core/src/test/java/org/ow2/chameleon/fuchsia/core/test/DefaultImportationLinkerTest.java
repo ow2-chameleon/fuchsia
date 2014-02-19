@@ -7,7 +7,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
-import org.ow2.chameleon.fuchsia.core.DefaultImportationLinker;
+import org.ow2.chameleon.fuchsia.core.component.DefaultImportationLinker;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.fest.reflect.core.Reflection.field;

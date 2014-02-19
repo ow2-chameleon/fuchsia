@@ -5,7 +5,7 @@ import org.apache.felix.ipojo.configuration.Instance;
 import org.ow2.chameleon.fuchsia.core.FuchsiaConstants;
 
 import static org.apache.felix.ipojo.configuration.Instance.instance;
-import static org.ow2.chameleon.fuchsia.core.ImportationLinker.*;
+import static org.ow2.chameleon.fuchsia.core.component.ImportationLinker.*;
 
 @Configuration
 public class UPnPInitializer {

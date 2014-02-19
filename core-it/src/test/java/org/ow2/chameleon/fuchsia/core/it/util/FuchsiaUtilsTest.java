@@ -1,16 +1,9 @@
 package org.ow2.chameleon.fuchsia.core.it.util;
 
 import org.junit.Test;
-import org.osgi.framework.Filter;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.InvalidSyntaxException;
-import org.ow2.chameleon.fuchsia.core.DefaultImportationLinker;
+import org.ow2.chameleon.fuchsia.core.component.DefaultImportationLinker;
 import org.ow2.chameleon.fuchsia.core.FuchsiaUtils;
-import org.ow2.chameleon.fuchsia.core.exceptions.InvalidFilterException;
 import org.ow2.chameleon.fuchsia.testing.CommonTest;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.*;
 

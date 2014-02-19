@@ -2,10 +2,9 @@ package org.ow2.chameleon.fuchsia.upnp.examples.config;
 
 import org.apache.felix.ipojo.configuration.Configuration;
 import org.apache.felix.ipojo.configuration.Instance;
-import org.ow2.chameleon.fuchsia.core.FuchsiaConstants;
 
 import static org.apache.felix.ipojo.configuration.Instance.instance;
-import static org.ow2.chameleon.fuchsia.core.ImportationLinker.FILTER_IMPORTERSERVICE_PROPERTY;
+import static org.ow2.chameleon.fuchsia.core.component.ImportationLinker.FILTER_IMPORTERSERVICE_PROPERTY;
 
 @Configuration
 public class DiscoveryInitializer {

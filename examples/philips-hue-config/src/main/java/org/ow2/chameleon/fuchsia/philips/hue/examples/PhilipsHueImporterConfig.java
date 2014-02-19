@@ -3,7 +3,7 @@ package org.ow2.chameleon.fuchsia.philips.hue.examples;
 import org.apache.felix.ipojo.configuration.Configuration;
 import org.apache.felix.ipojo.configuration.Instance;
 import org.ow2.chameleon.fuchsia.core.FuchsiaConstants;
-import org.ow2.chameleon.fuchsia.core.ImportationLinker;
+import org.ow2.chameleon.fuchsia.core.component.ImportationLinker;
 
 import static org.apache.felix.ipojo.configuration.Instance.instance;
 

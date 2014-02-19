@@ -1,7 +1,6 @@
-package org.ow2.chameleon.fuchsia.core;
+package org.ow2.chameleon.fuchsia.core.component;
 
 
-import org.ow2.chameleon.fuchsia.core.component.ExporterService;
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
 
 import java.util.Set;
@@ -11,9 +10,9 @@ import java.util.Set;
  * {@link ExportDeclaration} and the {@link ExporterService}.
  * You can use multiples {@link ExportationLinker} with different configurations.
  * <p/>
- * A default implementation of {@link ExportationLinker} is provided by the {@link org.ow2.chameleon.fuchsia.core.DefaultExportationLinker} component.
- * If the {@link org.ow2.chameleon.fuchsia.core.DefaultExportationLinker} doesn't fit to your needs, you can use your own implementation
- * of this interface, by subclassing {@link org.ow2.chameleon.fuchsia.core.DefaultExportationLinker} or by implementing this {@link ExportationLinker} interface.
+ * A default implementation of {@link ExportationLinker} is provided by the {@link DefaultExportationLinker} component.
+ * If the {@link DefaultExportationLinker} doesn't fit to your needs, you can use your own implementation
+ * of this interface, by subclassing {@link DefaultExportationLinker} or by implementing this {@link ExportationLinker} interface.
  *
  * @author Morgan Martinet
  */

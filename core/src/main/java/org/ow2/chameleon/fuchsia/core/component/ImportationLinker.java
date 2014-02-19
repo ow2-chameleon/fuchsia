@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.core;
+package org.ow2.chameleon.fuchsia.core.component;
 
 
 /**
