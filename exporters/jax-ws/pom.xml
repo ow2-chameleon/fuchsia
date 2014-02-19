@@ -68,13 +68,37 @@
        </dependency>
         -->
 
+        <!--
         <dependency>
             <groupId>org.eclipse.jetty.aggregate</groupId>
             <artifactId>jetty-all-server</artifactId>
             <version>7.5.4.v20111024</version>
         </dependency>
+        -->
 
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-server</artifactId>
+            <version>7.5.4.v20111024</version>
+        </dependency>
 
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-servlets</artifactId>
+            <version>7.5.4.v20111024</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-jsp-2.1</artifactId>
+            <version>7.5.4.v20111024</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.jetty.aggregate</groupId>
+            <artifactId>jetty-servlet</artifactId>
+            <version>7.5.4.v20111024</version>
+        </dependency>
 
         <dependency>
             <groupId>org.assertj</groupId>
