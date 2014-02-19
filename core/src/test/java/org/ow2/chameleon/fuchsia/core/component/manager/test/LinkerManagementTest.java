@@ -50,7 +50,7 @@ public class LinkerManagementTest {
         ImportDeclaration dec = ImportDeclarationBuilder.empty().key("id").value("dec1").key("field").value("imyourtarget").build();
         ServiceReference decSRef = mock(ServiceReference.class);
         when(bundleContext.getService(decSRef)).thenReturn(dec);
-        lm.declarationsManager.add(decSRef);
+        lm.getDeclarationsManager().add(decSRef);
 
 
         ServiceReference bSRef = mock(ServiceReference.class);
@@ -61,7 +61,7 @@ public class LinkerManagementTest {
 
         when(bundleContext.getService(bSRef)).thenReturn(db);
         try {
-            lm.bindersManager.add(bSRef);
+            lm.getBindersManager().add(bSRef);
         } catch (InvalidFilterException e) {
             fail("", e);
         }

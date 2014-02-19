@@ -43,6 +43,12 @@ public class DefaultExportationLinker implements ExportationLinker, ExportationL
     // The OSGi BundleContext, injected by OSGi in the constructor
     private final BundleContext bundleContext;
 
+    private final Object lock = new Object();
+
+    private final LinkerManagement<ExportDeclaration, ExporterService> linkerManagement;
+    private final LinkerBinderManager<ExportDeclaration, ExporterService> exportersManager;
+    private final LinkerDeclarationsManager<ExportDeclaration, ExporterService> declarationsManager;
+
     @Controller
     private boolean state;
 
@@ -61,6 +67,25 @@ public class DefaultExportationLinker implements ExportationLinker, ExportationL
     private Object exporterServiceFilterProperty;
 
     private Filter exporterServiceFilter;
+
+    public DefaultExportationLinker(BundleContext context) {
+        this.bundleContext = context;
+        processProperties();
+
+        linkerManagement = new LinkerManagement<ExportDeclaration, ExporterService>(bundleContext, exporterServiceFilter, exportDeclarationFilter);
+        exportersManager = linkerManagement.getBindersManager();
+        declarationsManager = linkerManagement.getDeclarationsManager();
+    }
+
+    @Validate
+    public void start() {
+        LOG.debug(linkerName + " starting");
+    }
+
+    @Invalidate
+    public void stop() {
+        LOG.debug(linkerName + " stopping");
+    }
 
     /**
      * Get the filters ExporterServiceFilter and ExportDeclarationFilter from the properties, stop the instance if one of
@@ -100,31 +125,6 @@ public class DefaultExportationLinker implements ExportationLinker, ExportationL
             exportersManager.applyFilterChanges(exporterServiceFilter);
             declarationsManager.applyFilterChanges(exportDeclarationFilter);
         }
-    }
-
-    private final Object lock = new Object();
-
-    public final LinkerManagement<ExportDeclaration, ExporterService> linkerManagement;
-    public final LinkerBinderManager<ExportDeclaration, ExporterService> exportersManager;
-    public final LinkerDeclarationsManager<ExportDeclaration, ExporterService> declarationsManager;
-
-    @Validate
-    public void start() {
-        LOG.debug(linkerName + " starting");
-    }
-
-    @Invalidate
-    public void stop() {
-        LOG.debug(linkerName + " stopping");
-    }
-
-    public DefaultExportationLinker(BundleContext context) {
-        this.bundleContext=context;
-        processProperties();
-
-        linkerManagement = new LinkerManagement<ExportDeclaration, ExporterService>(bundleContext, exporterServiceFilter, exportDeclarationFilter);
-        exportersManager = linkerManagement.bindersManager;
-        declarationsManager = linkerManagement.declarationsManager;
     }
 
     /**

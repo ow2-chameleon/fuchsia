@@ -43,6 +43,12 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
     // The OSGi BundleContext, injected by OSGi in the constructor
     private final BundleContext bundleContext;
 
+    private final Object lock = new Object();
+
+    private final LinkerManagement<ImportDeclaration, ImporterService> linkerManagement;
+    private final LinkerBinderManager<ImportDeclaration, ImporterService> importersManager;
+    private final LinkerDeclarationsManager<ImportDeclaration, ImporterService> declarationsManager;
+
     @Controller
     private boolean state;
 
@@ -61,6 +67,25 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
     private Object importerServiceFilterProperty;
 
     private Filter importerServiceFilter;
+
+    public DefaultImportationLinker(BundleContext bundleContext) {
+        this.bundleContext = bundleContext;
+
+        processProperties();
+        linkerManagement = new LinkerManagement<ImportDeclaration, ImporterService>(bundleContext, importerServiceFilter, importDeclarationFilter);
+        importersManager = linkerManagement.getBindersManager();
+        declarationsManager = linkerManagement.getDeclarationsManager();
+    }
+
+    @Validate
+    public void start() {
+        LOG.debug(linkerName + " starting");
+    }
+
+    @Invalidate
+    public void stop() {
+        LOG.debug(linkerName + " stopping");
+    }
 
     /**
      * Get the filters ImporterServiceFilter and ImportDeclarationFilter from the properties, stop the instance if one of
@@ -100,32 +125,6 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
             importersManager.applyFilterChanges(importerServiceFilter);
             declarationsManager.applyFilterChanges(importDeclarationFilter);
         }
-    }
-
-    private final Object lock = new Object();
-
-    public final LinkerManagement<ImportDeclaration, ImporterService> linkerManagement;
-    public final LinkerBinderManager<ImportDeclaration, ImporterService> importersManager;
-    public final LinkerDeclarationsManager<ImportDeclaration, ImporterService> declarationsManager;
-
-
-    @Validate
-    public void start() {
-        LOG.debug(linkerName + " starting");
-    }
-
-    @Invalidate
-    public void stop() {
-        LOG.debug(linkerName + " stopping");
-    }
-
-    public DefaultImportationLinker(BundleContext bundleContext) {
-        this.bundleContext = bundleContext;
-
-        processProperties();
-        linkerManagement = new LinkerManagement<ImportDeclaration, ImporterService>(bundleContext, importerServiceFilter, importDeclarationFilter);
-        importersManager = linkerManagement.bindersManager;
-        declarationsManager = linkerManagement.declarationsManager;
     }
 
     /**

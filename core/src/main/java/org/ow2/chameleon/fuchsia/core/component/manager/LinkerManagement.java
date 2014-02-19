@@ -14,8 +14,9 @@ public class LinkerManagement<D extends Declaration, S extends DeclarationBinder
 
     private static final Logger LOG = LoggerFactory.getLogger(LinkerManagement.class);
 
-    public final LinkerBinderManager<D, S> bindersManager;
-    public final LinkerDeclarationsManager<D, S> declarationsManager;
+    private final LinkerBinderManager<D, S> bindersManager;
+
+    private final LinkerDeclarationsManager<D, S> declarationsManager;
 
     public LinkerManagement(BundleContext bundleContext, Filter importerServiceFilter, Filter declarationFilter) {
         this.bindersManager = new LinkerBinderManager<D, S>(bundleContext, this, importerServiceFilter);
@@ -85,5 +86,13 @@ public class LinkerManagement<D extends Declaration, S extends DeclarationBinder
 
     public Set<D> getMatchedDeclaration() {
         return declarationsManager.getMatchedDeclaration();
+    }
+
+    public LinkerDeclarationsManager<D, S> getDeclarationsManager() {
+        return declarationsManager;
+    }
+
+    public LinkerBinderManager<D, S> getBindersManager() {
+        return bindersManager;
     }
 }
