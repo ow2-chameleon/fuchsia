@@ -10,10 +10,10 @@ import java.util.Map;
  * <p/>
  * If you doing it wrong, {@link IllegalStateException} are thrown.
  */
-class DeclarationBuilder<BUILDER extends DeclarationBuilder<BUILDER,DECLARATION>, DECLARATION extends Declaration> {
+class DeclarationBuilder<B extends DeclarationBuilder<B, D>, D extends Declaration> {
     private Map<String, Object> metadata;
     private Map<String, Object> extraMetadata;
-    private DECLARATION declaration;
+    private D declaration;
 
     DeclarationBuilder() {
         this.metadata = null;
@@ -26,7 +26,7 @@ class DeclarationBuilder<BUILDER extends DeclarationBuilder<BUILDER,DECLARATION>
         this.metadata = metadata;
     }
 
-    DeclarationBuilder(DECLARATION declaration) {
+    DeclarationBuilder(D declaration) {
         this();
         this.declaration = declaration;
     }
@@ -46,19 +46,19 @@ class DeclarationBuilder<BUILDER extends DeclarationBuilder<BUILDER,DECLARATION>
         return new ExtraValueSetter(key);
     }
 
-    public BUILDER withExtraMetadata(Map<String, Object> extraMetadata) {
+    public B withExtraMetadata(Map<String, Object> extraMetadata) {
         if (declaration == null) {
             throw new IllegalStateException();
         }
         this.extraMetadata = extraMetadata;
-        return (BUILDER) this;
+        return (B) this;
     }
 
-    public DECLARATION build() {
+    public D build() {
         if (metadata != null && declaration == null) {
-            return (DECLARATION) new DeclarationImpl(metadata);
+            return (D) new DeclarationImpl(metadata);
         } else if (metadata == null && declaration != null) {
-            return (DECLARATION) new DeclarationDecorator(declaration, extraMetadata);
+            return (D) new DeclarationDecorator(declaration, extraMetadata);
         } else {
             throw new IllegalStateException();
         }
@@ -82,9 +82,9 @@ class DeclarationBuilder<BUILDER extends DeclarationBuilder<BUILDER,DECLARATION>
             this.key = key;
         }
 
-        public BUILDER value(Object value) {
+        public B value(Object value) {
             addMetadata(key, value);
-            return (BUILDER) DeclarationBuilder.this;
+            return (B) DeclarationBuilder.this;
         }
     }
 
@@ -95,9 +95,9 @@ class DeclarationBuilder<BUILDER extends DeclarationBuilder<BUILDER,DECLARATION>
             this.key = key;
         }
 
-        public BUILDER value(Object value) {
+        public B value(Object value) {
             addExtraMetadata(key, value);
-            return (BUILDER) DeclarationBuilder.this;
+            return (B) DeclarationBuilder.this;
         }
     }
 }
