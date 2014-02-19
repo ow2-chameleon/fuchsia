@@ -18,7 +18,9 @@ import java.util.List;
 
 public class FuchsiaUtils {
 
-    private FuchsiaUtils(){}
+    private FuchsiaUtils(){
+        // private constructor
+    }
 
     public static Filter getFilter(Object filterObject) throws InvalidFilterException {
         Filter filter = null;
@@ -113,7 +115,7 @@ public class FuchsiaUtils {
 
                 }catch (ClassNotFoundException e){
                     throw new ClassNotFoundException("No package found with name " + packageName + " while trying to load the class "
-                            + klassName + ".");
+                            + klassName + ".", e);
                 }
 
 
