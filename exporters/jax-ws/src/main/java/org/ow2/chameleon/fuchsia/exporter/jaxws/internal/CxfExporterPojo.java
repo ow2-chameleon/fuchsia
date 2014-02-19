@@ -1,6 +1,7 @@
 package org.ow2.chameleon.fuchsia.exporter.jaxws.internal;
 
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
+import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
 
 public class CxfExporterPojo {
 
@@ -12,11 +13,19 @@ public class CxfExporterPojo {
 
     }
 
-    public static CxfExporterPojo create(ExportDeclaration exportDeclaration){
+    public static CxfExporterPojo create(ExportDeclaration exportDeclaration) throws BinderException{
+
         CxfExporterPojo pojo=new CxfExporterPojo();
 
-        pojo.clazz=(String) exportDeclaration.getMetadata().get(Constants.CXF_EXPORT_TYPE);
-        pojo.webcontext=(String) exportDeclaration.getMetadata().get(Constants.CXF_EXPORT_WEB_CONTEXT);
+        Object clazzObject=exportDeclaration.getMetadata().get(Constants.CXF_EXPORT_TYPE);
+        Object webcontextObject=exportDeclaration.getMetadata().get(Constants.CXF_EXPORT_WEB_CONTEXT);
+
+        if(clazzObject==null || webcontextObject==null){
+            throw new BinderException(String.format("Parameters missing class=%s webcontext=%s",clazzObject,webcontextObject).toString());
+        }
+
+        pojo.clazz=(String) clazzObject;
+        pojo.webcontext=(String) webcontextObject;
 
         Object filterObject=exportDeclaration.getMetadata().get(Constants.CXF_EXPORT_FILTER);
 
