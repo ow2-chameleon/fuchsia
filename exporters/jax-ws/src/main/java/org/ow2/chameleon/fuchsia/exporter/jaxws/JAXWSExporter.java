@@ -1,10 +1,24 @@
 package org.ow2.chameleon.fuchsia.exporter.jaxws;
 
 import org.apache.cxf.Bus;
-import org.apache.cxf.endpoint.Server;
+import org.apache.cxf.BusFactory;
+//import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.transport.servlet.CXFNonSpringServlet;
+import org.apache.cxf.transport.servlet.CXFServlet;
 import org.apache.felix.ipojo.annotations.*;
+
+/*
+import org.mortbay.jetty.handler.ContextHandlerCollection;
+import org.mortbay.jetty.servlet.Context;
+import org.mortbay.jetty.servlet.ServletHolder;
+*/
+
+
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.ContextHandlerCollection;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.http.HttpService;
@@ -13,6 +27,7 @@ import org.ow2.chameleon.fuchsia.core.FuchsiaUtils;
 import org.ow2.chameleon.fuchsia.core.component.AbstractExporterComponent;
 import org.ow2.chameleon.fuchsia.core.component.ExporterService;
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
+import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
 import org.ow2.chameleon.fuchsia.exporter.jaxws.internal.Constants;
 import org.ow2.chameleon.fuchsia.exporter.jaxws.internal.CxfExporterPojo;
 import org.slf4j.Logger;
@@ -34,10 +49,12 @@ public class JAXWSExporter extends AbstractExporterComponent {
 
     private ServiceReference serviceReference;
 
-    private Map<String,Server> exportedDeclaration=new HashMap<String,Server>();
+    private Map<String,org.apache.cxf.endpoint.Server> exportedDeclaration=new HashMap<String,org.apache.cxf.endpoint.Server>();
 
     @Requires
     HttpService http;
+
+    Server httpServer;
 
     @ServiceProperty(name = "target")
     private String filter;
@@ -47,7 +64,7 @@ public class JAXWSExporter extends AbstractExporterComponent {
     }
 
     @Override
-    public void useExportDeclaration(ExportDeclaration exportDeclaration) {
+    public void useExportDeclaration(ExportDeclaration exportDeclaration) throws BinderException {
 
         LOG.info("exporting {}", exportDeclaration.getMetadata());
 
@@ -65,21 +82,26 @@ public class JAXWSExporter extends AbstractExporterComponent {
 
             Object instance=null;
 
-            ServiceReference[] protobuffReferences = context.getAllServiceReferences(pojo.getClazz(),pojo.getFilter());
+            ServiceReference[] jaxWsReferences = context.getAllServiceReferences(pojo.getClazz(), pojo.getFilter());
 
-            if(protobuffReferences==null){
+            if(jaxWsReferences==null){
                 LOG.warn("instance not found to be exported, ignoring exportation request, filter:" + pojo.getFilter());
+                return;
             }
 
-            srvFactory.setServiceBean(instance);
+            Object object=context.getService(jaxWsReferences[0]);
+
+            srvFactory.setServiceBean(object);
 
             srvFactory.setAddress(pojo.getWebcontext());
 
-            Server endpoint = srvFactory.create();
+            org.apache.cxf.endpoint.Server endpoint = srvFactory.create();
 
             exportDeclaration.handle(serviceReference);
 
-            exportedDeclaration.put(pojo.getWebcontext(),endpoint);
+            exportedDeclaration.put(pojo.getWebcontext(), endpoint);
+
+            srvFactory.getServer().start();
 
             LOG.info("Pushing CXF endpoint: {}", endpoint.getEndpoint().getEndpointInfo().getAddress());
 
@@ -101,7 +123,7 @@ public class JAXWSExporter extends AbstractExporterComponent {
 
         exportDeclaration.unhandle(serviceReference);
 
-        Server exported=exportedDeclaration.get(webcontext);
+        org.apache.cxf.endpoint.Server exported=exportedDeclaration.get(webcontext);
 
         if(exported!=null){
             exported.destroy();
@@ -136,6 +158,31 @@ public class JAXWSExporter extends AbstractExporterComponent {
             LOG.error("Failed registering CXF servlet", e);
         } catch (NamespaceException e) {
             LOG.error("Failed registering CXF servlet", e);
+        } catch (NullPointerException e){
+
+            httpServer=new Server(8080);
+
+            Bus bus = BusFactory.getDefaultBus(true);
+            ContextHandlerCollection contexts = new ContextHandlerCollection();
+            httpServer.setHandler(contexts);
+
+            ServletContextHandler root = new ServletContextHandler(contexts, "/",
+                    ServletContextHandler.SESSIONS);
+            CXFServlet cxf = new CXFServlet();
+            cxf.setBus(bus);
+
+            ServletHolder servlet = new ServletHolder(cxf);
+
+            root.addServlet(servlet, "/cxf/*");
+
+            try {
+                httpServer.start();
+            } catch (Exception e1) {
+                LOG.error("Impossible to start standalone CXF Jetty server.",e);
+            }
+
+            cxfServlet=cxf;
+
         }
 
         cxfbus = cxfServlet.getBus();
@@ -147,9 +194,17 @@ public class JAXWSExporter extends AbstractExporterComponent {
 
         super.stop();
 
-        http.unregister(Constants.CXF_SERVLET);
+        if(http!=null){
+            http.unregister(Constants.CXF_SERVLET);
+        }else {
+            try {
+                httpServer.stop();
+            } catch (Exception e) {
+                LOG.error("Failed to stop standalone CXF Jetty server.",e);
+            }
+        }
 
-        for(Map.Entry<String,Server> item:exportedDeclaration.entrySet()){
+        for(Map.Entry<String,org.apache.cxf.endpoint.Server> item:exportedDeclaration.entrySet()){
             item.getValue().destroy();
         }
 
