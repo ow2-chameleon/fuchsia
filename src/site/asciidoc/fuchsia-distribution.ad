@@ -54,12 +54,12 @@ In order to generate a Fuchsia distribution there is only one mandatory profile 
 ** discovery-filebased
 ** discovery-philips-hue
 * importers
-** importer-cxf
+** importer-jax-ws
 ** importer-philips-hue
 ** http://mqtt.org/[mqtt]
 ** https://code.google.com/p/pubsubhubbub/[push]
 * exporter
-** exporter-cxf
+** exporter-jaw-ws
 * tools
 ** grid
 ** shell
@@ -79,10 +79,10 @@ Config profiles are the instantiation of the _linker_ and the _processor_. Those
 ** exporter-cxf-config
 
 
-Thus, in order to compile Fuchsia with the *grid*, *exporter-cxf* and *mqtt*, would be enough to:
+Thus, in order to compile Fuchsia with the *grid*, *exporter-jax-ws* and *mqtt*, would be enough to:
 
 1. go to the **distribution** directory
-2. type *mvn -Pcore,grid,exporter-cxf,mqtt*
+2. type *mvn -Pcore,grid,exporter-jax-ws,mqtt*
 
 After the compilation process is finished, your Fuchsia distribution is ready to use:
 

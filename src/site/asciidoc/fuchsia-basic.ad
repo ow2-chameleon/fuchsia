@@ -68,7 +68,7 @@ The *Linkers* job is to evaluate if a given *Declaration* and a *Service* match 
 [source]
 --
     Instance cxfimporterlinker = instance()
-            .of("FuchsiaDefaultImportationLinkerFactory")
+            .of(FuchsiaConstants.DEFAULT_IMPORTATION_LINKER_FACTORY_NAME)
             .with("fuchsia.linker.filter.importDeclaration").setto("(endpoint.url=*)")
             .with("fuchsia.linker.filter.importerService").setto("(instance.name=cxfimporterlinker)");
 --
