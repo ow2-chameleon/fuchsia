@@ -2,19 +2,10 @@ package org.ow2.chameleon.fuchsia.exporter.jaxws;
 
 import org.apache.cxf.Bus;
 import org.apache.cxf.BusFactory;
-//import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.transport.servlet.CXFNonSpringServlet;
 import org.apache.cxf.transport.servlet.CXFServlet;
 import org.apache.felix.ipojo.annotations.*;
-
-/*
-import org.mortbay.jetty.handler.ContextHandlerCollection;
-import org.mortbay.jetty.servlet.Context;
-import org.mortbay.jetty.servlet.ServletHolder;
-*/
-
-
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -32,7 +23,6 @@ import org.ow2.chameleon.fuchsia.exporter.jaxws.internal.Constants;
 import org.ow2.chameleon.fuchsia.exporter.jaxws.internal.CxfExporterPojo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import javax.servlet.ServletException;
 import java.util.HashMap;
 import java.util.Map;
