@@ -42,9 +42,12 @@ public class JAXWSExporter extends AbstractExporterComponent {
     private Map<String,org.apache.cxf.endpoint.Server> exportedDeclaration=new HashMap<String,org.apache.cxf.endpoint.Server>();
 
     @Requires
-    HttpService http;
+    private HttpService http;
 
-    Server httpServer;
+    private Server httpServer;
+
+    @ServiceProperty(name = "org.osgi.service.http.port")
+    private Integer HTTP_PORT;
 
     @ServiceProperty(name = "target")
     private String filter;
@@ -150,7 +153,7 @@ public class JAXWSExporter extends AbstractExporterComponent {
             LOG.error("Failed registering CXF servlet", e);
         } catch (NullPointerException e){
 
-            httpServer=new Server(8080);
+            httpServer=new Server(HTTP_PORT);
 
             Bus bus = BusFactory.getDefaultBus(true);
             ContextHandlerCollection contexts = new ContextHandlerCollection();
