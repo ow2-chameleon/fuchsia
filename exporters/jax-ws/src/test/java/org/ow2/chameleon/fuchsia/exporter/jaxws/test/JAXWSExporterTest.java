@@ -11,10 +11,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceReference;
-import org.osgi.framework.ServiceRegistration;
+import org.osgi.framework.*;
 import org.osgi.service.packageadmin.ExportedPackage;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
@@ -29,23 +26,32 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
+import static org.fest.reflect.core.Reflection.constructor;
+import static org.fest.reflect.core.Reflection.field;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
 public class JAXWSExporterTest {
 
+    private static Integer HTTP_PORT=8043;
+
     @Mock
     org.osgi.framework.BundleContext context;
 
-    private ServiceRegistration registrationFromClassToBeExported = mock(ServiceRegistration.class);
+    @Mock
+    private ServiceRegistration registrationFromClassToBeExported;
 
-    private ServiceReference serviceReferenceFromExporter=  mock(ServiceReference.class);
+    @Mock
+    private ServiceReference serviceReferenceFromExporter;
 
-    private ExportedPackage exportPackageForClass = mock(ExportedPackage.class);
+    @Mock
+    private ExportedPackage exportPackageForClass;
 
-    private Bundle bundeToLoadClassFrom= mock(Bundle.class);
+    @Mock
+    private Bundle bundeToLoadClassFrom;
 
-    private PackageAdmin packageAdminMock= mock(PackageAdmin.class);
+    @Mock
+    private PackageAdmin packageAdminMock;
 
     private ServiceForExportation id= spy(new ServiceForExportationImpl());
 
@@ -60,20 +66,6 @@ public class JAXWSExporterTest {
     public void setup() {
 
         MockitoAnnotations.initMocks(this);
-
-        registrationFromClassToBeExported = mock(ServiceRegistration.class);
-
-        serviceReferenceFromExporter=  mock(ServiceReference.class);
-
-        exportPackageForClass = mock(ExportedPackage.class);
-
-        bundeToLoadClassFrom= mock(Bundle.class);
-
-        packageAdminMock= mock(PackageAdmin.class);
-
-        id= spy(new ServiceForExportationImpl());
-
-        idServiceReference=new ServiceReference[]{id};
 
         Dictionary<String, Object> props1 = new Hashtable<String, Object>();
 
@@ -98,7 +90,9 @@ public class JAXWSExporterTest {
 
         when(packageAdminMock.getExportedPackage(ServiceForExportation.class.getName())).thenReturn(exportPackageForClass);
 
-        exporter=new JAXWSExporter(context);
+        exporter=constructor().withParameterTypes(BundleContext.class).in(JAXWSExporter.class).newInstance(context);//new JAXWSExporter(context);
+
+        field("HTTP_PORT").ofType(Integer.class).in(exporter).set(HTTP_PORT);
 
         exporter.start();
 
@@ -212,6 +206,8 @@ public class JAXWSExporterTest {
     @Test
     public void remoteWSInvokationShouldSucceed() throws BinderException {
 
+
+
         Map<String, Object> metadata=new HashMap<String, Object>();
 
         metadata.put("fuchsia.export.cxf.class.name",ServiceForExportation.class.getName());
@@ -235,7 +231,7 @@ public class JAXWSExporterTest {
 
         factory.setServiceClass(ServiceForExportation.class);
 
-        String endPointURL = "http://localhost:8080/cxf/"+ServiceForExportation.class.getSimpleName();
+        String endPointURL = "http://localhost:"+HTTP_PORT+"/cxf/"+ServiceForExportation.class.getSimpleName();
         factory.setAddress(endPointURL);
 
         ServiceForExportation objectProxy = (ServiceForExportation)factory.create();
