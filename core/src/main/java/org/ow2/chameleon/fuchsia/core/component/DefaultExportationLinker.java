@@ -32,8 +32,8 @@ import static org.ow2.chameleon.fuchsia.core.component.manager.DeclarationBinder
  * @author Morgan Martinet
  */
 @Component(name = FuchsiaConstants.DEFAULT_EXPORTATION_LINKER_FACTORY_NAME)
-@Provides(specifications = ExportationLinker.class)
-public class DefaultExportationLinker implements ExportationLinker {
+@Provides(specifications = {ExportationLinker.class, ExportationLinkerIntrospection.class})
+public class DefaultExportationLinker implements ExportationLinker, ExportationLinkerIntrospection {
 
     /**
      * Logger

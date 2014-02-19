@@ -18,27 +18,10 @@ import java.util.Set;
  */
 public interface ExportationLinker {
 
-    final static String FILTER_EXPORTDECLARATION_PROPERTY = "fuchsia.linker.filter.exportDeclaration";
+    String FILTER_EXPORTDECLARATION_PROPERTY = "fuchsia.linker.filter.exportDeclaration";
 
-    final static String FILTER_EXPORTERSERVICE_PROPERTY = "fuchsia.linker.filter.exporterService";
-
-    final static String UNIQUE_EXPORTATION_PROPERTY = "fuchsia.linker.uniqueExportation";
-
+    String FILTER_EXPORTERSERVICE_PROPERTY = "fuchsia.linker.filter.exporterService";
 
     String getName();
-
-    /**
-     * Return the exporterServices linked the ExportationLinker
-     *
-     * @return The exporterServices linked to the ExportationLinker
-     */
-    Set<ExporterService> getLinkedExporters();
-
-    /**
-     * Return the exportDeclarations bind by the ExportationLinker
-     *
-     * @return The exportDeclarations bind by the ExportationLinker
-     */
-    Set<ExportDeclaration> getExportDeclarations();
 
 }
