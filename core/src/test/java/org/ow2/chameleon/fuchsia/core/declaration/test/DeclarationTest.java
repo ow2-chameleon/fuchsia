@@ -171,11 +171,24 @@ public class DeclarationTest {
         Map<String, Object> md = new HashMap<String, Object>();
         md.put("md", "value");
         ImportDeclaration id = ImportDeclarationBuilder.fromMetadata(md).build();
-
         ImportDeclaration id2 = ImportDeclarationBuilder.fromImportDeclaration(id).extraKey("emd").value("value2").build();
 
-        String output = id2.toString();
-        int nbLines = output.split(System.getProperty("line.separator")).length;
-        assertThat(nbLines).isEqualTo(6);
+        assertThat(id.toString()).isEqualTo("[Declaration:{md=value}({})(0(0))]");
+        assertThat(id2.toString()).isEqualTo("[Declaration:{md=value}({emd=value2})(0(0))]");
+
+        ServiceReference mock = mock(ServiceReference.class);
+        id2.bind(mock);
+        assertThat(id.toString()).isEqualTo("[Declaration:{md=value}({})(1(0))]");
+        assertThat(id2.toString()).isEqualTo("[Declaration:{md=value}({emd=value2})(1(0))]");
+
+        id2.handle(mock);
+        assertThat(id.toString()).isEqualTo("[Declaration:{md=value}({})(1(1))]");
+        assertThat(id2.toString()).isEqualTo("[Declaration:{md=value}({emd=value2})(1(1))]");
+
+        id2.unhandle(mock);
+        id2.unbind(mock);
+
+        assertThat(id.toString()).isEqualTo("[Declaration:{md=value}({})(0(0))]");
+        assertThat(id2.toString()).isEqualTo("[Declaration:{md=value}({emd=value2})(0(0))]");
     }
 }

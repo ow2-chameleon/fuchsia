@@ -95,9 +95,10 @@ class DeclarationImpl implements Declaration, ImportDeclaration, ExportDeclarati
     }
 
     public String toString() {
+        Status status = getStatus();
         return String.format("[Declaration:%s(%s)(%d(%d))]",
-                metadata.toString(), extraMetadata.toString(),
-                serviceReferencesBound.size(), serviceReferencesHandled.size());
+                getMetadata().toString(), getExtraMetadata().toString(),
+                status.getServiceReferencesBounded().size(), status.getServiceReferencesHandled().size());
     }
 
     /**

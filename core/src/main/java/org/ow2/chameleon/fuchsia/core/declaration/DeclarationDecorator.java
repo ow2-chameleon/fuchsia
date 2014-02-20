@@ -61,7 +61,10 @@ class DeclarationDecorator implements Declaration, ImportDeclaration, ExportDecl
     }
 
     public String toString() {
-        return declaration.toString() + "+extraMetadata";
+        Status status = declaration.getStatus();
+        return String.format("[Declaration:%s(%s)(%d(%d))]",
+                getMetadata().toString(), getExtraMetadata().toString(),
+                status.getServiceReferencesBounded().size(), status.getServiceReferencesHandled().size());
     }
 
 }
