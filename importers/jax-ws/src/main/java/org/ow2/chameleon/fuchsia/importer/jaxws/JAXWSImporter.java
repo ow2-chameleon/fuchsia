@@ -10,6 +10,8 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
+import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
+import org.ow2.chameleon.fuchsia.importer.jaxws.internal.JAXWSImporterPojo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,14 +25,15 @@ import static org.ow2.chameleon.fuchsia.core.FuchsiaUtils.loadClass;
  *
  * @author Jonathan Bardin <jonathan.bardin@imag.fr>
  * @Edited Jeremy.Savonet@gmail.com
+ * @Edited Jander Nascimento <botelho@imag.fr>
  */
 @Component
 @Provides(specifications = {org.ow2.chameleon.fuchsia.core.component.ImporterService.class})
 public class JAXWSImporter extends AbstractImporterComponent {
 
-    public static final String ENDPOINT_URL = "endpoint.url"; //TODO FIXME
+    public static final String ENDPOINT_URL = "endpoint.url";
 
-    private static final String CLASSNAME = "className";
+    public static final String CLASSNAME = "className";
 
     /**
      * logger
@@ -61,14 +64,14 @@ public class JAXWSImporter extends AbstractImporterComponent {
 
     @Override
     @Invalidate
-    protected void stop() {
+    public void stop() {
         LOG.info("STOP CXF IMPORTER SERVICE");
         super.stop();
     }
 
     @Override
     @Validate
-    protected void start() {
+    public void start() {
         LOG.info("START CXF IMPORTER SERVICE");
         super.start();
     }
@@ -87,16 +90,18 @@ public class JAXWSImporter extends AbstractImporterComponent {
 	 *--------------------------*/
 
     @Override
-    protected void useImportDeclaration(ImportDeclaration importDeclaration) {
+    protected void useImportDeclaration(ImportDeclaration importDeclaration) throws BinderException {
         LOG.debug("Create proxy" + importDeclaration.getMetadata());
         ClientProxyFactoryBean factory;
-        String endPointURL;
+
         Object objectProxy;
+
+        JAXWSImporterPojo pojo=JAXWSImporterPojo.create(importDeclaration);
 
         //Try to load the class
         final Class<?> klass;
         try {
-            klass = loadClass(context, (String) importDeclaration.getMetadata().get(CLASSNAME));
+            klass = loadClass(context, pojo.getClazz());
         } catch (ClassNotFoundException e) {
             LOG.error("Failed to load class", e);
             return;
@@ -119,13 +124,7 @@ public class JAXWSImporter extends AbstractImporterComponent {
             //set the class XXX only one class is supported
             factory.setServiceClass(klass);
 
-            //set the URL
-            if(!(importDeclaration.getMetadata().get(ENDPOINT_URL) instanceof String)) {
-                return;  //TODO FIXME
-            }
-
-            endPointURL = (String) importDeclaration.getMetadata().get(ENDPOINT_URL);
-            factory.setAddress(endPointURL);
+            factory.setAddress(pojo.getEndpoint());
 
             LOG.debug(String.valueOf(factory.getAddress()));
             LOG.debug(String.valueOf(factory.getServiceFactory()));
