@@ -79,11 +79,10 @@ public class FuchsiaGogoCommand {
         } else if (declaration instanceof ExportDeclaration) {
             type = "export";
         }
-        String scope = (String) declaration.getMetadata().get("scope");
-        String protocol = (String) declaration.getMetadata().get(PROTOCOL_NAME);
+
         String id = (String) declaration.getMetadata().get(ID);
 
-        return type + '.' + scope + '.' + protocol + '.' + id;
+        return id;
     }
 
     private void displayDeclarationList(List<ServiceReference> references) {
@@ -102,55 +101,89 @@ public class FuchsiaGogoCommand {
 
 
     @Descriptor("Gets info about the declaration")
-    public void declaration(@Descriptor("declaration declaration_identifier") String... parameters) {
-        if (parameters.length != 1) {
-            System.err.println("1 parameter");
-            return;
-        }
-        String identifier = parameters[0];
+    public void declaration(@Descriptor("declaration [-f LDAP_FILTER] [DECLARATION_ID]") String... parameters) {
 
-        String[] split = identifier.split("\\.");
-        String filterString = String.format("(&(scope=%s)(%s=%s)(%s=%s))", split[1], PROTOCOL_NAME, split[2], ID, split[3]);
         Filter filter = null;
+
         try {
-            filter = FrameworkUtil.createFilter(filterString);
+
+            String explicitFilterArgument=getArgumentValue("-f",parameters);
+
+            if(explicitFilterArgument==null){
+
+                String idFilterArgument=getArgumentValue(null,parameters);
+
+                if(idFilterArgument==null){
+                    filter=null;
+                }else {
+                    filter=FrameworkUtil.createFilter(String.format("(id=%s)",idFilterArgument));
+                }
+
+            } else  {
+                filter=FrameworkUtil.createFilter(getArgumentValue(null,parameters));
+            }
+
         } catch (InvalidSyntaxException e) {
             LOG.error("Failed to create the appropriate filter.", e);
             return;
         }
 
         HashMap<ServiceReference, Declaration> declarations = null;
-        if (split[0].equals("import")) {
+
+        String type=getArgumentValue("-t",parameters);
+
+        if (type!=null && type.equals("import")) {
             declarations = new HashMap<ServiceReference, Declaration>(getAllServiceRefsAndServices(ImportDeclaration.class));
-        } else if (split[0].equals("export")) {
+        } else if (type!=null && type.equals("export")) {
             declarations = new HashMap<ServiceReference, Declaration>(getAllServiceRefsAndServices(ExportDeclaration.class));
+        } else {
+            declarations = new HashMap<ServiceReference, Declaration>(getAllServiceRefsAndServices(Declaration.class));
+            declarations.putAll(new HashMap<ServiceReference, Declaration>(getAllServiceRefsAndServices(ImportDeclaration.class)));
+            declarations.putAll(new HashMap<ServiceReference, Declaration>(getAllServiceRefsAndServices(ExportDeclaration.class)));
         }
 
         if (declarations == null) {
             System.err.println("No declarations found.");
             return;
         }
+
         for (Map.Entry<ServiceReference, Declaration> declaration : declarations.entrySet()) {
-            if (filter.matches(declaration.getValue().getMetadata())) {
-                displayDeclaration(identifier, declaration.getKey(), declaration.getValue());
-                return;
+
+            if (filter==null || filter.matches(declaration.getValue().getMetadata())) {
+
+                displayDeclaration(getIdentifier(declaration.getValue()), declaration.getKey(), declaration.getValue());
+
             }
+
         }
-        System.err.println("No declarations found with the identifier " + identifier + ".");
+
     }
 
     private void displayDeclaration(String identifier, ServiceReference reference, Declaration declaration) {
-        System.out.println("Declaration : " + identifier);
-        Map<String, Object> metadata = declaration.getMetadata();
-        if (metadata.size() == 0) {
-            LOG.error("Malformated declaration, metadata are empty.");
-        } else {
-            for (Map.Entry<String, Object> entry : metadata.entrySet()) {
-                System.out.println(String.format("\t%s\t\t= %s", entry.getKey(), entry.getValue()));
-            }
+
+        StringBuilder sg = new StringBuilder();
+        sg.append("Declaration Metadata : \n");
+        for (Map.Entry<String, Object> entry : declaration.getMetadata().entrySet()) {
+            sg.append(String.format("\t%s = %s\n", entry.getKey(), entry.getValue()));
         }
-        System.out.println("---");
-        displayServiceProperties("Declaration ", reference, "\t");
+        sg.append("Declaration ExtraMetadata : \n");
+        for (Map.Entry<String, Object> entry : declaration.getExtraMetadata().entrySet()) {
+            sg.append(String.format("\t%s = %s\n", entry.getKey(), entry.getValue()));
+        }
+
+        System.out.printf("Service Properties\n");
+        for (String propertyKey : reference.getPropertyKeys()) {
+            sg.append(String.format("\t%s = %s\n", propertyKey, reference.getProperty(propertyKey)));
+        }
+        if (reference.getPropertyKeys().length == 0) {
+            sg.append("\tEMPTY\n");
+        }
+
+        sg.append("Declaration binded to " + declaration.getStatus().getServiceReferencesBounded().size() + " services.\n");
+        sg.append("Declaration handled by " + declaration.getStatus().getServiceReferencesHandled().size() + " services.\n");
+
+        System.out.println(sg.toString());
+
     }
 
 
@@ -301,6 +334,7 @@ public class FuchsiaGogoCommand {
         for (ServiceReference sr : getAllServiceRefs(klass)) {
             services.put(sr, (T) m_context.getService(sr));
         }
+
         return services;
     }
 
@@ -327,6 +361,14 @@ public class FuchsiaGogoCommand {
         String value = null;
 
         for (int i = 0; i < params.length; i++) {
+
+            /**
+             * In case of a Null option, returns the last parameter
+             */
+            if(option==null){
+                return params[params.length-1];
+            }
+
             if (i < (params.length - 1) && params[i].equals(option)) {
                 found = true;
                 value = params[i + 1];
