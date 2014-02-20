@@ -11,11 +11,15 @@ import org.ow2.chameleon.fuchsia.core.FuchsiaUtils;
 import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
 import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
+import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.MalformedURLException;
-import java.util.*;
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Map;
 
 import static java.lang.String.valueOf;
 import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
@@ -64,23 +68,21 @@ public class JSONRPCImporter extends AbstractImporterComponent {
     }
 
     @Override
-    public void useImportDeclaration(ImportDeclaration importDeclaration) {
+    public void useImportDeclaration(ImportDeclaration importDeclaration) throws BinderException {
 
         final JsonRpcHttpClient client;
-        final Object proxy;
-        final Class<?> klass;
-        final String uri, id, klassName;
+        final String url, id, klassName;
 
-        // Get the URI
-        uri = valueOf(importDeclaration.getMetadata().get(URL));
+        // Get the URL
+        url = valueOf(importDeclaration.getMetadata().get(URL));
         // Get an id
         id = (String) importDeclaration.getMetadata().get(ID);
 
         try {
-            client = new JsonRpcHttpClient(new java.net.URL(uri));
+            client = new JsonRpcHttpClient(new java.net.URL(url));
         } catch (MalformedURLException e) {
-            LOG.error("Error during connection to " + uri, e);
-            return; //FIXME
+            LOG.error("Error during connection to " + url, e);
+            throw new BinderException("Error during connection to " + url, e);
         }
         clients.put(id, client);
 
@@ -91,48 +93,61 @@ public class JSONRPCImporter extends AbstractImporterComponent {
         //Try to load the class
         klassName = (String) importDeclaration.getMetadata().get(SERVICE_CLASS);
         if (klassName != null) {
-            // Use given klass
-            try {
-                klass = FuchsiaUtils.loadClass(context, klassName);
-            } catch (ClassNotFoundException e) {
-                throw new IllegalStateException(
-                        "Cannot create a proxy for the ImportDeclaration : " + importDeclaration
-                                + " unable to find a bundle which export the service class.", e);
-            }
-
-            // create the proxy !
-            proxy = ProxyUtil.createClientProxy(klass.getClassLoader(), klass, client);
-            ServiceRegistration sReg = context.registerService(klassName, proxy, props);
-
-            importDeclaration.handle(serviceReference);
-
-            // Add the registration to the registration list
-            registrations.put(id, sReg);
+            createProxyFromKlass(klassName, client, props, importDeclaration);
         } else {
-            // Use a default/generic proxy
-            ComponentInstance componentInstance = null;
-            props.put("client", client);
-            try {
-                componentInstance = defaultProxyFactory.createComponentInstance(props);
-            } catch (UnacceptableConfiguration unacceptableConfiguration) {
-                LOG.error("Invalid configuration exception", unacceptableConfiguration);
-                return;
-            } catch (MissingHandlerException e) {
-                LOG.error("Missing handler exception", e);
-                return;
-            } catch (ConfigurationException e) {
-                LOG.error("Configuration exception", e);
-                return;
-            }
-            importDeclaration.handle(serviceReference);
-            componentInstances.put(id, componentInstance);
+            createDefaultProxy(client, props, importDeclaration);
         }
-
-        LOG.debug("JsonRPC Proxy successfully created and registered in OSGi " + uri + "");
+        LOG.debug("JsonRPC Proxy successfully created and registered in OSGi " + url + "");
     }
 
+    private void createProxyFromKlass(String klassName, JsonRpcHttpClient client, Dictionary<String, Object> props, ImportDeclaration importDeclaration) throws BinderException {
+        final Object proxy;
+        final Class<?> klass;
+        // Use given klass
+        try {
+            klass = FuchsiaUtils.loadClass(context, klassName);
+        } catch (ClassNotFoundException e) {
+            throw new BinderException(
+                    "Cannot create a proxy for the ImportDeclaration : " + importDeclaration
+                            + " unable to find a bundle which export the service class.", e);
+        }
+
+        // create the proxy !
+        proxy = ProxyUtil.createClientProxy(klass.getClassLoader(), klass, client);
+        ServiceRegistration sReg = context.registerService(klassName, proxy, props);
+
+        importDeclaration.handle(serviceReference);
+
+        String id = (String) importDeclaration.getMetadata().get(ID);
+        // Add the registration to the registration list
+        registrations.put(id, sReg);
+    }
+
+    private void createDefaultProxy(JsonRpcHttpClient client, Dictionary<String, Object> props, ImportDeclaration importDeclaration) throws BinderException {
+        // Use a default/generic proxy
+        final ComponentInstance componentInstance;
+        props.put("client", client);
+        try {
+            componentInstance = defaultProxyFactory.createComponentInstance(props);
+        } catch (UnacceptableConfiguration e) {
+            LOG.error("Invalid configuration exception", e);
+            throw new BinderException("Error during creation of defaultProxy", e);
+        } catch (MissingHandlerException e) {
+            LOG.error("Missing handler exception", e);
+            throw new BinderException("Error during creation of defaultProxy", e);
+        } catch (ConfigurationException e) {
+            LOG.error("Configuration exception", e);
+            throw new BinderException("Error during creation of defaultProxy", e);
+        }
+        importDeclaration.handle(serviceReference);
+
+        String id = (String) importDeclaration.getMetadata().get(ID);
+        componentInstances.put(id, componentInstance);
+    }
+
+
     @Override
-    public void denyImportDeclaration(ImportDeclaration importDeclaration) {
+    public void denyImportDeclaration(ImportDeclaration importDeclaration) throws BinderException {
         String id = (String) importDeclaration.getMetadata().get(ID);
         if (clients.containsKey(id)) {
 
@@ -144,7 +159,8 @@ public class JSONRPCImporter extends AbstractImporterComponent {
                     sReg.unregister();
                     importDeclaration.unhandle(serviceReference);
                 } else {
-                    // FIXME : fail
+                    throw new IllegalStateException("The serviceRegistration of the given object is null." +
+                            "It could not be unregister.");
                 }
             } else {
                 ComponentInstance componentInstance = componentInstances.remove(id);
@@ -156,7 +172,7 @@ public class JSONRPCImporter extends AbstractImporterComponent {
             // Remove the client
             clients.remove(id);
         } else {
-            throw new IllegalArgumentException("The given object has not been created through this factory");
+            throw new BinderException("The given object has not been created through this factory");
         }
     }
 

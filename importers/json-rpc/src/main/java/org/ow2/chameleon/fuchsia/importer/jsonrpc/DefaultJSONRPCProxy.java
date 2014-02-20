@@ -8,8 +8,6 @@ import org.apache.felix.ipojo.annotations.StaticServiceProperty;
 import org.ow2.chameleon.fuchsia.tools.proxiesutils.FuchsiaProxy;
 import org.ow2.chameleon.fuchsia.tools.proxiesutils.ProxyFacetInvokable;
 import org.ow2.chameleon.fuchsia.tools.proxiesutils.ProxyInvokationException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.security.InvalidParameterException;
 import java.util.Map;
@@ -23,10 +21,8 @@ import java.util.Map;
         })
 public class DefaultJSONRPCProxy implements ProxyFacetInvokable {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DefaultJSONRPCProxy.class);
-
     @ServiceProperty(name = "metadata", immutable = false, mandatory = true)
-    private Map proxy_metadata;
+    private Map proxyMetadata;
 
     @ServiceProperty(name = "name", immutable = false, mandatory = true)
     private String name;
