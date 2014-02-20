@@ -142,7 +142,7 @@ public class FuchsiaGogoCommand {
             declarations.putAll(new HashMap<ServiceReference, Declaration>(getAllServiceRefsAndServices(ExportDeclaration.class)));
         }
 
-        if (declarations == null) {
+        if (declarations.isEmpty()) {
             System.err.println("No declarations found.");
             return;
         }
