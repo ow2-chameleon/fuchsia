@@ -95,18 +95,9 @@ class DeclarationImpl implements Declaration, ImportDeclaration, ExportDeclarati
     }
 
     public String toString() {
-        StringBuilder sg = new StringBuilder();
-        sg.append("Declaration Metadata : \n");
-        for (Map.Entry<String, Object> entry : metadata.entrySet()) {
-            sg.append(String.format("  %s\t\t= %s\n", entry.getKey(), entry.getValue()));
-        }
-        sg.append("Declaration ExtraMetadata : \n");
-        for (Map.Entry<String, Object> entry : getExtraMetadata().entrySet()) {
-            sg.append(String.format("  %s\t\t= %s\n", entry.getKey(), entry.getValue()));
-        }
-        sg.append("Declaration binded to " + serviceReferencesBound.size() + " services.\n");
-        sg.append("Declaration handled by " + serviceReferencesHandled.size() + " services.\n");
-        return sg.toString();
+        return String.format("[Declaration:%s(%s)(%d(%d))]",
+                metadata.toString(), extraMetadata.toString(),
+                serviceReferencesBound.size(), serviceReferencesHandled.size());
     }
 
     /**
