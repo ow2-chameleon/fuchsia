@@ -33,7 +33,7 @@ import static org.mockito.Mockito.*;
 
 public class JAXWSExporterTest {
 
-    private static Integer HTTP_PORT=8043;
+    private static final Integer HTTP_PORT=8043;
 
     @Mock
     org.osgi.framework.BundleContext context;
@@ -90,7 +90,7 @@ public class JAXWSExporterTest {
 
         when(packageAdminMock.getExportedPackage(ServiceForExportation.class.getName())).thenReturn(exportPackageForClass);
 
-        exporter=constructor().withParameterTypes(BundleContext.class).in(JAXWSExporter.class).newInstance(context);//new JAXWSExporter(context);
+        exporter=constructor().withParameterTypes(BundleContext.class).in(JAXWSExporter.class).newInstance(context);
 
         field("HTTP_PORT").ofType(Integer.class).in(exporter).set(HTTP_PORT);
 
