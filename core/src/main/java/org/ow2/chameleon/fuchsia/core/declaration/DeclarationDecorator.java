@@ -35,9 +35,9 @@ class DeclarationDecorator implements Declaration, ImportDeclaration, ExportDecl
 
     public Map<String, Object> getExtraMetadata() {
         // Aggregate the extraMetadata of the decorated object and the extraMetadata of the decorator
-        Map<String, Object> extraMetadata = new HashMap<String, Object>(declaration.getExtraMetadata());
-        extraMetadata.putAll(this.extraMetadata);
-        return Collections.unmodifiableMap(extraMetadata);
+        Map<String, Object> em = new HashMap<String, Object>(declaration.getExtraMetadata());
+        em.putAll(this.extraMetadata);
+        return Collections.unmodifiableMap(em);
     }
 
     public Status getStatus() {

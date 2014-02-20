@@ -2,7 +2,6 @@ package org.ow2.chameleon.fuchsia.core.declaration;
 
 import org.osgi.framework.ServiceReference;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -22,13 +21,13 @@ public class Status {
      * The list of ServiceReference which are bound to the declaration.
      * (immutable)
      */
-    private final Set<ServiceReference> m_serviceReferencesBound;
+    private final Set<ServiceReference> serviceReferencesBound;
 
     /**
      * The list of ServiceReference which are handling the declaration.
      * (immutable)
      */
-    private final Set<ServiceReference> m_serviceReferencesHandled;
+    private final Set<ServiceReference> serviceReferencesHandled;
 
     /**
      * Creates a status object from the given sets of serviceReferencesBound and serviceReferencesHandled.
@@ -38,8 +37,8 @@ public class Status {
      * @param serviceReferencesHandled the set of ServiceReference which are handling the declaration.
      */
     private Status(Set<ServiceReference> serviceReferencesBound, Set<ServiceReference> serviceReferencesHandled) {
-        m_serviceReferencesBound = Collections.unmodifiableSet(new HashSet<ServiceReference>(serviceReferencesBound));
-        m_serviceReferencesHandled = Collections.unmodifiableSet(new HashSet<ServiceReference>(serviceReferencesHandled));
+        this.serviceReferencesBound = Collections.unmodifiableSet(new HashSet<ServiceReference>(serviceReferencesBound));
+        this.serviceReferencesHandled = Collections.unmodifiableSet(new HashSet<ServiceReference>(serviceReferencesHandled));
     }
 
     /**
@@ -66,28 +65,28 @@ public class Status {
      * @return true if the Declaration is bound to at least one Service, false otherwise
      */
     public Boolean isBound() {
-        return !m_serviceReferencesBound.isEmpty();
+        return !serviceReferencesBound.isEmpty();
     }
 
     /**
      * @return true if the Declaration is handled by at least one Service, false otherwise
      */
     public Boolean isHandled() {
-        return !m_serviceReferencesHandled.isEmpty();
+        return !serviceReferencesHandled.isEmpty();
     }
 
     /**
      * @return The list of ServiceReference of the Services bound to the Declaration
      */
     public Set<ServiceReference> getServiceReferencesBounded() {
-        return m_serviceReferencesBound;
+        return serviceReferencesBound;
     }
 
     /**
      * @return The list of ServiceReference of the Services bound to the Declaration
      */
     public Set<ServiceReference> getServiceReferencesHandled() {
-        return m_serviceReferencesHandled;
+        return serviceReferencesHandled;
     }
 
 }

@@ -2,7 +2,6 @@ package org.ow2.chameleon.fuchsia.core.component;
 
 import org.ow2.chameleon.fuchsia.core.component.manager.DeclarationBinder;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
-import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
 
 /**
  * The components providing this service are capable of creating a proxy thanks to an {@link ImportDeclaration}.

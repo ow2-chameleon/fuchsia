@@ -3,8 +3,6 @@ package org.ow2.chameleon.fuchsia.core.component;
 
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
 
-import java.util.Set;
-
 /**
  * The components providing this service are used by Fuchsia to make the link between the
  * {@link ExportDeclaration} and the {@link ExporterService}.

@@ -65,7 +65,7 @@ public interface Declaration {
      *
      * @param serviceReference the ServiceReference of the ImporterService that handle the Declaration.
      */
-    public void handle(ServiceReference serviceReference);
+    void handle(ServiceReference serviceReference);
 
     /**
      * Set the Declaration as unhandled by the given ImporterService.
@@ -76,6 +76,6 @@ public interface Declaration {
      *
      * @param serviceReference the ServiceReference of the ImporterService that unhandle the Declaration.
      */
-    public void unhandle(ServiceReference serviceReference);
+    void unhandle(ServiceReference serviceReference);
 
 }

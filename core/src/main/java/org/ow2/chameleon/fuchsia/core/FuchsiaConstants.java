@@ -1,9 +1,14 @@
 package org.ow2.chameleon.fuchsia.core;
 
-public interface FuchsiaConstants {
+public final class FuchsiaConstants {
 
-    String DEFAULT_EXPORTATION_LINKER_FACTORY_NAME = "FuchsiaDefaultExportationLinkerFactory";
+    public static final String DEFAULT_EXPORTATION_LINKER_FACTORY_NAME = "FuchsiaDefaultExportationLinkerFactory";
 
-    String DEFAULT_IMPORTATION_LINKER_FACTORY_NAME = "FuchsiaDefaultImportationLinkerFactory";
+    public static final String DEFAULT_IMPORTATION_LINKER_FACTORY_NAME = "FuchsiaDefaultImportationLinkerFactory";
 
+
+    private FuchsiaConstants() {
+        // private constructor
+    }
+    
 }

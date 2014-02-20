@@ -4,7 +4,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.ow2.chameleon.fuchsia.core.declaration.Declaration;
 
-import java.lang.reflect.Type;
 import java.util.*;
 
 public class DeclarationRegistrationManager<T extends Declaration> {

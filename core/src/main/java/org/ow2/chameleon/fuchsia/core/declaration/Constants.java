@@ -1,21 +1,25 @@
 package org.ow2.chameleon.fuchsia.core.declaration;
 
 
-public interface Constants {
+public final class Constants {
 
-    String PROTOCOL_NAME =  "protocol.name";
-    String PROTOCOL_VERSION =  "protocol.version";
+    public static final String PROTOCOL_NAME =  "protocol.name";
+    public static final String PROTOCOL_VERSION =  "protocol.version";
 
-    String URL = "url";
-    String ID = "id";
-    String SERVICE_CLASS = "service.class";
-    String CONFIGS = "configs";
+    public static final String URL = "url";
+    public static final String ID = "id";
+    public static final String SERVICE_CLASS = "service.class";
+    public static final String CONFIGS = "configs";
 
-    String ORG_OSGI_SERVICE_UPNP_UPNP_DEVICE ="org.osgi.service.upnp.UPnPDevice";
+    public static final String ORG_OSGI_SERVICE_UPNP_UPNP_DEVICE ="org.osgi.service.upnp.UPnPDevice";
 
-    String DEVICE_ID="id";
-    String DEVICE_TYPE="deviceType";
-    String DEVICE_TYPE_SUB="deviceSubType";
+    public static final String DEVICE_ID="id";
+    public static final String DEVICE_TYPE="deviceType";
+    public static final String DEVICE_TYPE_SUB="deviceSubType";
 
+
+    private Constants() {
+        // private constructor
+    }
 
 }
