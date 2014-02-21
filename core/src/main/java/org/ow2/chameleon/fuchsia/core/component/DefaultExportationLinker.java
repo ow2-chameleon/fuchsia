@@ -173,14 +173,10 @@ public class DefaultExportationLinker implements ExportationLinker, ExportationL
             exportersManager.removeLinks(serviceReference);
             return;
         }
-        for (ExportDeclaration exportDeclaration : declarationsManager.getMatchedDeclaration()) {
-            boolean isAlreadyLinked = exportDeclaration.getStatus().getServiceReferencesBounded().contains(serviceReference);
-            boolean canBeLinked = linkerManagement.canBeLinked(exportDeclaration, serviceReference);
-            if (isAlreadyLinked && !canBeLinked) {
-                linkerManagement.unlink(exportDeclaration, serviceReference);
-            } else if (!isAlreadyLinked && canBeLinked) {
-                linkerManagement.link(exportDeclaration, serviceReference);
-            }
+        if(exportersManager.matched(serviceReference)){
+            exportersManager.updateLinks(serviceReference);
+        } else {
+            exportersManager.removeLinks(serviceReference);
         }
     }
 

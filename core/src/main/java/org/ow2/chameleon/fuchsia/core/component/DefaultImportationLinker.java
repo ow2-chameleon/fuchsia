@@ -173,14 +173,10 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
             importersManager.removeLinks(serviceReference);
             return;
         }
-        for (ImportDeclaration importDeclaration : declarationsManager.getMatchedDeclaration()) {
-            boolean isAlreadyLinked = importDeclaration.getStatus().getServiceReferencesBounded().contains(serviceReference);
-            boolean canBeLinked = linkerManagement.canBeLinked(importDeclaration, serviceReference);
-            if (isAlreadyLinked && !canBeLinked) {
-                linkerManagement.unlink(importDeclaration, serviceReference);
-            } else if (!isAlreadyLinked && canBeLinked) {
-                linkerManagement.link(importDeclaration, serviceReference);
-            }
+        if(importersManager.matched(serviceReference)){
+            importersManager.updateLinks(serviceReference);
+        } else {
+            importersManager.removeLinks(serviceReference);
         }
     }
 
