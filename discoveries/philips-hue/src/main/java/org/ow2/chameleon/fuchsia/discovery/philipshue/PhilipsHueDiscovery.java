@@ -68,11 +68,6 @@ public class PhilipsHueDiscovery extends AbstractDiscoveryComponent implements P
         isRunning=false;
     }
 
-    @Override
-    public Logger getLogger() {
-        return LoggerFactory.getLogger(this.getClass());
-    }
-
     public String getName() {
         return name;
     }

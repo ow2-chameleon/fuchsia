@@ -122,11 +122,6 @@ public class ProtobufferImporter extends AbstractImporterComponent {
 
     }
 
-    @Override
-    protected Logger getLogger() {
-        return LOG;
-    }
-
     public String getName() {
         return this.getClass().getSimpleName();
     }

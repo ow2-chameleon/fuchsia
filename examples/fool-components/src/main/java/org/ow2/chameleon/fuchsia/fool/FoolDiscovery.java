@@ -80,11 +80,6 @@ public class FoolDiscovery extends AbstractDiscoveryComponent {
         importDeclarations.clear();
     }
 
-    @Override
-    public Logger getLogger() {
-        return LOG;
-    }
-
     public String getName() {
         return name;
     }

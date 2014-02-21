@@ -110,11 +110,6 @@ public class PhilipsHueImporter extends AbstractImporterComponent {
         importDeclaration.unhandle(serviceReference);
     }
 
-    @Override
-    protected Logger getLogger() {
-        return LOG;
-    }
-
 
     public String getName() {
         return this.getClass().getSimpleName();

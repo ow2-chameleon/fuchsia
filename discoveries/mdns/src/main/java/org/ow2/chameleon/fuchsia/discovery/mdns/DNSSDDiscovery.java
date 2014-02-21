@@ -145,8 +145,4 @@ public class DNSSDDiscovery extends AbstractDiscoveryComponent implements Networ
         }
     }
 
-    @Override
-    public Logger getLogger() {
-        return LOG;
-    }
 }

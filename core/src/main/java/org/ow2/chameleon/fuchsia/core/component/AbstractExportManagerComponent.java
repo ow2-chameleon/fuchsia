@@ -71,8 +71,6 @@ public abstract class AbstractExportManagerComponent implements ExportManagerSer
         return bundleContext;
     }
 
-    public abstract Logger getLogger();
-
     public Set<ExportDeclaration> getExportDeclarations() {
         return declarationRegistrationManager.getDeclarations();
     }

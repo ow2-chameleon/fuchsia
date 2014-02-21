@@ -170,8 +170,4 @@ public class JAXWSImporter extends AbstractImporterComponent {
         map.remove(importDeclaration);
     }
 
-    @Override
-    protected Logger getLogger() {
-        return LOG;
-    }
 }

@@ -74,11 +74,6 @@ public class FileBasedDiscoveryExportBridge extends AbstractDiscoveryComponent i
         LOG.info("Filebased Export discovery stopped.");
     }
 
-    @Override
-    public Logger getLogger() {
-        return LOG;
-    }
-
     public String getName() {
         return name;
     }

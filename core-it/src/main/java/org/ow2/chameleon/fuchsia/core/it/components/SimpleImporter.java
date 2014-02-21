@@ -33,11 +33,6 @@ public class SimpleImporter extends AbstractImporterComponent {
         return decs.size();
     }
 
-    @Override
-    protected Logger getLogger() {
-        return LOG;
-    }
-
     public String getName() {
         return "simpleImporter";
     }

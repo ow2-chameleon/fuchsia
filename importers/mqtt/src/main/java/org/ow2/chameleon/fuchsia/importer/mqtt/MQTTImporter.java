@@ -87,8 +87,4 @@ public class MQTTImporter extends AbstractImporterComponent {
         return name;
     }
 
-    public Logger getLogger() {
-        return LOG;
-    }
-
 }

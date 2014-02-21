@@ -221,8 +221,4 @@ public class SubscriptionImporter extends AbstractImporterComponent implements S
 
     }
 
-    @Override
-    protected Logger getLogger() {
-        return LOG;
-    }
 }

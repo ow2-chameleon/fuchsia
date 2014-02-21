@@ -3,7 +3,6 @@ package org.ow2.chameleon.fuchsia.core.component.test;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.osgi.framework.BundleContext;
@@ -12,12 +11,9 @@ import org.ow2.chameleon.fuchsia.core.component.AbstractDiscoveryComponent;
 import org.ow2.chameleon.fuchsia.core.declaration.Declaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclarationBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Dictionary;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -136,11 +132,6 @@ public class AbstractDiscoveryComponentTest {
 
         protected TestedClass(BundleContext bundleContext) {
             super(bundleContext);
-        }
-
-        @Override
-        public Logger getLogger() {
-            return LoggerFactory.getLogger(this.getClass());
         }
 
         public String getName() {

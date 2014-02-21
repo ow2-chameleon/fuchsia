@@ -132,11 +132,6 @@ public class BluetoothImporter extends AbstractImporterComponent {
         }
     }
 
-    @Override
-    protected Logger getLogger() {
-        return LOG;
-    }
-
 
     @Bind(aggregate = true, optional = true, filter = "(protocol=bluetooth)")
     private void bindBluetoothProxyFactories(Factory f, ServiceReference<Factory> sr) {

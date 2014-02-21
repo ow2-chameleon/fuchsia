@@ -176,10 +176,6 @@ public class JSONRPCImporter extends AbstractImporterComponent {
         }
     }
 
-    protected Logger getLogger() {
-        return LOG;
-    }
-
     public String getName() {
         return name;
     }

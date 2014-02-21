@@ -10,8 +10,6 @@ import org.ow2.chameleon.fuchsia.core.component.ImportationLinker;
 import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -139,11 +137,6 @@ public class AbstractImporterComponentTest {
         @Override
         protected void denyImportDeclaration(ImportDeclaration importDeclaration) {
             decs.remove(importDeclaration);
-        }
-
-        @Override
-        protected Logger getLogger() {
-            return LoggerFactory.getLogger(this.getClass());
         }
 
         public int nbProxies() {

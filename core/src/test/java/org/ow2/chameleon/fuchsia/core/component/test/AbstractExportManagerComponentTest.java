@@ -11,8 +11,6 @@ import org.ow2.chameleon.fuchsia.core.component.AbstractExportManagerComponent;
 import org.ow2.chameleon.fuchsia.core.declaration.Declaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclarationBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Dictionary;
 import java.util.HashMap;
@@ -134,11 +132,6 @@ public class AbstractExportManagerComponentTest {
 
         protected TestedClass(BundleContext bundleContext) {
             super(bundleContext);
-        }
-
-        @Override
-        public Logger getLogger() {
-            return LoggerFactory.getLogger(this.getClass());
         }
 
         public String getName() {

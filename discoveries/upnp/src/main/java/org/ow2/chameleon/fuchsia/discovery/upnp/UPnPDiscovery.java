@@ -53,11 +53,6 @@ public class UPnPDiscovery extends AbstractDiscoveryComponent {
         LOG.debug("UPnP discovery: stopped.");
     }
 
-    @Override
-    public Logger getLogger() {
-        return LOG;
-    }
-
     public String getName() {
         return name;
     }

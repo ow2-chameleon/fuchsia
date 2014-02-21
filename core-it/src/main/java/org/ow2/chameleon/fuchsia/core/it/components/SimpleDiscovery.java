@@ -42,11 +42,6 @@ public class SimpleDiscovery extends AbstractDiscoveryComponent implements Simul
         super.stop();
     }
 
-    @Override
-    public Logger getLogger() {
-        return LOG;
-    }
-
     public String getName() {
         return "name";
     }

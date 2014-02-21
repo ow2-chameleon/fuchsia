@@ -131,11 +131,6 @@ public class BluetoothDiscovery extends AbstractDiscoveryComponent {
         bluetoothDevices.clear();
     }
 
-    @Override
-    public Logger getLogger() {
-        return LOG;
-    }
-
 
     public String getName() {
         return name;

@@ -74,11 +74,6 @@ public class FileBasedDiscoveryImportBridge extends AbstractDiscoveryComponent i
         LOG.info("Filebased Import discovery  stopped.");
     }
 
-    @Override
-    public Logger getLogger() {
-        return LOG;
-    }
-
     public String getName() {
         return name;
     }

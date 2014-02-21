@@ -1,7 +1,5 @@
 package org.ow2.chameleon.fuchsia.core.component.manager.test;
 
-import org.apache.felix.ipojo.annotations.Component;
-import org.apache.felix.ipojo.annotations.Provides;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,7 +7,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.osgi.framework.*;
 import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
-import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 import org.ow2.chameleon.fuchsia.core.component.manager.DeclarationBinder;
 import org.ow2.chameleon.fuchsia.core.component.manager.LinkerManagement;
 import org.ow2.chameleon.fuchsia.core.declaration.Declaration;
@@ -135,11 +132,6 @@ public class LinkerManagementTest {
 
         public int nbProxies() {
             return decs.size();
-        }
-
-        @Override
-        protected Logger getLogger() {
-            return LOG;
         }
 
         public String getName() {

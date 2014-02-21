@@ -32,11 +32,6 @@ public abstract class AbstractImporterComponent implements ImporterService, Impo
     protected abstract void denyImportDeclaration(final ImportDeclaration importDeclaration) throws BinderException;
 
     /**
-     *
-     */
-    protected abstract Logger getLogger();
-
-    /**
      * Stop the Importer component, iPOJO Invalidate instance callback.
      * Must be override !
      */

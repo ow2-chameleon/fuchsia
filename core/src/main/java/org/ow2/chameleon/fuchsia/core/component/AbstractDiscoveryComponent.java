@@ -20,7 +20,6 @@ public abstract class AbstractDiscoveryComponent implements DiscoveryService, Di
     private final DeclarationRegistrationManager<ImportDeclaration> declarationRegistrationManager;
     private final BundleContext bundleContext;
 
-
     protected AbstractDiscoveryComponent(BundleContext bundleContext) {
         this.bundleContext = bundleContext;
         declarationRegistrationManager = new DeclarationRegistrationManager<ImportDeclaration>(bundleContext, ImportDeclaration.class);
@@ -74,5 +73,4 @@ public abstract class AbstractDiscoveryComponent implements DiscoveryService, Di
         return bundleContext;
     }
 
-    public abstract Logger getLogger();
 }

@@ -95,11 +95,6 @@ public class GpIOImporter extends AbstractImporterComponent {
 
     }
 
-    @Override
-    protected Logger getLogger() {
-        return LOG;
-    }
-
 
     public String getName() {
         return this.getClass().getSimpleName();
