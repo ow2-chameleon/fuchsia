@@ -146,36 +146,29 @@ public class JAXWSExporter extends AbstractExporterComponent {
         CXFNonSpringServlet cxfServlet = new CXFNonSpringServlet();
 
         try {
-            http.registerServlet(Constants.CXF_SERVLET, cxfServlet, null, null);
+
+            if(http!=null){
+                http.registerServlet(Constants.CXF_SERVLET, cxfServlet, null, null);
+            }else {
+
+                try {
+
+                    cxfServlet=configStandaloneServer();
+
+                    httpServer.start();
+
+                } catch (Exception e1) {
+                    LOG.error("Impossible to start standalone CXF Jetty server.",e1);
+                }
+
+
+
+            }
+
         } catch (ServletException e) {
             LOG.error("Failed registering CXF servlet", e);
         } catch (NamespaceException e) {
             LOG.error("Failed registering CXF servlet", e);
-        } catch (NullPointerException e){
-
-            httpServer=new Server(HTTP_PORT);
-
-            Bus bus = BusFactory.getDefaultBus(true);
-            ContextHandlerCollection contexts = new ContextHandlerCollection();
-            httpServer.setHandler(contexts);
-
-            ServletContextHandler root = new ServletContextHandler(contexts, "/",
-                    ServletContextHandler.SESSIONS);
-            CXFServlet cxf = new CXFServlet();
-            cxf.setBus(bus);
-
-            ServletHolder servlet = new ServletHolder(cxf);
-
-            root.addServlet(servlet, "/cxf/*");
-
-            try {
-                httpServer.start();
-            } catch (Exception e1) {
-                LOG.error("Impossible to start standalone CXF Jetty server.",e);
-            }
-
-            cxfServlet=cxf;
-
         }
 
         cxfbus = cxfServlet.getBus();
@@ -200,6 +193,34 @@ public class JAXWSExporter extends AbstractExporterComponent {
         for(Map.Entry<String,org.apache.cxf.endpoint.Server> item:exportedDeclaration.entrySet()){
             item.getValue().destroy();
         }
+
+    }
+
+    private CXFServlet configStandaloneServer(){
+
+        httpServer=new Server(HTTP_PORT);
+
+        Bus bus = BusFactory.getDefaultBus(true);
+
+        ContextHandlerCollection contexts = new ContextHandlerCollection();
+
+        httpServer.setHandler(contexts);
+
+        ServletContextHandler root = new ServletContextHandler(contexts, "/",
+                ServletContextHandler.SESSIONS);
+
+        CXFServlet cxf = new CXFServlet();
+
+        cxf.setBus(bus);
+
+        ServletHolder servlet = new ServletHolder(cxf);
+
+        root.addServlet(servlet, "/cxf/*");
+
+        return cxf;
+
+
+
 
     }
 
