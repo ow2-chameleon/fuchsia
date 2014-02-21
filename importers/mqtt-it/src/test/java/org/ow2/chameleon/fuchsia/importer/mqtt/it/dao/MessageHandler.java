@@ -8,20 +8,18 @@ import org.slf4j.LoggerFactory;
 import java.util.Arrays;
 
 public  class MessageHandler implements EventHandler {
+
+    private static final Logger LOG = LoggerFactory.getLogger(MessageHandler.class);
+
     public void handleEvent(Event event) {
 
         if(event!=null){
-
-            getLogger().info("<eventadmin type='inbound'>");
-            getLogger().info("\tTOPIC: {}",event.getTopic());
-            getLogger().info("\tProperty names: {}", Arrays.asList(event.getPropertyNames()));
-            getLogger().info("</eventadmin>\n");
-
+            LOG.info("<eventadmin type='inbound'>");
+            LOG.info("\tTOPIC: {}",event.getTopic());
+            LOG.info("\tProperty names: {}", Arrays.asList(event.getPropertyNames()));
+            LOG.info("</eventadmin>\n");
         }
 
     }
 
-    public Logger getLogger() {
-        return LoggerFactory.getLogger(this.getClass());
-    }
 }

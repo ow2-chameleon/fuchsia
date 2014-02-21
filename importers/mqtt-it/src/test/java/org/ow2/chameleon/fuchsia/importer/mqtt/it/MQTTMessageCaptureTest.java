@@ -32,8 +32,8 @@ import java.util.Properties;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.*;
-import static org.ow2.chameleon.fuchsia.core.ImportationLinker.FILTER_IMPORTDECLARATION_PROPERTY;
-import static org.ow2.chameleon.fuchsia.core.ImportationLinker.FILTER_IMPORTERSERVICE_PROPERTY;
+import static org.ow2.chameleon.fuchsia.core.component.ImportationLinker.FILTER_IMPORTDECLARATION_PROPERTY;
+import static org.ow2.chameleon.fuchsia.core.component.ImportationLinker.FILTER_IMPORTERSERVICE_PROPERTY;
 
 /**
  * Test class MQTT
@@ -135,10 +135,10 @@ public class MQTTMessageCaptureTest extends RabbitMQTestSuite {
 
         assertThat(connection.isConnected()).isTrue();
 
-        getLogger().info("<eventadmin type='outbound'>");
-        getLogger().info("\tTOPIC: {}",topic);
-        getLogger().info("\tQuote: {}",quote);
-        getLogger().info("</eventadmin>\n");
+        LOG.info("<eventadmin type='outbound'>");
+        LOG.info("\tTOPIC: {}",topic);
+        LOG.info("\tQuote: {}",quote);
+        LOG.info("</eventadmin>\n");
 
         connection.publish(topic, quote.getBytes(), QoS.AT_MOST_ONCE, false);
 

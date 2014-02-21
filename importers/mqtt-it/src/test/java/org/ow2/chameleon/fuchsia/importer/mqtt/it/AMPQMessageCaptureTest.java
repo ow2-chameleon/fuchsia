@@ -30,8 +30,8 @@ import java.io.IOException;
 import java.util.*;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.*;
-import static org.ow2.chameleon.fuchsia.core.ImportationLinker.FILTER_IMPORTDECLARATION_PROPERTY;
-import static org.ow2.chameleon.fuchsia.core.ImportationLinker.FILTER_IMPORTERSERVICE_PROPERTY;
+import static org.ow2.chameleon.fuchsia.core.component.ImportationLinker.FILTER_IMPORTDECLARATION_PROPERTY;
+import static org.ow2.chameleon.fuchsia.core.component.ImportationLinker.FILTER_IMPORTERSERVICE_PROPERTY;
 
 /**
  * Test class AMQP (low level) message receiving
@@ -203,10 +203,10 @@ public class AMPQMessageCaptureTest extends RabbitMQTestSuite {
         final String topic="public";
         final String quote = "The force of mind is only as great as its expression; its depth only as deep as its power to expand and lose itself";
 
-        getLogger().info("<eventadmin type='outbound'>");
-        getLogger().info("\tTOPIC: {}",topic);
-        getLogger().info("\tQuote: {}",quote);
-        getLogger().info("</eventadmin>\n");
+        LOG.info("<eventadmin type='outbound'>");
+        LOG.info("\tTOPIC: {}",topic);
+        LOG.info("\tQuote: {}",quote);
+        LOG.info("</eventadmin>\n");
 
         channel.basicPublish("", topic, null, quote.getBytes());
 

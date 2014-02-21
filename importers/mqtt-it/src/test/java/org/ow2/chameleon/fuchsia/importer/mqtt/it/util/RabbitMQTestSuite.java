@@ -24,6 +24,8 @@ import static org.ops4j.pax.exam.CoreOptions.*;
 
 public class RabbitMQTestSuite extends BaseTest {
 
+    protected static final Logger LOG = LoggerFactory.getLogger(RabbitMQTestSuite.class);
+
     @Inject
     protected BundleContext bundleContext;
 
@@ -106,10 +108,6 @@ public class RabbitMQTestSuite extends BaseTest {
 
     }
 
-    public Logger getLogger() {
-        return LoggerFactory.getLogger(this.getClass());
-    }
-
     /**
      * Verify is Rabbit MQ service is available in the current platform
      * @return the availability of the rabbitmq daemon, true in case its available, or false otherwise
@@ -126,7 +124,7 @@ public class RabbitMQTestSuite extends BaseTest {
 
             final String message="RabbitMQ service not available, ignoring test";
 
-            getLogger().warn(message);
+            LOG.warn(message);
 
             throw new AssumptionViolatedException(message);
         }
