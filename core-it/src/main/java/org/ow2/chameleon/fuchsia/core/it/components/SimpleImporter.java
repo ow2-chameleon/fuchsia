@@ -15,8 +15,6 @@ import java.util.HashSet;
 @Provides(specifications = {ImporterService.class, SimpleImporter.class})
 public class SimpleImporter extends AbstractImporterComponent {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SimpleImporter.class);
-
     private final Collection<ImportDeclaration> decs = new HashSet<ImportDeclaration>();
 
     @Override

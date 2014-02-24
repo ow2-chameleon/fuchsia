@@ -1,13 +1,9 @@
 package org.ow2.chameleon.fuchsia.core.component.manager;
 
-import com.sun.swing.internal.plaf.synth.resources.synth_sv;
-import org.apache.felix.ipojo.util.SystemPropertiesSource;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
 import org.osgi.framework.ServiceReference;
-import org.ow2.chameleon.fuchsia.core.component.ExporterService;
 import org.ow2.chameleon.fuchsia.core.declaration.Declaration;
-import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
 import org.ow2.chameleon.fuchsia.core.exceptions.InvalidFilterException;
 
 import java.util.HashMap;
@@ -118,18 +114,13 @@ public class LinkerBinderManager<D extends Declaration, S extends DeclarationBin
      * @param declarationBinderRef the ServiceReference<DeclarationBinder> of the DeclarationBinder
      */
     public void updateLinks(ServiceReference<S> serviceReference) {
-        System.err.println("UPDATE LINKS");
         for (D declaration : linkerManagement.getMatchedDeclaration()) {
             boolean isAlreadyLinked = declaration.getStatus().getServiceReferencesBounded().contains(serviceReference);
             boolean canBeLinked = linkerManagement.canBeLinked(declaration, serviceReference);
             if (isAlreadyLinked && !canBeLinked) {
-                System.err.println("UNLINK");
                 linkerManagement.unlink(declaration, serviceReference);
             } else if (!isAlreadyLinked && canBeLinked) {
-                System.err.println("NEW LINK");
                 linkerManagement.link(declaration, serviceReference);
-            }else{
-                System.err.println("NOTHING isAlreadyLinked="+isAlreadyLinked+" ,canBeLinked="+canBeLinked);
             }
         }
     }
