@@ -18,8 +18,8 @@ public class ContentUpdatedNotificationServlet extends HttpServlet {
 
     private HubInput hub;
 
-    public ContentUpdatedNotificationServlet(HubInput hub){
-        this.hub=hub;
+    public ContentUpdatedNotificationServlet(HubInput hub) {
+        this.hub = hub;
     }
 
     @Override
@@ -37,13 +37,15 @@ public class ContentUpdatedNotificationServlet extends HttpServlet {
 
             LOG.info("Publisher -> (Hub), new content notification received for the topic {}", cn.getUrl());
 
-            hub.ContentNotificationReceived(cn);
+            hub.contentNotificationReceived(cn);
 
         } catch (InvalidContentNotification invalidContentNotification) {
             LOG.error("Failed to parse notification", invalidContentNotification);
-            resp.setStatus(400); //bad request
+            //bad request
+            resp.setStatus(400);
         } finally {
-            resp.setStatus(204); //no content (notification accepted)
+            //no content (notification accepted)
+            resp.setStatus(204);
         }
 
     }

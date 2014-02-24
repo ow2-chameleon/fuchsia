@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.ow2.chameleon.fuchsia.push.base.hub.HubConstants.*;
+
 public class SubscriptionRequest {
 
     String callback;
@@ -15,12 +17,12 @@ public class SubscriptionRequest {
     String topic;
     String verify;
 
-    public SubscriptionRequest(String callback,String mode, String topic, String verify){
+    public SubscriptionRequest(String callback, String mode, String topic, String verify) {
 
-        this.callback=callback;
-        this.mode=mode;
-        this.topic=topic;
-        this.verify=verify;
+        this.callback = callback;
+        this.mode = mode;
+        this.topic = topic;
+        this.verify = verify;
 
     }
 
@@ -28,24 +30,24 @@ public class SubscriptionRequest {
 
         validateRequest(request);
 
-        SubscriptionRequest sr=new SubscriptionRequest(
-                request.getParameter("hub.callback"),
-                request.getParameter("hub.mode"),
-                request.getParameter("hub.topic"),
-                request.getParameter("hub.verify")
-                );
+        SubscriptionRequest sr = new SubscriptionRequest(
+                request.getParameter(HUB_CALLBACK),
+                request.getParameter(HUB_MODE),
+                request.getParameter(HUB_TOPIC),
+                request.getParameter(HUB_VERIFY)
+        );
 
         return sr;
 
     }
 
-    public List<NameValuePair> toRequestParameters(){
+    public List<NameValuePair> toRequestParameters() {
 
-        List <NameValuePair> nvps = new ArrayList<NameValuePair>();
-        nvps.add(new BasicNameValuePair("hub.callback", getCallback()));
-        nvps.add(new BasicNameValuePair("hub.mode", getMode()));
-        nvps.add(new BasicNameValuePair("hub.topic", getTopic()));
-        nvps.add(new BasicNameValuePair("hub.verify", getVerify()));
+        List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+        nvps.add(new BasicNameValuePair(HUB_CALLBACK, getCallback()));
+        nvps.add(new BasicNameValuePair(HUB_MODE, getMode()));
+        nvps.add(new BasicNameValuePair(HUB_TOPIC, getTopic()));
+        nvps.add(new BasicNameValuePair(HUB_VERIFY, getVerify()));
 
         return nvps;
 
@@ -53,12 +55,12 @@ public class SubscriptionRequest {
 
     private static void validateRequest(HttpServletRequest request) throws InvalidContentNotification {
 
-        if(
-                request.getParameter("hub.callback")==null ||
-                request.getParameter("hub.mode")==null ||
-                request.getParameter("hub.topic")==null ||
-                request.getParameter("hub.verify")==null
-         ){
+        if (
+                request.getParameter(HUB_CALLBACK) == null ||
+                        request.getParameter(HUB_MODE) == null ||
+                        request.getParameter(HUB_TOPIC) == null ||
+                        request.getParameter(HUB_VERIFY) == null
+                ) {
             throw new InvalidContentNotification("Parameters requested not defined in the request");
         }
     }

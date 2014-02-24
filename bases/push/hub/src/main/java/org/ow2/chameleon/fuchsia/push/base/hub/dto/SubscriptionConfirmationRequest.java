@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.ow2.chameleon.fuchsia.push.base.hub.HubConstants.*;
+
 /**
  * Created with IntelliJ IDEA.
  * User: jnascimento
@@ -17,17 +19,18 @@ import java.util.List;
  */
 public class SubscriptionConfirmationRequest {
 
+
     private final String mode;
     private final String topic;
     private final String challenge;
     private final String lease;
 
-    public SubscriptionConfirmationRequest(String mode, String topic, String challenge, String lease){
+    public SubscriptionConfirmationRequest(String mode, String topic, String challenge, String lease) {
 
-        this.mode=mode;
-        this.topic=topic;
-        this.challenge=challenge;
-        this.lease=lease;
+        this.mode = mode;
+        this.topic = topic;
+        this.challenge = challenge;
+        this.lease = lease;
 
     }
 
@@ -35,32 +38,32 @@ public class SubscriptionConfirmationRequest {
 
         validateRequest(request);
 
-        return new  SubscriptionConfirmationRequest(
-                request.getParameter("hub.mode"),
-                request.getParameter("hub.topic"),
-                request.getParameter("hub.challenge"),
-                request.getParameter("hub.lease_seconds")
-                );
+        return new SubscriptionConfirmationRequest(
+                request.getParameter(HUB_MODE),
+                request.getParameter(HUB_TOPIC),
+                request.getParameter(HUB_CHALLENGE),
+                request.getParameter(HUB_LEASE_SECONDS)
+        );
 
     }
 
     private static void validateRequest(HttpServletRequest request) throws InvalidContentNotification {
 
-        if(request.getParameter("hub.mode")==null||
-                request.getParameter("hub.topic")==null||
-                request.getParameter("hub.challenge")==null||
-                request.getParameter("hub.lease_seconds")==null){
+        if (request.getParameter(HUB_MODE) == null ||
+                request.getParameter(HUB_TOPIC) == null ||
+                request.getParameter(HUB_CHALLENGE) == null ||
+                request.getParameter(HUB_LEASE_SECONDS) == null) {
             throw new InvalidContentNotification("No enough information provided");
         }
     }
 
-    public List<NameValuePair> toRequestParameters(){
+    public List<NameValuePair> toRequestParameters() {
 
-        List <NameValuePair> nvps = new ArrayList<NameValuePair>();
-        nvps.add(new BasicNameValuePair("hub.mode", getMode()));
-        nvps.add(new BasicNameValuePair("hub.topic", getTopic()));
-        nvps.add(new BasicNameValuePair("hub.challenge", getChallenge()));
-        nvps.add(new BasicNameValuePair("hub.lease_seconds", getLease()));
+        List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+        nvps.add(new BasicNameValuePair(HUB_MODE, getMode()));
+        nvps.add(new BasicNameValuePair(HUB_TOPIC, getTopic()));
+        nvps.add(new BasicNameValuePair(HUB_CHALLENGE, getChallenge()));
+        nvps.add(new BasicNameValuePair(HUB_LEASE_SECONDS, getLease()));
 
         return nvps;
 

@@ -11,14 +11,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public  class SubscriptionServlet extends HttpServlet {
+public class SubscriptionServlet extends HttpServlet {
 
     private HubInput hub;
 
     private static final Logger LOG = LoggerFactory.getLogger(SubscriptionServlet.class);
 
-    public SubscriptionServlet(HubInput hub){
-        this.hub=hub;
+    public SubscriptionServlet(HubInput hub) {
+        this.hub = hub;
     }
 
     @Override
@@ -30,7 +30,7 @@ public  class SubscriptionServlet extends HttpServlet {
         try {
             subscriptionRequest = SubscriptionRequest.from(req);
 
-            hub.SubscriptionRequestReceived(subscriptionRequest);
+            hub.subscriptionRequestReceived(subscriptionRequest);
 
             resp.setStatus(204);
 

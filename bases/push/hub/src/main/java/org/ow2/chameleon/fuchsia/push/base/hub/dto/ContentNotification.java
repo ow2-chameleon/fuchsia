@@ -8,35 +8,36 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.ow2.chameleon.fuchsia.push.base.hub.HubConstants.*;
+
 public class ContentNotification {
 
     private String mode;
     private String url;
 
-    public ContentNotification(String mode,String url){
-        this.mode=mode;
-        this.url=url;
+    public ContentNotification(String mode, String url) {
+        this.mode = mode;
+        this.url = url;
     }
 
     public static ContentNotification from(HttpServletRequest request) throws InvalidContentNotification {
 
         validateRequest(request);
 
-        ContentNotification cn=new ContentNotification(
-                request.getParameter("hub.mode"),
-                request.getParameter("hub.url")
+        ContentNotification cn = new ContentNotification(
+                request.getParameter(HUB_MODE),
+                request.getParameter(HUB_URL)
         );
-
 
 
         return cn;
     }
 
-    public List<NameValuePair> toRequesParameters(){
+    public List<NameValuePair> toRequesParameters() {
 
-        List <NameValuePair> nvps = new ArrayList<NameValuePair>();
-        nvps.add(new BasicNameValuePair("hub.mode", getMode()));
-        nvps.add(new BasicNameValuePair("hub.url", getUrl()));
+        List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+        nvps.add(new BasicNameValuePair(HUB_MODE, getMode()));
+        nvps.add(new BasicNameValuePair(HUB_URL, getUrl()));
 
         return nvps;
 
@@ -52,16 +53,16 @@ public class ContentNotification {
 
     private static void validateRequest(HttpServletRequest request) throws InvalidContentNotification {
 
-        if(!request.getContentType().equals("application/x-www-form-urlencoded")){
+        if (!"application/x-www-form-urlencoded".equals(request.getContentType())) {
             throw new InvalidContentNotification("Invalid content type");
         }
 
-        if(request.getParameter("hub.mode")==null){
-            throw new InvalidContentNotification("No hub.mode provided");
+        if (request.getParameter(HUB_MODE) == null) {
+            throw new InvalidContentNotification("No " + HUB_MODE + " provided");
         }
 
-        if(request.getParameter("hub.url")==null){
-            throw new InvalidContentNotification("No hub.url provided");
+        if (request.getParameter(HUB_URL) == null) {
+            throw new InvalidContentNotification("No " + HUB_URL + " provided");
         }
     }
 }

@@ -31,7 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Component(name="PuSHHubFactory")
+@Component(name = "PuSHHubFactory")
 public class HubImpl implements Hub {
 
     private static final Logger LOG = LoggerFactory.getLogger(HubImpl.class);
@@ -43,7 +43,9 @@ public class HubImpl implements Hub {
 
     Map<String, List<String>> topicCallbackSubscriptionMap = new HashMap<String, List<String>>();
 
-    public HubImpl() {}
+    public HubImpl() {
+
+    }
 
     public HubImpl(BundleContext context) {
         this.context = context;
@@ -69,34 +71,36 @@ public class HubImpl implements Hub {
     /**
      * Input method, called by a Publisher indicating that a new content is available. This method should either analyse
      * the http header info to verify that changes were really made or download the content and verify for himself if the content has changed
+     *
      * @param cn DTO with the notification info given by the protocol
      */
-    public void ContentNotificationReceived(ContentNotification cn) {
+    public void contentNotificationReceived(ContentNotification cn) {
 
         LOG.info("Publisher -> (Hub), notification of new content available for the topic {}.", cn.getUrl());
 
-        NotifySubscriberCallback(cn);
+        notifySubscriberCallback(cn);
 
     }
 
     /**
      * Input method, called by a Subscriber indicating its intent into receive notification about a given topic
+     *
      * @param sr DTO containing the info given by the protocol
      */
-    public void SubscriptionRequestReceived(SubscriptionRequest sr) throws SubscriptionException {
+    public void subscriptionRequestReceived(SubscriptionRequest sr) throws SubscriptionException {
 
         LOG.info("Subscriber -> (Hub), new subscription request received.", sr.getCallback());
 
         try {
 
-            VerifySubscriberRequestedSubscription(sr);
+            verifySubscriberRequestedSubscription(sr);
 
-            if(sr.getMode().equals("subscribe")){
+            if ("subscribe".equals(sr.getMode())) {
                 LOG.info("Adding callback {} to the topic {}", sr.getCallback(), sr.getTopic());
-                addCallbackToTopic(sr.getCallback(),sr.getTopic());
-            }else if(sr.getMode().equals("unsubscribe")){
+                addCallbackToTopic(sr.getCallback(), sr.getTopic());
+            } else if ("unsubscribe".equals(sr.getMode())) {
                 LOG.info("Removing callback {} from the topic {}", sr.getCallback(), sr.getTopic());
-                removeCallbackToTopic(sr.getCallback(),sr.getTopic());
+                removeCallbackToTopic(sr.getCallback(), sr.getTopic());
             }
 
         } catch (Exception e) {
@@ -107,78 +111,84 @@ public class HubImpl implements Hub {
 
     /**
      * Output method that sends a subscription confirmation for the subscriber to avoid DoS attacks, or false subscription
+     *
      * @param sr
      * @return True case the subscription was confirmed, or False otherwise
      * @throws org.ow2.chameleon.fuchsia.push.base.hub.exception.SubscriptionOriginVerificationException
-     * @throws URISyntaxException
-     * @throws IOException
      */
-    public Boolean VerifySubscriberRequestedSubscription(SubscriptionRequest sr) throws SubscriptionOriginVerificationException, URISyntaxException, IOException {
+    public Boolean verifySubscriberRequestedSubscription(SubscriptionRequest sr) throws SubscriptionOriginVerificationException {
 
         LOG.info("(Hub) -> Subscriber, sending notification to verify the origin of the subscription {}.", sr.getCallback());
 
         SubscriptionConfirmationRequest sc = new SubscriptionConfirmationRequest(sr.getMode(),
                 sr.getTopic(), "challenge", "0");
 
-        URI uri = new URIBuilder(sr.getCallback()).setParameters(sc.toRequestParameters()).build();
+        URI uri;
+        try {
+            uri = new URIBuilder(sr.getCallback()).setParameters(sc.toRequestParameters()).build();
+        } catch (URISyntaxException e) {
+            throw new SubscriptionOriginVerificationException("URISyntaxException while sending a confirmation of subscription", e);
+        }
 
         HttpGet httpGet = new HttpGet(uri);
 
         CloseableHttpClient httpclient = HttpClients.createDefault();
 
-        CloseableHttpResponse response1 = httpclient.execute(httpGet);
-
-        LOG.info("Subscriber replied with the http code {}.", response1.getStatusLine().getStatusCode());
-
-        Integer returnedCode=response1.getStatusLine().getStatusCode();
-
-        if(returnedCode>199 && returnedCode<300){
-            return true;
+        CloseableHttpResponse response;
+        try {
+            response = httpclient.execute(httpGet);
+        } catch (IOException e) {
+            throw new SubscriptionOriginVerificationException("IOException while sending a confirmation of subscription", e);
         }
 
-        return false;
+        LOG.info("Subscriber replied with the http code {}.", response.getStatusLine().getStatusCode());
+
+        Integer returnedCode = response.getStatusLine().getStatusCode();
+
+        return (returnedCode > 199) && (returnedCode < 300);
     }
 
     /**
      * Output method responsible for sending the updated content to the Subscribers
+     *
      * @param cn
      */
-    public void NotifySubscriberCallback(ContentNotification cn) {
+    public void notifySubscriberCallback(ContentNotification cn) {
 
-        String content=fetchContentFromPublisher(cn);
+        String content = fetchContentFromPublisher(cn);
 
         distributeContentToSubscribers(content, cn.getUrl());
 
 
     }
 
-    private void addCallbackToTopic(String callback,String topic){
+    private void addCallbackToTopic(String callback, String topic) {
 
         List<String> callbacks = topicCallbackSubscriptionMap.get(topic);
 
         if (callbacks == null) {
             callbacks = new ArrayList<String>();
-            topicCallbackSubscriptionMap.put(topic,callbacks);
+            topicCallbackSubscriptionMap.put(topic, callbacks);
         }
 
         callbacks.add(callback);
 
     }
 
-    private void removeCallbackToTopic(String callback,String topic){
+    private void removeCallbackToTopic(String callback, String topic) {
 
         List<String> callbacks = topicCallbackSubscriptionMap.get(topic);
 
         if (callbacks == null) {
             callbacks = new ArrayList<String>();
-            topicCallbackSubscriptionMap.put(topic,callbacks);
+            topicCallbackSubscriptionMap.put(topic, callbacks);
         }
 
-        Boolean removedFromList=callbacks.remove(callback);
+        Boolean removedFromList = callbacks.remove(callback);
 
-        if(removedFromList){
+        if (removedFromList) {
             LOG.info("Hub, callback {} removed from the topic {}", callback, topic);
-        }else {
+        } else {
             LOG.info("Hub, callback {} was not present for the topic {}", callback, topic);
         }
 
@@ -196,7 +206,7 @@ public class HubImpl implements Hub {
 
             CloseableHttpResponse response = httpclient.execute(httpGet);
 
-            String contentReceived=inputStreamToString(response.getEntity().getContent());
+            String contentReceived = inputStreamToString(response.getEntity().getContent());
 
             LOG.info("(Hub) -> Publisher, Content fetched from publisher \n{}\n", contentReceived);
 
@@ -215,32 +225,33 @@ public class HubImpl implements Hub {
 
         List<String> callbacks = topicCallbackSubscriptionMap.get(topic);
 
-        System.out.println(String.format("The topic [%s] has the callbacks %s",topic,callbacks));
+        LOG.info(String.format("The topic [%s] has the callbacks %s", topic, callbacks));
 
 
-        if(callbacks!=null)
-        for (String callback : callbacks) {
+        if (callbacks != null) {
+            for (String callback : callbacks) {
 
-            HttpPost httpPost = new HttpPost(callback);
+                HttpPost httpPost = new HttpPost(callback);
 
-            try {
+                try {
 
-                httpPost.setEntity(new StringEntity(content));
-                httpPost.setHeader("Content-Type","application/atom+xml");
-                System.out.println("publisher --> Distributed content to callback: " + callback);
+                    httpPost.setEntity(new StringEntity(content));
+                    httpPost.setHeader("Content-Type", "application/atom+xml");
+                    LOG.info("publisher --> Distributed content to callback: " + callback);
 
-                CloseableHttpClient httpclient = HttpClients.createDefault();
+                    CloseableHttpClient httpclient = HttpClients.createDefault();
 
-                LOG.info("(Hub) -> Subscriber, send content to subscriber {}", callback);
+                    LOG.info("(Hub) -> Subscriber, send content to subscriber {}", callback);
 
-                CloseableHttpResponse response=httpclient.execute(httpPost);
+                    CloseableHttpResponse response = httpclient.execute(httpPost);
 
-                LOG.info("(Hub) -> Subscriber, subcribers response {}", response.getStatusLine().getStatusCode());
+                    LOG.info("(Hub) -> Subscriber, subcribers response {}", response.getStatusLine().getStatusCode());
 
-            } catch (Exception e) {
+                } catch (Exception e) {
 
-                LOG.info("Failed distributing content to subscribers", e);
+                    LOG.info("Failed distributing content to subscribers", e);
 
+                }
             }
         }
 
@@ -257,7 +268,6 @@ public class HubImpl implements Hub {
         in.close();
         return sb.toString();
     }
-
 
 
 }

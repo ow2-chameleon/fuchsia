@@ -1,21 +1,21 @@
 package org.ow2.chameleon.fuchsia.push.base.hub.exception;
 
 
-public class SubscriptionOriginVerificationException extends Exception{
+public class SubscriptionOriginVerificationException extends Exception {
 
     public SubscriptionOriginVerificationException() {
-        super();    //To change body of overridden methods use File | Settings | File Templates.
+        super();
     }
 
     public SubscriptionOriginVerificationException(String message) {
-        super(message);    //To change body of overridden methods use File | Settings | File Templates.
+        super(message);
     }
 
     public SubscriptionOriginVerificationException(String message, Throwable cause) {
-        super(message, cause);    //To change body of overridden methods use File | Settings | File Templates.
+        super(message, cause);
     }
 
     public SubscriptionOriginVerificationException(Throwable cause) {
-        super(cause);    //To change body of overridden methods use File | Settings | File Templates.
+        super(cause);
     }
 }
