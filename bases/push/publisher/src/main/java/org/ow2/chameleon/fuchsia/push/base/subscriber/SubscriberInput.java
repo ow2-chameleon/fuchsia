@@ -7,8 +7,8 @@ import org.ow2.chameleon.fuchsia.push.base.subscriber.exception.ActionNotRequest
 
 public interface SubscriberInput {
 
-    void TopicUpdated(String hubtopic, SyndFeed feed);
+    void topicUpdated(String hubtopic, SyndFeed feed);
 
-    void ConfirmSubscriberRequestedSubscription(SubscriptionConfirmationRequest cr) throws InvalidContentNotification, ActionNotRequestedByTheSubscriberException;
+    void confirmSubscriberRequestedSubscription(SubscriptionConfirmationRequest cr) throws InvalidContentNotification, ActionNotRequestedByTheSubscriberException;
 
 }

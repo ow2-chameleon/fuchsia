@@ -22,38 +22,40 @@ import java.util.List;
 @Instantiate
 public class Publisher extends HttpServlet {
 
+    private static final Logger LOG = LoggerFactory.getLogger(Publisher.class);
+
+    private static final String PUBLISHER_URL = "/publisher/main";
+
     @Requires
     HttpService http;
 
-    private static final Logger log= LoggerFactory.getLogger(Publisher.class);
-
     BundleContext context;
 
-    private static String PUBLISHER_URL="/publisher/main";
 
-    public Publisher(){
+
+    public Publisher() {
 
     }
 
-    public Publisher(BundleContext context){
-        this.context=context;
+    public Publisher(BundleContext context) {
+        this.context = context;
     }
 
     @Validate
-    public void start(){
+    public void start() {
         try {
 
-            http.registerServlet(PUBLISHER_URL,new Publisher(),null,null);
+            http.registerServlet(PUBLISHER_URL, new Publisher(), null, null);
 
         } catch (Exception e) {
 
-            log.error("Failed to publish Publisher URL",e);
+            LOG.error("Failed to publish Publisher URL", e);
 
         }
     }
 
     @Invalidate
-    public void stop(){
+    public void stop() {
         http.unregister(PUBLISHER_URL);
     }
 
@@ -67,9 +69,9 @@ public class Publisher extends HttpServlet {
         feed.setTitle("Sample Feed (created with ROME)");
         feed.setLink("http://www.example.com");
 
-        List<SyndLink> links=new ArrayList<SyndLink>();
+        List<SyndLink> links = new ArrayList<SyndLink>();
 
-        SyndLinkImpl hubLink=new SyndLinkImpl();
+        SyndLinkImpl hubLink = new SyndLinkImpl();
         hubLink.setRel("hub");
         hubLink.setHref("http://localhost:8080/hub/main");
 
@@ -98,10 +100,10 @@ public class Publisher extends HttpServlet {
         SyndFeedOutput output = new SyndFeedOutput();
 
         try {
-            output.output(feed,resp.getWriter());
+            output.output(feed, resp.getWriter());
             resp.getWriter().close();
         } catch (FeedException e) {
-            log.error("Failed to create feed",e);
+            LOG.error("Failed to create feed", e);
         }
 
         resp.getWriter().write(feed.createWireFeed().toString());

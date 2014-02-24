@@ -21,15 +21,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.List;
 
-public class CallbackServlet extends HttpServlet implements SubscriberInput
-{
+public class CallbackServlet extends HttpServlet implements SubscriberInput {
 
-    enum MessageStatus { ERROR, OK_Challenge, OK };
+    enum MessageStatus {
+        ERROR,
+        OK_Challenge,
+        OK
+    }
 
     private static final Logger LOG = LoggerFactory.getLogger(CallbackServlet.class);
 
@@ -37,23 +39,23 @@ public class CallbackServlet extends HttpServlet implements SubscriberInput
 
     private SubscriberOutput subscriberOutput;
 
-    public CallbackServlet(EventAdmin eventadmin,ImportDeclaration declaration,SubscriberOutput subscriberOutput){
-        this.eventAdmin=eventadmin;
-        this.importDeclaration=declaration;
-        this.subscriberOutput=subscriberOutput;
-    }
-
     private EventAdmin eventAdmin;
 
-    public void TopicUpdated(String hubtopic, SyndFeed feed) {
+    public CallbackServlet(EventAdmin eventadmin, ImportDeclaration declaration, SubscriberOutput subscriberOutput) {
+        this.eventAdmin = eventadmin;
+        this.importDeclaration = declaration;
+        this.subscriberOutput = subscriberOutput;
+    }
 
-        String queue=importDeclaration.getMetadata().get("push.eventAdmin.queue").toString();
+    public void topicUpdated(String hubtopic, SyndFeed feed) {
 
-        LOG.info("(subscriber), received updated content for {}, sending through eventAdmin in the queue {}",hubtopic,queue);
+        String queue = importDeclaration.getMetadata().get("push.eventAdmin.queue").toString();
+
+        LOG.info("(subscriber), received updated content for {}, sending through eventAdmin in the queue {}", hubtopic, queue);
 
         Dictionary properties = new Hashtable();
-        properties.put("topic",hubtopic);
-        properties.put("content",feed.toString());
+        properties.put("topic", hubtopic);
+        properties.put("content", feed.toString());
 
         Event eventAdminMessage = new Event(queue, properties);
 
@@ -61,20 +63,20 @@ public class CallbackServlet extends HttpServlet implements SubscriberInput
 
     }
 
-    public void ConfirmSubscriberRequestedSubscription(SubscriptionConfirmationRequest cr)  throws ActionNotRequestedByTheSubscriberException {
+    public void confirmSubscriberRequestedSubscription(SubscriptionConfirmationRequest cr) throws ActionNotRequestedByTheSubscriberException {
 
 
-        if (((cr.getMode().equals("subscribe")) || (cr.getMode().equals("unsubscribe")))
-                && (cr.getMode().length() > 0) && (cr.getTopic().length() > 0) && (cr.getChallenge().length() > 0)) {
+        if (("subscribe".equals(cr.getMode()) || ("unsubscribe".equals(cr.getMode())))
+                && (cr.getTopic().length() > 0) && (cr.getChallenge().length() > 0)) {
 
-            String action=cr.getMode() + ":" + cr.getTopic() + ":"
-                    + null; //The last parameter should be checked
+            //The last parameter should be checked
+            String action = cr.getMode() + ":" + cr.getTopic() + ":" + null;
 
-            if(!subscriberOutput.getApprovedActions().contains(action)){
-                LOG.info("{} not requested by this subscriber, at least not the action {} (the only approved actions are {})",new Object[]{cr.getMode(),action,subscriberOutput.getApprovedActions()});
+            if (!subscriberOutput.getApprovedActions().contains(action)) {
+                LOG.info("{} not requested by this subscriber, at least not the action {} (the only approved actions are {})", new Object[]{cr.getMode(), action, subscriberOutput.getApprovedActions()});
 
                 throw new ActionNotRequestedByTheSubscriberException("action not approved");
-            }else {
+            } else {
                 subscriberOutput.getApprovedActions().remove(action);
             }
 
@@ -88,8 +90,8 @@ public class CallbackServlet extends HttpServlet implements SubscriberInput
         response.setContentType("application/x-www-form-urlencoded");
 
         try {
-            SubscriptionConfirmationRequest scr=SubscriptionConfirmationRequest.from(request);
-            ConfirmSubscriberRequestedSubscription(scr);
+            SubscriptionConfirmationRequest scr = SubscriptionConfirmationRequest.from(request);
+            confirmSubscriberRequestedSubscription(scr);
             response.getWriter().print(scr.getChallenge());
             response.setStatus(HttpServletResponse.SC_OK);
         } catch (Exception invalidContentNotification) {
@@ -103,15 +105,14 @@ public class CallbackServlet extends HttpServlet implements SubscriberInput
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String hubmode = null, hubtopic = null, hubchallenge = null, hubverify = null, hublease = null;
-        ArrayList<String> approvedActions;
         MessageStatus stsMessage = MessageStatus.ERROR;
 
-        ClassLoader cl=Thread.currentThread().getContextClassLoader();
+        ClassLoader cl = Thread.currentThread().getContextClassLoader();
         Thread.currentThread().setContextClassLoader(SyndFeedInput.class.getClassLoader());
 
-        if (request.getContentType().contains("application/atom+xml") || request.getContentType().contains("application/rss+xml")){
+        if (request.getContentType().contains("application/atom+xml") || request.getContentType().contains("application/rss+xml")) {
 
-            InputStream in= request.getInputStream();
+            InputStream in = request.getInputStream();
 
             try {
                 SyndFeedInput input = new SyndFeedInput();
@@ -121,16 +122,16 @@ public class CallbackServlet extends HttpServlet implements SubscriberInput
 
                 for (SyndLinkImpl link : linkList) {
 
-                    if (link.getRel().equals("self")){
-                        hubtopic = link.getHref().toString();
+                    if ("self".equals(link.getRel())) {
+                        hubtopic = link.getHref();
                     }
                 }
 
-                if (hubtopic == null){
-                    hubtopic= feed.getUri();
+                if (hubtopic == null) {
+                    hubtopic = feed.getUri();
                 }
 
-                TopicUpdated(hubtopic, feed);
+                topicUpdated(hubtopic, feed);
             } catch (FeedException e) {
                 LOG.error("Failed in creating feed response.", e);
             } finally {
@@ -143,7 +144,7 @@ public class CallbackServlet extends HttpServlet implements SubscriberInput
 
         response.setContentType("application/x-www-form-urlencoded");
 
-        switch(stsMessage) {
+        switch (stsMessage) {
             case OK:
                 response.setStatus(HttpServletResponse.SC_OK);
                 break;

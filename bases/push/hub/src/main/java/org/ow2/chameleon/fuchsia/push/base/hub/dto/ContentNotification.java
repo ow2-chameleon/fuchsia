@@ -8,7 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.ow2.chameleon.fuchsia.push.base.hub.HubConstants.*;
+import static org.ow2.chameleon.fuchsia.push.base.hub.HubConstants.HUB_MODE;
+import static org.ow2.chameleon.fuchsia.push.base.hub.HubConstants.HUB_URL;
 
 public class ContentNotification {
 
@@ -52,7 +53,6 @@ public class ContentNotification {
     }
 
     private static void validateRequest(HttpServletRequest request) throws InvalidContentNotification {
-
         if (!"application/x-www-form-urlencoded".equals(request.getContentType())) {
             throw new InvalidContentNotification("Invalid content type");
         }
