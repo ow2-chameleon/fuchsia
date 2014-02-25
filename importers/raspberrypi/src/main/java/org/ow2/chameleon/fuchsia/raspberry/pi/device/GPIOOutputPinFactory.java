@@ -14,41 +14,33 @@ public class GPIOOutputPinFactory implements ProxyFacetInvokable {
     @Requires
     private transient PiController controller;
 
-    @Property(mandatory = true,immutable = true)
+    @Property(mandatory = true, immutable = true)
     private int pin;
 
     public void invoke(String method, Integer transactionID, Object callback, Object... args) {
-
-        invoke(method,args);
-
+        invoke(method, args);
     }
 
     public Object invoke(String method, Object... args) {
-
-        if(method.equals("on")){
+        if ("on".equals(method)) {
             on();
-        }else if(method.equals("off")){
+        } else if ("off".equals(method)) {
             off();
         }
-
         return null;
     }
 
     /**
      * Changes the value of the pin to 1 - enable voltage to run on it
      */
-    public void on(){
-
-        controller.WritePin(pin, 1);
-
+    public void on() {
+        controller.writePin(pin, 1);
     }
 
     /**
      * Changes the value of the pin to 0 - disable voltage to run on it
      */
-    public void off(){
-
-        controller.WritePin(pin, 0);
-
+    public void off() {
+        controller.writePin(pin, 0);
     }
 }

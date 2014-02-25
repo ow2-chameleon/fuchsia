@@ -12,20 +12,17 @@ public class GPIOPojo {
     private String pin;
     private String name;
 
-    private GPIOPojo(){
+    private GPIOPojo() {
 
     }
 
-    public static GPIOPojo create(Map<String, Object> metadata){
-
-
-        GPIOPojo pojo=new GPIOPojo();
-        pojo.id=metadata.get("id").toString();
-        pojo.pin=metadata.get("importer.gpio.pin").toString();
-        pojo.name=metadata.get("importer.gpio.name").toString();
+    public static GPIOPojo create(Map<String, Object> metadata) {
+        GPIOPojo pojo = new GPIOPojo();
+        pojo.id = metadata.get("id").toString();
+        pojo.pin = metadata.get("importer.gpio.pin").toString();
+        pojo.name = metadata.get("importer.gpio.name").toString();
 
         return pojo;
-
     }
 
     public String getId() {

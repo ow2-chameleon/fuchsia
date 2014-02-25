@@ -18,66 +18,47 @@ import java.util.Map;
  *
  * @author Jander Nascimento <botelho@imag.fr>
  */
-@Component(publicFactory=false)
+@Component(publicFactory = false)
 @Instantiate
 @Provides
 public class PiController {
 
-    private static final GpioController io = GpioFactory.getInstance();
+    private static final GpioController GPIO_CONTROLLER = GpioFactory.getInstance();
 
-    private Map<Integer,Pin> pins=new HashMap<Integer,Pin>();
-    private Map<Integer,GpioPinDigitalMultipurpose> pinMp=new HashMap<Integer,GpioPinDigitalMultipurpose>();
+    private Map<Integer, Pin> pins = new HashMap<Integer, Pin>();
+    private Map<Integer, GpioPinDigitalMultipurpose> pinMp = new HashMap<Integer, GpioPinDigitalMultipurpose>();
 
-    public int ReadPin(int pinum){
-
+    public int readPin(int pinum) {
         return fetchMp(pinum).getState().getValue();
-
     }
 
-    public void WritePin(int pinInt, int value){
-
-        fetchMp(pinInt).setState(value==0?false:true);
-
+    public void writePin(int pinInt, int value) {
+        fetchMp(pinInt).setState(value != 0);
     }
 
-    private Pin fetchPin(int pinInt){
-
-        if(!pins.containsKey(pinInt)){
-
-            Pin pin = new PinImpl(RaspiGpioProvider.NAME, Integer.valueOf(pinInt), "GPIO "+pinInt,
+    private Pin fetchPin(int pinInt) {
+        if (!pins.containsKey(pinInt)) {
+            Pin pin = new PinImpl(RaspiGpioProvider.NAME, pinInt, "GPIO " + pinInt,
                     EnumSet.of(PinMode.DIGITAL_INPUT, PinMode.DIGITAL_OUTPUT),
                     PinPullResistance.all());
-
-            pins.put(pinInt,pin);
-
+            pins.put(pinInt, pin);
         }
-
         return pins.get(pinInt);
-
     }
 
-    private GpioPinDigitalMultipurpose fetchMp(int pinInt){
-
-
-        if(!pins.containsKey(pinInt)){
-
-            GpioPinDigitalMultipurpose pin = io.provisionDigitalMultipurposePin(fetchPin(pinInt), PinMode.ANALOG_INPUT);
-
-            pinMp.put(pinInt,pin);
-
+    private GpioPinDigitalMultipurpose fetchMp(int pinInt) {
+        if (!pins.containsKey(pinInt)) {
+            GpioPinDigitalMultipurpose pin = GPIO_CONTROLLER.provisionDigitalMultipurposePin(fetchPin(pinInt), PinMode.ANALOG_INPUT);
+            pinMp.put(pinInt, pin);
         }
 
         return pinMp.get(pinInt);
-
     }
 
     @Invalidate
-    public void release(){
-
-        io.shutdown();
-
-        io.getProvisionedPins().removeAll(pins.values());
-
+    public void release() {
+        GPIO_CONTROLLER.shutdown();
+        GPIO_CONTROLLER.getProvisionedPins().removeAll(pins.values());
     }
 
 }
