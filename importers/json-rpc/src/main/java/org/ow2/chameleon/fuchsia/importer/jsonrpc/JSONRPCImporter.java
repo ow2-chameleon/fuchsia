@@ -129,14 +129,8 @@ public class JSONRPCImporter extends AbstractImporterComponent {
         props.put("client", client);
         try {
             componentInstance = defaultProxyFactory.createComponentInstance(props);
-        } catch (UnacceptableConfiguration e) {
-            LOG.error("Invalid configuration exception", e);
-            throw new BinderException("Error during creation of defaultProxy", e);
-        } catch (MissingHandlerException e) {
-            LOG.error("Missing handler exception", e);
-            throw new BinderException("Error during creation of defaultProxy", e);
-        } catch (ConfigurationException e) {
-            LOG.error("Configuration exception", e);
+        } catch (Exception e) {
+            LOG.error("Error during creation of defaultProxy", e);
             throw new BinderException("Error during creation of defaultProxy", e);
         }
         importDeclaration.handle(serviceReference);
