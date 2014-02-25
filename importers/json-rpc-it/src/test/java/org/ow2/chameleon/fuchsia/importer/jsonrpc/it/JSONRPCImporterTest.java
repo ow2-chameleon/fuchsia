@@ -49,8 +49,8 @@ public class JSONRPCImporterTest extends ImporterComponentAbstractTest {
         Dictionary<String, String> conf = new Hashtable<String, String>();
         conf.put(INSTANCE_NAME_PROPERTY, IMPORTER_NAME);
         conf.put(TARGET_FILTER_PROPERTY, "(" + CONFIGS + "=jsonrpc)");
-        ComponentInstance importer = ipojoHelper.createComponentInstance("org.ow2.chameleon.fuchsia.importer.jsonrpc.JSONRPCImporter", conf);
-        if(importer == null){
+        ComponentInstance importer = ipojoHelper.createComponentInstance("org.ow2.chameleon.fuchsia.importer.jsonrpc.JSONRPCImporter", conf, 20000);
+        if (importer == null) {
             fail("Fail to create the JSONRPC Importer.");
         }
 
