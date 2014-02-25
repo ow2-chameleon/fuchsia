@@ -9,6 +9,6 @@ public interface SubscriberInput {
 
     void topicUpdated(String hubtopic, SyndFeed feed);
 
-    void confirmSubscriberRequestedSubscription(SubscriptionConfirmationRequest cr) throws InvalidContentNotification, ActionNotRequestedByTheSubscriberException;
+    void confirmSubscriberRequestedSubscription(SubscriptionConfirmationRequest cr) throws ActionNotRequestedByTheSubscriberException;
 
 }

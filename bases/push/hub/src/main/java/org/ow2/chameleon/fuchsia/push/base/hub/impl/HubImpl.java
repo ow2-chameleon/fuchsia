@@ -12,6 +12,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.http.HttpService;
+import org.ow2.chameleon.fuchsia.push.base.hub.Hub;
 import org.ow2.chameleon.fuchsia.push.base.hub.dto.ContentNotification;
 import org.ow2.chameleon.fuchsia.push.base.hub.dto.SubscriptionConfirmationRequest;
 import org.ow2.chameleon.fuchsia.push.base.hub.dto.SubscriptionRequest;
@@ -19,11 +20,13 @@ import org.ow2.chameleon.fuchsia.push.base.hub.exception.SubscriptionException;
 import org.ow2.chameleon.fuchsia.push.base.hub.exception.SubscriptionOriginVerificationException;
 import org.ow2.chameleon.fuchsia.push.base.hub.servlet.ContentUpdatedNotificationServlet;
 import org.ow2.chameleon.fuchsia.push.base.hub.servlet.SubscriptionServlet;
-import org.ow2.chameleon.fuchsia.push.base.hub.Hub;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -261,9 +264,10 @@ public class HubImpl implements Hub {
     private static String inputStreamToString(InputStream in) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(in));
         StringBuilder sb = new StringBuilder();
-        String line = null;
-        while ((line = reader.readLine()) != null) {
+        String line = reader.readLine();
+        while (line != null) {
             sb.append(line).append("\n");
+            line = reader.readLine();
         }
         in.close();
         return sb.toString();

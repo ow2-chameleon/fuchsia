@@ -17,7 +17,7 @@ public class HttpClientCallAsynchronous extends Thread {
     private final HttpContext context;
     private final HttpPost httppost;
 
-    public HttpResponse httpresponse = null;
+    private HttpResponse httpresponse = null;
 
 
     public HttpClientCallAsynchronous(HttpClient httpClient, HttpPost httppost) {

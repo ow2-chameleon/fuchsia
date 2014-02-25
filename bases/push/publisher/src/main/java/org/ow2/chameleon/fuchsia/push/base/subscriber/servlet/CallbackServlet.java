@@ -29,7 +29,7 @@ public class CallbackServlet extends HttpServlet implements SubscriberInput {
 
     enum MessageStatus {
         ERROR,
-        OK_Challenge,
+        OK_CHALLENGE,
         OK
     }
 
@@ -148,7 +148,7 @@ public class CallbackServlet extends HttpServlet implements SubscriberInput {
             case OK:
                 response.setStatus(HttpServletResponse.SC_OK);
                 break;
-            case OK_Challenge:
+            case OK_CHALLENGE:
                 response.setStatus(HttpServletResponse.SC_OK);
                 response.getWriter().print(hubchallenge);
                 break;
@@ -159,4 +159,4 @@ public class CallbackServlet extends HttpServlet implements SubscriberInput {
 
     }
 
-}	
+}

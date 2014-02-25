@@ -15,11 +15,14 @@ import org.osgi.service.http.HttpService;
 import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
+import org.ow2.chameleon.fuchsia.push.base.hub.exception.SubscriptionException;
 import org.ow2.chameleon.fuchsia.push.base.subscriber.SubscriberOutput;
 import org.ow2.chameleon.fuchsia.push.base.subscriber.servlet.CallbackServlet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +74,7 @@ public class SubscriptionImporter extends AbstractImporterComponent implements S
         return this.getClass().getSimpleName();
     }
 
-    public int subscribe(String hub, String topicUrl, String hostname, String verifyToken, String leaseSeconds) throws Exception {
+    public int subscribe(String hub, String topicUrl, String hostname, String verifyToken, String leaseSeconds) throws SubscriptionException {
         if (topicUrl != null) {
 
             String callbackserverurl = hostname;
@@ -87,20 +90,31 @@ public class SubscriptionImporter extends AbstractImporterComponent implements S
             }
             //For future https implementation
             //if ((secret !=null) && (secret.getBytes("utf8").length < 200))
-            //	nvps.add(new BasicNameValuePair("hub.hub.secret", secret));
+            //nvps.add(new BasicNameValuePair("hub.hub.secret", secret));
             if (verifyToken != null) {
                 nvps.add(new BasicNameValuePair(HUB_VERIFY_TOKEN, verifyToken));
             }
 
             addAction("subscribe", topicUrl, verifyToken);
 
-            httppost.setEntity(new UrlEncodedFormEntity(nvps));
+            UrlEncodedFormEntity entity = null;
+            try {
+                entity = new UrlEncodedFormEntity(nvps);
+            } catch (UnsupportedEncodingException e) {
+                throw new SubscriptionException("UnsupportedEncodingException thrown during subscription",e);
+            }
+            httppost.setEntity(entity);
             httppost.setHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
             httppost.setHeader(HttpHeaders.USER_AGENT, "RSS pubsubhubbub 0.3");
 
             CloseableHttpClient httpclient = HttpClients.createDefault();
 
-            HttpResponse response = httpclient.execute(httppost);
+            HttpResponse response = null;
+            try {
+                response = httpclient.execute(httppost);
+            } catch (IOException e) {
+                throw new SubscriptionException("IOException during subscription",e);
+            }
 
             if (response != null) {
                 return response.getStatusLine().getStatusCode();
@@ -111,7 +125,7 @@ public class SubscriptionImporter extends AbstractImporterComponent implements S
         return 400;
     }
 
-    public int unsubscribe(String hub, String topicUrl, String hostname, String verifyToken) throws Exception {
+    public int unsubscribe(String hub, String topicUrl, String hostname, String verifyToken) throws SubscriptionException {
         if (topicUrl != null) {
 
             String callbackserverurl = hostname;
@@ -124,20 +138,31 @@ public class SubscriptionImporter extends AbstractImporterComponent implements S
             nvps.add(new BasicNameValuePair(HUB_VERIFY, "sync"));
             //For future https implementation
             //if ((secret !=null) && (secret.getBytes("utf8").length < 200))
-            //	nvps.add(new BasicNameValuePair("hub.hub.secret", secret));
+            //nvps.add(new BasicNameValuePair("hub.hub.secret", secret));
             if (verifyToken != null) {
                 nvps.add(new BasicNameValuePair(HUB_VERIFY_TOKEN, verifyToken));
             }
 
             addAction("unsubscribe", topicUrl, verifyToken);
 
-            httppost.setEntity(new UrlEncodedFormEntity(nvps));
+            UrlEncodedFormEntity entity = null;
+            try {
+                entity = new UrlEncodedFormEntity(nvps);
+            } catch (UnsupportedEncodingException e) {
+                throw new SubscriptionException("UnsupportedEncodingException thrown while stopping subscription",e);
+            }
+            httppost.setEntity(entity);
 
             httppost.setHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
             httppost.setHeader(HttpHeaders.USER_AGENT, "ERGO RSS pubsubhubbub 0.3");
 
             CloseableHttpClient httpclient = HttpClients.createDefault();
-            HttpResponse response = httpclient.execute(httppost);
+            HttpResponse response = null;
+            try {
+                response = httpclient.execute(httppost);
+            } catch (IOException e) {
+                throw new SubscriptionException("IOException during stop of subscription",e);
+            }
 
             if (response != null) {
                 return response.getStatusLine().getStatusCode();
@@ -219,7 +244,7 @@ public class SubscriptionImporter extends AbstractImporterComponent implements S
 
                     LOG.info("Callback {} removed from the subscriber", callback);
 
-                } catch (Exception e) {
+                } catch (SubscriptionException e) {
                     LOG.error("Callback " + callback + " failed to be removed from the subscriber with the message", e);
                 }
 

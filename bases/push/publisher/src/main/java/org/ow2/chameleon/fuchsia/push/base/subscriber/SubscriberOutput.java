@@ -1,14 +1,16 @@
 package org.ow2.chameleon.fuchsia.push.base.subscriber;
 
 
+import org.ow2.chameleon.fuchsia.push.base.hub.exception.SubscriptionException;
+
 import java.util.List;
 
 public interface SubscriberOutput {
 
-    public int subscribe(String hub, String topic_url,String hostname,String verifytoken,String lease_seconds) throws Exception;
+    int subscribe(String hub, String topicUrl, String hostname, String verifyToken, String leaseSeconds) throws SubscriptionException;
 
-    public int unsubscribe(String hub, String topic_url,String hostname,String verifytoken) throws Exception;
+    int unsubscribe(String hub, String topicUrl, String hostname, String verifyToken) throws SubscriptionException;
 
-    public List<String> getApprovedActions();
+    List<String> getApprovedActions();
 
 }

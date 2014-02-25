@@ -5,6 +5,7 @@ import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.ow2.chameleon.fuchsia.push.base.subscriber.exception.HubDiscoveryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -12,21 +13,20 @@ import org.xml.sax.InputSource;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
+import java.io.IOException;
 import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 public class HubDiscovery {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HubDiscovery.class);
 
-    public String hasHub(Document doc) throws Exception {
+    public String hasHub(Document doc) {
         String hub = null;
 
         XPathFactory factory = XPathFactory.newInstance();
@@ -80,7 +80,7 @@ public class HubDiscovery {
 
     }
 
-    public String getContents(String feed) throws Exception {
+    public String getContents(String feed) throws IOException {
         String response = null;
 
         HttpClient httpclient = new DefaultHttpClient();
@@ -94,25 +94,32 @@ public class HubDiscovery {
         return response;
     }
 
-    public String getHub(String feedurl) throws Exception {
-
+    public String getHub(String feedurl) throws HubDiscoveryException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        Document doc = builder.parse(new InputSource(new StringReader(
-                getContents(feedurl))));
+        DocumentBuilder builder = null;
+        try {
+            builder = factory.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            throw new HubDiscoveryException("Exception thrown while instantiating the DocumentBuilder.", e);
+        }
+        Document doc = null;
+        try {
+            doc = builder.parse(new InputSource(new StringReader(getContents(feedurl))));
+        } catch (Exception e) {
+            throw new HubDiscoveryException("Exception thrown while parsing the feed.", e);
+        }
 
         return hasHub(doc);
-
     }
 
-    public Map<String, String> getHubs(ArrayList<String> feedurls) {
+    public Map<String, String> getHubs(List<String> feedurls) {
         Iterator<String> i = feedurls.iterator();
         Map<String, String> hashtable = new HashMap<String, String>();
         while (i.hasNext()) {
             String feedurl = i.next();
             try {
                 hashtable.put(feedurl, getHub(feedurl));
-            } catch (Exception e) {
+            } catch (HubDiscoveryException e) {
                 LOGGER.error("Failed to fetch hubs", e);
             }
         }
