@@ -8,16 +8,16 @@ import java.util.Collection;
  */
 public interface Deployer {
 
-    public boolean accept(File file);
+    boolean accept(File file);
 
-    public void onFileCreate(File file);
+    void onFileCreate(File file);
 
-    public void onFileChange(File file);
+    void onFileChange(File file);
 
-    public void onFileDelete(File file);
+    void onFileDelete(File file);
 
-    public void open(Collection<File> files);
+    void open(Collection<File> files);
 
-    public void close();
+    void close();
 
 }

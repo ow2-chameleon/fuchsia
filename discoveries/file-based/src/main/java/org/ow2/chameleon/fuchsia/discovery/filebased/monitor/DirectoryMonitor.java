@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 
-public class DirectoryMonitor implements BundleActivator,ServiceTrackerCustomizer {
+public class DirectoryMonitor implements BundleActivator, ServiceTrackerCustomizer {
 
     /**
      * logger.
@@ -30,7 +30,7 @@ public class DirectoryMonitor implements BundleActivator,ServiceTrackerCustomize
     /**
      * List of deployers
      */
-    protected final List<Deployer> deployers = new ArrayList<Deployer>();
+    private final List<Deployer> deployers = new ArrayList<Deployer>();
     /**
      * The directory.
      */
@@ -47,23 +47,27 @@ public class DirectoryMonitor implements BundleActivator,ServiceTrackerCustomize
     /**
      * The lock avoiding concurrent modifications of the deployers map.
      */
-    private ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
+    private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
+
+    private final String trackedClassName;
     /**
      * Service tracking to retrieve deployers.
      */
     private ServiceTracker tracker;
     private BundleContext context;
-    private String trackedClassName;
+
 
     public DirectoryMonitor(String directorypath, long polling, String classname) {
 
-        this.directory=new File(directorypath);
-        this.trackedClassName=classname;
+        this.directory = new File(directorypath);
+        this.trackedClassName = classname;
         this.polling = polling;
 
         if (!directory.isDirectory()) {
             LOG.info("Monitored directory {} not existing - creating directory", directory.getAbsolutePath());
-            this.directory.mkdirs();
+            if(!this.directory.mkdirs()){
+                throw new IllegalStateException("Monitored directory doesn't exist and cannot be created.");
+            }
         }
 
         // We observes all files.
@@ -79,7 +83,7 @@ public class DirectoryMonitor implements BundleActivator,ServiceTrackerCustomize
      *
      * @return {@literal true} if the lock was acquired within the method, {@literal false} otherwise.
      */
-    public boolean acquireWriteLockIfNotHeld() {
+    private boolean acquireWriteLockIfNotHeld() {
         if (!lock.isWriteLockedByCurrentThread()) {
             lock.writeLock().lock();
             return true;
@@ -92,7 +96,7 @@ public class DirectoryMonitor implements BundleActivator,ServiceTrackerCustomize
      *
      * @return {@literal true} if the lock has no more holders, {@literal false} otherwise.
      */
-    public boolean releaseWriteLockIfHeld() {
+    private boolean releaseWriteLockIfHeld() {
         if (lock.isWriteLockedByCurrentThread()) {
             lock.writeLock().unlock();
         }
@@ -104,7 +108,7 @@ public class DirectoryMonitor implements BundleActivator,ServiceTrackerCustomize
      *
      * @return {@literal true} if the lock was acquired within the method, {@literal false} otherwise.
      */
-    public boolean acquireReadLockIfNotHeld() {
+    private boolean acquireReadLockIfNotHeld() {
         if (lock.getReadHoldCount() == 0) {
             lock.readLock().lock();
             return true;
@@ -117,7 +121,7 @@ public class DirectoryMonitor implements BundleActivator,ServiceTrackerCustomize
      *
      * @return {@literal true} if the lock has no more holders, {@literal false} otherwise.
      */
-    public boolean releaseReadLockIfHeld() {
+    private boolean releaseReadLockIfHeld() {
         if (lock.getReadHoldCount() != 0) {
             lock.readLock().unlock();
         }
