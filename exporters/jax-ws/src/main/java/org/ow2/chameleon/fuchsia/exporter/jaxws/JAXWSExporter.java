@@ -219,9 +219,6 @@ public class JAXWSExporter extends AbstractExporterComponent {
 
         return cxf;
 
-
-
-
     }
 
 }

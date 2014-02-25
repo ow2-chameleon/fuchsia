@@ -158,17 +158,13 @@ public class JAXWSExporterWithoutHttpServiceTest extends JAXExporterAbstractTest
         }
 
         Map<String, Object> metadata=new HashMap<String, Object>();
-
         metadata.put("fuchsia.export.cxf.class.name",ServiceForExportation.class.getName());
         metadata.put("fuchsia.export.cxf.url.context","/"+ServiceForExportation.class.getSimpleName());
 
         ExportDeclaration declaration = spy(ExportDeclarationBuilder.fromMetadata(metadata).build());
         declaration.bind(serviceReferenceFromExporter);
-
         exporter.registration(serviceReferenceFromExporter);
-
         exporter.addDeclaration(declaration);
-
         verify(declaration, never()).handle(serviceReferenceFromExporter);
 
     }
