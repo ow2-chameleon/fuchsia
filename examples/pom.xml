@@ -44,6 +44,7 @@
         <module>proto-class</module>
         <module>proto-client</module>
         <module>proto-config</module>
+        <module>filebased-config</module>
 <!--
         <module>jax-ws</module>
 -->
