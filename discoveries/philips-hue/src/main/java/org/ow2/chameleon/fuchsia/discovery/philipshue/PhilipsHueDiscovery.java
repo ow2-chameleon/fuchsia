@@ -36,14 +36,14 @@ public class PhilipsHueDiscovery extends AbstractDiscoveryComponent implements P
     @ServiceProperty(name = INSTANCE_NAME_PROPERTY)
     private String name;
 
-    @ServiceProperty(name = "philips.hue.discovery.pooling",value = "5000")
+    @ServiceProperty(name = "philips.hue.discovery.pooling", value = "5000")
     private Long pollingTime;
 
     private PHAccessPoint ap;
 
-    private boolean isRunning=false;
+    private boolean isRunning = false;
 
-    private Preferences preferences=Preferences.userRoot().node(this.getClass().getName());
+    private Preferences preferences = Preferences.userRoot().node(this.getClass().getName());
 
     public PhilipsHueDiscovery(BundleContext bundleContext) {
         super(bundleContext);
@@ -56,17 +56,16 @@ public class PhilipsHueDiscovery extends AbstractDiscoveryComponent implements P
 
         PHHueSDK.getInstance().getNotificationManager().registerSDKListener(this);
 
-        isRunning=true;
+        isRunning = true;
 
-        Thread t1=new Thread(this);
+        Thread t1 = new Thread(this);
         t1.setDaemon(true);
         t1.start();
-
     }
 
     @Invalidate
     public void stop() {
-        isRunning=false;
+        isRunning = false;
     }
 
     public String getName() {
@@ -75,29 +74,22 @@ public class PhilipsHueDiscovery extends AbstractDiscoveryComponent implements P
 
 
     public void onCacheUpdated(int i, PHBridge phBridge) {
-        //LOG.info("cache updated");
     }
 
     public void onBridgeConnected(PHBridge phBridge) {
-
         PHHueSDK.getInstance().setSelectedBridge(phBridge);
         PHHueSDK.getInstance().enableHeartbeat(phBridge, pollingTime);
         LOG.info("bridge connected");
-
     }
 
     public void onAuthenticationRequired(PHAccessPoint phAccessPoint) {
-
         LOG.warn("authentication required, you have 30 seconds to push the button on the bridge");
 
         PHHueSDK.getInstance().startPushlinkAuthentication(phAccessPoint);
     }
 
     public void onAccessPointsFound(List<PHAccessPoint> phAccessPoints) {
-        //LOG.info("access point found {}",phAccessPoints);
-
-        ap=phAccessPoints.get(phAccessPoints.size()-1);
-
+        ap = phAccessPoints.get(phAccessPoints.size() - 1);
     }
 
     public void onError(int i, String s) {
@@ -105,7 +97,6 @@ public class PhilipsHueDiscovery extends AbstractDiscoveryComponent implements P
     }
 
     public void onConnectionResumed(PHBridge phBridge) {
-        //LOG.info("connection resumed");
     }
 
     public void onConnectionLost(PHAccessPoint phAccessPoint) {
@@ -116,18 +107,18 @@ public class PhilipsHueDiscovery extends AbstractDiscoveryComponent implements P
 
         PHBridgeSearchManager sm = (PHBridgeSearchManager) PHHueSDK.getInstance().getSDKService(PHHueSDK.SEARCH_BRIDGE);
 
-        while(isRunning){
+        while (isRunning) {
 
             sm.search(true, false);
 
-            if(ap!=null){
-                final String BRIDGE_USERNAME_KEY="username";
+            if (ap != null) {
+                final String bridgeUsernameKey = "username";
 
-                String username=preferences.get(BRIDGE_USERNAME_KEY,null);
+                String username = preferences.get(bridgeUsernameKey, null);
 
-                if(username==null){
-                    username=PHBridgeInternal.generateUniqueKey();
-                    preferences.put(BRIDGE_USERNAME_KEY,username);
+                if (username == null) {
+                    username = PHBridgeInternal.generateUniqueKey();
+                    preferences.put(bridgeUsernameKey, username);
                     try {
                         preferences.flush();
                     } catch (BackingStoreException e) {
@@ -137,18 +128,18 @@ public class PhilipsHueDiscovery extends AbstractDiscoveryComponent implements P
 
                 ap.setUsername(username);
 
-                try{
+                try {
                     PHHueSDK.getInstance().connect(ap);
-                }catch(PHHueException e){
+                } catch (PHHueException e) {
                     LOG.debug("Failed to connect to the Philips Hue AP with the message {}", e.getMessage(), e);
                 }
 
                 PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
 
-                if(PHHueSDK.getInstance().getSelectedBridge()!=null){
+                if (PHHueSDK.getInstance().getSelectedBridge() != null) {
                     PHBridgeResourcesCache cache = bridge.getResourceCache();
-                    for(PHLight light:cache.getAllLights()){
-                        generateImportDeclaration(light,bridge);
+                    for (PHLight light : cache.getAllLights()) {
+                        generateImportDeclaration(light, bridge);
                     }
                 }
             }
@@ -163,7 +154,7 @@ public class PhilipsHueDiscovery extends AbstractDiscoveryComponent implements P
         }
     }
 
-    private void generateImportDeclaration(PHLight light,PHBridge bridge){
+    private void generateImportDeclaration(PHLight light, PHBridge bridge) {
 
         Map<String, Object> metadata = new HashMap<String, Object>();
 
@@ -176,17 +167,16 @@ public class PhilipsHueDiscovery extends AbstractDiscoveryComponent implements P
 
         ImportDeclaration declaration = ImportDeclarationBuilder.fromMetadata(metadata).build();
 
-        boolean found=false;
-        for(ImportDeclaration im:super.getImportDeclarations()){
-            if(im.getMetadata().get("id").toString().equals(im.getMetadata().get("id").toString())){
-                found=true;
+        boolean found = false;
+        for (ImportDeclaration im : super.getImportDeclarations()) {
+            if (im.getMetadata().get("id").toString().equals(im.getMetadata().get("id").toString())) {
+                found = true;
             }
         }
 
-        if(!found){
+        if (!found) {
             super.registerImportDeclaration(declaration);
         }
-
 
 
     }

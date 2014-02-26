@@ -41,7 +41,7 @@ public class SubscriptionImporter extends AbstractImporterComponent implements S
 
     public static final String PUBSUBHUBBUB_USER_AGENT = "RSS pubsubhubbub 0.3";
 
-    private static List<String> approvedActions = new Vector<String>();
+    private static List<String> APPROVED_ACTIONS = new Vector<String>();
 
     private List<String> callbacksRegistered = new ArrayList<String>();
 
@@ -148,11 +148,11 @@ public class SubscriptionImporter extends AbstractImporterComponent implements S
 
     private void addAction(String hubmode, String hubtopic, String hubverify) {
         String action = hubmode + ":" + hubtopic + ":" + hubverify;
-        approvedActions.add(action);
+        APPROVED_ACTIONS.add(action);
     }
 
     public List<String> getApprovedActions() {
-        return approvedActions;
+        return APPROVED_ACTIONS;
     }
 
     @Override
