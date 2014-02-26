@@ -1,6 +1,7 @@
 package org.ow2.chameleon.fuchsia.importer.protobuffer.internal;
 
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
+import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
 
 public class ProtobufferImporterPojo {
 
@@ -14,18 +15,23 @@ public class ProtobufferImporterPojo {
 
     }
 
-    public static ProtobufferImporterPojo create(ImportDeclaration importDeclaration){
+    public static ProtobufferImporterPojo create(ImportDeclaration importDeclaration) throws BinderException {
 
+        try {
 
-        ProtobufferImporterPojo declaration=new ProtobufferImporterPojo();
+            ProtobufferImporterPojo declaration=new ProtobufferImporterPojo();
 
-        declaration.id = importDeclaration.getMetadata().get("id").toString();
-        declaration.address = importDeclaration.getMetadata().get("rpc.server.address").toString();
-        declaration.clazz = importDeclaration.getMetadata().get("rpc.proto.class").toString();
-        declaration.service = importDeclaration.getMetadata().get("rpc.proto.service").toString();
-        declaration.message = importDeclaration.getMetadata().get("rpc.proto.message").toString();
+            declaration.id = importDeclaration.getMetadata().get("id").toString();
+            declaration.address = importDeclaration.getMetadata().get("rpc.server.address").toString();
+            declaration.clazz = importDeclaration.getMetadata().get("rpc.proto.class").toString();
+            declaration.service = importDeclaration.getMetadata().get("rpc.proto.service").toString();
+            declaration.message = importDeclaration.getMetadata().get("rpc.proto.message").toString();
 
-        return declaration;
+            return declaration;
+
+        }catch(NullPointerException npe){
+            throw new BinderException(npe);
+        }
 
     }
 

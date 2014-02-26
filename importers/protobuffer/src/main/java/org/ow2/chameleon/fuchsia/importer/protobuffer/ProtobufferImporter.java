@@ -39,6 +39,7 @@ public class ProtobufferImporter extends AbstractImporterComponent {
 
     @ServiceProperty(name = "instance.name")
     private String name;
+
     @ServiceProperty(name = "target", value = "(id=*)")
     private String filter;
 
@@ -60,7 +61,13 @@ public class ProtobufferImporter extends AbstractImporterComponent {
     @Invalidate
     public void stop() {
         super.stop();
-        LOG.info("Protobuffer Importer RPC is up and running");
+
+        for(Map.Entry<String,ServiceRegistration> item:registeredImporter.entrySet()){
+            item.getValue().unregister();
+            registeredImporter.remove(item.getKey());
+        }
+
+        LOG.info("Protobuffer Importer RPC was stopped");
     }
 
     @Override
