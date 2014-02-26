@@ -41,7 +41,7 @@ public class SubscriptionImporter extends AbstractImporterComponent implements S
 
     public static final String PUBSUBHUBBUB_USER_AGENT = "RSS pubsubhubbub 0.3";
 
-    static List<String> approvedActions = new Vector<String>();
+    private static List<String> approvedActions = new Vector<String>();
 
     private List<String> callbacksRegistered = new ArrayList<String>();
 
@@ -80,106 +80,75 @@ public class SubscriptionImporter extends AbstractImporterComponent implements S
 
     public int subscribe(String hub, String topicUrl, String hostname, String verifyToken, String leaseSeconds) throws SubscriptionException {
         if (topicUrl != null) {
-
-            String callbackserverurl = hostname;
-
+            UrlEncodedFormEntity entity = buildUrlEncodedFormEntity(hostname, topicUrl, verifyToken, "subscribe");
             HttpPost httppost = new HttpPost(hub);
-            List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-            nvps.add(new BasicNameValuePair(HUB_CALLBACK, callbackserverurl));
-            nvps.add(new BasicNameValuePair(HUB_MODE, "subscribe"));
-            nvps.add(new BasicNameValuePair(HUB_TOPIC, topicUrl));
-            nvps.add(new BasicNameValuePair(HUB_VERIFY, "sync"));
-            if (leaseSeconds != null) {
-                nvps.add(new BasicNameValuePair(HUB_LEASE_SECONDS, leaseSeconds));
-            }
-            //For future https implementation
-            //if ((secret !=null) && (secret.getBytes("utf8").length < 200))
-            //nvps.add(new BasicNameValuePair("hub.hub.secret", secret));
-            if (verifyToken != null) {
-                nvps.add(new BasicNameValuePair(HUB_VERIFY_TOKEN, verifyToken));
-            }
 
             addAction("subscribe", topicUrl, verifyToken);
 
-            UrlEncodedFormEntity entity = null;
-            try {
-                entity = new UrlEncodedFormEntity(nvps);
-            } catch (UnsupportedEncodingException e) {
-                throw new SubscriptionException("UnsupportedEncodingException thrown during subscription",e);
-            }
             httppost.setEntity(entity);
             httppost.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED);
             httppost.setHeader(HttpHeaders.USER_AGENT, PUBSUBHUBBUB_USER_AGENT);
 
-            CloseableHttpClient httpclient = HttpClients.createDefault();
-
-            HttpResponse response = null;
-            try {
-                response = httpclient.execute(httppost);
-            } catch (IOException e) {
-                throw new SubscriptionException("IOException during subscription",e);
-            }
-
-            if (response != null) {
-                return response.getStatusLine().getStatusCode();
-            } else {
-                return HttpStatus.SC_BAD_REQUEST;
-            }
+            return executeRequest(httppost, "subscription");
         }
         return HttpStatus.SC_BAD_REQUEST;
     }
 
     public int unsubscribe(String hub, String topicUrl, String hostname, String verifyToken) throws SubscriptionException {
         if (topicUrl != null) {
-
-            String callbackserverurl = hostname;
-
+            UrlEncodedFormEntity entity = buildUrlEncodedFormEntity(hostname, topicUrl, verifyToken, "unsubscribe");
             HttpPost httppost = new HttpPost(hub);
-            List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-            nvps.add(new BasicNameValuePair(HUB_CALLBACK, callbackserverurl));
-            nvps.add(new BasicNameValuePair(HUB_MODE, "unsubscribe"));
-            nvps.add(new BasicNameValuePair(HUB_TOPIC, topicUrl));
-            nvps.add(new BasicNameValuePair(HUB_VERIFY, "sync"));
-            //For future https implementation
-            //if ((secret !=null) && (secret.getBytes("utf8").length < 200))
-            //nvps.add(new BasicNameValuePair("hub.hub.secret", secret));
-            if (verifyToken != null) {
-                nvps.add(new BasicNameValuePair(HUB_VERIFY_TOKEN, verifyToken));
-            }
 
             addAction("unsubscribe", topicUrl, verifyToken);
 
-            UrlEncodedFormEntity entity = null;
-            try {
-                entity = new UrlEncodedFormEntity(nvps);
-            } catch (UnsupportedEncodingException e) {
-                throw new SubscriptionException("UnsupportedEncodingException thrown while stopping subscription",e);
-            }
             httppost.setEntity(entity);
-
             httppost.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED);
             httppost.setHeader(HttpHeaders.USER_AGENT, PUBSUBHUBBUB_USER_AGENT);
 
-            CloseableHttpClient httpclient = HttpClients.createDefault();
-            HttpResponse response = null;
-            try {
-                response = httpclient.execute(httppost);
-            } catch (IOException e) {
-                throw new SubscriptionException("IOException during stop of subscription",e);
-            }
-
-            if (response != null) {
-                return response.getStatusLine().getStatusCode();
-            } else {
-                return HttpStatus.SC_BAD_REQUEST;
-            }
+            return executeRequest(httppost, "unsubscription");
         }
         return HttpStatus.SC_BAD_REQUEST;
     }
 
+    private int executeRequest(HttpPost httppost, String action) throws SubscriptionException {
+        CloseableHttpClient httpclient = HttpClients.createDefault();
+        HttpResponse response;
+        try {
+            response = httpclient.execute(httppost);
+        } catch (IOException e) {
+            throw new SubscriptionException("IOException during stop of " + action, e);
+        }
+
+        if (response != null) {
+            return response.getStatusLine().getStatusCode();
+        } else {
+            return HttpStatus.SC_BAD_REQUEST;
+        }
+    }
+
+    private UrlEncodedFormEntity buildUrlEncodedFormEntity(String callbackserverurl, String topicUrl, String verifyToken, String mode) throws SubscriptionException {
+        List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+        nvps.add(new BasicNameValuePair(HUB_CALLBACK, callbackserverurl));
+        nvps.add(new BasicNameValuePair(HUB_MODE, mode));
+        nvps.add(new BasicNameValuePair(HUB_TOPIC, topicUrl));
+        nvps.add(new BasicNameValuePair(HUB_VERIFY, "sync"));
+        //For future https implementation
+        //if ((secret !=null) && (secret.getBytes("utf8").length < 200))
+        //nvps.add(new BasicNameValuePair("hub.hub.secret", secret));
+        if (verifyToken != null) {
+            nvps.add(new BasicNameValuePair(HUB_VERIFY_TOKEN, verifyToken));
+        }
+
+        try {
+            return new UrlEncodedFormEntity(nvps);
+        } catch (UnsupportedEncodingException e) {
+            throw new SubscriptionException("UnsupportedEncodingException thrown while stopping subscription", e);
+        }
+    }
+
     private void addAction(String hubmode, String hubtopic, String hubverify) {
         String action = hubmode + ":" + hubtopic + ":" + hubverify;
-        getApprovedActions().add(action);
+        approvedActions.add(action);
     }
 
     public List<String> getApprovedActions() {
