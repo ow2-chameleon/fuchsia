@@ -7,6 +7,8 @@ import com.sun.syndication.io.SyndFeedInput;
 import com.sun.syndication.io.XmlReader;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
+import org.ow2.chameleon.fuchsia.core.constant.HttpStatus;
+import org.ow2.chameleon.fuchsia.core.constant.MediaType;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.push.base.hub.dto.SubscriptionConfirmationRequest;
 import org.ow2.chameleon.fuchsia.push.base.subscriber.SubscriberInput;
@@ -86,17 +88,16 @@ public class CallbackServlet extends HttpServlet implements SubscriberInput {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        response.setContentType("application/x-www-form-urlencoded");
+        response.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
         try {
             SubscriptionConfirmationRequest scr = SubscriptionConfirmationRequest.from(request);
             confirmSubscriberRequestedSubscription(scr);
             response.getWriter().print(scr.getChallenge());
-            response.setStatus(HttpServletResponse.SC_OK);
+            response.setStatus(HttpStatus.SC_OK);
         } catch (Exception invalidContentNotification) {
             LOG.error("Invalid content notification.", invalidContentNotification);
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            response.setStatus(HttpStatus.SC_NOT_FOUND);
         }
 
     }
@@ -104,13 +105,14 @@ public class CallbackServlet extends HttpServlet implements SubscriberInput {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String hubmode = null, hubtopic = null, hubchallenge = null, hubverify = null, hublease = null;
+        String hubtopic = null, hubchallenge = null;
         MessageStatus stsMessage = MessageStatus.ERROR;
 
         ClassLoader cl = Thread.currentThread().getContextClassLoader();
         Thread.currentThread().setContextClassLoader(SyndFeedInput.class.getClassLoader());
 
-        if (request.getContentType().contains("application/atom+xml") || request.getContentType().contains("application/rss+xml")) {
+        if (request.getContentType().contains(MediaType.APPLICATION_ATOM_XML)
+                || request.getContentType().contains(MediaType.APPLICATION_RSS_XML)) {
 
             InputStream in = request.getInputStream();
 
@@ -142,18 +144,18 @@ public class CallbackServlet extends HttpServlet implements SubscriberInput {
             stsMessage = MessageStatus.OK;
         }
 
-        response.setContentType("application/x-www-form-urlencoded");
+        response.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
         switch (stsMessage) {
             case OK:
-                response.setStatus(HttpServletResponse.SC_OK);
+                response.setStatus(HttpStatus.SC_OK);
                 break;
             case OK_CHALLENGE:
-                response.setStatus(HttpServletResponse.SC_OK);
+                response.setStatus(HttpStatus.SC_OK);
                 response.getWriter().print(hubchallenge);
                 break;
             default:
-                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                response.setStatus(HttpStatus.SC_NOT_FOUND);
                 break;
         }
 

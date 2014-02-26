@@ -1,7 +1,6 @@
 package org.ow2.chameleon.fuchsia.importer.push;
 
 import org.apache.felix.ipojo.annotations.*;
-import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -13,6 +12,9 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.service.http.HttpService;
 import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
+import org.ow2.chameleon.fuchsia.core.constant.HttpHeaders;
+import org.ow2.chameleon.fuchsia.core.constant.HttpStatus;
+import org.ow2.chameleon.fuchsia.core.constant.MediaType;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
 import org.ow2.chameleon.fuchsia.push.base.hub.exception.SubscriptionException;
@@ -36,6 +38,8 @@ import static org.ow2.chameleon.fuchsia.importer.push.Constants.*;
 public class SubscriptionImporter extends AbstractImporterComponent implements SubscriberOutput {
 
     private static final Logger LOG = LoggerFactory.getLogger(SubscriptionImporter.class);
+
+    public static final String PUBSUBHUBBUB_USER_AGENT = "RSS pubsubhubbub 0.3";
 
     static List<String> approvedActions = new Vector<String>();
 
@@ -104,8 +108,8 @@ public class SubscriptionImporter extends AbstractImporterComponent implements S
                 throw new SubscriptionException("UnsupportedEncodingException thrown during subscription",e);
             }
             httppost.setEntity(entity);
-            httppost.setHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
-            httppost.setHeader(HttpHeaders.USER_AGENT, "RSS pubsubhubbub 0.3");
+            httppost.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED);
+            httppost.setHeader(HttpHeaders.USER_AGENT, PUBSUBHUBBUB_USER_AGENT);
 
             CloseableHttpClient httpclient = HttpClients.createDefault();
 
@@ -119,10 +123,10 @@ public class SubscriptionImporter extends AbstractImporterComponent implements S
             if (response != null) {
                 return response.getStatusLine().getStatusCode();
             } else {
-                return 400;
+                return HttpStatus.SC_BAD_REQUEST;
             }
         }
-        return 400;
+        return HttpStatus.SC_BAD_REQUEST;
     }
 
     public int unsubscribe(String hub, String topicUrl, String hostname, String verifyToken) throws SubscriptionException {
@@ -153,8 +157,8 @@ public class SubscriptionImporter extends AbstractImporterComponent implements S
             }
             httppost.setEntity(entity);
 
-            httppost.setHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
-            httppost.setHeader(HttpHeaders.USER_AGENT, "ERGO RSS pubsubhubbub 0.3");
+            httppost.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED);
+            httppost.setHeader(HttpHeaders.USER_AGENT, PUBSUBHUBBUB_USER_AGENT);
 
             CloseableHttpClient httpclient = HttpClients.createDefault();
             HttpResponse response = null;
@@ -167,10 +171,10 @@ public class SubscriptionImporter extends AbstractImporterComponent implements S
             if (response != null) {
                 return response.getStatusLine().getStatusCode();
             } else {
-                return 400;
+                return HttpStatus.SC_BAD_REQUEST;
             }
         }
-        return 400;
+        return HttpStatus.SC_BAD_REQUEST;
     }
 
     private void addAction(String hubmode, String hubtopic, String hubverify) {
@@ -201,9 +205,9 @@ public class SubscriptionImporter extends AbstractImporterComponent implements S
 
             int statusCode = subscribe(hub, hubTopic, callback, null, null);
 
-            if (statusCode == 204) {
+            if (statusCode == HttpStatus.SC_NO_CONTENT) {
                 LOG.info("the status code of the subscription is 204: the request was verified and that the subscription is active");
-            } else if (statusCode == 202) {
+            } else if (statusCode == HttpStatus.SC_ACCEPTED) {
                 LOG.info("the status code of the subscription is 202: the subscription has yet to be verified (asynchronous verification)");
             } else {
                 LOG.info("the status code of the subscription is {}", statusCode);

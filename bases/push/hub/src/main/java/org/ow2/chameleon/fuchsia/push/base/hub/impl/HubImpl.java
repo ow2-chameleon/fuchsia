@@ -12,6 +12,8 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.http.HttpService;
+import org.ow2.chameleon.fuchsia.core.constant.HttpHeaders;
+import org.ow2.chameleon.fuchsia.core.constant.MediaType;
 import org.ow2.chameleon.fuchsia.push.base.hub.Hub;
 import org.ow2.chameleon.fuchsia.push.base.hub.dto.ContentNotification;
 import org.ow2.chameleon.fuchsia.push.base.hub.dto.SubscriptionConfirmationRequest;
@@ -148,7 +150,8 @@ public class HubImpl implements Hub {
 
         Integer returnedCode = response.getStatusLine().getStatusCode();
 
-        return (returnedCode > 199) && (returnedCode < 300);
+        // if code is a success code return true, else false
+        return (199 < returnedCode) && (returnedCode < 300);
     }
 
     /**
@@ -157,16 +160,12 @@ public class HubImpl implements Hub {
      * @param cn
      */
     public void notifySubscriberCallback(ContentNotification cn) {
-
         String content = fetchContentFromPublisher(cn);
 
         distributeContentToSubscribers(content, cn.getUrl());
-
-
     }
 
     private void addCallbackToTopic(String callback, String topic) {
-
         List<String> callbacks = topicCallbackSubscriptionMap.get(topic);
 
         if (callbacks == null) {
@@ -175,7 +174,6 @@ public class HubImpl implements Hub {
         }
 
         callbacks.add(callback);
-
     }
 
     private void removeCallbackToTopic(String callback, String topic) {
@@ -239,7 +237,7 @@ public class HubImpl implements Hub {
                 try {
 
                     httpPost.setEntity(new StringEntity(content));
-                    httpPost.setHeader("Content-Type", "application/atom+xml");
+                    httpPost.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_ATOM_XML);
                     LOG.info("publisher --> Distributed content to callback: " + callback);
 
                     CloseableHttpClient httpclient = HttpClients.createDefault();

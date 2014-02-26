@@ -1,5 +1,6 @@
 package org.ow2.chameleon.fuchsia.push.base.hub.servlet;
 
+import org.ow2.chameleon.fuchsia.core.constant.HttpStatus;
 import org.ow2.chameleon.fuchsia.push.base.hub.HubInput;
 import org.ow2.chameleon.fuchsia.push.base.hub.dto.ContentNotification;
 import org.ow2.chameleon.fuchsia.push.base.hub.exception.InvalidContentNotification;
@@ -42,10 +43,10 @@ public class ContentUpdatedNotificationServlet extends HttpServlet {
         } catch (InvalidContentNotification invalidContentNotification) {
             LOG.error("Failed to parse notification", invalidContentNotification);
             //bad request
-            resp.setStatus(400);
+            resp.setStatus(HttpStatus.SC_BAD_REQUEST);
         } finally {
             //no content (notification accepted)
-            resp.setStatus(204);
+            resp.setStatus(HttpStatus.SC_NO_CONTENT);
         }
 
     }

@@ -1,5 +1,6 @@
 package org.ow2.chameleon.fuchsia.push.base.hub.servlet;
 
+import org.ow2.chameleon.fuchsia.core.constant.HttpStatus;
 import org.ow2.chameleon.fuchsia.push.base.hub.HubInput;
 import org.ow2.chameleon.fuchsia.push.base.hub.dto.SubscriptionRequest;
 import org.slf4j.Logger;
@@ -32,11 +33,11 @@ public class SubscriptionServlet extends HttpServlet {
 
             hub.subscriptionRequestReceived(subscriptionRequest);
 
-            resp.setStatus(204);
+            resp.setStatus(HttpStatus.SC_NO_CONTENT);
 
         } catch (Exception exception) {
 
-            resp.setStatus(400);
+            resp.setStatus(HttpStatus.SC_BAD_REQUEST);
 
             LOG.error("Failed to created response to the request", exception);
 

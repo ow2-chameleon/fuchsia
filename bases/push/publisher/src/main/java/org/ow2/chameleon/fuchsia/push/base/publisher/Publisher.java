@@ -6,6 +6,7 @@ import com.sun.syndication.io.SyndFeedOutput;
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.http.HttpService;
+import org.ow2.chameleon.fuchsia.core.constant.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,8 +32,6 @@ public class Publisher extends HttpServlet {
 
     BundleContext context;
 
-
-
     public Publisher() {
 
     }
@@ -44,13 +43,9 @@ public class Publisher extends HttpServlet {
     @Validate
     public void start() {
         try {
-
             http.registerServlet(PUBLISHER_URL, new Publisher(), null, null);
-
         } catch (Exception e) {
-
             LOG.error("Failed to publish Publisher URL", e);
-
         }
     }
 
@@ -90,7 +85,7 @@ public class Publisher extends HttpServlet {
         entry.setLink("http://wiki.java.net/bin/view/Javawsxml/Rome01");
         entry.setPublishedDate(new Date());
         description = new SyndContentImpl();
-        description.setType("text/plain");
+        description.setType(MediaType.TEXT_PLAIN);
         description.setValue("Initial release of ROME");
         entry.setDescription(description);
         entries.add(entry);

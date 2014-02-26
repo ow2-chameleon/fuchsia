@@ -2,6 +2,7 @@ package org.ow2.chameleon.fuchsia.push.base.hub.dto;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.ow2.chameleon.fuchsia.core.constant.MediaType;
 import org.ow2.chameleon.fuchsia.push.base.hub.exception.InvalidContentNotification;
 
 import javax.servlet.http.HttpServletRequest;
@@ -53,7 +54,7 @@ public class ContentNotification {
     }
 
     private static void validateRequest(HttpServletRequest request) throws InvalidContentNotification {
-        if (!"application/x-www-form-urlencoded".equals(request.getContentType())) {
+        if (!MediaType.APPLICATION_FORM_URLENCODED.equals(request.getContentType())) {
             throw new InvalidContentNotification("Invalid content type");
         }
 

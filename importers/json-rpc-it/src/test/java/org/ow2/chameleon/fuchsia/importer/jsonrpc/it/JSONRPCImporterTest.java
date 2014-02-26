@@ -9,6 +9,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.ops4j.pax.exam.CoreOptions;
 import org.ops4j.pax.exam.Option;
+import org.ow2.chameleon.fuchsia.core.constant.HttpStatus;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclarationBuilder;
 import org.ow2.chameleon.fuchsia.testing.ImporterComponentAbstractTest;
@@ -128,7 +129,7 @@ public class JSONRPCImporterTest extends ImporterComponentAbstractTest {
 
                 int size = byteArrayOutputStream.size();
                 // send response header
-                httpExchange.sendResponseHeaders(200, size);
+                httpExchange.sendResponseHeaders(HttpStatus.SC_OK, size);
 
                 // write response to real outputStream
                 OutputStream realOs = httpExchange.getResponseBody();
