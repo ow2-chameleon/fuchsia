@@ -105,12 +105,7 @@
                             ${project.artifactId}
                         </Bundle-SymbolicName>
                         <Export-Package>
-                            org.ow2.chameleon.fuchsia.core,
-                            org.ow2.chameleon.fuchsia.core.component,
-                            org.ow2.chameleon.fuchsia.core.component.manager,
-                            org.ow2.chameleon.fuchsia.core.exceptions,
-                            org.ow2.chameleon.fuchsia.core.util,
-                            org.ow2.chameleon.fuchsia.core.declaration
+                            {local-packages}
                         </Export-Package>
                         <Import-Package>
                             *
