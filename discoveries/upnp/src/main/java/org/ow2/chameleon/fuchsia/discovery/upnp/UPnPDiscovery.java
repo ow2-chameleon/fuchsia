@@ -12,10 +12,7 @@ import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclarationBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Discovery UPnP  Detects the presence of a UPnP device (in a basedriver interface level) and publishes it as a importation declaration that can be seen by Fuchsia
@@ -29,7 +26,7 @@ public class UPnPDiscovery extends AbstractDiscoveryComponent {
 
     private static final Logger LOG = LoggerFactory.getLogger(UPnPDiscovery.class);
 
-    private final HashMap<String, ImportDeclaration> importDeclarations = new HashMap<String, ImportDeclaration>();
+    private final Map<String, ImportDeclaration> importDeclarations = new HashMap<String, ImportDeclaration>();
 
     @ServiceProperty(name = "instance.name")
     private String name;
@@ -91,7 +88,7 @@ public class UPnPDiscovery extends AbstractDiscoveryComponent {
      */
     public synchronized void createImportationDeclaration(String deviceId, String deviceType, String deviceSubType, ServiceReference reference) {
 
-        HashMap<String, Object> metadata = new HashMap<String, Object>();
+        Map<String, Object> metadata = new HashMap<String, Object>();
         metadata.put(Constants.DEVICE_ID, deviceId);
         metadata.put(Constants.DEVICE_TYPE, deviceType);
         metadata.put(Constants.DEVICE_TYPE_SUB, deviceSubType);

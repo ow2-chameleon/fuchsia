@@ -78,7 +78,7 @@ public class MQTTOutputRouter implements Runnable {
 
                 LOG.info("Forwarding ..");
 
-                Hashtable metatable=new Hashtable();
+                Dictionary metatable=new Hashtable();
                 metatable.put("content", message);
 
                 eventAdmin.sendEvent(getEventAdminMessage(metatable));

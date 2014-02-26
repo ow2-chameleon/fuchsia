@@ -20,7 +20,6 @@ import java.util.*;
 
 import static org.apache.felix.ipojo.Factory.*;
 import static org.ow2.chameleon.fuchsia.core.declaration.Constants.ID;
-import static org.ow2.chameleon.fuchsia.core.declaration.Constants.PROTOCOL_NAME;
 
 
 @Component(immediate = true)
@@ -36,19 +35,19 @@ public class FuchsiaGogoCommand {
 
     private static final Logger LOG = LoggerFactory.getLogger(FuchsiaGogoCommand.class);
 
+    private final BundleContext context;
+
     @ServiceProperty(name = "osgi.command.scope", value = "fuchsia")
-    String m_scope;
+    private String scope;
 
     @ServiceProperty(name = "osgi.command.function", value = "{}")
-    String[] m_function = new String[]{"declarations", "declaration", "linker", "discovery", "importer", "exporter", "sendmessage"};
+    private String[] function = new String[]{"declarations", "declaration", "linker", "discovery", "importer", "exporter", "sendmessage"};
 
     @Requires
-    EventAdmin eventAdmin;
-
-    private BundleContext m_context = null;
+    private EventAdmin eventAdmin;
 
     public FuchsiaGogoCommand(BundleContext context) {
-        this.m_context = context;
+        this.context = context;
     }
 
     // ---------------- DECLARATION
@@ -87,7 +86,7 @@ public class FuchsiaGogoCommand {
 
     private void displayDeclarationList(List<ServiceReference> references) {
         for (ServiceReference reference : references) {
-            Declaration declaration = (Declaration) m_context.getService(reference);
+            Declaration declaration = (Declaration) context.getService(reference);
             String state;
             if (declaration.getStatus().isBound()) {
                 state = " BOUND ";
@@ -128,7 +127,7 @@ public class FuchsiaGogoCommand {
             return;
         }
 
-        HashMap<ServiceReference, Declaration> declarations = null;
+        Map<ServiceReference, Declaration> declarations = null;
 
         String type=getArgumentValue("-t",parameters);
 
@@ -193,8 +192,8 @@ public class FuchsiaGogoCommand {
     public void linker(@Descriptor("linker [-(import|export)] [ID name]") String... parameters) {
         String filter = null;
         try {
-            ServiceReference[] exportationLinkerRef = m_context.getAllServiceReferences(ExportationLinker.class.getName(), filter);
-            ServiceReference[] importationLinkerRef = m_context.getAllServiceReferences(ImportationLinker.class.getName(), filter);
+            ServiceReference[] exportationLinkerRef = context.getAllServiceReferences(ExportationLinker.class.getName(), filter);
+            ServiceReference[] importationLinkerRef = context.getAllServiceReferences(ImportationLinker.class.getName(), filter);
             if (exportationLinkerRef != null || importationLinkerRef != null) {
                 if (exportationLinkerRef != null)
                     for (ServiceReference reference : exportationLinkerRef) {
@@ -221,7 +220,7 @@ public class FuchsiaGogoCommand {
     public void discovery(@Descriptor("discovery [discovery name]") String... parameters) {
         String filter = null;
         try {
-            ServiceReference[] discoveryRef = m_context.getAllServiceReferences(DiscoveryService.class.getName(), filter);
+            ServiceReference[] discoveryRef = context.getAllServiceReferences(DiscoveryService.class.getName(), filter);
             if (discoveryRef != null) {
                 for (ServiceReference reference : discoveryRef) {
                     displayServiceInfo("Discovery", reference);
@@ -242,11 +241,11 @@ public class FuchsiaGogoCommand {
     public void importer(@Descriptor("importer [importer name]") String... parameters) {
         String filter = null;
         try {
-            ServiceReference[] discoveryRef = m_context.getAllServiceReferences(ImporterService.class.getName(), filter);
+            ServiceReference[] discoveryRef = context.getAllServiceReferences(ImporterService.class.getName(), filter);
             if (discoveryRef != null) {
                 for (ServiceReference reference : discoveryRef) {
                     displayServiceInfo("Importer", reference);
-                    ImporterService is = (ImporterService) m_context.getService(reference);
+                    ImporterService is = (ImporterService) context.getService(reference);
                     System.out.println(String.format("\t*importer name = %s", is.getName()));
                     displayServiceProperties("Importer", reference, "\t\t");
                 }
@@ -265,11 +264,11 @@ public class FuchsiaGogoCommand {
     public void exporter(@Descriptor("exporter [exporter name]") String... parameters) {
         String filter = null;
         try {
-            ServiceReference[] discoveryRef = m_context.getAllServiceReferences(ExporterService.class.getName(), filter);
+            ServiceReference[] discoveryRef = context.getAllServiceReferences(ExporterService.class.getName(), filter);
             if (discoveryRef != null) {
                 for (ServiceReference reference : discoveryRef) {
                     displayServiceInfo("Exporter", reference);
-                    ExporterService es = (ExporterService) m_context.getService(reference);
+                    ExporterService es = (ExporterService) context.getService(reference);
                     System.out.println(String.format("\t*exporter name = %s", es.getName()));
                     displayServiceProperties("Exporter", reference, "\t\t");
                 }
@@ -310,7 +309,7 @@ public class FuchsiaGogoCommand {
     private <T> List<ServiceReference> getAllServiceRefs(Class<T> klass) {
         ServiceReference[] importDeclarationsRef;
         try {
-            importDeclarationsRef = m_context.getAllServiceReferences(klass.getName(), null);
+            importDeclarationsRef = context.getAllServiceReferences(klass.getName(), null);
         } catch (InvalidSyntaxException e) {
             LOG.error("Failed to retrieved services " + klass.getName(), e);
             return new ArrayList<ServiceReference>();
@@ -324,7 +323,7 @@ public class FuchsiaGogoCommand {
     private <T> List<T> getAllServices(Class<T> klass) {
         List<T> services = new ArrayList<T>();
         for (ServiceReference sr : getAllServiceRefs(klass)) {
-            services.add((T) m_context.getService(sr));
+            services.add((T) context.getService(sr));
         }
         return services;
     }
@@ -332,7 +331,7 @@ public class FuchsiaGogoCommand {
     private <T> Map<ServiceReference, T> getAllServiceRefsAndServices(Class<T> klass) {
         Map<ServiceReference, T> services = new HashMap<ServiceReference, T>();
         for (ServiceReference sr : getAllServiceRefs(klass)) {
-            services.put(sr, (T) m_context.getService(sr));
+            services.put(sr, (T) context.getService(sr));
         }
 
         return services;

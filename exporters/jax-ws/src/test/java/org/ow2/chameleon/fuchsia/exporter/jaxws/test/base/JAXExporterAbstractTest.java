@@ -120,7 +120,7 @@ public abstract class JAXExporterAbstractTest {
 
         exporter=constructor().withParameterTypes(BundleContext.class).in(JAXWSExporter.class).newInstance(context);
 
-        field("HTTP_PORT").ofType(Integer.class).in(exporter).set(HTTP_PORT);
+        field("httpPort").ofType(Integer.class).in(exporter).set(HTTP_PORT);
 
     }
 

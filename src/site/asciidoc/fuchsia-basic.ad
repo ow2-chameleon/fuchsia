@@ -569,7 +569,7 @@ As always here is it the example we put to work:
 @Instantiate
 public class BookClient {
 
-    private BundleContext context;
+    private final BundleContext context;
 
     @Requires (filter = "(fuchsia.importer.id=cxf-protobuffer-importer)")
     AddressBookProtos.AddressBookService addressBook;

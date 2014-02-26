@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
@@ -36,7 +37,7 @@ public class PhilipsHueDiscovery extends AbstractDiscoveryComponent implements P
     private String name;
 
     @ServiceProperty(name = "philips.hue.discovery.pooling",value = "5000")
-    private Long DISCOVERY_POLLING_TIME;
+    private Long pollingTime;
 
     private PHAccessPoint ap;
 
@@ -80,7 +81,7 @@ public class PhilipsHueDiscovery extends AbstractDiscoveryComponent implements P
     public void onBridgeConnected(PHBridge phBridge) {
 
         PHHueSDK.getInstance().setSelectedBridge(phBridge);
-        PHHueSDK.getInstance().enableHeartbeat(phBridge, DISCOVERY_POLLING_TIME);
+        PHHueSDK.getInstance().enableHeartbeat(phBridge, pollingTime);
         LOG.info("bridge connected");
 
     }
@@ -161,9 +162,9 @@ public class PhilipsHueDiscovery extends AbstractDiscoveryComponent implements P
             }
 
             try {
-                Thread.sleep(DISCOVERY_POLLING_TIME);
+                Thread.sleep(pollingTime);
             } catch (InterruptedException e) {
-                LOG.error("failed to put in wait state");
+                LOG.error("failed to put in wait state", e);
             }
 
 
@@ -172,7 +173,7 @@ public class PhilipsHueDiscovery extends AbstractDiscoveryComponent implements P
 
     private void generateImportDeclaration(PHLight light,PHBridge bridge){
 
-        HashMap<String, Object> metadata = new HashMap<String, Object>();
+        Map<String, Object> metadata = new HashMap<String, Object>();
 
         metadata.put("id", light.getIdentifier());
         metadata.put("discovery.philips.device.name", light.getModelNumber());

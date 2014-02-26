@@ -8,7 +8,6 @@ import org.apache.felix.ipojo.annotations.*;
 import org.apache.felix.service.command.Descriptor;
 import org.osgi.framework.BundleContext;
 
-import java.util.Random;
 import java.util.Set;
 
 @Component
@@ -16,11 +15,13 @@ import java.util.Set;
 @Provides
 public class PhilipsHueGogoCommand {
 
+    private final BundleContext context;
+
     @ServiceProperty(name = "osgi.command.scope", value = "philips")
-    String m_scope;
+    private String scope;
 
     @ServiceProperty(name = "osgi.command.function", value = "{}")
-    String[] m_function = new String[]{"phlist","phset"};
+    private String[] function = new String[]{"phlist","phset"};
 
     @Requires(specification = "com.philips.lighting.model.PHLight")
     Set<PHLight> lights;
@@ -28,10 +29,8 @@ public class PhilipsHueGogoCommand {
     @Requires
     PHBridge bridge;
 
-    private BundleContext m_context = null;
-
     public PhilipsHueGogoCommand(BundleContext context) {
-        this.m_context = context;
+        this.context = context;
     }
 
     @Descriptor  (value = "List all lights available")

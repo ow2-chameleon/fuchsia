@@ -41,16 +41,12 @@ public class HubImpl implements Hub {
 
     private static final Logger LOG = LoggerFactory.getLogger(HubImpl.class);
 
+    private final BundleContext context;
+
     @Requires
-    HttpService http;
+    private HttpService http;
 
-    BundleContext context;
-
-    Map<String, List<String>> topicCallbackSubscriptionMap = new HashMap<String, List<String>>();
-
-    public HubImpl() {
-
-    }
+    private Map<String, List<String>> topicCallbackSubscriptionMap = new HashMap<String, List<String>>();
 
     public HubImpl(BundleContext context) {
         this.context = context;

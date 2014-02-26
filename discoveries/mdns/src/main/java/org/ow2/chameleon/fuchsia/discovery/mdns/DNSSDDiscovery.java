@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Map;
 
 
 @Component
@@ -23,7 +24,7 @@ public class DNSSDDiscovery extends AbstractDiscoveryComponent implements Networ
 
     private static final Logger LOG = LoggerFactory.getLogger(DNSSDDiscovery.class);
 
-    private final HashMap<String, ImportDeclaration> importDeclarations = new HashMap<String, ImportDeclaration>();
+    private final Map<String, ImportDeclaration> importDeclarations = new HashMap<String, ImportDeclaration>();
 
     @Property(name = "dnssd.service.type",value = MDNSConstants.DNSSD_SERVICE_TYPE)
     private String dnssdServiceType;
@@ -88,7 +89,7 @@ public class DNSSDDiscovery extends AbstractDiscoveryComponent implements Networ
 
     private synchronized void createImportationDeclaration(ServiceEvent event) {
 
-        HashMap<String, Object> metadata = new HashMap<String, Object>();
+        Map<String, Object> metadata = new HashMap<String, Object>();
 
         StringBuffer bufAddress=new StringBuffer();
 

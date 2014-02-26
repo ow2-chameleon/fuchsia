@@ -33,9 +33,9 @@ public class JAXWSExporter extends AbstractExporterComponent {
 
     private static final Logger LOG = LoggerFactory.getLogger(JAXWSExporter.class);
 
-    private Bus cxfbus;
-
     private final BundleContext context;
+
+    private Bus cxfbus;
 
     private ServiceReference serviceReference;
 
@@ -47,7 +47,7 @@ public class JAXWSExporter extends AbstractExporterComponent {
     private Server httpServer;
 
     @ServiceProperty(name = "org.osgi.service.http.port")
-    private Integer HTTP_PORT;
+    private Integer httpPort;
 
     @ServiceProperty(name = "target")
     private String filter;
@@ -100,7 +100,7 @@ public class JAXWSExporter extends AbstractExporterComponent {
 
         } catch (Exception e) {
 
-            LOG.error("Failed exporting in CXF, with the message {}", e.getMessage());
+            LOG.error("Failed exporting in CXF", e);
             throw new RuntimeException(e);
 
         }
@@ -198,7 +198,7 @@ public class JAXWSExporter extends AbstractExporterComponent {
 
     private CXFServlet configStandaloneServer(){
 
-        httpServer=new Server(HTTP_PORT);
+        httpServer=new Server(httpPort);
 
         Bus bus = BusFactory.getDefaultBus(true);
 

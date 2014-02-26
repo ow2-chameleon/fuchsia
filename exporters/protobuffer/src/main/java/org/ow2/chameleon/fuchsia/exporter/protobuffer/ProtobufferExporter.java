@@ -40,22 +40,22 @@ public class ProtobufferExporter extends AbstractExporterComponent {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProtobufferExporter.class);
 
+    private final BundleContext context;
+
     private Map<String,Server> serverPublished=new HashMap<String,Server>();
 
-    org.eclipse.jetty.server.Server httpServer;
+    private org.eclipse.jetty.server.Server httpServer;
 
     @ServiceProperty(name = "org.osgi.service.http.port")
-    private Integer HTTP_PORT;
+    private Integer httpPort;
 
     private Bus cxfbus;
 
     @Requires
-    HttpService http;
+    private HttpService http;
 
     @ServiceProperty(name = "target")
     private String filter;
-
-    BundleContext context;
 
     public ProtobufferExporter(BundleContext context) {
         this.context = context;
@@ -99,7 +99,7 @@ public class ProtobufferExporter extends AbstractExporterComponent {
     }
 
     private CXFServlet configStandaloneServer(){
-        httpServer = new org.eclipse.jetty.server.Server(HTTP_PORT);
+        httpServer = new org.eclipse.jetty.server.Server(httpPort);
         Bus bus = BusFactory.getDefaultBus(true);
         ContextHandlerCollection contexts = new ContextHandlerCollection();
         httpServer.setHandler(contexts);

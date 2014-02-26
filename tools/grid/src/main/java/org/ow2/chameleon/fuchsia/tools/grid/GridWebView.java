@@ -93,8 +93,8 @@ public class GridWebView {
 
     public Map generateTemplateModel(){
 
-        ArrayList nodes=new ArrayList();
-        ArrayList edges=new ArrayList();
+        List nodes=new ArrayList();
+        List edges=new ArrayList();
 
         Map templateVariables=new HashMap<String,Object>();
 
