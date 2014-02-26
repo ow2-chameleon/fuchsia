@@ -79,7 +79,7 @@ public class JSONRPCExporter extends AbstractExporterComponent {
                 klass=context.getBundle().loadClass(jp.getInstanceClass());
             }
 
-            String osgiFilter=String.format("(instance.name=%s)", jp.getInstanceName()).toString();
+            String osgiFilter= String.format("(instance.name=%s)", jp.getInstanceName());
 
             Collection<ServiceReference> references = new ArrayList(context.getServiceReferences(klass,osgiFilter));
 
@@ -87,7 +87,7 @@ public class JSONRPCExporter extends AbstractExporterComponent {
 
             final JsonRpcServer jsonRpcServer = new JsonRpcServer(serviceToBePublished, klass);
 
-            final String endpointURL=String.format("%s/%s",jp.getUrlContext(),jp.getInstanceName()).toString();
+            final String endpointURL=String.format("%s/%s",jp.getUrlContext(),jp.getInstanceName());
 
             Servlet gs=new RPCServlet(jsonRpcServer);
 
@@ -118,7 +118,7 @@ public class JSONRPCExporter extends AbstractExporterComponent {
 
         JSONRPCExporterPojo jp=JSONRPCExporterPojo.create(exportDeclaration);
 
-        final String endpointURL=String.format("%s/%s",jp.getUrlContext(),jp.getInstanceName()).toString();
+        final String endpointURL=String.format("%s/%s",jp.getUrlContext(),jp.getInstanceName());
 
         exportDeclaration.unhandle(serviceReference);
 

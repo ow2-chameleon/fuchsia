@@ -10,7 +10,9 @@ public class ProtobufferImporterPojo {
     private String service;
     private String message;
 
-    private ProtobufferImporterPojo(){}
+    private ProtobufferImporterPojo(){
+
+    }
 
     public static ProtobufferImporterPojo create(ImportDeclaration importDeclaration){
 

@@ -12,7 +12,9 @@ public class PhilipsImporterPojo {
     private String bridgeType;
     private Object bridgeObject;
 
-    private PhilipsImporterPojo(){}
+    private PhilipsImporterPojo(){
+
+    }
 
     public static PhilipsImporterPojo create(ImportDeclaration importDeclaration) throws BinderException {
 

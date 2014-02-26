@@ -38,8 +38,6 @@ public class FileBasedDiscoveryImport extends AbstractFileBasedDiscovery<ImportD
     @ServiceProperty(name = FileBasedDiscoveryConstants.FILEBASED_DISCOVERY_PROPERTY_POLLING_TIME_KEY, value = FileBasedDiscoveryConstants.FILEBASED_DISCOVERY_PROPERTY_POLLING_TIME_VALUE)
     private Long pollingTime;
 
-    private final Map<String, ImportDeclaration> importDeclarationsFile = new HashMap<String, ImportDeclaration>();
-
     public FileBasedDiscoveryImport(BundleContext bundleContext) {
         super(bundleContext, ImportDeclaration.class);
     }

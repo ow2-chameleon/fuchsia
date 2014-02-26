@@ -76,11 +76,12 @@ public class GridWebView {
 
             ServiceReference[] references=bundleContext.getServiceReferences(ImportationLinkerIntrospection.class.getName(),null);
 
-            if(references!=null)
-            for(ServiceReference sr:bundleContext.getServiceReferences(ImportationLinkerIntrospection.class.getName(),null)){
+            if(references!=null) {
+                for (ServiceReference sr : bundleContext.getServiceReferences(ImportationLinkerIntrospection.class.getName(), null)) {
 
-                linkers.add((ImportationLinkerIntrospection) bundleContext.getService(sr));
+                    linkers.add((ImportationLinkerIntrospection) bundleContext.getService(sr));
 
+                }
             }
 
         } catch (InvalidSyntaxException e) {

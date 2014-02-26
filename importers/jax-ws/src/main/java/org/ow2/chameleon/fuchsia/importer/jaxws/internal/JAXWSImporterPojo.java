@@ -10,24 +10,24 @@ public class JAXWSImporterPojo {
     private String endpoint;
     private String clazz;
 
-    private void JAXWSImporterPojo(){
+    private JAXWSImporterPojo() {
 
     }
 
-    public static JAXWSImporterPojo create(ImportDeclaration importer) throws BinderException{
+    public static JAXWSImporterPojo create(ImportDeclaration importer) throws BinderException {
 
 
-        JAXWSImporterPojo pojo=new JAXWSImporterPojo();
+        JAXWSImporterPojo pojo = new JAXWSImporterPojo();
 
-        Object endpointObject=importer.getMetadata().get(JAXWSImporter.ENDPOINT_URL);
-        Object classNameObject=importer.getMetadata().get(JAXWSImporter.CLASSNAME);
+        Object endpointObject = importer.getMetadata().get(JAXWSImporter.ENDPOINT_URL);
+        Object classNameObject = importer.getMetadata().get(JAXWSImporter.CLASSNAME);
 
-        if(endpointObject==null || classNameObject==null){
-            throw new BinderException(String.format("Parameters missing endpoint=%s classname=%s",endpointObject,classNameObject).toString());
+        if (endpointObject == null || classNameObject == null) {
+            throw new BinderException(String.format("Parameters missing endpoint=%s classname=%s", endpointObject, classNameObject));
         }
 
-        pojo.endpoint=(String) endpointObject;
-        pojo.clazz=(String) classNameObject;
+        pojo.endpoint = (String) endpointObject;
+        pojo.clazz = (String) classNameObject;
 
         return pojo;
 

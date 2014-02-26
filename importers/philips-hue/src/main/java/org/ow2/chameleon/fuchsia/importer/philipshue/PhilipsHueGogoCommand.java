@@ -15,8 +15,6 @@ import java.util.Set;
 @Provides
 public class PhilipsHueGogoCommand {
 
-    private final BundleContext context;
-
     @ServiceProperty(name = "osgi.command.scope", value = "philips")
     private String scope;
 
@@ -29,8 +27,8 @@ public class PhilipsHueGogoCommand {
     @Requires
     PHBridge bridge;
 
-    public PhilipsHueGogoCommand(BundleContext context) {
-        this.context = context;
+    public PhilipsHueGogoCommand() {
+
     }
 
     @Descriptor  (value = "List all lights available")
@@ -104,20 +102,11 @@ public class PhilipsHueGogoCommand {
      * @return the value associated with the parameter or Null in case it is not present
      */
     private String getArgumentValue(String option, String... params) {
-
-        boolean found = false;
-        String value = null;
-
         for (int i = 0; i < params.length; i++) {
             if (i < (params.length - 1) && params[i].equals(option)) {
-                found = true;
-                value = params[i + 1];
-                break;
+                return params[i + 1];
             }
         }
-
-        if (found)
-            return value;
 
         return null;
     }

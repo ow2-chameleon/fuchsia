@@ -13,7 +13,9 @@ public class ProtobufferExporterPojo {
     String service;
 
 
-    private ProtobufferExporterPojo(){}
+    private ProtobufferExporterPojo(){
+
+    }
 
     public static ProtobufferExporterPojo create(ExportDeclaration exportDeclaration) throws BinderException{
 
@@ -68,5 +70,7 @@ public class ProtobufferExporterPojo {
         return filter;
     }
 
-    public String getService() {  return service; }
+    public String getService() {
+        return service;
+    }
 }

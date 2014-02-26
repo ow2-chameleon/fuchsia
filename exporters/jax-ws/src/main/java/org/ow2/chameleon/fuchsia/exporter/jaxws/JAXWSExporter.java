@@ -23,6 +23,7 @@ import org.ow2.chameleon.fuchsia.exporter.jaxws.internal.Constants;
 import org.ow2.chameleon.fuchsia.exporter.jaxws.internal.CxfExporterPojo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import javax.servlet.ServletException;
 import java.util.HashMap;
 import java.util.Map;
@@ -39,7 +40,7 @@ public class JAXWSExporter extends AbstractExporterComponent {
 
     private ServiceReference serviceReference;
 
-    private Map<String,org.apache.cxf.endpoint.Server> exportedDeclaration=new HashMap<String,org.apache.cxf.endpoint.Server>();
+    private Map<String, org.apache.cxf.endpoint.Server> exportedDeclaration = new HashMap<String, org.apache.cxf.endpoint.Server>();
 
     @Requires
     private HttpService http;
@@ -52,8 +53,8 @@ public class JAXWSExporter extends AbstractExporterComponent {
     @ServiceProperty(name = "target")
     private String filter;
 
-    public JAXWSExporter(BundleContext context){
-        this.context=context;
+    public JAXWSExporter(BundleContext context) {
+        this.context = context;
     }
 
     @Override
@@ -61,28 +62,28 @@ public class JAXWSExporter extends AbstractExporterComponent {
 
         LOG.info("exporting {}", exportDeclaration.getMetadata());
 
-        CxfExporterPojo pojo=CxfExporterPojo.create(exportDeclaration);
+        CxfExporterPojo pojo = CxfExporterPojo.create(exportDeclaration);
 
         try {
 
             ServerFactoryBean srvFactory = new ServerFactoryBean();
 
-            Class ref = FuchsiaUtils.loadClass(this.context,pojo.getClazz());
+            Class ref = FuchsiaUtils.loadClass(this.context, pojo.getClazz());
 
             srvFactory.setServiceClass(ref);
 
             srvFactory.setBus(cxfbus);
 
-            Object instance=null;
+            Object instance = null;
 
             ServiceReference[] jaxWsReferences = context.getAllServiceReferences(pojo.getClazz(), pojo.getFilter());
 
-            if(jaxWsReferences==null){
+            if (jaxWsReferences == null) {
                 LOG.warn("instance not found to be exported, ignoring exportation request, filter:" + pojo.getFilter());
                 return;
             }
 
-            Object object=context.getService(jaxWsReferences[0]);
+            Object object = context.getService(jaxWsReferences[0]);
 
             srvFactory.setServiceBean(object);
 
@@ -116,12 +117,12 @@ public class JAXWSExporter extends AbstractExporterComponent {
 
         exportDeclaration.unhandle(serviceReference);
 
-        org.apache.cxf.endpoint.Server exported=exportedDeclaration.get(webcontext);
+        org.apache.cxf.endpoint.Server exported = exportedDeclaration.get(webcontext);
 
-        if(exported!=null){
+        if (exported != null) {
             exported.destroy();
             LOG.info("Endpoint destroyed: {}", webcontext);
-        }else {
+        } else {
             LOG.warn("Error destroying endpoint {}, is was not registered before.", webcontext);
         }
 
@@ -145,60 +146,49 @@ public class JAXWSExporter extends AbstractExporterComponent {
 
         CXFNonSpringServlet cxfServlet = new CXFNonSpringServlet();
 
-        try {
-
-            if(http!=null){
+        if (http != null) {
+            try {
                 http.registerServlet(Constants.CXF_SERVLET, cxfServlet, null, null);
-            }else {
-
-                try {
-
-                    cxfServlet=configStandaloneServer();
-
-                    httpServer.start();
-
-                } catch (Exception e1) {
-                    LOG.error("Impossible to start standalone CXF Jetty server.",e1);
-                }
-
-
-
+            } catch (ServletException e) {
+                LOG.error("Failed registering CXF servlet", e);
+            } catch (NamespaceException e) {
+                LOG.error("Failed registering CXF servlet", e);
             }
-
-        } catch (ServletException e) {
-            LOG.error("Failed registering CXF servlet", e);
-        } catch (NamespaceException e) {
-            LOG.error("Failed registering CXF servlet", e);
+        } else {
+            try {
+                cxfServlet = configStandaloneServer();
+                httpServer.start();
+            } catch (Exception e1) {
+                LOG.error("Impossible to start standalone CXF Jetty server.", e1);
+            }
         }
-
         cxfbus = cxfServlet.getBus();
-
     }
 
     @Invalidate
-    public void stop(){
+    public void stop() {
 
         super.stop();
 
-        if(http!=null){
+        if (http != null) {
             http.unregister(Constants.CXF_SERVLET);
-        }else {
+        } else {
             try {
                 httpServer.stop();
             } catch (Exception e) {
-                LOG.error("Failed to stop standalone CXF Jetty server.",e);
+                LOG.error("Failed to stop standalone CXF Jetty server.", e);
             }
         }
 
-        for(Map.Entry<String,org.apache.cxf.endpoint.Server> item:exportedDeclaration.entrySet()){
+        for (Map.Entry<String, org.apache.cxf.endpoint.Server> item : exportedDeclaration.entrySet()) {
             item.getValue().destroy();
         }
 
     }
 
-    private CXFServlet configStandaloneServer(){
+    private CXFServlet configStandaloneServer() {
 
-        httpServer=new Server(httpPort);
+        httpServer = new Server(httpPort);
 
         Bus bus = BusFactory.getDefaultBus(true);
 

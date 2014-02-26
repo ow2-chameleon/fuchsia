@@ -18,35 +18,31 @@ public class NetworkTopology implements NetworkTopologyDiscovery {
 
     public InetAddress[] getInetAddresses() {
 
-        List<InetAddress> addresses=new ArrayList<InetAddress>();
+        List<InetAddress> addresses = new ArrayList<InetAddress>();
 
         try {
-            for (NetworkInterface ni :  Collections.list(NetworkInterface.getNetworkInterfaces())) {
+            for (NetworkInterface ni : Collections.list(NetworkInterface.getNetworkInterfaces())) {
 
                 for (InetAddress inetAddress : Collections.list(ni.getInetAddresses())) {
-                    if(!this.useInetAddress(ni, inetAddress)) continue;
-                    addresses.add(inetAddress);
+                    if (this.useInetAddress(ni, inetAddress)) {
+                        addresses.add(inetAddress);
+                    }
                 }
             }
 
-            return addresses.toArray(new InetAddress[0]);
+            return addresses.toArray(new InetAddress[addresses.size()]);
 
         } catch (SocketException e) {
-            LOGGER.error("Socket exception",e);
+            LOGGER.error("Socket exception", e);
         }
 
         return null;
 
     }
 
-    public boolean useInetAddress(NetworkInterface networkInterface,
-                                  InetAddress interfaceAddress) {
-
-        if (interfaceAddress instanceof Inet6Address
-            //TODO in the future hide localhost	|| !interfaceAddress.isLoopbackAddress()
-                ) return false;
-
-        return true;
+    public boolean useInetAddress(NetworkInterface networkInterface, InetAddress interfaceAddress) {
+        //TODO in the future hide localhost	|| !interfaceAddress.isLoopbackAddress()
+        return !(interfaceAddress instanceof Inet6Address);
     }
 
 

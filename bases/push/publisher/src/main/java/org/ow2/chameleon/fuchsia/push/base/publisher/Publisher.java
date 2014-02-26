@@ -14,13 +14,11 @@ public class Publisher {
 
     private static final String PUBLISHER_URL = "/publisher/main";
 
-    private final BundleContext context;
-
     @Requires
     private HttpService http;
 
-    public Publisher(BundleContext context) {
-        this.context = context;
+    public Publisher() {
+
     }
 
     @Validate

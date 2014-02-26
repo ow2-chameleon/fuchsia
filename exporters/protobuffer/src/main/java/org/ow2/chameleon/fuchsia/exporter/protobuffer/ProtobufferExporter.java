@@ -6,7 +6,6 @@ import com.google.protobuf.Service;
 import org.apache.cxf.Bus;
 import org.apache.cxf.BusFactory;
 import org.apache.cxf.binding.BindingFactoryManager;
-//import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.transport.servlet.CXFNonSpringServlet;
 import org.apache.cxf.transport.servlet.CXFServlet;
@@ -42,7 +41,7 @@ public class ProtobufferExporter extends AbstractExporterComponent {
 
     private final BundleContext context;
 
-    private Map<String,Server> serverPublished=new HashMap<String,Server>();
+    private Map<String, Server> serverPublished = new HashMap<String, Server>();
 
     private org.eclipse.jetty.server.Server httpServer;
 
@@ -68,37 +67,26 @@ public class ProtobufferExporter extends AbstractExporterComponent {
 
         CXFNonSpringServlet cxfServlet = new CXFNonSpringServlet();
 
-        try {
-
-            if(http!=null){
+        if (http != null) {
+            try {
                 http.registerServlet("/cxf", cxfServlet, null, null);
-            }else {
-
-                try {
-
-                    cxfServlet=configStandaloneServer();
-
-                    httpServer.start();
-
-                } catch (Exception e1) {
-                    LOG.error("Impossible to start standalone CXF Jetty server.",e1);
-                }
-
-
-
+            } catch (ServletException e) {
+                LOG.error("Failed registering CXF servlet", e);
+            } catch (NamespaceException e) {
+                LOG.error("Failed registering CXF servlet", e);
             }
-
-        } catch (ServletException e) {
-            LOG.error("Failed registering CXF servlet", e);
-        } catch (NamespaceException e) {
-            LOG.error("Failed registering CXF servlet", e);
+        } else {
+            try {
+                cxfServlet = configStandaloneServer();
+                httpServer.start();
+            } catch (Exception e1) {
+                LOG.error("Impossible to start standalone CXF Jetty server.", e1);
+            }
         }
-
         cxfbus = cxfServlet.getBus();
-
     }
 
-    private CXFServlet configStandaloneServer(){
+    private CXFServlet configStandaloneServer() {
         httpServer = new org.eclipse.jetty.server.Server(httpPort);
         Bus bus = BusFactory.getDefaultBus(true);
         ContextHandlerCollection contexts = new ContextHandlerCollection();
@@ -113,16 +101,16 @@ public class ProtobufferExporter extends AbstractExporterComponent {
     }
 
     @Invalidate
-    public void stop(){
+    public void stop() {
         super.stop();
-        if(httpServer!=null){
+        if (httpServer != null) {
             try {
                 httpServer.stop();
             } catch (Exception e) {
-                LOG.warn("Failed to stop standalone server.",e);
+                LOG.warn("Failed to stop standalone server.", e);
             }
         }
-        for(Map.Entry<String,Server> entry:serverPublished.entrySet()){
+        for (Map.Entry<String, Server> entry : serverPublished.entrySet()) {
             serverPublished.remove(entry.getKey());
             entry.getValue().stop();
         }
@@ -133,13 +121,13 @@ public class ProtobufferExporter extends AbstractExporterComponent {
 
         LOG.info("initiating exportation...");
 
-        ProtobufferExporterPojo pojo=ProtobufferExporterPojo.create(exportDeclaration);
+        ProtobufferExporterPojo pojo = ProtobufferExporterPojo.create(exportDeclaration);
 
         try {
 
             Class inter = FuchsiaUtils.loadClass(context, String.format("%s$%s", pojo.getClazz(), pojo.getService()));
             Class messageClass = FuchsiaUtils.loadClass(context, String.format("%s$%s", pojo.getClazz(), pojo.getMessage()));
-            LOG.info("Looking for service that provides class {}",pojo.getClazz()+"$"+pojo.getService());
+            LOG.info("Looking for service that provides class {}", pojo.getClazz() + "$" + pojo.getService());
             Collection<ServiceReference<Service>> protobuffReferences = context.getServiceReferences(inter, pojo.getFilter());
             LOG.info("using filter " + pojo.getFilter() + " to find instance");
             if (protobuffReferences.size() == 0) {
@@ -159,8 +147,8 @@ public class ProtobufferExporter extends AbstractExporterComponent {
                     serverFactoryBean.setMessageClass(messageClass);
                     ClassLoader loader = Thread.currentThread().getContextClassLoader();
                     Thread.currentThread().setContextClassLoader(Container.class.getClassLoader());
-                    Server server=serverFactoryBean.create();
-                    serverPublished.put(pojo.getId(),server);
+                    Server server = serverFactoryBean.create();
+                    serverPublished.put(pojo.getId(), server);
                     Thread.currentThread().setContextClassLoader(loader);
                     LOG.info("exporting the service with the id:" + pojo.getId());
                 }
@@ -180,14 +168,14 @@ public class ProtobufferExporter extends AbstractExporterComponent {
     @Override
     protected void denyExportDeclaration(ExportDeclaration exportDeclaration) throws BinderException {
 
-        ProtobufferExporterPojo pojo=ProtobufferExporterPojo.create(exportDeclaration);
+        ProtobufferExporterPojo pojo = ProtobufferExporterPojo.create(exportDeclaration);
 
-        Server server=serverPublished.get(pojo.getId());
+        Server server = serverPublished.get(pojo.getId());
 
-        if(server!=null){
+        if (server != null) {
             LOG.info("Destroying endpoint:" + server.getEndpoint().getEndpointInfo().getAddress());
             server.destroy();
-        }else {
+        } else {
             LOG.warn("nothing to destroy");
         }
 

@@ -56,12 +56,12 @@ public class FuchsiaGogoCommand {
     public void declarations(@Descriptor("declarations [--type import|export]") String... parameters) {
         String type = getArgumentValue("--type", parameters);
         try {
-            if (type == null || type.equals("import")) {
+            if ((type == null) || "import".equals(type)) {
                 List<ServiceReference> allServiceRef = getAllServiceRefs(ImportDeclaration.class);
                 displayDeclarationList(allServiceRef);
             }
 
-            if (type == null || type.equals("export")) {
+            if ((type == null) || "export".equals(type)) {
                 List<ServiceReference> allServiceRef = getAllServiceRefs(ExportDeclaration.class);
                 displayDeclarationList(allServiceRef);
             }
@@ -78,10 +78,7 @@ public class FuchsiaGogoCommand {
         } else if (declaration instanceof ExportDeclaration) {
             type = "export";
         }
-
-        String id = (String) declaration.getMetadata().get(ID);
-
-        return id;
+        return (String) declaration.getMetadata().get(ID);
     }
 
     private void displayDeclarationList(List<ServiceReference> references) {
@@ -94,7 +91,7 @@ public class FuchsiaGogoCommand {
                 state = "UNBOUND";
             }
             String identifier = getIdentifier(declaration);
-            System.out.printf("[%s]\t%s\n", state, identifier);
+            System.out.printf("[%s]\t%s%n", state, identifier);
         }
     }
 
@@ -127,59 +124,67 @@ public class FuchsiaGogoCommand {
             return;
         }
 
-        Map<ServiceReference, Declaration> declarations = null;
-
         String type=getArgumentValue("-t",parameters);
+        Map<ServiceReference, Declaration> declarations = getDeclarations(type);
 
-        if (type!=null && type.equals("import")) {
+        displayDeclarations(declarations, filter);
+    }
+
+
+    private Map<ServiceReference, Declaration> getDeclarations(String type){
+        Map<ServiceReference, Declaration> declarations;
+
+        if ((type != null) && "import".equals(type)) {
             declarations = new HashMap<ServiceReference, Declaration>(getAllServiceRefsAndServices(ImportDeclaration.class));
-        } else if (type!=null && type.equals("export")) {
+        } else if ((type != null) && "export".equals(type)) {
             declarations = new HashMap<ServiceReference, Declaration>(getAllServiceRefsAndServices(ExportDeclaration.class));
         } else {
             declarations = new HashMap<ServiceReference, Declaration>(getAllServiceRefsAndServices(Declaration.class));
             declarations.putAll(new HashMap<ServiceReference, Declaration>(getAllServiceRefsAndServices(ImportDeclaration.class)));
             declarations.putAll(new HashMap<ServiceReference, Declaration>(getAllServiceRefsAndServices(ExportDeclaration.class)));
         }
+        return declarations;
+    }
 
+    private void displayDeclarations(Map<ServiceReference, Declaration> declarations, Filter filter) {
         if (declarations.isEmpty()) {
             System.err.println("No declarations found.");
             return;
         }
 
         for (Map.Entry<ServiceReference, Declaration> declaration : declarations.entrySet()) {
-
             if (filter==null || filter.matches(declaration.getValue().getMetadata())) {
-
                 displayDeclaration(getIdentifier(declaration.getValue()), declaration.getKey(), declaration.getValue());
-
             }
-
         }
-
     }
 
     private void displayDeclaration(String identifier, ServiceReference reference, Declaration declaration) {
 
         StringBuilder sg = new StringBuilder();
-        sg.append("Declaration Metadata : \n");
+        sg.append("Declaration Metadata : %n");
         for (Map.Entry<String, Object> entry : declaration.getMetadata().entrySet()) {
-            sg.append(String.format("\t%s = %s\n", entry.getKey(), entry.getValue()));
+            sg.append(String.format("\t%s = %s%n", entry.getKey(), entry.getValue()));
         }
-        sg.append("Declaration ExtraMetadata : \n");
+        sg.append("Declaration ExtraMetadata : %n");
         for (Map.Entry<String, Object> entry : declaration.getExtraMetadata().entrySet()) {
-            sg.append(String.format("\t%s = %s\n", entry.getKey(), entry.getValue()));
+            sg.append(String.format("\t%s = %s%n", entry.getKey(), entry.getValue()));
         }
 
-        System.out.printf("Service Properties\n");
+        System.out.printf("Service Properties%n");
         for (String propertyKey : reference.getPropertyKeys()) {
-            sg.append(String.format("\t%s = %s\n", propertyKey, reference.getProperty(propertyKey)));
+            sg.append(String.format("\t%s = %s%n", propertyKey, reference.getProperty(propertyKey)));
         }
         if (reference.getPropertyKeys().length == 0) {
-            sg.append("\tEMPTY\n");
+            sg.append("\tEMPTY%n");
         }
 
-        sg.append("Declaration binded to " + declaration.getStatus().getServiceReferencesBounded().size() + " services.\n");
-        sg.append("Declaration handled by " + declaration.getStatus().getServiceReferencesHandled().size() + " services.\n");
+        sg.append("Declaration binded to ")
+                .append(declaration.getStatus().getServiceReferencesBounded().size())
+                .append(" services.%n");
+        sg.append("Declaration handled by ")
+                .append(declaration.getStatus().getServiceReferencesHandled().size())
+                .append(" services.%n");
 
         System.out.println(sg.toString());
 
@@ -195,16 +200,18 @@ public class FuchsiaGogoCommand {
             ServiceReference[] exportationLinkerRef = context.getAllServiceReferences(ExportationLinker.class.getName(), filter);
             ServiceReference[] importationLinkerRef = context.getAllServiceReferences(ImportationLinker.class.getName(), filter);
             if (exportationLinkerRef != null || importationLinkerRef != null) {
-                if (exportationLinkerRef != null)
+                if (exportationLinkerRef != null) {
                     for (ServiceReference reference : exportationLinkerRef) {
                         displayServiceInfo("Exportation Linker", reference);
                         displayServiceProperties("Exportation Linker", reference, "\t\t");
                     }
-                if (importationLinkerRef != null)
+                }
+                if (importationLinkerRef != null) {
                     for (ServiceReference reference : importationLinkerRef) {
                         displayServiceInfo("Importation Linker", reference);
                         displayServiceProperties("Importation Linker", reference, "\t\t");
                     }
+                }
             } else {
                 System.out.println("No linkers available.");
             }
@@ -340,7 +347,7 @@ public class FuchsiaGogoCommand {
     // ---------------- UTILS DISPLAY
 
     private static void displayServiceProperties(String prolog, ServiceReference reference, String prefixTabulation) {
-        System.out.printf("%s Service Properties\n", prolog);
+        System.out.printf("%s Service Properties%n", prolog);
         for (String propertyKey : reference.getPropertyKeys()) {
             System.out.println(String.format(prefixTabulation + "%s\t\t = %s", propertyKey, reference.getProperty(propertyKey)));
         }

@@ -121,26 +121,24 @@ public class PhilipsHueDiscovery extends AbstractDiscoveryComponent implements P
             sm.search(true, false);
 
             if(ap!=null){
+                final String BRIDGE_USERNAME_KEY="username";
+
+                String username=preferences.get(BRIDGE_USERNAME_KEY,null);
+
+                if(username==null){
+                    username=PHBridgeInternal.generateUniqueKey();
+                    preferences.put(BRIDGE_USERNAME_KEY,username);
+                    try {
+                        preferences.flush();
+                    } catch (BackingStoreException e) {
+                        LOG.error("failed to store username in java preferences, this will force you to push the bridge button everytime to authenticate", e);
+                    }
+                }
+
+                ap.setUsername(username);
 
                 try{
-                    final String BRIDGE_USERNAME_KEY="username";
-
-                    String username=preferences.get(BRIDGE_USERNAME_KEY,null);
-
-                    if(username==null){
-                        username=PHBridgeInternal.generateUniqueKey();
-                        preferences.put(BRIDGE_USERNAME_KEY,username);
-                        try {
-                            preferences.flush();
-                        } catch (BackingStoreException e) {
-                            LOG.error("failed to store username in java preferences, this will force you to push the bridge button everytime to authenticate", e);
-                        }
-                    }
-
-                    ap.setUsername(username);
-
                     PHHueSDK.getInstance().connect(ap);
-
                 }catch(PHHueException e){
                     LOG.debug("Failed to connect to the Philips Hue AP with the message {}", e.getMessage(), e);
                 }
@@ -148,17 +146,11 @@ public class PhilipsHueDiscovery extends AbstractDiscoveryComponent implements P
                 PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
 
                 if(PHHueSDK.getInstance().getSelectedBridge()!=null){
-
                     PHBridgeResourcesCache cache = bridge.getResourceCache();
-
                     for(PHLight light:cache.getAllLights()){
-
                         generateImportDeclaration(light,bridge);
-
                     }
-
                 }
-
             }
 
             try {
