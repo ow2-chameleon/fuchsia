@@ -4,7 +4,6 @@ package org.ow2.chameleon.fuchsia.core.component;
 import org.osgi.framework.BundleContext;
 import org.ow2.chameleon.fuchsia.core.component.manager.DeclarationRegistrationManager;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
-import org.slf4j.Logger;
 
 import java.util.Set;
 

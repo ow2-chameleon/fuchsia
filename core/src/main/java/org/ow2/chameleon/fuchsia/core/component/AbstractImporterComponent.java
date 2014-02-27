@@ -3,7 +3,6 @@ package org.ow2.chameleon.fuchsia.core.component;
 import org.ow2.chameleon.fuchsia.core.component.manager.DeclarationBindManager;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
-import org.slf4j.Logger;
 
 import java.util.Set;
 
