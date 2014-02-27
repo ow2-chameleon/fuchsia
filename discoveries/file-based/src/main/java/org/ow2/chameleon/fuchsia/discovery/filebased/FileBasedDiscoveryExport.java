@@ -35,24 +35,16 @@ public class FileBasedDiscoveryExport extends AbstractFileBasedDiscovery<ExportD
     @ServiceProperty(name = FileBasedDiscoveryConstants.FILEBASED_DISCOVERY_PROPERTY_POLLING_TIME_KEY, value = FileBasedDiscoveryConstants.FILEBASED_DISCOVERY_PROPERTY_POLLING_TIME_VALUE)
     private Long pollingTime;
 
+    private DirectoryMonitor dm;
+
     public FileBasedDiscoveryExport(BundleContext bundleContext) {
         super(bundleContext, ExportDeclaration.class);
     }
 
     @Validate
     public void start() {
-        super.start();
-        startMonitorDirectory(monitoredExportDirectory);
+        super.start(this.monitoredExportDirectory, this.pollingTime);
         LOG.info("Filebased Export discovery up and running.");
-    }
-
-    private void startMonitorDirectory(String directory) {
-        try {
-            DirectoryMonitor dm = new DirectoryMonitor(directory, pollingTime, ExporterDeployer.class.getName());
-            dm.start(getBundleContext());
-        } catch (Exception e) {
-            LOG.error("Failed to start " + DirectoryMonitor.class.getName() + " for the directory " + directory + " and polling time " + pollingTime.toString(), e);
-        }
     }
 
     @Invalidate
@@ -64,5 +56,7 @@ public class FileBasedDiscoveryExport extends AbstractFileBasedDiscovery<ExportD
     public String getName() {
         return name;
     }
+
+
 
 }

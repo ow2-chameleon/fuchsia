@@ -4,11 +4,15 @@ import org.osgi.framework.BundleContext;
 import org.ow2.chameleon.fuchsia.core.component.manager.DeclarationRegistrationManager;
 import org.ow2.chameleon.fuchsia.core.declaration.*;
 import org.ow2.chameleon.fuchsia.discovery.filebased.monitor.Deployer;
+import org.ow2.chameleon.fuchsia.discovery.filebased.monitor.DirectoryMonitor;
+import org.ow2.chameleon.fuchsia.discovery.filebased.monitor.DirectoryMonitoringException;
+import org.ow2.chameleon.fuchsia.discovery.filebased.monitor.ExporterDeployer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.HashMap;
@@ -24,34 +28,40 @@ abstract class AbstractFileBasedDiscovery<D extends Declaration> implements Depl
     private final Class<D> klass;
 
     private final BundleContext bundleContext;
+    private DirectoryMonitor dm;
+    private String monitoredDirectory;
 
     public AbstractFileBasedDiscovery(BundleContext bundleContext, Class<D> klass) {
         this.bundleContext = bundleContext;
         this.klass = klass;
         declarationsFiles = new HashMap<String, D>();
-        declarationRegistrationManager  = new DeclarationRegistrationManager<D>(bundleContext, klass);
+        declarationRegistrationManager = new DeclarationRegistrationManager<D>(bundleContext, klass);
     }
 
     public boolean accept(File file) {
         return !file.exists() || (!file.isHidden() && file.isFile());
     }
 
-    private Properties parseFile(File file) throws Exception {
+    private Properties parseFile(File file) throws InvalidDeclarationFileException {
         Properties properties = new Properties();
         InputStream is = null;
         try {
             is = new FileInputStream(file);
             properties.load(is);
         } catch (Exception e) {
-            throw new Exception(String.format("Error reading declaration file %s", file.getAbsoluteFile()), e);
+            throw new InvalidDeclarationFileException(String.format("Error reading declaration file %s", file.getAbsoluteFile()), e);
         } finally {
             if (is != null) {
-                is.close();
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    LOG.error("IOException thrown while trying to close the declaration file.", e);
+                }
             }
         }
 
         if (!properties.containsKey(Constants.ID)) {
-            throw new Exception(String.format("File %s is not a correct declaration, needs to contains an id property", file.getAbsoluteFile()));
+            throw new InvalidDeclarationFileException(String.format("File %s is not a correct declaration, needs to contains an id property", file.getAbsoluteFile()));
         }
         return properties;
     }
@@ -114,11 +124,11 @@ abstract class AbstractFileBasedDiscovery<D extends Declaration> implements Depl
 
     private D createAndRegisterDeclaration(Map<String, Object> metadata) {
         D declaration;
-        if(klass.equals(ImportDeclaration.class)){
+        if (klass.equals(ImportDeclaration.class)) {
             declaration = (D) ImportDeclarationBuilder.fromMetadata(metadata).build();
-        }else if(klass.equals(ExportDeclaration.class)){
+        } else if (klass.equals(ExportDeclaration.class)) {
             declaration = (D) ExportDeclarationBuilder.fromMetadata(metadata).build();
-        }else{
+        } else {
             throw new IllegalStateException("");
         }
         declarationRegistrationManager.registerDeclaration(declaration);
@@ -134,13 +144,22 @@ abstract class AbstractFileBasedDiscovery<D extends Declaration> implements Depl
         return bundleContext;
     }
 
-
-    void start(){
-
+    void start(String monitoredDirectory, Long pollingTime) {
+        this.monitoredDirectory = monitoredDirectory;
+        this.dm = new DirectoryMonitor(monitoredDirectory, pollingTime, ExporterDeployer.class.getName());
+        try {
+            dm.start(getBundleContext());
+        } catch (DirectoryMonitoringException e) {
+            LOG.error("Failed to start " + DirectoryMonitor.class.getName() + " for the directory " + monitoredDirectory + " and polling time " + pollingTime.toString(), e);
+        }
     }
 
-
-    void stop(){
+    void stop() {
+        try {
+            dm.stop(getBundleContext());
+        } catch (DirectoryMonitoringException e) {
+            LOG.error("Failed to stop " + DirectoryMonitor.class.getName() + " for the directory " + monitoredDirectory, e);
+        }
         declarationsFiles.clear();
         declarationRegistrationManager.unregisterAll();
     }

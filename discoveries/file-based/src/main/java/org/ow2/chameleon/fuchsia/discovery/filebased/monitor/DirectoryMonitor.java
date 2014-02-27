@@ -65,7 +65,7 @@ public class DirectoryMonitor implements BundleActivator, ServiceTrackerCustomiz
 
         if (!directory.isDirectory()) {
             LOG.info("Monitored directory {} not existing - creating directory", directory.getAbsolutePath());
-            if(!this.directory.mkdirs()){
+            if (!this.directory.mkdirs()) {
                 throw new IllegalStateException("Monitored directory doesn't exist and cannot be created.");
             }
         }
@@ -128,7 +128,7 @@ public class DirectoryMonitor implements BundleActivator, ServiceTrackerCustomiz
         return lock.getReadHoldCount() == 0;
     }
 
-    public void start(final BundleContext context) throws Exception {
+    public void start(final BundleContext context) throws DirectoryMonitoringException {
         this.context = context;
         LOG.info("Starting installing bundles from {}", directory.getAbsolutePath());
         this.tracker = new ServiceTracker(context, this.trackedClassName, this);
@@ -148,7 +148,6 @@ public class DirectoryMonitor implements BundleActivator, ServiceTrackerCustomiz
         }
 
         // Initialization does not need the write lock, read is enough.
-
         try {
             acquireReadLockIfNotHeld();
             // Per extension, open deployer.
@@ -165,31 +164,37 @@ public class DirectoryMonitor implements BundleActivator, ServiceTrackerCustomiz
         }
     }
 
-    private void startFileMonitoring() throws Exception {
+    private void startFileMonitoring() throws DirectoryMonitoringException {
         if (polling == -1l) {
             LOG.debug("No file monitoring for {}", directory.getAbsolutePath());
             return;
         }
 
         LOG.info("Starting file monitoring for {} - polling : {} ms", directory.getName(), polling);
-        monitor.start();
+        try {
+            monitor.start();
+        } catch (Exception e) {
+            throw new DirectoryMonitoringException("Exception while starting the FileAlterationMonitor.", e);
+        }
     }
 
-    public void stop(BundleContext context) throws Exception {
+    public void stop(BundleContext context) throws DirectoryMonitoringException {
         // To avoid concurrency, we take the write lock here.
         try {
             acquireWriteLockIfNotHeld();
             this.tracker.close();
             if (monitor != null) {
                 LOG.debug("Stopping file monitoring of {}", directory.getAbsolutePath());
-                monitor.stop(5); // Wait 5 milliseconds.
+                // Wait 5 milliseconds.
+                monitor.stop(5);
             }
+        } catch (Exception e) {
+            throw new DirectoryMonitoringException("Exception while stopping the FileAlterationMonitor.", e);
         } finally {
             releaseWriteLockIfHeld();
         }
 
         // No concurrency involved from here.
-
         for (Deployer deployer : deployers) {
             deployer.close();
         }

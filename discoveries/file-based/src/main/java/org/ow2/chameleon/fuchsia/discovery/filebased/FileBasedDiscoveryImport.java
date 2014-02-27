@@ -4,13 +4,9 @@ import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
 import org.ow2.chameleon.fuchsia.core.component.DiscoveryService;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
-import org.ow2.chameleon.fuchsia.discovery.filebased.monitor.DirectoryMonitor;
 import org.ow2.chameleon.fuchsia.discovery.filebased.monitor.ImporterDeployer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
 
@@ -44,18 +40,8 @@ public class FileBasedDiscoveryImport extends AbstractFileBasedDiscovery<ImportD
 
     @Validate
     public void start() {
-        super.start();
-        startMonitorDirectory(monitoredImportDirectory);
+        super.start(this.monitoredImportDirectory, this.pollingTime);
         LOG.info("Filebased Import discovery up and running.");
-    }
-
-    private void startMonitorDirectory(String directory) {
-        try {
-            DirectoryMonitor dm = new DirectoryMonitor(directory, pollingTime, ImporterDeployer.class.getName());
-            dm.start(getBundleContext());
-        } catch (Exception e) {
-            LOG.error("Failed to start " + DirectoryMonitor.class.getName() + " for the directory " + directory + " and polling time" + pollingTime, e);
-        }
     }
 
     @Invalidate
