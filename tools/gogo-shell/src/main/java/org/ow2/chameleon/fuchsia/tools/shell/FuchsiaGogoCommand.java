@@ -167,7 +167,7 @@ public class FuchsiaGogoCommand {
             sg.append(String.format("\t%s = %s%n", entry.getKey(), entry.getValue()));
         }
 
-        System.out.printf("Service Properties%n");
+        sg.append("Service Properties%n");
         for (String propertyKey : reference.getPropertyKeys()) {
             sg.append(String.format("\t%s = %s%n", propertyKey, reference.getProperty(propertyKey)));
         }
@@ -182,7 +182,7 @@ public class FuchsiaGogoCommand {
                 .append(declaration.getStatus().getServiceReferencesHandled().size())
                 .append(" services.%n");
 
-        System.out.println(sg.toString());
+        System.out.printf(sg.toString());
 
     }
 
