@@ -6,17 +6,30 @@
         <artifactId>org.ow2.chameleon.fuchsia.base.protobuffer</artifactId>
         <groupId>org.ow2.chameleon.fuchsia.base</groupId>
         <version>0.0.2-SNAPSHOT</version>
-        <relativePath>../../bases/protobuffer/pom.xml</relativePath>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
+    <name>OW2 Chameleon - Fuchsia Base Protobuffer : Utilities for test</name>
+    <artifactId>org.ow2.chameleon.fuchsia.base.protobuffer.protobuffer-test-utils</artifactId>
+    <groupId>org.ow2.chameleon.fuchsia.base.protobuffer</groupId>
 
-    <artifactId>org.ow2.chameleon.fuchsia.importer.protobuffer</artifactId>
-    <groupId>org.ow2.chameleon.fuchsia.importer</groupId>
-    <name>OW2 Chameleon - Fuchsia Importer Protobuffer</name>
     <packaging>bundle</packaging>
 
+
     <dependencies>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.compendium</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.apache.felix</groupId>
             <artifactId>org.apache.felix.ipojo</artifactId>
@@ -32,12 +45,6 @@
         <dependency>
             <groupId>org.ow2.chameleon.fuchsia.base.protobuffer</groupId>
             <artifactId>org.ow2.chameleon.fuchsia.base.protobuffer.cxf-protobuf</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <artifactId>org.ow2.chameleon.fuchsia.base.protobuffer.protobuffer-test-utils</artifactId>
-            <groupId>org.ow2.chameleon.fuchsia.base.protobuffer</groupId>
             <version>${project.version}</version>
         </dependency>
 
@@ -79,23 +86,35 @@
             <artifactId>jetty-servlet</artifactId>
             <version>7.5.4.v20111024</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-bundle-minimal</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
-            <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>org.easytesting</groupId>
             <artifactId>fest-reflect</artifactId>
-            <scope>test</scope>
         </dependency>
-
     </dependencies>
 
     <build>
         <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
@@ -105,30 +124,24 @@
                         <Bundle-SymbolicName>
                             ${project.artifactId}
                         </Bundle-SymbolicName>
+                        <Export-Package>
+                            {local-packages}
+                        </Export-Package>
+                        <Bundle-Classpath>
+                            .
+                        </Bundle-Classpath>
                     </instructions>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-ipojo-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>ipojo-bundle</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
-                </configuration>
-            </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>${basedir}/src/main/java</directory>
+            </resource>
+            <resource>
+                <directory>${basedir}/src/main/resources</directory>
+            </resource>
+        </resources>
     </build>
-
 
 </project>

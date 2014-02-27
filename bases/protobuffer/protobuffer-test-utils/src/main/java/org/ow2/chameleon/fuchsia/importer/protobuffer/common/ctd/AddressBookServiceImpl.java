@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.importer.protobuffer.test.ctd;
+package org.ow2.chameleon.fuchsia.importer.protobuffer.common.ctd;
 
 import com.google.protobuf.RpcCallback;
 import com.google.protobuf.RpcController;

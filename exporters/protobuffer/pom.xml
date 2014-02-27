@@ -56,6 +56,12 @@
         </dependency>
 
         <dependency>
+            <artifactId>org.ow2.chameleon.fuchsia.base.protobuffer.protobuffer-test-utils</artifactId>
+            <groupId>org.ow2.chameleon.fuchsia.base.protobuffer</groupId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
         </dependency>

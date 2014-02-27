@@ -17,6 +17,7 @@
 
     <modules>
         <module>cxf-protobuf</module>
+        <module>protobuffer-test-utils</module>
     </modules>
 
     <dependencyManagement>
