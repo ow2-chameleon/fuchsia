@@ -14,15 +14,30 @@
     <groupId>org.ow2.chameleon.fuchsia.discovery</groupId>
     <packaging>pom</packaging>
 
-    <modules>
-        <module>file-based</module>
-        <module>mdns</module>
-        <module>upnp</module>
-        <module>upnp.it</module>
-        <module>philips-hue</module>
-    </modules>
-
     <profiles>
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>file-based</module>
+                <module>mdns</module>
+                <module>upnp</module>
+                <module>upnp.it</module>
+                <module>philips-hue</module>
+            </modules>
+        </profile>
+        <profile>
+            <!-- Continuous integration profile, must be the same than the default profile without the integrations tests -->
+            <id>ci</id>
+            <modules>
+                <module>file-based</module>
+                <module>mdns</module>
+                <module>upnp</module>
+                <module>philips-hue</module>
+            </modules>
+        </profile>
         <profile>
             <id>experimental</id>
             <modules>

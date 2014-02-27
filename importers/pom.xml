@@ -13,18 +13,38 @@
     <groupId>org.ow2.chameleon.fuchsia.importer</groupId>
     <packaging>pom</packaging>
 
-    <modules>
-        <module>mqtt</module>
-        <module>push</module>
-        <module>protobuffer</module>
-        <module>philips-hue</module>
-        <module>jax-ws</module>
-        <module>json-rpc</module>
-        <module>json-rpc-it</module>
-        <module>raspberrypi</module>
-    </modules>
 
     <profiles>
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+
+            <modules>
+                <module>mqtt</module>
+                <module>push</module>
+                <module>protobuffer</module>
+                <module>philips-hue</module>
+                <module>jax-ws</module>
+                <module>json-rpc</module>
+                <module>json-rpc-it</module>
+                <module>raspberrypi</module>
+            </modules>
+        </profile>
+        <profile>
+            <!-- Continuous integration profile, must be the same than the default profile without the integrations tests -->
+            <id>ci</id>
+            <modules>
+                <module>mqtt</module>
+                <module>push</module>
+                <module>protobuffer</module>
+                <module>philips-hue</module>
+                <module>jax-ws</module>
+                <module>json-rpc</module>
+                <module>raspberrypi</module>
+            </modules>
+        </profile>
         <profile>
             <id>experimental</id>
             <modules>

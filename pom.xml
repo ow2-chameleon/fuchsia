@@ -116,6 +116,20 @@
                 <module>testing</module>
             </modules>
         </profile>
+        <profile>
+            <!-- Continuous integration profile, must be the same than the default profile without the integrations tests -->
+            <id>ci</id>
+            <modules>
+                <module>distribution</module>
+                <module>core</module>
+                <module>bases</module>
+                <module>importers</module>
+                <module>exporters</module>
+                <module>discoveries</module>
+                <module>tools</module>
+                <module>testing</module>
+            </modules>
+        </profile>
 
         <profile>
             <id>examples</id>
