@@ -7,6 +7,7 @@ import com.google.protobuf.RpcChannel;
 import org.apache.cxf.Bus;
 import org.apache.cxf.BusFactory;
 import org.apache.cxf.binding.BindingFactoryManager;
+import org.apache.cxf.endpoint.EndpointException;
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -19,6 +20,7 @@ import org.ow2.chameleon.fuchsia.importer.protobuffer.internal.ProtobufferImport
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Dictionary;
 import java.util.HashMap;
@@ -104,8 +106,16 @@ public class ProtobufferImporter extends AbstractImporterComponent {
 
             importDeclaration.handle(serviceReference);
 
-        } catch (Exception e) {
-            LOG.error("Fail to import Protobuffer RPC service with the message '{}'", e.getMessage(), e);
+        } catch (ClassNotFoundException e) {
+            LOG.error("Fail to import Protobuffer RPC service with the message", e);
+        } catch (EndpointException e) {
+            LOG.error("Fail to import Protobuffer RPC service with the message", e);
+        } catch (InvocationTargetException e) {
+            LOG.error("Fail to import Protobuffer RPC service with the message", e);
+        } catch (IllegalAccessException e) {
+            LOG.error("Fail to import Protobuffer RPC service with the message", e);
+        } catch (NoSuchMethodException e) {
+            LOG.error("Fail to import Protobuffer RPC service with the message", e);
         }
 
     }

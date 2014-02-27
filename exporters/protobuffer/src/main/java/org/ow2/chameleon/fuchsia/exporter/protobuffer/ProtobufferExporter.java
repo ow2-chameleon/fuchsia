@@ -172,11 +172,13 @@ public class ProtobufferExporter extends AbstractExporterComponent {
 
         Server server = serverPublished.get(pojo.getId());
 
+        serverPublished.remove(pojo.getId());
+
         if (server != null) {
             LOG.info("Destroying endpoint:" + server.getEndpoint().getEndpointInfo().getAddress());
             server.destroy();
         } else {
-            LOG.warn("nothing to destroy");
+            LOG.warn("no endpoint to destroy");
         }
 
     }

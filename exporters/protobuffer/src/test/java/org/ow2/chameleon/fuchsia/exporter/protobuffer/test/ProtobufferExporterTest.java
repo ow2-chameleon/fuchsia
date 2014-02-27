@@ -35,6 +35,7 @@ import static org.fest.reflect.core.Reflection.constructor;
 import static org.fest.reflect.core.Reflection.field;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 public class ProtobufferExporterTest extends ProtobufferTestAbstract<ExportDeclaration,ProtobufferExporter> {
@@ -60,6 +61,7 @@ public class ProtobufferExporterTest extends ProtobufferTestAbstract<ExportDecla
 
         super.initInterceptors();
 
+        //when(context.registerService(any(Class.class), any(protobufferRemoteService.getClass()), any(Dictionary.class))).thenReturn(proxyServiceRegistration);
         when(context.registerService(new String[]{ExportDeclaration.class.getName()}, protobufferRemoteService, new Hashtable<String, Object>())).thenReturn(registrationFromClassToBeExported);
         when(context.getServiceReference(PackageAdmin.class.getName())).thenReturn(serviceReferenceFromExporter);
         when(serviceReferenceFromExporter.getProperty(org.osgi.framework.Constants.SERVICE_ID)).thenReturn(1l);
@@ -83,7 +85,7 @@ public class ProtobufferExporterTest extends ProtobufferTestAbstract<ExportDecla
         when(context.getService(serviceReference)).thenReturn(protobufferRemoteService);
         when(context.getService(protobufferRemoteService)).thenReturn(protobufferRemoteService);
 
-        fuchsiaDeclarationBinder =constructor().withParameterTypes(BundleContext.class).in(ProtobufferExporter.class).newInstance(context);
+        fuchsiaDeclarationBinder =spy(constructor().withParameterTypes(BundleContext.class).in(ProtobufferExporter.class).newInstance(context));
 
         //Inject HTTP_PORT, that usually is done by OSGi
         field("httpPort").ofType(Integer.class).in(fuchsiaDeclarationBinder).set(HTTP_PORT);
@@ -99,6 +101,16 @@ public class ProtobufferExporterTest extends ProtobufferTestAbstract<ExportDecla
         Map<String,Server> serverPublished = field("serverPublished").ofType(Map.class).in(fuchsiaDeclarationBinder).get();
         Assert.assertEquals(1,serverPublished.size());
         fuchsiaDeclarationBinder.stop();
+        Assert.assertEquals(0,serverPublished.size());
+    }
+
+    @Test
+    public void testDenyDeclaration() throws BinderException, InvalidSyntaxException, ClassNotFoundException, InterruptedException, InvocationTargetException, EndpointException, IllegalAccessException, NoSuchMethodException {
+        ExportDeclaration declaration = getValidDeclarations().get(0);
+        fuchsiaDeclarationBinder.useDeclaration(declaration);
+        Map<String,Server> serverPublished = field("serverPublished").ofType(Map.class).in(fuchsiaDeclarationBinder).get();
+        Assert.assertEquals(1,serverPublished.size());
+        fuchsiaDeclarationBinder.denyDeclaration(declaration);
         Assert.assertEquals(0,serverPublished.size());
     }
 
