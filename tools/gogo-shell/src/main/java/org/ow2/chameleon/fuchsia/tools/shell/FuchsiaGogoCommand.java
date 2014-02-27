@@ -5,11 +5,7 @@ import org.apache.felix.service.command.Descriptor;
 import org.osgi.framework.*;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
-import org.ow2.chameleon.fuchsia.core.component.ExportationLinker;
-import org.ow2.chameleon.fuchsia.core.component.ImportationLinker;
-import org.ow2.chameleon.fuchsia.core.component.DiscoveryService;
-import org.ow2.chameleon.fuchsia.core.component.ExporterService;
-import org.ow2.chameleon.fuchsia.core.component.ImporterService;
+import org.ow2.chameleon.fuchsia.core.component.*;
 import org.ow2.chameleon.fuchsia.core.declaration.Declaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
@@ -18,7 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
-import static org.apache.felix.ipojo.Factory.*;
+import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
 import static org.ow2.chameleon.fuchsia.core.declaration.Constants.ID;
 
 
@@ -103,20 +99,20 @@ public class FuchsiaGogoCommand {
 
         try {
 
-            String explicitFilterArgument=getArgumentValue("-f",parameters);
+            String explicitFilterArgument = getArgumentValue("-f", parameters);
 
-            if(explicitFilterArgument==null){
+            if (explicitFilterArgument == null) {
 
-                String idFilterArgument=getArgumentValue(null,parameters);
+                String idFilterArgument = getArgumentValue(null, parameters);
 
-                if(idFilterArgument==null){
-                    filter=null;
-                }else {
-                    filter=FrameworkUtil.createFilter(String.format("(id=%s)",idFilterArgument));
+                if (idFilterArgument == null) {
+                    filter = null;
+                } else {
+                    filter = FrameworkUtil.createFilter(String.format("(id=%s)", idFilterArgument));
                 }
 
-            } else  {
-                filter=FrameworkUtil.createFilter(getArgumentValue(null,parameters));
+            } else {
+                filter = FrameworkUtil.createFilter(getArgumentValue(null, parameters));
             }
 
         } catch (InvalidSyntaxException e) {
@@ -124,14 +120,14 @@ public class FuchsiaGogoCommand {
             return;
         }
 
-        String type=getArgumentValue("-t",parameters);
+        String type = getArgumentValue("-t", parameters);
         Map<ServiceReference, Declaration> declarations = getDeclarations(type);
 
         displayDeclarations(declarations, filter);
     }
 
 
-    private Map<ServiceReference, Declaration> getDeclarations(String type){
+    private Map<ServiceReference, Declaration> getDeclarations(String type) {
         Map<ServiceReference, Declaration> declarations;
 
         if ((type != null) && "import".equals(type)) {
@@ -153,7 +149,7 @@ public class FuchsiaGogoCommand {
         }
 
         for (Map.Entry<ServiceReference, Declaration> declaration : declarations.entrySet()) {
-            if (filter==null || filter.matches(declaration.getValue().getMetadata())) {
+            if (filter == null || filter.matches(declaration.getValue().getMetadata())) {
                 displayDeclaration(getIdentifier(declaration.getValue()), declaration.getKey(), declaration.getValue());
             }
         }
@@ -195,29 +191,23 @@ public class FuchsiaGogoCommand {
 
     @Descriptor("Gets the importation/exportation linker available")
     public void linker(@Descriptor("linker [-(import|export)] [ID name]") String... parameters) {
-        String filter = null;
-        try {
-            ServiceReference[] exportationLinkerRef = context.getAllServiceReferences(ExportationLinker.class.getName(), filter);
-            ServiceReference[] importationLinkerRef = context.getAllServiceReferences(ImportationLinker.class.getName(), filter);
-            if (exportationLinkerRef != null || importationLinkerRef != null) {
-                if (exportationLinkerRef != null) {
-                    for (ServiceReference reference : exportationLinkerRef) {
-                        displayServiceInfo("Exportation Linker", reference);
-                        displayServiceProperties("Exportation Linker", reference, "\t\t");
-                    }
+        List<ServiceReference> exportationLinkerRef = getAllServiceRefs(ExportationLinker.class);
+        List<ServiceReference> importationLinkerRef = getAllServiceRefs(ImportationLinker.class);
+        if (exportationLinkerRef != null || importationLinkerRef != null) {
+            if (exportationLinkerRef != null) {
+                for (ServiceReference reference : exportationLinkerRef) {
+                    displayServiceInfo("Exportation Linker", reference);
+                    displayServiceProperties("Exportation Linker", reference, "\t\t");
                 }
-                if (importationLinkerRef != null) {
-                    for (ServiceReference reference : importationLinkerRef) {
-                        displayServiceInfo("Importation Linker", reference);
-                        displayServiceProperties("Importation Linker", reference, "\t\t");
-                    }
-                }
-            } else {
-                System.out.println("No linkers available.");
             }
-        } catch (InvalidSyntaxException e) {
-            LOG.error("invalid LDAP filter syntax", e);
-            System.out.println("failed to execute the command");
+            if (importationLinkerRef != null) {
+                for (ServiceReference reference : importationLinkerRef) {
+                    displayServiceInfo("Importation Linker", reference);
+                    displayServiceProperties("Importation Linker", reference, "\t\t");
+                }
+            }
+        } else {
+            System.out.println("No linkers available.");
         }
     }
 
@@ -225,20 +215,14 @@ public class FuchsiaGogoCommand {
 
     @Descriptor("Gets the discovery available in the platform")
     public void discovery(@Descriptor("discovery [discovery name]") String... parameters) {
-        String filter = null;
-        try {
-            ServiceReference[] discoveryRef = context.getAllServiceReferences(DiscoveryService.class.getName(), filter);
-            if (discoveryRef != null) {
-                for (ServiceReference reference : discoveryRef) {
-                    displayServiceInfo("Discovery", reference);
-                    displayServiceProperties("Discovery", reference, "\t\t");
-                }
-            } else {
-                System.out.println("No discovery available.");
+        List<ServiceReference> discoveryRef = getAllServiceRefs(DiscoveryService.class);
+        if (discoveryRef != null) {
+            for (ServiceReference reference : discoveryRef) {
+                displayServiceInfo("Discovery", reference);
+                displayServiceProperties("Discovery", reference, "\t\t");
             }
-        } catch (InvalidSyntaxException e) {
-            LOG.error("invalid ldap filter syntax", e);
-            System.out.println("failed to execute the command");
+        } else {
+            System.out.println("No discovery available.");
         }
     }
 
@@ -246,22 +230,15 @@ public class FuchsiaGogoCommand {
 
     @Descriptor("Gets the importer available in the platform")
     public void importer(@Descriptor("importer [importer name]") String... parameters) {
-        String filter = null;
-        try {
-            ServiceReference[] discoveryRef = context.getAllServiceReferences(ImporterService.class.getName(), filter);
-            if (discoveryRef != null) {
-                for (ServiceReference reference : discoveryRef) {
-                    displayServiceInfo("Importer", reference);
-                    ImporterService is = (ImporterService) context.getService(reference);
-                    System.out.println(String.format("\t*importer name = %s", is.getName()));
-                    displayServiceProperties("Importer", reference, "\t\t");
-                }
-            } else {
-                System.out.println("No importers available.");
+        Map<ServiceReference, ImporterService> importerRefsAndServices = getAllServiceRefsAndServices(ImporterService.class);
+        if (importerRefsAndServices != null) {
+            for (Map.Entry<ServiceReference, ImporterService> e : importerRefsAndServices.entrySet()) {
+                displayServiceInfo("Importer", e.getKey());
+                System.out.println(String.format("\t*importer name = %s", e.getValue().getName()));
+                displayServiceProperties("Importer", e.getKey(), "\t\t");
             }
-        } catch (InvalidSyntaxException e) {
-            LOG.error("invalid ldap filter syntax", e);
-            System.out.println("failed to execute the command");
+        } else {
+            System.out.println("No importers available.");
         }
     }
 
@@ -269,22 +246,15 @@ public class FuchsiaGogoCommand {
 
     @Descriptor("Gets the exporter available in the platform")
     public void exporter(@Descriptor("exporter [exporter name]") String... parameters) {
-        String filter = null;
-        try {
-            ServiceReference[] discoveryRef = context.getAllServiceReferences(ExporterService.class.getName(), filter);
-            if (discoveryRef != null) {
-                for (ServiceReference reference : discoveryRef) {
-                    displayServiceInfo("Exporter", reference);
-                    ExporterService es = (ExporterService) context.getService(reference);
-                    System.out.println(String.format("\t*exporter name = %s", es.getName()));
-                    displayServiceProperties("Exporter", reference, "\t\t");
-                }
-            } else {
-                System.out.println("No exporter available.");
+        Map<ServiceReference, ExporterService> exporterRefsAndServices = getAllServiceRefsAndServices(ExporterService.class);
+        if (exporterRefsAndServices != null) {
+            for (Map.Entry<ServiceReference, ExporterService> e : exporterRefsAndServices.entrySet()) {
+                displayServiceInfo("Exporter", e.getKey());
+                System.out.println(String.format("\t*exporter name = %s", e.getValue().getName()));
+                displayServiceProperties("Exporter", e.getKey(), "\t\t");
             }
-        } catch (InvalidSyntaxException e) {
-            LOG.error("invalid ldap filter syntax", e);
-            System.out.println("failed to execute the command");
+        } else {
+            System.out.println("No exporter available.");
         }
     }
 
@@ -340,7 +310,6 @@ public class FuchsiaGogoCommand {
         for (ServiceReference sr : getAllServiceRefs(klass)) {
             services.put(sr, (T) context.getService(sr));
         }
-
         return services;
     }
 
@@ -371,8 +340,8 @@ public class FuchsiaGogoCommand {
             /**
              * In case of a Null option, returns the last parameter
              */
-            if(option==null){
-                return params[params.length-1];
+            if (option == null) {
+                return params[params.length - 1];
             }
 
             if (i < (params.length - 1) && params[i].equals(option)) {
