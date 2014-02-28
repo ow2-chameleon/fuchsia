@@ -2,7 +2,6 @@ package org.ow2.chameleon.fuchsia.raspberry.pi.importer;
 
 import org.apache.felix.ipojo.*;
 import org.apache.felix.ipojo.annotations.*;
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;

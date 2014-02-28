@@ -1,7 +1,6 @@
 package org.ow2.chameleon.fuchsia.push.base.publisher;
 
 import org.apache.felix.ipojo.annotations.*;
-import org.osgi.framework.BundleContext;
 import org.osgi.service.http.HttpService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -36,12 +36,11 @@ public class NetworkTopology implements NetworkTopologyDiscovery {
             LOGGER.error("Socket exception", e);
         }
 
-        return null;
-
+        return new InetAddress[0];
     }
 
     public boolean useInetAddress(NetworkInterface networkInterface, InetAddress interfaceAddress) {
-        //TODO in the future hide localhost	|| !interfaceAddress.isLoopbackAddress()
+        //TODO in the future hide localhost || !interfaceAddress.isLoopbackAddress()
         return !(interfaceAddress instanceof Inet6Address);
     }
 

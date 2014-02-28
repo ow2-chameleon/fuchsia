@@ -7,7 +7,6 @@ import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Provides;
 import org.apache.felix.ipojo.annotations.ServiceProperty;
 import org.apache.felix.service.command.Descriptor;
-import org.osgi.framework.BundleContext;
 
 import java.util.EnumSet;
 

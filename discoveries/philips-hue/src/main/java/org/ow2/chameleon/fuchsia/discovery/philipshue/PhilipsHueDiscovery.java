@@ -104,53 +104,55 @@ public class PhilipsHueDiscovery extends AbstractDiscoveryComponent implements P
     }
 
     public void run() {
-
         PHBridgeSearchManager sm = (PHBridgeSearchManager) PHHueSDK.getInstance().getSDKService(PHHueSDK.SEARCH_BRIDGE);
 
         while (isRunning) {
-
-            sm.search(true, false);
-
-            if (ap != null) {
-                final String bridgeUsernameKey = "username";
-
-                String username = preferences.get(bridgeUsernameKey, null);
-
-                if (username == null) {
-                    username = PHBridgeInternal.generateUniqueKey();
-                    preferences.put(bridgeUsernameKey, username);
-                    try {
-                        preferences.flush();
-                    } catch (BackingStoreException e) {
-                        LOG.error("failed to store username in java preferences, this will force you to push the bridge button everytime to authenticate", e);
-                    }
-                }
-
-                ap.setUsername(username);
-
-                try {
-                    PHHueSDK.getInstance().connect(ap);
-                } catch (PHHueException e) {
-                    LOG.debug("Failed to connect to the Philips Hue AP with the message {}", e.getMessage(), e);
-                }
-
-                PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
-
-                if (PHHueSDK.getInstance().getSelectedBridge() != null) {
-                    PHBridgeResourcesCache cache = bridge.getResourceCache();
-                    for (PHLight light : cache.getAllLights()) {
-                        generateImportDeclaration(light, bridge);
-                    }
-                }
-            }
+            doSearch(sm);
 
             try {
                 Thread.sleep(pollingTime);
             } catch (InterruptedException e) {
                 LOG.error("failed to put in wait state", e);
             }
+        }
+    }
 
+    private void doSearch(PHBridgeSearchManager sm) {
+        sm.search(true, false);
 
+        if (ap == null) {
+            return;
+        }
+
+        final String bridgeUsernameKey = "username";
+
+        String username = preferences.get(bridgeUsernameKey, null);
+
+        if (username == null) {
+            username = PHBridgeInternal.generateUniqueKey();
+            preferences.put(bridgeUsernameKey, username);
+            try {
+                preferences.flush();
+            } catch (BackingStoreException e) {
+                LOG.error("failed to store username in java preferences, this will force you to push the bridge button everytime to authenticate", e);
+            }
+        }
+
+        ap.setUsername(username);
+
+        try {
+            PHHueSDK.getInstance().connect(ap);
+        } catch (PHHueException e) {
+            LOG.debug("Failed to connect to the Philips Hue AP with the message {}", e.getMessage(), e);
+        }
+
+        PHBridge bridge = PHHueSDK.getInstance().getSelectedBridge();
+
+        if (PHHueSDK.getInstance().getSelectedBridge() != null) {
+            PHBridgeResourcesCache cache = bridge.getResourceCache();
+            for (PHLight light : cache.getAllLights()) {
+                generateImportDeclaration(light, bridge);
+            }
         }
     }
 

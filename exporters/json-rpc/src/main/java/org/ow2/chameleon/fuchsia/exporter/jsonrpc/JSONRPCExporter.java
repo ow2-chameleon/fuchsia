@@ -53,7 +53,7 @@ public class JSONRPCExporter extends AbstractExporterComponent {
     @Requires
     HttpService web;
 
-    private Set<String> registeredServlets=new HashSet<String>();
+    private Set<String> registeredServlets = new HashSet<String>();
 
     private final BundleContext context;
 
@@ -65,60 +65,55 @@ public class JSONRPCExporter extends AbstractExporterComponent {
 
     @Override
     protected void useExportDeclaration(ExportDeclaration exportDeclaration) {
-
-        Class<?> klass;
-
-        JSONRPCExporterPojo jp=JSONRPCExporterPojo.create(exportDeclaration);
+        Class<?> klass = null;
+        JSONRPCExporterPojo jp = JSONRPCExporterPojo.create(exportDeclaration);
 
         try {
-
-            try{
-                klass = FuchsiaUtils.loadClass(context, jp.getInstanceClass());
-            }catch (ClassNotFoundException e){
-                LOG.warn("Failed to load from the own bundle, loading externally", e);
-                klass=context.getBundle().loadClass(jp.getInstanceClass());
+            klass = FuchsiaUtils.loadClass(context, jp.getInstanceClass());
+        } catch (ClassNotFoundException e) {
+            LOG.warn("Failed to load from the own bundle, loading externally", e);
+        }
+        if(klass == null) {
+            try {
+                klass = context.getBundle().loadClass(jp.getInstanceClass());
+            } catch (ClassNotFoundException e) {
+                LOG.error("The class to be exporter could not be loaded.", e);
+                return;
             }
+        }
 
-            String osgiFilter= String.format("(instance.name=%s)", jp.getInstanceName());
-
-            Collection<ServiceReference> references = new ArrayList(context.getServiceReferences(klass,osgiFilter));
-
-            Object serviceToBePublished=context.getService(references.iterator().next());
-
-            final JsonRpcServer jsonRpcServer = new JsonRpcServer(serviceToBePublished, klass);
-
-            final String endpointURL=String.format("%s/%s",jp.getUrlContext(),jp.getInstanceName());
-
-            Servlet gs=new RPCServlet(jsonRpcServer);
-
-            web.registerServlet(endpointURL, gs, new Hashtable(), null);
-
-            exportDeclaration.handle(serviceReference);
-
-            registeredServlets.add(endpointURL);
-
-            LOG.info("JSONRPC-exporter, publishing object exporter at: {}", endpointURL);
-
+        String osgiFilter = String.format("(instance.name=%s)", jp.getInstanceName());
+        List<ServiceReference> references = null;
+        try {
+            references = new ArrayList<ServiceReference>(context.getServiceReferences(klass, osgiFilter));
         } catch (InvalidSyntaxException e) {
             LOG.error("LDAP filter specified on the linker is not valid, recheck your LDAP filters for the linker and exporter. ", e);
-        } catch (ClassNotFoundException e) {
-            LOG.error("The class to be exporter could not be loaded.", e);
+            return;
+        }
+
+        Object serviceToBePublished = context.getService(references.iterator().next());
+        final JsonRpcServer jsonRpcServer = new JsonRpcServer(serviceToBePublished, klass);
+        final String endpointURL = String.format("%s/%s", jp.getUrlContext(), jp.getInstanceName());
+        Servlet gs = new RPCServlet(jsonRpcServer);
+
+        try {
+            web.registerServlet(endpointURL, gs, new Hashtable(), null);
+            exportDeclaration.handle(serviceReference);
+            registeredServlets.add(endpointURL);
+            LOG.info("JSONRPC-exporter, publishing object exporter at: {}", endpointURL);
         } catch (NamespaceException e) {
             LOG.error("Namespace failure", e);
         } catch (ServletException e) {
             LOG.error("Failed registering the servlet to respond the RPC request.", e);
-        } finally {
-            LOG.info("JSONRPC exporter finished to process exportation request.");
         }
-
     }
 
     @Override
     protected void denyExportDeclaration(ExportDeclaration exportDeclaration) {
 
-        JSONRPCExporterPojo jp=JSONRPCExporterPojo.create(exportDeclaration);
+        JSONRPCExporterPojo jp = JSONRPCExporterPojo.create(exportDeclaration);
 
-        final String endpointURL=String.format("%s/%s",jp.getUrlContext(),jp.getInstanceName());
+        final String endpointURL = String.format("%s/%s", jp.getUrlContext(), jp.getInstanceName());
 
         exportDeclaration.unhandle(serviceReference);
 
@@ -148,9 +143,9 @@ public class JSONRPCExporter extends AbstractExporterComponent {
     /**
      * Unregister all servlets registered by this exporter
      */
-    private void unregisterAllServlets(){
+    private void unregisterAllServlets() {
 
-        for(String endpoint:registeredServlets){
+        for (String endpoint : registeredServlets) {
             web.unregister(endpoint);
             LOG.info("endpoint {} unregistered", endpoint);
         }
@@ -162,12 +157,12 @@ public class JSONRPCExporter extends AbstractExporterComponent {
         private final JsonRpcServer jsonRpcServer;
 
         public RPCServlet(JsonRpcServer jsonRpcServer) {
-            this.jsonRpcServer=jsonRpcServer;
+            this.jsonRpcServer = jsonRpcServer;
         }
 
         @Override
         protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-            jsonRpcServer.handle(req,resp);
+            jsonRpcServer.handle(req, resp);
         }
 
     }

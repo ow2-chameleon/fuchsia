@@ -100,12 +100,9 @@ public class JAXWSExporter extends AbstractExporterComponent {
             LOG.info("Pushing CXF endpoint: {}", endpoint.getEndpoint().getEndpointInfo().getAddress());
 
         } catch (Exception e) {
-
             LOG.error("Failed exporting in CXF", e);
-            throw new RuntimeException(e);
-
+            throw new BinderException(e);
         }
-
     }
 
     @Override

@@ -44,26 +44,37 @@ public class GridWebView {
 
     private final BundleContext bundleContext;
 
+    @Controller
+    private boolean state;
+
     @Requires
     HttpService web;
 
+    public GridWebView(BundleContext context){
+        this.bundleContext=context;
+    }
+
     @Validate
-    public void validate() throws ServletException, NamespaceException {
+    public void validate() {
+        try {
+            web.registerServlet(SERVLET,new MainPage(),null,null);
+        } catch (Exception e) {
+            LOG.error("Cannot register servlet", e);
+            state = false;
+            return;
+        }
 
-        web.registerServlet(SERVLET,new MainPage(),null,null);
-
-        web.registerResources(RESOURCES, RESOURCES, web.createDefaultHttpContext());
-
-
+        try {
+            web.registerResources(RESOURCES, RESOURCES, web.createDefaultHttpContext());
+        } catch (NamespaceException e) {
+            LOG.error("Cannot register resources", e);
+            state = false;
+        }
     }
 
     public void invalidate(){
         web.unregister(SERVLET);
         web.unregister(RESOURCES);
-    }
-
-    public GridWebView(BundleContext context){
-        this.bundleContext=context;
     }
 
     private List<ImportationLinkerIntrospection> fetchLinkerIntrospections(){
@@ -117,7 +128,6 @@ public class GridWebView {
             }
 
         }
-
         return templateVariables;
     }
 

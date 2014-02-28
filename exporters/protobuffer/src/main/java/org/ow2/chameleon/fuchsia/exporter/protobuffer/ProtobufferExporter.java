@@ -122,47 +122,46 @@ public class ProtobufferExporter extends AbstractExporterComponent {
         LOG.info("initiating exportation...");
 
         ProtobufferExporterPojo pojo = ProtobufferExporterPojo.create(exportDeclaration);
-
+        Class inter, messageClass;
         try {
-
-            Class inter = FuchsiaUtils.loadClass(context, String.format("%s$%s", pojo.getClazz(), pojo.getService()));
-            Class messageClass = FuchsiaUtils.loadClass(context, String.format("%s$%s", pojo.getClazz(), pojo.getMessage()));
-            LOG.info("Looking for service that provides class {}", pojo.getClazz() + "$" + pojo.getService());
-            Collection<ServiceReference<Service>> protobuffReferences = context.getServiceReferences(inter, pojo.getFilter());
-            LOG.info("using filter " + pojo.getFilter() + " to find instance");
-            if (protobuffReferences.size() == 0) {
-
-                LOG.info("nothing to be exported was found");
-
-            } else if (protobuffReferences.size() == 1) {
-
-                for (ServiceReference<Service> sr : protobuffReferences) {
-                    Service protobufferService = context.getService(sr);
-                    BindingFactoryManager mgr = cxfbus.getExtension(BindingFactoryManager.class);
-                    mgr.registerBindingFactory(ProtobufBindingFactory.PROTOBUF_BINDING_ID, new ProtobufBindingFactory(cxfbus));
-                    ProtobufServerFactoryBean serverFactoryBean = new ProtobufServerFactoryBean();
-                    serverFactoryBean.setAddress(pojo.getAddress());
-                    serverFactoryBean.setBus(cxfbus);
-                    serverFactoryBean.setServiceBean(inter.cast(protobufferService));
-                    serverFactoryBean.setMessageClass(messageClass);
-                    ClassLoader loader = Thread.currentThread().getContextClassLoader();
-                    Thread.currentThread().setContextClassLoader(Container.class.getClassLoader());
-                    Server server = serverFactoryBean.create();
-                    serverPublished.put(pojo.getId(), server);
-                    Thread.currentThread().setContextClassLoader(loader);
-                    LOG.info("exporting the service with the id:" + pojo.getId());
-                }
-
-            } else if (protobuffReferences.size() > 1) {
-                LOG.info("more than one were found to be exported");
-            }
-
-        } catch (InvalidSyntaxException e) {
-            LOG.error("Invalid filter exception", e);
+            inter = FuchsiaUtils.loadClass(context, String.format("%s$%s", pojo.getClazz(), pojo.getService()));
+            messageClass = FuchsiaUtils.loadClass(context, String.format("%s$%s", pojo.getClazz(), pojo.getMessage()));
         } catch (ClassNotFoundException e) {
             LOG.error("Class not found", e);
+            return;
+        }
+        LOG.info("Looking for service that provides class {}", pojo.getClazz() + "$" + pojo.getService());
+        Collection<ServiceReference<Service>> protobuffReferences = null;
+        try {
+            protobuffReferences = context.getServiceReferences(inter, pojo.getFilter());
+        } catch (InvalidSyntaxException e) {
+            LOG.error("Invalid filter exception", e);
+            return;
         }
 
+        LOG.info("using filter " + pojo.getFilter() + " to find instance");
+        if (protobuffReferences.isEmpty()) {
+            LOG.info("nothing to be exported was found");
+        } else if (protobuffReferences.size() == 1) {
+            for (ServiceReference<Service> sr : protobuffReferences) {
+                Service protobufferService = context.getService(sr);
+                BindingFactoryManager mgr = cxfbus.getExtension(BindingFactoryManager.class);
+                mgr.registerBindingFactory(ProtobufBindingFactory.PROTOBUF_BINDING_ID, new ProtobufBindingFactory(cxfbus));
+                ProtobufServerFactoryBean serverFactoryBean = new ProtobufServerFactoryBean();
+                serverFactoryBean.setAddress(pojo.getAddress());
+                serverFactoryBean.setBus(cxfbus);
+                serverFactoryBean.setServiceBean(inter.cast(protobufferService));
+                serverFactoryBean.setMessageClass(messageClass);
+                ClassLoader loader = Thread.currentThread().getContextClassLoader();
+                Thread.currentThread().setContextClassLoader(Container.class.getClassLoader());
+                Server server = serverFactoryBean.create();
+                serverPublished.put(pojo.getId(), server);
+                Thread.currentThread().setContextClassLoader(loader);
+                LOG.info("exporting the service with the id:" + pojo.getId());
+            }
+        } else {
+            LOG.info("more than one were found to be exported");
+        }
     }
 
     @Override

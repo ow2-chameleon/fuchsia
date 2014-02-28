@@ -193,21 +193,21 @@ public class FuchsiaGogoCommand {
     public void linker(@Descriptor("linker [-(import|export)] [ID name]") String... parameters) {
         List<ServiceReference> exportationLinkerRef = getAllServiceRefs(ExportationLinker.class);
         List<ServiceReference> importationLinkerRef = getAllServiceRefs(ImportationLinker.class);
-        if (exportationLinkerRef != null || importationLinkerRef != null) {
-            if (exportationLinkerRef != null) {
+        if (exportationLinkerRef.isEmpty() && importationLinkerRef.isEmpty()) {
+            System.out.println("No linkers available.");
+        } else {
+            if (!exportationLinkerRef.isEmpty()) {
                 for (ServiceReference reference : exportationLinkerRef) {
                     displayServiceInfo("Exportation Linker", reference);
                     displayServiceProperties("Exportation Linker", reference, "\t\t");
                 }
             }
-            if (importationLinkerRef != null) {
+            if (!importationLinkerRef.isEmpty()) {
                 for (ServiceReference reference : importationLinkerRef) {
                     displayServiceInfo("Importation Linker", reference);
                     displayServiceProperties("Importation Linker", reference, "\t\t");
                 }
             }
-        } else {
-            System.out.println("No linkers available.");
         }
     }
 
@@ -216,13 +216,13 @@ public class FuchsiaGogoCommand {
     @Descriptor("Gets the discovery available in the platform")
     public void discovery(@Descriptor("discovery [discovery name]") String... parameters) {
         List<ServiceReference> discoveryRef = getAllServiceRefs(DiscoveryService.class);
-        if (discoveryRef != null) {
+        if (discoveryRef.isEmpty()) {
+            System.out.println("No discovery available.");
+        } else {
             for (ServiceReference reference : discoveryRef) {
                 displayServiceInfo("Discovery", reference);
                 displayServiceProperties("Discovery", reference, "\t\t");
             }
-        } else {
-            System.out.println("No discovery available.");
         }
     }
 
@@ -231,14 +231,14 @@ public class FuchsiaGogoCommand {
     @Descriptor("Gets the importer available in the platform")
     public void importer(@Descriptor("importer [importer name]") String... parameters) {
         Map<ServiceReference, ImporterService> importerRefsAndServices = getAllServiceRefsAndServices(ImporterService.class);
-        if (importerRefsAndServices != null) {
+        if (importerRefsAndServices.isEmpty()) {
+            System.out.println("No importers available.");
+        } else {
             for (Map.Entry<ServiceReference, ImporterService> e : importerRefsAndServices.entrySet()) {
                 displayServiceInfo("Importer", e.getKey());
                 System.out.println(String.format("\t*importer name = %s", e.getValue().getName()));
                 displayServiceProperties("Importer", e.getKey(), "\t\t");
             }
-        } else {
-            System.out.println("No importers available.");
         }
     }
 
@@ -247,14 +247,14 @@ public class FuchsiaGogoCommand {
     @Descriptor("Gets the exporter available in the platform")
     public void exporter(@Descriptor("exporter [exporter name]") String... parameters) {
         Map<ServiceReference, ExporterService> exporterRefsAndServices = getAllServiceRefsAndServices(ExporterService.class);
-        if (exporterRefsAndServices != null) {
+        if (exporterRefsAndServices.isEmpty()) {
+            System.out.println("No exporter available.");
+        } else {
             for (Map.Entry<ServiceReference, ExporterService> e : exporterRefsAndServices.entrySet()) {
                 displayServiceInfo("Exporter", e.getKey());
                 System.out.println(String.format("\t*exporter name = %s", e.getValue().getName()));
                 displayServiceProperties("Exporter", e.getKey(), "\t\t");
             }
-        } else {
-            System.out.println("No exporter available.");
         }
     }
 

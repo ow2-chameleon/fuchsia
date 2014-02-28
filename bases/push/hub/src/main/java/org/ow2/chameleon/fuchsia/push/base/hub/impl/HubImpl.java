@@ -10,7 +10,6 @@ import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.osgi.framework.BundleContext;
 import org.osgi.service.http.HttpService;
 import org.ow2.chameleon.fuchsia.core.constant.HttpHeaders;
 import org.ow2.chameleon.fuchsia.core.constant.MediaType;

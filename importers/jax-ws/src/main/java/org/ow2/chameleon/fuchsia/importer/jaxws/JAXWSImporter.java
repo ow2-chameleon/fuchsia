@@ -16,7 +16,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.jws.WebService;
-import java.util.*;
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Map;
 
 import static org.ow2.chameleon.fuchsia.core.FuchsiaUtils.loadClass;
 
@@ -53,12 +56,12 @@ public class JAXWSImporter extends AbstractImporterComponent {
     private ServiceReference serviceReference;
 
     public JAXWSImporter(BundleContext pContext) {
-        context=pContext;
+        context = pContext;
         map = new HashMap<ImportDeclaration, ServiceRegistration>();
     }
 
     @PostRegistration
-    public void registration(ServiceReference serviceReference){
+    public void registration(ServiceReference serviceReference) {
         this.serviceReference = serviceReference;
     }
 
@@ -79,15 +82,16 @@ public class JAXWSImporter extends AbstractImporterComponent {
 
     /**
      * Return the name of the instance
+     *
      * @return name of this instance
      */
     public String getName() {
         return name;
     }
 
-	/*--------------------------*
-	 * ImporterService methods  *
-	 *--------------------------*/
+    /*--------------------------*
+     * ImporterService methods  *
+     *--------------------------*/
 
     @Override
     protected void useImportDeclaration(ImportDeclaration importDeclaration) throws BinderException {
@@ -96,7 +100,7 @@ public class JAXWSImporter extends AbstractImporterComponent {
 
         Object objectProxy;
 
-        JAXWSImporterPojo pojo=JAXWSImporterPojo.create(importDeclaration);
+        JAXWSImporterPojo pojo = JAXWSImporterPojo.create(importDeclaration);
 
         //Try to load the class
         final Class<?> klass;
@@ -112,7 +116,7 @@ public class JAXWSImporter extends AbstractImporterComponent {
             Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader());
             LOG.debug(String.valueOf(klass));
             //use annotations if present
-            if (klass.isAnnotationPresent(WebService.class)){
+            if (klass.isAnnotationPresent(WebService.class)) {
                 factory = new JaxWsProxyFactoryBean();
             } else {
                 factory = new ClientProxyFactoryBean();
@@ -136,7 +140,7 @@ public class JAXWSImporter extends AbstractImporterComponent {
             importDeclaration.handle(serviceReference);
 
             //Publish object
-            map.put(importDeclaration,registerProxy(objectProxy,klass));
+            map.put(importDeclaration, registerProxy(objectProxy, klass));
         } finally {
             Thread.currentThread().setContextClassLoader(origin);
         }
@@ -144,7 +148,6 @@ public class JAXWSImporter extends AbstractImporterComponent {
 
     /**
      * Utility method to register a proxy has a Service in OSGi.
-     *
      */
     protected ServiceRegistration registerProxy(Object objectProxy, Class clazz) {
         Dictionary<String, Object> props = new Hashtable<String, Object>();
@@ -155,7 +158,8 @@ public class JAXWSImporter extends AbstractImporterComponent {
     }
 
     /**
-     *  Destroy the proxy & update the map containing the registration ref
+     * Destroy the proxy & update the map containing the registration ref
+     *
      * @param importDeclaration
      */
     @Override

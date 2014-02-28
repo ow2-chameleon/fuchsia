@@ -6,7 +6,6 @@ import com.philips.lighting.model.PHLight;
 import com.philips.lighting.model.PHLightState;
 import org.apache.felix.ipojo.annotations.*;
 import org.apache.felix.service.command.Descriptor;
-import org.osgi.framework.BundleContext;
 
 import java.util.Set;
 
@@ -42,57 +41,54 @@ public class PhilipsHueGogoCommand {
     @Descriptor  (value = "Change light parameters, for a specific lamp or for all light plugged into the bridge")
     public void phset(@Descriptor("[-name NAME] [-on true|false] [-i 0<=INTENSITY<=255] [-tt TRANSITION_TIME_IN_DECISECONDS] [-r 0<=RED<=255] [-g 0<=GREEN<=255] [-b 0<=BLUE<=255]") String... parameters) {
 
-        String valueStr=getArgumentValue("-on",parameters);
-        String nameStr=getArgumentValue("-name",parameters);
-        String ttStr=getArgumentValue("-tt",parameters);
-        String iStr=getArgumentValue("-i",parameters);
-        String rStr=getArgumentValue("-r",parameters);
-        String gStr=getArgumentValue("-g",parameters);
-        String bStr=getArgumentValue("-b",parameters);
+        String valueStr = getArgumentValue("-on", parameters);
+        String nameStr = getArgumentValue("-name", parameters);
+        String ttStr = getArgumentValue("-tt", parameters);
+        String iStr = getArgumentValue("-i", parameters);
+        String rStr = getArgumentValue("-r", parameters);
+        String gStr = getArgumentValue("-g", parameters);
+        String bStr = getArgumentValue("-b", parameters);
 
-        Boolean value=new Boolean(valueStr);
+        Boolean value = Boolean.valueOf(valueStr);
 
-        for(PHLight light:lights){
-
-            if(nameStr==null || nameStr.equals(light.getName())){
-
+        for (PHLight light : lights) {
+            if (nameStr == null || nameStr.equals(light.getName())) {
                 PHLightState lightState = new PHLightState();
 
-                if(value!=null){
+                if (value != null) {
                     lightState.setOn(value);
                 }
 
-                if(ttStr!=null){
-                    System.out.println("transition time:"+ttStr);
+                if (ttStr != null) {
+                    System.out.println("transition time:" + ttStr);
                     lightState.setTransitionTime(Integer.valueOf(ttStr));
                 }
 
-                if(iStr!=null){
-                    System.out.println("brightness:"+iStr);
+                if (iStr != null) {
+                    System.out.println("brightness:" + iStr);
                     lightState.setBrightness(Integer.valueOf(iStr));
                 }
 
-                if(rStr!=null||gStr!=null||bStr!=null){
+                if (rStr != null || gStr != null || bStr != null) {
+                    int r = getColorValue(rStr);
+                    int g = getColorValue(gStr);
+                    int b = getColorValue(bStr);
 
-                    int r=rStr!=null?Integer.valueOf(rStr):0;
-                    int g=gStr!=null?Integer.valueOf(gStr):0;
-                    int b=bStr!=null?Integer.valueOf(bStr):0;
-
-                    System.out.println(String.format("color red:%s green:%s blue:%s",r,g,b));
+                    System.out.println(String.format("color red:%s green:%s blue:%s", r, g, b));
 
                     lightState.setColorMode(PHLight.PHLightColorMode.COLORMODE_HUE_SATURATION);
 
-                    float[] xy= PHUtilities.calculateXYFromRGB(r, g, b, light.getIdentifier());
+                    float[] xy = PHUtilities.calculateXYFromRGB(r, g, b, light.getIdentifier());
 
-                    lightState.setHue(PHUtilities.colorFromXY(xy,light.getIdentifier()));
-
+                    lightState.setHue(PHUtilities.colorFromXY(xy, light.getIdentifier()));
                 }
-
-
-                bridge.updateLightState(light,lightState);
-
+                bridge.updateLightState(light, lightState);
             }
         }
+    }
+
+    private int getColorValue(String value) {
+        return value != null ? Integer.valueOf(value) : 0;
     }
 
     /**
