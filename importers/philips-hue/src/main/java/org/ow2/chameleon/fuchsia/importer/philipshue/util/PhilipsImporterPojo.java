@@ -20,16 +20,28 @@ public class PhilipsImporterPojo {
 
         PhilipsImporterPojo dto=new PhilipsImporterPojo();
 
-        try{
-            dto.id=importDeclaration.getMetadata().get("id").toString();
-            dto.name=importDeclaration.getMetadata().get("discovery.philips.device.name").toString();
-            dto.type=importDeclaration.getMetadata().get("discovery.philips.device.type").toString();
-            dto.object=importDeclaration.getMetadata().get("discovery.philips.device.object");
-            dto.bridgeType=importDeclaration.getMetadata().get("discovery.philips.bridge.type").toString();
-            dto.bridgeObject=importDeclaration.getMetadata().get("discovery.philips.bridge.object");
-        }catch(NullPointerException npe){
-            throw new BinderException(npe);
+        Object idObject=importDeclaration.getMetadata().get("id");
+        Object nameObject=importDeclaration.getMetadata().get("discovery.philips.device.name");
+        Object deviceType=importDeclaration.getMetadata().get("discovery.philips.device.type");
+        Object deviceObject=importDeclaration.getMetadata().get("discovery.philips.device.object");
+        Object bridgeType=importDeclaration.getMetadata().get("discovery.philips.bridge.type");
+        Object bridgeObject=importDeclaration.getMetadata().get("discovery.philips.bridge.object");
+
+        if(idObject==null
+                || nameObject==null
+                || deviceType==null
+                || deviceObject==null
+                || bridgeType==null
+                || bridgeObject==null){
+            throw new BinderException("Missing information");
         }
+
+        dto.id=idObject.toString();
+        dto.name=nameObject.toString();
+        dto.type=deviceType.toString();
+        dto.object=deviceObject;
+        dto.bridgeType=bridgeType.toString();
+        dto.bridgeObject=bridgeObject;
 
         return dto;
 
@@ -47,11 +59,9 @@ public class PhilipsImporterPojo {
         return type;
     }
 
-
     public Object getObject() {
         return object;
     }
-
 
     public String getBridgeType() {
         return bridgeType;
