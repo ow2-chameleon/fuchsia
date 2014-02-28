@@ -8,6 +8,7 @@ import junit.framework.Assert;
 import org.apache.cxf.Bus;
 import org.apache.cxf.BusFactory;
 import org.apache.cxf.binding.BindingFactoryManager;
+import org.apache.cxf.endpoint.EndpointException;
 import org.apache.cxf.endpoint.Server;
 import org.eclipse.jetty.util.component.Container;
 import org.junit.Test;
@@ -15,15 +16,19 @@ import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
+import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclarationBuilder;
+import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
 import org.ow2.chameleon.fuchsia.importer.protobuffer.ProtobufferImporter;
 import org.ow2.chameleon.fuchsia.importer.protobuffer.common.ProtobufferTestAbstract;
 import org.ow2.chameleon.fuchsia.importer.protobuffer.common.ctd.AddressBookProtos;
 import org.ow2.chameleon.fuchsia.importer.protobuffer.internal.ProtobufferImporterPojo;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 import static org.fest.reflect.core.Reflection.constructor;
@@ -138,6 +143,21 @@ public class ProtobufferImporterTest extends ProtobufferTestAbstract<ImportDecla
         stopStandaloneServer();
     }
 
+    @Test
+    public void testDenyDeclaration() throws BinderException, InvalidSyntaxException, ClassNotFoundException, InterruptedException, InvocationTargetException, EndpointException, IllegalAccessException, NoSuchMethodException {
+        ImportDeclaration declaration = getValidDeclarations().get(0);
+        fuchsiaDeclarationBinder.useDeclaration(declaration);
+        Map<String,Server> serverPublished = field("registeredImporter").ofType(Map.class).in(fuchsiaDeclarationBinder).get();
+        Assert.assertEquals(1,serverPublished.size());
+        fuchsiaDeclarationBinder.denyDeclaration(declaration);
+        Assert.assertEquals(0,serverPublished.size());
+    }
+
+    @Test
+    public void testNameWasProvided(){
+        org.junit.Assert.assertNotNull(fuchsiaDeclarationBinder.getName());
+    }
+
     @Override
     public List<ImportDeclaration> getInvalidDeclarations() {
         final Map<String, Object> metadata=new Hashtable<String, Object>();
@@ -169,4 +189,6 @@ public class ProtobufferImporterTest extends ProtobufferTestAbstract<ImportDecla
 
         return new ArrayList<ImportDeclaration>(){{add(declarationValid);}};
     }
+
+
 }

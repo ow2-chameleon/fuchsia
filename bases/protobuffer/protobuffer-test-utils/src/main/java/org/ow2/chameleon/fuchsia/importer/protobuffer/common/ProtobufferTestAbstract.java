@@ -88,7 +88,7 @@ public abstract class ProtobufferTestAbstract<T extends Declaration,S extends De
     }
 
     @Test
-    public void testInvalidDeclarationExceptionThrown() throws Exception {
+    public void testInvalidDeclaration() throws Exception {
         try {
             for(T declaration:getInvalidDeclarations()){
                 fuchsiaDeclarationBinder.useDeclaration(declaration);

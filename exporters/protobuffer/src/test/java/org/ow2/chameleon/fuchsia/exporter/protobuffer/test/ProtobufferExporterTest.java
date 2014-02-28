@@ -115,6 +115,11 @@ public class ProtobufferExporterTest extends ProtobufferTestAbstract<ExportDecla
     }
 
     @Test
+    public void testNameWasProvided(){
+        org.junit.Assert.assertNotNull(fuchsiaDeclarationBinder.getName());
+    }
+
+    @Test
     public void testExportDeclaration() throws BinderException, InvalidSyntaxException, ClassNotFoundException, InterruptedException, InvocationTargetException, EndpointException, IllegalAccessException, NoSuchMethodException {
 
         ExportDeclaration declaration = getValidDeclarations().get(0);
@@ -205,7 +210,7 @@ public class ProtobufferExporterTest extends ProtobufferTestAbstract<ExportDecla
 
         metadata.put("id","protobuffer-exporter");
         metadata.put("rpc.export.address","http://localhost:8085/cxf/AddressBookService");//"http://localhost:8085/cxf/AddressBookService"
-        metadata.put("rpc.export.class",AddressBookProtos.class.getName());
+        metadata.put("rpc.export.class", AddressBookProtos.class.getName());
         metadata.put("rpc.export.message","AddressBookServiceMessage");
         metadata.put("rpc.export.service","AddressBookService");
 

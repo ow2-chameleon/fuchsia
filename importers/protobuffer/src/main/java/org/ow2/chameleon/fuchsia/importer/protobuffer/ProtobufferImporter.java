@@ -127,7 +127,7 @@ public class ProtobufferImporter extends AbstractImporterComponent {
 
         ProtobufferImporterPojo pojo=ProtobufferImporterPojo.create(importDeclaration);
 
-        ServiceRegistration sr=registeredImporter.get(pojo.getId());
+        ServiceRegistration sr=registeredImporter.remove(pojo.getId());
 
         if(sr!=null){
             LOG.info("unregistering service with id:" + pojo.getId());
