@@ -62,11 +62,61 @@ public class PhilipsHueImporterTest extends PhilipsHueImporterAbstractTest{
         Map<String,ServiceRegistration> lamps=field("lamps").ofType(new TypeRef<Map<String,ServiceRegistration>>() {}).in(importer).get();
         Map<String,ServiceRegistration> bridges=field("bridges").ofType(new TypeRef<Map<String,ServiceRegistration>>() {}).in(importer).get();
 
-        Assert.assertTrue(lamps.size() == 1);
-        Assert.assertEquals(lamps.get(philipsId),lightServiceRegistration);
+        Assert.assertEquals(1,lamps.size());
+        Assert.assertEquals(lamps.get(philipsId), lightServiceRegistration);
 
-        Assert.assertTrue(bridges.size()==1);
+        Assert.assertEquals(1,bridges.size());
         Assert.assertEquals(bridges.get(philipsId),bridgeServiceRegistration);
+
+    }
+
+    @Test
+    public void checkDenyImport() throws BinderException {
+
+        String philipsId="L1-ID";
+
+        ImportDeclaration declaration = spy(ImportDeclarationBuilder.fromMetadata(generateValidMetadata(philipsId)).build());
+        importer.registration(serviceReference);
+        declaration.bind(serviceReference);
+
+        importer.useDeclaration(declaration);
+
+        Map<String,ServiceRegistration> lamps=field("lamps").ofType(new TypeRef<Map<String,ServiceRegistration>>() {}).in(importer).get();
+        Map<String,ServiceRegistration> bridges=field("bridges").ofType(new TypeRef<Map<String,ServiceRegistration>>() {}).in(importer).get();
+
+        Assert.assertEquals(1,lamps.size());
+        Assert.assertEquals(1,bridges.size());
+
+        importer.denyDeclaration(declaration);
+
+        Assert.assertEquals(0,lamps.size());
+        Assert.assertEquals(0,bridges.size());
+
+        verify(declaration,times(1)).unhandle(serviceReference);
+
+    }
+
+    @Test
+    public void checkGracefulStop() throws BinderException {
+
+        String philipsId="L1-ID";
+
+        ImportDeclaration declaration = spy(ImportDeclarationBuilder.fromMetadata(generateValidMetadata(philipsId)).build());
+        importer.registration(serviceReference);
+        declaration.bind(serviceReference);
+
+        importer.useDeclaration(declaration);
+
+        Map<String,ServiceRegistration> lamps=field("lamps").ofType(new TypeRef<Map<String,ServiceRegistration>>() {}).in(importer).get();
+        Map<String,ServiceRegistration> bridges=field("bridges").ofType(new TypeRef<Map<String,ServiceRegistration>>() {}).in(importer).get();
+
+        Assert.assertEquals(1,lamps.size());
+        Assert.assertEquals(1,bridges.size());
+
+        importer.invalidate();
+
+        Assert.assertEquals(0,lamps.size());
+        Assert.assertEquals(0,bridges.size());
 
     }
 
