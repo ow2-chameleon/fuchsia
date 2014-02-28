@@ -49,16 +49,18 @@ public class PhilipsHueImporter extends AbstractImporterComponent {
 
         LOG.info("Cleaning up instances into Philips hue Importer");
 
+        cleanup();
+
     }
 
     private void cleanup(){
 
         for(Map.Entry<String,ServiceRegistration> lampEntry:lamps.entrySet()){
-            lampEntry.getValue().unregister();
+            lamps.remove(lampEntry.getKey()).unregister();
         }
 
         for(Map.Entry<String,ServiceRegistration> bridgeEntry:bridges.entrySet()){
-            bridgeEntry.getValue().unregister();
+            bridges.remove(bridgeEntry.getKey()).unregister();
         }
 
     }
@@ -97,13 +99,13 @@ public class PhilipsHueImporter extends AbstractImporterComponent {
         PhilipsImporterPojo pojo=PhilipsImporterPojo.create(importDeclaration);
 
         try {
-            lamps.get(pojo.getId()).unregister();
+            lamps.remove(pojo.getId()).unregister();
         }catch(IllegalStateException e){
             LOG.error("failed unregistering lamp", e);
         }
 
         try {
-            bridges.get(pojo.getId()).unregister();
+            bridges.remove(pojo.getId()).unregister();
         }catch(IllegalStateException e){
             LOG.error("failed unregistering bridge", e);
         }
