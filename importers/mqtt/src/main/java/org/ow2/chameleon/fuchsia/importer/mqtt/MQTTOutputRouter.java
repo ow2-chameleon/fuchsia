@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
@@ -72,7 +73,10 @@ public class MQTTOutputRouter implements Runnable {
             while (isMonitoringArrivals) {
 
                 QueueingConsumer.Delivery delivery = consumer.nextDelivery();
-                String message = new String(delivery.getBody());
+
+                Charset messageCharset=Charset.forName(delivery.getProperties().getContentEncoding());
+
+                String message = new String(delivery.getBody(),messageCharset);
 
                 LOG.info("AMQP: message '{}' received,", message);
 
