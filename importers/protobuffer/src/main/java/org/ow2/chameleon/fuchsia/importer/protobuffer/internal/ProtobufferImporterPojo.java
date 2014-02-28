@@ -17,21 +17,29 @@ public class ProtobufferImporterPojo {
 
     public static ProtobufferImporterPojo create(ImportDeclaration importDeclaration) throws BinderException {
 
-        try {
+        Object idObject = importDeclaration.getMetadata().get("id");
+        Object addressObject = importDeclaration.getMetadata().get("rpc.server.address");
+        Object clazzObject = importDeclaration.getMetadata().get("rpc.proto.class");
+        Object serviceObject = importDeclaration.getMetadata().get("rpc.proto.service");
+        Object messageObject = importDeclaration.getMetadata().get("rpc.proto.message");
 
-            ProtobufferImporterPojo declaration=new ProtobufferImporterPojo();
+        ProtobufferImporterPojo declaration=new ProtobufferImporterPojo();
 
-            declaration.id = importDeclaration.getMetadata().get("id").toString();
-            declaration.address = importDeclaration.getMetadata().get("rpc.server.address").toString();
-            declaration.clazz = importDeclaration.getMetadata().get("rpc.proto.class").toString();
-            declaration.service = importDeclaration.getMetadata().get("rpc.proto.service").toString();
-            declaration.message = importDeclaration.getMetadata().get("rpc.proto.message").toString();
-
-            return declaration;
-
-        }catch(NullPointerException npe){
-            throw new BinderException(npe);
+        if(idObject==null
+                ||addressObject==null
+                ||clazzObject==null
+                ||serviceObject==null
+                ||messageObject==null){
+            throw new BinderException("Not enough information in the metadata to be used by the protobuffer importer");
         }
+
+        declaration.id = idObject.toString();
+        declaration.address = addressObject.toString();
+        declaration.clazz = clazzObject.toString();
+        declaration.service = serviceObject.toString();
+        declaration.message = messageObject.toString();
+
+        return declaration;
 
     }
 

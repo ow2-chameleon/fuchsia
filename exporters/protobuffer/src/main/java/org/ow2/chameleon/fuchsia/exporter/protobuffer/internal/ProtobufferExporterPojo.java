@@ -12,7 +12,6 @@ public class ProtobufferExporterPojo {
     String filter;
     String service;
 
-
     private ProtobufferExporterPojo(){
 
     }
@@ -21,29 +20,31 @@ public class ProtobufferExporterPojo {
 
         ProtobufferExporterPojo declaration=new ProtobufferExporterPojo();
 
-        try {
+        Object idObject=exportDeclaration.getMetadata().get("id");
+        Object addressObject=exportDeclaration.getMetadata().get("rpc.export.address");
+        Object clazzObject=exportDeclaration.getMetadata().get("rpc.export.class");
+        Object messageObject=exportDeclaration.getMetadata().get("rpc.export.message");
+        Object serviceObject=exportDeclaration.getMetadata().get("rpc.export.service");
+        Object filterObject=exportDeclaration.getMetadata().get("rpc.export.filter");
 
-            declaration.id = exportDeclaration.getMetadata().get("id").toString();
-            declaration.address = exportDeclaration.getMetadata().get("rpc.export.address").toString();
-            declaration.clazz = exportDeclaration.getMetadata().get("rpc.export.class").toString();
-            declaration.message = exportDeclaration.getMetadata().get("rpc.export.message").toString();
-            declaration.service = exportDeclaration.getMetadata().get("rpc.export.service").toString();
-
-        }catch(NullPointerException npe){
-
-            throw new BinderException(npe);
-
+        if(idObject==null
+                ||addressObject==null
+                ||clazzObject==null
+                ||messageObject==null
+                ||serviceObject==null){
+            throw new BinderException("Not enough information in the metadata to be used by the protobuffer export");
         }
 
+        declaration.id = idObject.toString();
+        declaration.address = addressObject.toString();
+        declaration.clazz = clazzObject.toString();
+        declaration.message = messageObject.toString();
+        declaration.service = serviceObject.toString();
 
-
-
-        Object filterRaw=exportDeclaration.getMetadata().get("rpc.export.filter");
-
-        if(filterRaw==null){
+        if(filterObject==null){
             declaration.filter=null;
         }else {
-            declaration.filter = filterRaw.toString();
+            declaration.filter = filterObject.toString();
         }
 
         return declaration;

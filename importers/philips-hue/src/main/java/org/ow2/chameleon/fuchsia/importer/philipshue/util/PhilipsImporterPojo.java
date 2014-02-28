@@ -33,7 +33,7 @@ public class PhilipsImporterPojo {
                 || deviceObject==null
                 || bridgeType==null
                 || bridgeObject==null){
-            throw new BinderException("Missing information");
+            throw new BinderException("Not enough information in the metadata to be used by the phillips hue importer");
         }
 
         dto.id=idObject.toString();
