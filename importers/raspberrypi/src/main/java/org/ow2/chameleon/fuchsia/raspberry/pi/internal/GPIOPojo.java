@@ -1,6 +1,8 @@
 package org.ow2.chameleon.fuchsia.raspberry.pi.internal;
 
 
+import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
+
 import java.util.Map;
 
 /**
@@ -16,11 +18,21 @@ public class GPIOPojo {
 
     }
 
-    public static GPIOPojo create(Map<String, Object> metadata) {
+    public static GPIOPojo create(Map<String, Object> metadata) throws BinderException {
+
+        Object id=metadata.get("id");
+        Object pin=metadata.get("importer.gpio.pin");
+        Object name=metadata.get("importer.gpio.name");
+
+        if(id==null ||pin==null||name==null){
+            throw new BinderException("Not enough information provided to create GPIO Importer");
+        }
+
         GPIOPojo pojo = new GPIOPojo();
-        pojo.id = metadata.get("id").toString();
-        pojo.pin = metadata.get("importer.gpio.pin").toString();
-        pojo.name = metadata.get("importer.gpio.name").toString();
+
+        pojo.id = id.toString();
+        pojo.pin = pin.toString();
+        pojo.name = name.toString();
 
         return pojo;
     }

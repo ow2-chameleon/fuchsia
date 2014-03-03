@@ -31,7 +31,7 @@ public class GpIOImporter extends AbstractImporterComponent {
     @ServiceProperty(name = "target", value = "(&(importer.gpio.pin=*)(importer.gpio.name=*)(id=*))")
     private String filter;
 
-    public GpIOImporter() {
+    public GpIOImporter(BundleContext context) {
         super();
     }
 
@@ -68,7 +68,6 @@ public class GpIOImporter extends AbstractImporterComponent {
 
             gpioPin.put(pojo.getId(), im);
 
-
         } catch (UnacceptableConfiguration e) {
             LOG.error("Invalid configuration", e);
             importDeclaration.unhandle(serviceReference);
@@ -85,7 +84,7 @@ public class GpIOImporter extends AbstractImporterComponent {
     protected void denyImportDeclaration(ImportDeclaration importDeclaration) throws BinderException {
         GPIOPojo pojo = GPIOPojo.create(importDeclaration.getMetadata());
 
-        InstanceManager im = gpioPin.get(pojo.getId());
+        InstanceManager im = gpioPin.remove(pojo.getId());
         importDeclaration.unhandle(serviceReference);
         if (im != null) {
             im.dispose();
