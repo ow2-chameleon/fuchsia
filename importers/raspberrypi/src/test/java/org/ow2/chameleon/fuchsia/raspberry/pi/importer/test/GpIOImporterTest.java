@@ -112,6 +112,28 @@ public class GpIOImporterTest {
     }
 
     @Test
+    public void testGracefulServiceStop() throws MissingHandlerException, UnacceptableConfiguration, ConfigurationException {
+        ImportDeclaration declaration=spy(getValidDeclaration());
+        try{
+            importer.useDeclaration(declaration);
+        }catch(Exception e){
+            //Swallow exception
+        }
+
+        Map<String, InstanceManager> gpioPin=field("gpioPin").ofType(Map.class).in(importer).get();
+        verify(lightFactory,times(1)).createComponentInstance(any(Dictionary.class));
+        verify(declaration,times(1)).handle(importerServiceReference);
+        Assert.assertEquals(1,gpioPin.size());
+        importer.invalidate();
+        Assert.assertEquals(0,importer.getImportDeclarations().size());
+    }
+
+    @Test
+    public void importerNameCannotBeNull(){
+        Assert.assertNotNull(importer.getName());
+    }
+
+    @Test
     public void testImporterDenyDeclaration() throws BinderException, MissingHandlerException, UnacceptableConfiguration, ConfigurationException {
         importer.useDeclaration(declaration);
         Map<String, InstanceManager> gpioPin=field("gpioPin").ofType(Map.class).in(importer).get();
