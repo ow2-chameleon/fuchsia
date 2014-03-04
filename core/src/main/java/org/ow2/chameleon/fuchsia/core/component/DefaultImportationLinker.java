@@ -79,12 +79,12 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
 
     @Validate
     public void start() {
-        LOG.debug(linkerName + " starting");
+        LOG.debug("ImportationLinker " + linkerName + " starting");
     }
 
     @Invalidate
     public void stop() {
-        LOG.debug(linkerName + " stopping");
+        LOG.debug("ImportationLinker " + linkerName + " stopping");
     }
 
     /**

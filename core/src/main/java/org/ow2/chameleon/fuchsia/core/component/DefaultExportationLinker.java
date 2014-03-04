@@ -79,12 +79,12 @@ public class DefaultExportationLinker implements ExportationLinker, ExportationL
 
     @Validate
     public void start() {
-        LOG.debug(linkerName + " starting");
+        LOG.debug("ExportationLinker " + linkerName + " starting");
     }
 
     @Invalidate
     public void stop() {
-        LOG.debug(linkerName + " stopping");
+        LOG.debug("ExportationLinker " + linkerName + " stopping");
     }
 
     /**

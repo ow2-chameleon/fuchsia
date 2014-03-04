@@ -14,9 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 
@@ -247,20 +245,9 @@ public class DirectoryMonitor implements BundleActivator, ServiceTrackerCustomiz
         @Override
         public void onFileCreate(File file) {
             LOG.info("File " + file + " created in " + directory);
-            List<Deployer> depl = new ArrayList<Deployer>();
-            try {
-                acquireReadLockIfNotHeld();
-                for (Deployer deployer : deployers) {
-                    if (deployer.accept(file)) {
-                        depl.add(deployer);
-                    }
-                }
-            } finally {
-                releaseReadLockIfHeld();
-            }
 
             // Callback called outside the protected region.
-            for (Deployer deployer : depl) {
+            for (Deployer deployer : getDeployers(file)) {
                 try {
                     deployer.onFileCreate(file);
                 } catch (Exception e) {
@@ -273,19 +260,7 @@ public class DirectoryMonitor implements BundleActivator, ServiceTrackerCustomiz
         public void onFileChange(File file) {
             LOG.info("File " + file + " from " + directory + " changed");
 
-            List<Deployer> depl = new ArrayList<Deployer>();
-            try {
-                acquireReadLockIfNotHeld();
-                for (Deployer deployer : deployers) {
-                    if (deployer.accept(file)) {
-                        depl.add(deployer);
-                    }
-                }
-            } finally {
-                releaseReadLockIfHeld();
-            }
-
-            for (Deployer deployer : depl) {
+            for (Deployer deployer : getDeployers(file)) {
                 try {
                     deployer.onFileChange(file);
                 } catch (Exception e) {
@@ -299,19 +274,7 @@ public class DirectoryMonitor implements BundleActivator, ServiceTrackerCustomiz
         public void onFileDelete(File file) {
             LOG.info("File " + file + " deleted from " + directory);
 
-            List<Deployer> depl = new ArrayList<Deployer>();
-            try {
-                acquireReadLockIfNotHeld();
-                for (Deployer deployer : deployers) {
-                    if (deployer.accept(file)) {
-                        depl.add(deployer);
-                    }
-                }
-            } finally {
-                releaseReadLockIfHeld();
-            }
-
-            for (Deployer deployer : depl) {
+            for (Deployer deployer : getDeployers(file)) {
                 try {
                     deployer.onFileDelete(file);
                 } catch (Exception e) {
@@ -319,5 +282,20 @@ public class DirectoryMonitor implements BundleActivator, ServiceTrackerCustomiz
                 }
             }
         }
+    }
+
+    private Set<Deployer> getDeployers(File file) {
+        Set<Deployer> depl = new HashSet<Deployer>();
+        try {
+            acquireReadLockIfNotHeld();
+            for (Deployer deployer : deployers) {
+                if (deployer.accept(file)) {
+                    depl.add(deployer);
+                }
+            }
+        } finally {
+            releaseReadLockIfHeld();
+        }
+        return depl;
     }
 }
