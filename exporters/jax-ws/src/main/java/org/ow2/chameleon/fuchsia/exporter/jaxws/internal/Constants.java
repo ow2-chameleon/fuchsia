@@ -7,6 +7,8 @@ public final class Constants {
     public static final String CXF_EXPORT_TYPE="fuchsia.export.cxf.class.name";
     public static final String CXF_EXPORT_WEB_CONTEXT="fuchsia.export.cxf.url.context";
 
-    private Constants(){}
+    private Constants(){
+        // private constructor
+    }
 
 }

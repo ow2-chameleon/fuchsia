@@ -165,7 +165,7 @@ public class DirectoryMonitor implements BundleActivator, ServiceTrackerCustomiz
     }
 
     private void startFileMonitoring() throws DirectoryMonitoringException {
-        if (polling == -1l) {
+        if (polling == -1L) {
             LOG.debug("No file monitoring for {}", directory.getAbsolutePath());
             return;
         }

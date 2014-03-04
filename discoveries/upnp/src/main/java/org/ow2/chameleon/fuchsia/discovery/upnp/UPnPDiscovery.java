@@ -61,9 +61,9 @@ public class UPnPDiscovery extends AbstractDiscoveryComponent {
 
         String deviceID = (String) reference.getProperty(UPnPDevice.FRIENDLY_NAME);
         String deviceType = (String) reference.getProperty(UPnPDevice.TYPE);
-        String UDN = (String) reference.getProperty(UPnPDevice.ID);
+        String udn = (String) reference.getProperty(UPnPDevice.ID);
 
-        createImportationDeclaration(deviceID, deviceType, UDN, reference);
+        createImportationDeclaration(deviceID, deviceType, udn, reference);
 
         return getBundleContext().getService(reference);
     }
