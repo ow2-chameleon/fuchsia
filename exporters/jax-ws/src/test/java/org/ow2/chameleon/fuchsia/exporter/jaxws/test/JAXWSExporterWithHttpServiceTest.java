@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.mockito.MockitoAnnotations;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.http.NamespaceException;
+import org.ow2.chameleon.fuchsia.core.declaration.Constants;
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclarationBuilder;
 import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
@@ -19,6 +20,7 @@ import java.util.Map;
 
 import static org.fest.reflect.core.Reflection.field;
 import static org.mockito.Mockito.*;
+import static org.ow2.chameleon.fuchsia.core.declaration.Constants.ID;
 
 public class JAXWSExporterWithHttpServiceTest extends JAXExporterAbstractTest {
 
@@ -46,6 +48,7 @@ public class JAXWSExporterWithHttpServiceTest extends JAXExporterAbstractTest {
 
         Map<String, Object> metadata=new HashMap<String, Object>();
 
+        metadata.put(ID,"TestJAXWSDeclaration");
         metadata.put("fuchsia.export.cxf.class.name",ServiceForExportation.class.getName());
         metadata.put("fuchsia.export.cxf.url.context","/"+ServiceForExportation.class.getSimpleName());
 

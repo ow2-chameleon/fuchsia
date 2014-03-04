@@ -6,8 +6,8 @@ import org.apache.cxf.interceptor.LoggingInInterceptor;
 import org.apache.cxf.interceptor.LoggingOutInterceptor;
 import org.junit.Test;
 import org.osgi.framework.*;
-import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
-import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclarationBuilder;
+import org.ow2.chameleon.fuchsia.core.declaration.*;
+import org.ow2.chameleon.fuchsia.core.declaration.Constants;
 import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
 import org.ow2.chameleon.fuchsia.exporter.jaxws.test.base.JAXExporterAbstractTest;
 import org.ow2.chameleon.fuchsia.exporter.jaxws.test.ctd.ServiceForExportation;
@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.mockito.Mockito.*;
+import static org.ow2.chameleon.fuchsia.core.declaration.Constants.*;
 
 public class JAXWSExporterWithoutHttpServiceTest extends JAXExporterAbstractTest {
 
@@ -23,7 +24,7 @@ public class JAXWSExporterWithoutHttpServiceTest extends JAXExporterAbstractTest
     public void allParametersProvidedDontThrowException()  {
 
         Map<String, Object> metadata=new HashMap<String, Object>();
-
+        metadata.put(ID,"TestJAXWSDeclaration");
         metadata.put("fuchsia.export.cxf.class.name",ServiceForExportation.class.getName());
         metadata.put("fuchsia.export.cxf.url.context","/"+ServiceForExportation.class.getSimpleName());
 
@@ -44,9 +45,11 @@ public class JAXWSExporterWithoutHttpServiceTest extends JAXExporterAbstractTest
     public void absentParameterThrowsProperException()  {
 
         Map<String, Object> noClassNameParameter=new HashMap<String, Object>();
+        noClassNameParameter.put(Constants.ID,"TestJAXWSDeclaration");
         noClassNameParameter.put("fuchsia.export.cxf.url.context", "/"+ServiceForExportation.class.getSimpleName());
 
         Map<String, Object> noClassNameContext=new HashMap<String, Object>();
+        noClassNameContext.put(Constants.ID,"TestJAXWSDeclaration");
         noClassNameContext.put("fuchsia.export.cxf.class.name", ServiceForExportation.class.getName());
 
         ExportDeclaration declarationNoClassName = spy(ExportDeclarationBuilder.fromMetadata(noClassNameParameter).build());
@@ -75,7 +78,7 @@ public class JAXWSExporterWithoutHttpServiceTest extends JAXExporterAbstractTest
     public void registerDeclarationShouldCallHandle()  {
 
         Map<String, Object> metadata=new HashMap<String, Object>();
-
+        metadata.put(ID,"TestJAXWSDeclaration");
         metadata.put("fuchsia.export.cxf.class.name",ServiceForExportation.class.getName());
         metadata.put("fuchsia.export.cxf.url.context","/"+ServiceForExportation.class.getSimpleName());
 
@@ -98,7 +101,7 @@ public class JAXWSExporterWithoutHttpServiceTest extends JAXExporterAbstractTest
     public void remoteWSInvokationShouldSucceed() throws BinderException {
 
         Map<String, Object> metadata=new HashMap<String, Object>();
-
+        metadata.put(ID,"TestJAXWSDeclaration");
         metadata.put("fuchsia.export.cxf.class.name",ServiceForExportation.class.getName());
         metadata.put("fuchsia.export.cxf.url.context","/"+ServiceForExportation.class.getSimpleName());
 
@@ -158,6 +161,7 @@ public class JAXWSExporterWithoutHttpServiceTest extends JAXExporterAbstractTest
         }
 
         Map<String, Object> metadata=new HashMap<String, Object>();
+        metadata.put(ID,"TestJAXWSDeclaration");
         metadata.put("fuchsia.export.cxf.class.name",ServiceForExportation.class.getName());
         metadata.put("fuchsia.export.cxf.url.context","/"+ServiceForExportation.class.getSimpleName());
 
