@@ -23,7 +23,7 @@ import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclarationBuilder;
 import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
 import org.ow2.chameleon.fuchsia.exporter.protobuffer.ProtobufferExporter;
-import org.ow2.chameleon.fuchsia.exporter.protobuffer.internal.ProtobufferExporterPojo;
+import org.ow2.chameleon.fuchsia.exporter.protobuffer.internal.ProtobufferExportDeclarationWrapper;
 import org.ow2.chameleon.fuchsia.importer.protobuffer.common.ProtobufferTestAbstract;
 import org.ow2.chameleon.fuchsia.importer.protobuffer.common.ctd.AddressBookProtos;
 
@@ -175,7 +175,7 @@ public class ProtobufferExporterTest extends ProtobufferTestAbstract<ExportDecla
 
 
     private AddressBookProtos.AddressBookService connectExportedProtobufAddress(ExportDeclaration declaration) throws EndpointException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, BinderException {
-        ProtobufferExporterPojo pojo=ProtobufferExporterPojo.create(declaration);
+        ProtobufferExportDeclarationWrapper pojo= ProtobufferExportDeclarationWrapper.create(declaration);
         Bus cxfbus = BusFactory.getThreadDefaultBus();
         BindingFactoryManager mgr = cxfbus.getExtension(BindingFactoryManager.class);
         mgr.registerBindingFactory(ProtobufBindingFactory.PROTOBUF_BINDING_ID, new ProtobufBindingFactory(cxfbus));

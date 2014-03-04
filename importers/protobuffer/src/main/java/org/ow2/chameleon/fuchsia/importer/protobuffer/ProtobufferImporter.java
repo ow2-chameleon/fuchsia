@@ -16,7 +16,7 @@ import org.ow2.chameleon.fuchsia.core.FuchsiaUtils;
 import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
-import org.ow2.chameleon.fuchsia.importer.protobuffer.internal.ProtobufferImporterPojo;
+import org.ow2.chameleon.fuchsia.importer.protobuffer.internal.ProtobufferImportDeclarationWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -75,7 +75,7 @@ public class ProtobufferImporter extends AbstractImporterComponent {
     @Override
     protected void useImportDeclaration(ImportDeclaration importDeclaration) throws BinderException {
 
-        ProtobufferImporterPojo pojo=ProtobufferImporterPojo.create(importDeclaration);
+        ProtobufferImportDeclarationWrapper pojo= ProtobufferImportDeclarationWrapper.create(importDeclaration);
 
         LOG.info("Importing declaration with ID {}", pojo.getId());
 
@@ -125,7 +125,7 @@ public class ProtobufferImporter extends AbstractImporterComponent {
 
         importDeclaration.unhandle(serviceReference);
 
-        ProtobufferImporterPojo pojo=ProtobufferImporterPojo.create(importDeclaration);
+        ProtobufferImportDeclarationWrapper pojo= ProtobufferImportDeclarationWrapper.create(importDeclaration);
 
         ServiceRegistration sr=registeredImporter.remove(pojo.getId());
 

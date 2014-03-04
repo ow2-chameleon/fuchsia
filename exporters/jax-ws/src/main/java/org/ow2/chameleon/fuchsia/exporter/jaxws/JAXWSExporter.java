@@ -19,8 +19,8 @@ import org.ow2.chameleon.fuchsia.core.component.AbstractExporterComponent;
 import org.ow2.chameleon.fuchsia.core.component.ExporterService;
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
 import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
+import org.ow2.chameleon.fuchsia.exporter.jaxws.internal.JAXWSExportDeclarationWrapper;
 import org.ow2.chameleon.fuchsia.exporter.jaxws.internal.Constants;
-import org.ow2.chameleon.fuchsia.exporter.jaxws.internal.CxfExporterPojo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,7 +62,7 @@ public class JAXWSExporter extends AbstractExporterComponent {
 
         LOG.info("exporting {}", exportDeclaration.getMetadata());
 
-        CxfExporterPojo pojo = CxfExporterPojo.create(exportDeclaration);
+        JAXWSExportDeclarationWrapper pojo = JAXWSExportDeclarationWrapper.create(exportDeclaration);
 
         try {
 

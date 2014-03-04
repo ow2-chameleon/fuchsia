@@ -8,7 +8,7 @@ import org.ow2.chameleon.fuchsia.core.FuchsiaUtils;
 import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
-import org.ow2.chameleon.fuchsia.importer.philipshue.util.PhilipsImporterPojo;
+import org.ow2.chameleon.fuchsia.importer.philipshue.util.PhilipsHueImportDeclarationWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,7 +70,7 @@ public class PhilipsHueImporter extends AbstractImporterComponent {
 
         LOG.info("philips hue importer triggered");
 
-        PhilipsImporterPojo pojo=PhilipsImporterPojo.create(importDeclaration);
+        PhilipsHueImportDeclarationWrapper pojo= PhilipsHueImportDeclarationWrapper.create(importDeclaration);
 
         try {
 
@@ -96,7 +96,7 @@ public class PhilipsHueImporter extends AbstractImporterComponent {
     @Override
     protected void denyImportDeclaration(ImportDeclaration importDeclaration) throws BinderException {
 
-        PhilipsImporterPojo pojo=PhilipsImporterPojo.create(importDeclaration);
+        PhilipsHueImportDeclarationWrapper pojo= PhilipsHueImportDeclarationWrapper.create(importDeclaration);
 
         try {
             lamps.remove(pojo.getId()).unregister();

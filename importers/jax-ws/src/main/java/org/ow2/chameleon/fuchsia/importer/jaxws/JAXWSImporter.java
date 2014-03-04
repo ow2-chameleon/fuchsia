@@ -11,7 +11,7 @@ import org.osgi.framework.ServiceRegistration;
 import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
-import org.ow2.chameleon.fuchsia.importer.jaxws.internal.JAXWSImporterPojo;
+import org.ow2.chameleon.fuchsia.importer.jaxws.internal.JAXWSImportDeclarationWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -100,7 +100,7 @@ public class JAXWSImporter extends AbstractImporterComponent {
 
         Object objectProxy;
 
-        JAXWSImporterPojo pojo = JAXWSImporterPojo.create(importDeclaration);
+        JAXWSImportDeclarationWrapper pojo = JAXWSImportDeclarationWrapper.create(importDeclaration);
 
         //Try to load the class
         final Class<?> klass;

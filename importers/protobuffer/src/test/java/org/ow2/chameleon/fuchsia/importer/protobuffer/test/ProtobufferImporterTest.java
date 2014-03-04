@@ -12,21 +12,18 @@ import org.apache.cxf.endpoint.EndpointException;
 import org.apache.cxf.endpoint.Server;
 import org.eclipse.jetty.util.component.Container;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
-import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclarationBuilder;
 import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
 import org.ow2.chameleon.fuchsia.importer.protobuffer.ProtobufferImporter;
 import org.ow2.chameleon.fuchsia.importer.protobuffer.common.ProtobufferTestAbstract;
 import org.ow2.chameleon.fuchsia.importer.protobuffer.common.ctd.AddressBookProtos;
-import org.ow2.chameleon.fuchsia.importer.protobuffer.internal.ProtobufferImporterPojo;
+import org.ow2.chameleon.fuchsia.importer.protobuffer.internal.ProtobufferImportDeclarationWrapper;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -48,7 +45,7 @@ public class ProtobufferImporterTest extends ProtobufferTestAbstract<ImportDecla
 
     private ImportDeclaration declaration;
 
-    protected void startStandaloneServer(ProtobufferImporterPojo pojo){
+    protected void startStandaloneServer(ProtobufferImportDeclarationWrapper pojo){
 
         Bus cxfbus = BusFactory.getDefaultBus(true);
         BindingFactoryManager mgr = cxfbus.getExtension(BindingFactoryManager.class);
@@ -93,7 +90,7 @@ public class ProtobufferImporterTest extends ProtobufferTestAbstract<ImportDecla
     @Test
     public void testImportProxyInvocation() throws Exception {
 
-        ProtobufferImporterPojo pojo=ProtobufferImporterPojo.create(declaration);
+        ProtobufferImportDeclarationWrapper pojo= ProtobufferImportDeclarationWrapper.create(declaration);
 
         startStandaloneServer(pojo);
 
@@ -128,7 +125,7 @@ public class ProtobufferImporterTest extends ProtobufferTestAbstract<ImportDecla
 
     @Test
     public void testCleanupAfterStop() throws Exception {
-        ProtobufferImporterPojo pojo=ProtobufferImporterPojo.create(declaration);
+        ProtobufferImportDeclarationWrapper pojo= ProtobufferImportDeclarationWrapper.create(declaration);
         startStandaloneServer(pojo);
         //Add declaration
         fuchsiaDeclarationBinder.useDeclaration(declaration);

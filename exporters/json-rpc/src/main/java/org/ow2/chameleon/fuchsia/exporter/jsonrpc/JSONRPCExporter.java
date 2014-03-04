@@ -13,7 +13,8 @@ import org.ow2.chameleon.fuchsia.core.component.ExporterService;
 import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
-import org.ow2.chameleon.fuchsia.exporter.jsonrpc.model.JSONRPCExporterPojo;
+import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
+import org.ow2.chameleon.fuchsia.exporter.jsonrpc.model.JSONRPCExportDeclarationWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,9 +65,9 @@ public class JSONRPCExporter extends AbstractExporterComponent {
     }
 
     @Override
-    protected void useExportDeclaration(ExportDeclaration exportDeclaration) {
+    protected void useExportDeclaration(ExportDeclaration exportDeclaration) throws BinderException {
         Class<?> klass = null;
-        JSONRPCExporterPojo jp = JSONRPCExporterPojo.create(exportDeclaration);
+        JSONRPCExportDeclarationWrapper jp = JSONRPCExportDeclarationWrapper.create(exportDeclaration);
 
         try {
             klass = FuchsiaUtils.loadClass(context, jp.getInstanceClass());
@@ -109,9 +110,9 @@ public class JSONRPCExporter extends AbstractExporterComponent {
     }
 
     @Override
-    protected void denyExportDeclaration(ExportDeclaration exportDeclaration) {
+    protected void denyExportDeclaration(ExportDeclaration exportDeclaration) throws BinderException {
 
-        JSONRPCExporterPojo jp = JSONRPCExporterPojo.create(exportDeclaration);
+        JSONRPCExportDeclarationWrapper jp = JSONRPCExportDeclarationWrapper.create(exportDeclaration);
 
         final String endpointURL = String.format("%s/%s", jp.getUrlContext(), jp.getInstanceName());
 

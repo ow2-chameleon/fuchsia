@@ -24,7 +24,7 @@ import org.ow2.chameleon.fuchsia.core.component.AbstractExporterComponent;
 import org.ow2.chameleon.fuchsia.core.component.ExporterService;
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
 import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
-import org.ow2.chameleon.fuchsia.exporter.protobuffer.internal.ProtobufferExporterPojo;
+import org.ow2.chameleon.fuchsia.exporter.protobuffer.internal.ProtobufferExportDeclarationWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -121,7 +121,7 @@ public class ProtobufferExporter extends AbstractExporterComponent {
 
         LOG.info("initiating exportation...");
 
-        ProtobufferExporterPojo pojo = ProtobufferExporterPojo.create(exportDeclaration);
+        ProtobufferExportDeclarationWrapper pojo = ProtobufferExportDeclarationWrapper.create(exportDeclaration);
         Class inter, messageClass;
         try {
             inter = FuchsiaUtils.loadClass(context, String.format("%s$%s", pojo.getClazz(), pojo.getService()));
@@ -167,7 +167,7 @@ public class ProtobufferExporter extends AbstractExporterComponent {
     @Override
     protected void denyExportDeclaration(ExportDeclaration exportDeclaration) throws BinderException {
 
-        ProtobufferExporterPojo pojo = ProtobufferExporterPojo.create(exportDeclaration);
+        ProtobufferExportDeclarationWrapper pojo = ProtobufferExportDeclarationWrapper.create(exportDeclaration);
 
         Server server = serverPublished.get(pojo.getId());
 

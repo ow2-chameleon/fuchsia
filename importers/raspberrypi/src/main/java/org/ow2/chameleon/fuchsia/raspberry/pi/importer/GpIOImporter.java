@@ -7,7 +7,7 @@ import org.osgi.framework.ServiceReference;
 import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
-import org.ow2.chameleon.fuchsia.raspberry.pi.internal.GPIOPojo;
+import org.ow2.chameleon.fuchsia.raspberry.pi.internal.GPIOImportDeclarationWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,7 +55,7 @@ public class GpIOImporter extends AbstractImporterComponent {
 
     @Override
     protected void useImportDeclaration(ImportDeclaration importDeclaration) throws BinderException {
-        GPIOPojo pojo = GPIOPojo.create(importDeclaration.getMetadata());
+        GPIOImportDeclarationWrapper pojo = GPIOImportDeclarationWrapper.create(importDeclaration);
 
         LOG.info("importing id:" + pojo.getId());
 
@@ -83,7 +83,7 @@ public class GpIOImporter extends AbstractImporterComponent {
 
     @Override
     protected void denyImportDeclaration(ImportDeclaration importDeclaration) throws BinderException {
-        GPIOPojo pojo = GPIOPojo.create(importDeclaration.getMetadata());
+        GPIOImportDeclarationWrapper pojo = GPIOImportDeclarationWrapper.create(importDeclaration);
 
         InstanceManager im = gpioPin.remove(pojo.getId());
         importDeclaration.unhandle(serviceReference);
