@@ -74,14 +74,6 @@ public class JSONRPCExporter extends AbstractExporterComponent {
         } catch (ClassNotFoundException e) {
             LOG.warn("Failed to load from the own bundle, loading externally", e);
         }
-        if(klass == null) {
-            try {
-                klass = context.getBundle().loadClass(jp.getInstanceClass());
-            } catch (ClassNotFoundException e) {
-                LOG.error("The class to be exporter could not be loaded.", e);
-                return;
-            }
-        }
 
         String osgiFilter = String.format("(instance.name=%s)", jp.getInstanceName());
         List<ServiceReference> references = null;
@@ -118,6 +110,8 @@ public class JSONRPCExporter extends AbstractExporterComponent {
 
         exportDeclaration.unhandle(serviceReference);
 
+        registeredServlets.remove(endpointURL);
+
         web.unregister(endpointURL);
 
     }
@@ -137,7 +131,7 @@ public class JSONRPCExporter extends AbstractExporterComponent {
      */
     @Override
     @Invalidate
-    protected void stop() {
+    public void stop() {
         unregisterAllServlets();
     }
 
@@ -147,6 +141,7 @@ public class JSONRPCExporter extends AbstractExporterComponent {
     private void unregisterAllServlets() {
 
         for (String endpoint : registeredServlets) {
+            registeredServlets.remove(endpoint);
             web.unregister(endpoint);
             LOG.info("endpoint {} unregistered", endpoint);
         }
