@@ -9,13 +9,13 @@ import org.junit.Test;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.http.HttpService;
 import org.ow2.chameleon.fuchsia.base.test.common.GenericTest;
+import org.ow2.chameleon.fuchsia.base.test.common.ctd.ServiceForExportation;
+import org.ow2.chameleon.fuchsia.base.test.common.ctd.ServiceForExportationImpl;
 import org.ow2.chameleon.fuchsia.base.test.common.services.HttpServiceImpl;
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclarationBuilder;
 import org.ow2.chameleon.fuchsia.exporter.jsonrpc.JSONRPCExporter;
 import org.ow2.chameleon.fuchsia.exporter.jsonrpc.model.JSONRPCExportDeclarationWrapper;
-import org.ow2.chameleon.fuchsia.exporter.jsonrpc.test.ctd.Ping;
-import org.ow2.chameleon.fuchsia.exporter.jsonrpc.test.ctd.PingImpl;
 
 import java.util.*;
 
@@ -25,7 +25,7 @@ import static org.mockito.Mockito.*;
 
 public class JSONRPCExporterTest extends GenericTest<ExportDeclaration,JSONRPCExporter> {
 
-    private final PingImpl serviceToBeExported = spy(new PingImpl());
+    private final ServiceForExportation serviceToBeExported = spy(new ServiceForExportationImpl());
 
     private HttpServiceImpl http;
 
@@ -44,11 +44,7 @@ public class JSONRPCExporterTest extends GenericTest<ExportDeclaration,JSONRPCEx
 
         fuchsiaDeclarationBinder.registration(fuchsiaDeclarationBinderServiceReference);
 
-        super.registerService(packageAdminServiceReference,packageAdmin);
         super.registerService(serviceToBeExported,serviceToBeExported);
-
-        super.registerClass(Ping.class);
-        super.registerClass(PingImpl.class);
 
     }
 
@@ -68,9 +64,9 @@ public class JSONRPCExporterTest extends GenericTest<ExportDeclaration,JSONRPCEx
 
         JsonRpcHttpClient client=new JsonRpcHttpClient(new java.net.URL("http://localhost:"+HTTP_PORT+pojo.getUrlContext()+"/"+pojo.getInstanceName()));
 
-        Object proxy = ProxyUtil.createClientProxy(this.getClass().getClassLoader(), Ping.class, client);
+        Object proxy = ProxyUtil.createClientProxy(this.getClass().getClassLoader(), ServiceForExportation.class, client);
 
-        Ping remoteObject=(Ping)proxy;
+        ServiceForExportation remoteObject=(ServiceForExportation)proxy;
 
         remoteObject.ping();
 
@@ -164,7 +160,7 @@ public class JSONRPCExporterTest extends GenericTest<ExportDeclaration,JSONRPCEx
         Map<String, Object> metadata=new HashMap<String, Object>();
 
         metadata.put("id","id");
-        metadata.put("fuchsia.export.jsonrpc.class",Ping.class.getName());
+        metadata.put("fuchsia.export.jsonrpc.class",ServiceForExportation.class.getName());
         metadata.put("fuchsia.export.jsonrpc.url.context","/test");
         metadata.put("fuchsia.export.jsonrpc.instance","instanceName");
 

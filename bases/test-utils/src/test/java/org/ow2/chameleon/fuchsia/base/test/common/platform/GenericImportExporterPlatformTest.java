@@ -1,5 +1,6 @@
 package org.ow2.chameleon.fuchsia.base.test.common.platform;
 
+import junit.framework.Assert;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
@@ -9,6 +10,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.packageadmin.PackageAdmin;
+import org.ow2.chameleon.fuchsia.base.test.common.ctd.ServiceForExportation;
+import org.ow2.chameleon.fuchsia.base.test.common.ctd.ServiceForExportationImpl;
 import org.ow2.chameleon.fuchsia.core.component.manager.DeclarationBinder;
 import org.ow2.chameleon.fuchsia.core.declaration.Declaration;
 
@@ -19,6 +22,8 @@ import java.util.Map;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
@@ -69,18 +74,18 @@ public abstract class GenericImportExporterPlatformTest<T extends Declaration,S 
             when(context.getService(any(ServiceReference.class))).thenAnswer(new Answer<Object>() {
                 public Object answer(InvocationOnMock invocation) throws Throwable {
 
-                    ServiceReference sr=(ServiceReference)invocation.getArguments()[0];
+                    ServiceReference sr = (ServiceReference) invocation.getArguments()[0];
 
                     return services.get(sr);
                 }
             });
             when(context.getServiceReferences(any(Class.class), anyString())).then(new Answer<Object>() {
                 public Object answer(InvocationOnMock invocation) throws Throwable {
-                    ArrayList<ServiceReference> list=new ArrayList<ServiceReference>();
-                    Class clazz= (Class) invocation.getArguments()[0];
-                    for(Map.Entry<ServiceReference,Object> entry:services.entrySet()){
+                    ArrayList<ServiceReference> list = new ArrayList<ServiceReference>();
+                    Class clazz = (Class) invocation.getArguments()[0];
+                    for (Map.Entry<ServiceReference, Object> entry : services.entrySet()) {
 
-                        if(clazz==null || clazz.isInstance(entry.getValue()))
+                        if (clazz == null || clazz.isInstance(entry.getValue()))
                             list.add(entry.getKey());
 
                     }
@@ -90,15 +95,18 @@ public abstract class GenericImportExporterPlatformTest<T extends Declaration,S 
             });
             when(context.getServiceReference(any(Class.class))).thenAnswer(new Answer<Object>() {
                 public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
-                    Class clazz= (Class) invocationOnMock.getArguments()[0];
-                    for(Map.Entry<ServiceReference,Object> entry:services.entrySet()){
-                        if(clazz.isInstance(entry.getValue())){
+                    Class clazz = (Class) invocationOnMock.getArguments()[0];
+                    for (Map.Entry<ServiceReference, Object> entry : services.entrySet()) {
+                        if (clazz.isInstance(entry.getValue())) {
                             return entry.getValue();
                         }
                     }
                     return null;
                 }
             });
+            registerService(packageAdminServiceReference, packageAdmin);
+            registerClass(ServiceForExportation.class);
+            registerClass(ServiceForExportationImpl.class);
         } catch (InvalidSyntaxException e) {
             e.printStackTrace();
         }
@@ -108,12 +116,48 @@ public abstract class GenericImportExporterPlatformTest<T extends Declaration,S 
         services.put(sr,object);
     }
 
+    /**
+     * This are the classes that should be visible by bundle.loadClass. Only those classes will be allowed to be loaded
+     * @param clazz
+     */
     protected void registerClass(Class clazz){
         clazzes.put(clazz.getName(),clazz);
     }
 
+    protected void verifyRemoteInvocation(ServiceForExportation mock, ServiceForExportation proxy){
+
+        final String stringValue="coucou";
+        final Integer intValue=1789;
+
+        proxy.ping();
+        verify(mock, times(1)).ping();
+
+        proxy.ping(intValue);
+        verify(mock, times(1)).ping(intValue);
+
+        proxy.ping(stringValue);
+        verify(mock, times(1)).ping(stringValue);
+
+        String returnPongString=proxy.pongString(stringValue);
+        verify(mock, times(1)).pongString(stringValue);
+        Assert.assertEquals(returnPongString, stringValue);
+
+        Integer returnPongInteger=proxy.pongInteger(intValue);
+        verify(mock, times(1)).pongInteger(intValue);
+        Assert.assertEquals(returnPongInteger, intValue);
+
+    }
+
+    /**
+     * Force test class to give some samples of invalid declaration in order to be tested, if the proper exception are thrown
+     * @return
+     */
     public abstract List<T> getInvalidDeclarations();
 
+    /**
+     * Force test class to give some samples of valid declaration in order to be tested, if the proper exception are thrown
+     * @return
+     */
     public abstract List<T> getValidDeclarations();
 
 

@@ -21,7 +21,6 @@ import org.ow2.chameleon.fuchsia.core.declaration.Constants;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclarationBuilder;
 import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
-import org.ow2.chameleon.fuchsia.importer.jsonrpc.DefaultJSONRPCProxy;
 import org.ow2.chameleon.fuchsia.importer.jsonrpc.JSONRPCImporter;
 
 import javax.servlet.Servlet;
@@ -32,9 +31,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
 
-import static org.fest.reflect.core.Reflection.constructor;
-import static org.fest.reflect.core.Reflection.field;
-import static org.fest.reflect.core.Reflection.method;
+import static org.fest.reflect.core.Reflection.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.eq;
@@ -59,11 +56,7 @@ public class JSONRPCImporterTest extends GenericTest<ImportDeclaration,JSONRPCIm
         fuchsiaDeclarationBinder=spy(constructor().withParameterTypes(BundleContext.class).in(JSONRPCImporter.class).newInstance(context));
         fuchsiaDeclarationBinder.registration(fuchsiaDeclarationBinderServiceReference);
 
-        super.registerService(packageAdminServiceReference,packageAdmin);
         super.registerService(serviceToBeExported,serviceToBeExported);
-
-        super.registerClass(ServiceForExportation.class);
-        super.registerClass(ServiceForExportationImpl.class);
 
         http=new HttpServiceImpl(HTTP_PORT);
 
@@ -217,30 +210,6 @@ public class JSONRPCImporterTest extends GenericTest<ImportDeclaration,JSONRPCIm
         declaration.bind(fuchsiaDeclarationBinderServiceReference);
 
         return new ArrayList<ImportDeclaration>(){{add(declaration);}};
-    }
-
-    private void verifyRemoteInvocation(ServiceForExportation mock, ServiceForExportation proxy){
-
-        final String stringValue="coucou";
-        final Integer intValue=1789;
-
-        proxy.ping();
-        verify(mock, times(1)).ping();
-
-        proxy.ping(intValue);
-        verify(mock, times(1)).ping(intValue);
-
-        proxy.ping(stringValue);
-        verify(mock, times(1)).ping(stringValue);
-
-        String returnPongString=proxy.pongString(stringValue);
-        verify(mock, times(1)).pongString(stringValue);
-        Assert.assertEquals(returnPongString, stringValue);
-
-        Integer returnPongInteger=proxy.pongInteger(intValue);
-        verify(mock, times(1)).pongInteger(intValue);
-        Assert.assertEquals(returnPongInteger, intValue);
-
     }
 
     class RPCServlet extends HttpServlet {
