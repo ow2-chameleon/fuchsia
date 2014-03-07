@@ -1,5 +1,6 @@
 package org.ow2.chameleon.fuchsia.importer.jsonrpc.test;
 
+import com.googlecode.jsonrpc4j.JsonRpcHttpClient;
 import com.googlecode.jsonrpc4j.JsonRpcServer;
 import junit.framework.Assert;
 import org.apache.felix.ipojo.ComponentInstance;
@@ -75,6 +76,8 @@ public class JSONRPCImporterTest extends GenericTest<ImportDeclaration,JSONRPCIm
             }
         });
 
+        method("start").in(fuchsiaDeclarationBinder).invoke();
+
     }
 
     @After
@@ -100,9 +103,10 @@ public class JSONRPCImporterTest extends GenericTest<ImportDeclaration,JSONRPCIm
         verify(declaration,times(1)).handle(fuchsiaDeclarationBinderServiceReference);
 
         Map<String, ComponentInstance> registrations=field("registrations").ofType(Map.class).in(fuchsiaDeclarationBinder).get();
+        Map<String, JsonRpcHttpClient> clients=field("clients").ofType(Map.class).in(fuchsiaDeclarationBinder).get();
 
         Assert.assertEquals(1,registrations.size());
-
+        Assert.assertEquals(1,clients.size());
     }
 
     @Test
@@ -123,14 +127,17 @@ public class JSONRPCImporterTest extends GenericTest<ImportDeclaration,JSONRPCIm
         verify(declaration,times(1)).handle(fuchsiaDeclarationBinderServiceReference);
 
         Map<String, ComponentInstance> registrations=field("registrations").ofType(Map.class).in(fuchsiaDeclarationBinder).get();
+        Map<String, JsonRpcHttpClient> clients=field("clients").ofType(Map.class).in(fuchsiaDeclarationBinder).get();
 
         Assert.assertEquals(1,registrations.size());
+        Assert.assertEquals(1,clients.size());
 
         fuchsiaDeclarationBinder.denyDeclaration(declaration);
 
         verify(declaration,times(1)).unhandle(fuchsiaDeclarationBinderServiceReference);
 
         Assert.assertEquals(0,registrations.size());
+        Assert.assertEquals(0,clients.size());
 
     }
 
@@ -167,6 +174,33 @@ public class JSONRPCImporterTest extends GenericTest<ImportDeclaration,JSONRPCIm
         declaration.bind(fuchsiaDeclarationBinderServiceReference);
 
         return new ArrayList<ImportDeclaration>(){{add(declaration);}};
+    }
+
+    @Test
+    public void gracefulStop() throws BinderException, ServletException, NamespaceException {
+
+        ImportDeclaration declaration=getValidDeclarations().get(0);
+
+        JsonRpcServer jsonRpcServer = new JsonRpcServer(serviceToBeExported, ServiceForExportation.class);
+
+        Servlet gs = new RPCServlet(jsonRpcServer);
+
+        Dictionary<String,Object> emptyDictionary=new Hashtable<String, Object>();
+
+        http.registerServlet("/ping", gs, emptyDictionary, null);
+
+        fuchsiaDeclarationBinder.useDeclaration(declaration);
+
+        verifyRemoteInvocation(serviceToBeExported, proxyRegistered);
+
+        Map<String, ComponentInstance> registrations=field("registrations").ofType(Map.class).in(fuchsiaDeclarationBinder).get();
+
+        Assert.assertEquals(1,registrations.size());
+
+        method("stop").in(fuchsiaDeclarationBinder).invoke();
+
+        Assert.assertEquals(0,registrations.size());
+
     }
 
     @Override
