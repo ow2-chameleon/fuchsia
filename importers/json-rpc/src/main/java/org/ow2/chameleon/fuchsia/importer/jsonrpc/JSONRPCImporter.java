@@ -201,6 +201,22 @@ public class JSONRPCImporter extends AbstractImporterComponent {
     @Override
     @Invalidate
     protected void stop() {
+
         super.stop();
+
+        for(Map.Entry<String, JsonRpcHttpClient> entry:clients.entrySet()){
+            clients.remove(entry.getKey());
+        }
+
+        for(Map.Entry<String, ServiceRegistration> entry:registrations.entrySet()){
+            registrations.remove(entry.getKey());
+            entry.getValue().unregister();
+        }
+
+        for(Map.Entry<String, ComponentInstance> entry:componentInstances.entrySet()){
+            componentInstances.remove(entry.getKey());
+            entry.getValue().stop();
+        }
+
     }
 }
