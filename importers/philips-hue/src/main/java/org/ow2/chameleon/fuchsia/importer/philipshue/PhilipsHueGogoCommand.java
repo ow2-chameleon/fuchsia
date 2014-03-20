@@ -9,7 +9,7 @@ import org.apache.felix.service.command.Descriptor;
 
 import java.util.Set;
 
-@Component
+@Component(immediate = true)
 @Instantiate
 @Provides
 public class PhilipsHueGogoCommand {
@@ -70,17 +70,18 @@ public class PhilipsHueGogoCommand {
                 }
 
                 if (rStr != null || gStr != null || bStr != null) {
+
                     int r = getColorValue(rStr);
                     int g = getColorValue(gStr);
                     int b = getColorValue(bStr);
 
                     System.out.println(String.format("color red:%s green:%s blue:%s", r, g, b));
 
-                    lightState.setColorMode(PHLight.PHLightColorMode.COLORMODE_HUE_SATURATION);
-
                     float[] xy = PHUtilities.calculateXYFromRGB(r, g, b, light.getIdentifier());
 
-                    lightState.setHue(PHUtilities.colorFromXY(xy, light.getIdentifier()));
+                    lightState.setX(xy[0]);
+                    lightState.setY(xy[1]);
+
                 }
                 bridge.updateLightState(light, lightState);
             }
