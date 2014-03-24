@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.base.test.common.services;
+package org.ow2.chameleon.fuchsia.testing.common.services;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;

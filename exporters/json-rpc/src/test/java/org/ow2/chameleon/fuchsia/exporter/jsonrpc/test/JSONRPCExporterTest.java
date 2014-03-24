@@ -8,14 +8,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.http.HttpService;
-import org.ow2.chameleon.fuchsia.base.test.common.GenericTest;
-import org.ow2.chameleon.fuchsia.base.test.common.ctd.ServiceForExportation;
-import org.ow2.chameleon.fuchsia.base.test.common.ctd.ServiceForExportationImpl;
-import org.ow2.chameleon.fuchsia.base.test.common.services.HttpServiceImpl;
+import org.ow2.chameleon.fuchsia.testing.common.ctd.ServiceForExportation;
+import org.ow2.chameleon.fuchsia.testing.common.ctd.ServiceForExportationImpl;
+import org.ow2.chameleon.fuchsia.testing.common.services.HttpServiceImpl;
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclarationBuilder;
 import org.ow2.chameleon.fuchsia.exporter.jsonrpc.JSONRPCExporter;
 import org.ow2.chameleon.fuchsia.exporter.jsonrpc.model.JSONRPCExportDeclarationWrapper;
+import org.ow2.chameleon.fuchsia.testing.common.GenericTest;
 
 import java.util.*;
 

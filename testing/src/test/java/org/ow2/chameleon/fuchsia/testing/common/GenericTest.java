@@ -1,8 +1,8 @@
-package org.ow2.chameleon.fuchsia.base.test.common;
+package org.ow2.chameleon.fuchsia.testing.common;
 
+import org.ow2.chameleon.fuchsia.testing.common.platform.GenericImportExporterPlatformTest;
 import org.junit.Assert;
 import org.junit.Test;
-import org.ow2.chameleon.fuchsia.base.test.common.platform.GenericImportExporterPlatformTest;
 import org.ow2.chameleon.fuchsia.core.component.manager.DeclarationBinder;
 import org.ow2.chameleon.fuchsia.core.declaration.Declaration;
 import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;

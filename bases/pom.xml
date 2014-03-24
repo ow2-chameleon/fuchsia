@@ -21,6 +21,5 @@
         <module>push</module>
         <module>jax-ws</module>
         <module>philips-hue</module>
-        <module>test-utils</module>
     </modules>
 </project>

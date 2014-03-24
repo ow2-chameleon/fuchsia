@@ -1,5 +1,7 @@
-package org.ow2.chameleon.fuchsia.base.test.common.platform;
+package org.ow2.chameleon.fuchsia.testing.common.platform;
 
+import org.ow2.chameleon.fuchsia.testing.common.ctd.ServiceForExportation;
+import org.ow2.chameleon.fuchsia.testing.common.ctd.ServiceForExportationImpl;
 import junit.framework.Assert;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -10,8 +12,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.packageadmin.PackageAdmin;
-import org.ow2.chameleon.fuchsia.base.test.common.ctd.ServiceForExportation;
-import org.ow2.chameleon.fuchsia.base.test.common.ctd.ServiceForExportationImpl;
 import org.ow2.chameleon.fuchsia.core.component.manager.DeclarationBinder;
 import org.ow2.chameleon.fuchsia.core.declaration.Declaration;
 

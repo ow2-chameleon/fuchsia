@@ -25,6 +25,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.ow2.chameleon.fuchsia</groupId>
             <artifactId>org.ow2.chameleon.fuchsia.core</artifactId>
         </dependency>
@@ -69,10 +75,11 @@
         </dependency>
 
         <dependency>
-            <artifactId>org.ow2.chameleon.fuchsia.base.test.commons</artifactId>
-            <groupId>org.ow2.chameleon.fuchsia.base.test</groupId>
-            <version>${project.version}</version>
+            <groupId>org.ow2.chameleon.fuchsia.testing</groupId>
+            <artifactId>fuchsia-helpers</artifactId>
             <classifier>tests</classifier>
+            <scope>test</scope>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>

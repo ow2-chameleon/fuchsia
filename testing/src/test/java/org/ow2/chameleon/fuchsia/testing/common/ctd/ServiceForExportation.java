@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.base.test.common.ctd;
+package org.ow2.chameleon.fuchsia.testing.common.ctd;
 
 import org.osgi.framework.ServiceReference;
 
