@@ -10,7 +10,7 @@ import java.io.IOException;
 
 import static org.ops4j.pax.exam.CoreOptions.*;
 
-public class CommonTest extends BaseTest {
+public class Common extends BaseTest {
 
     // The Fuchsia Helper
     protected FuchsiaHelper fuchsiaHelper;
@@ -48,7 +48,7 @@ public class CommonTest extends BaseTest {
     protected Option fuchsiaBundles() {
         return composite(
                 mavenBundle().groupId("org.ow2.chameleon.fuchsia").artifactId("org.ow2.chameleon.fuchsia.core").versionAsInProject(),
-                mavenBundle().groupId("org.ow2.chameleon.fuchsia.testing").artifactId("fuchsia-helpers").versionAsInProject()
+                wrappedBundle(mavenBundle().groupId("org.ow2.chameleon.fuchsia.testing").artifactId("fuchsia-helpers").classifier("tests").versionAsInProject())
         );
     }
 

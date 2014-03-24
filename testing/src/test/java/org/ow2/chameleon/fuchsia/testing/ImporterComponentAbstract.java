@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-public abstract class ImporterComponentAbstractTest extends CommonTest {
+public abstract class ImporterComponentAbstract extends Common {
 
     // Number of mock object by test.
     protected static final int MAX_MOCK = 10;
@@ -33,7 +33,7 @@ public abstract class ImporterComponentAbstractTest extends CommonTest {
     @Mock
     private LogEntry logEntry;
 
-    private static final Logger LOG = LoggerFactory.getLogger(ImporterComponentAbstractTest.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ImporterComponentAbstract.class);
 
     /**
      * Done some initializations.

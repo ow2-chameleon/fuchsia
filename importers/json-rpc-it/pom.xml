@@ -101,7 +101,9 @@
         <dependency>
             <groupId>org.ow2.chameleon.fuchsia.testing</groupId>
             <artifactId>fuchsia-helpers</artifactId>
+            <classifier>tests</classifier>
             <scope>test</scope>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>

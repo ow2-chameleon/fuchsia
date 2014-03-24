@@ -5,8 +5,6 @@ import org.apache.felix.ipojo.annotations.Provides;
 import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
 import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.HashSet;

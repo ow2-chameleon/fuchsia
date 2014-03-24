@@ -9,8 +9,6 @@ import org.ow2.chameleon.fuchsia.core.component.AbstractDiscoveryComponent;
 import org.ow2.chameleon.fuchsia.core.component.DiscoveryService;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.it.services.SimulateBindingInterface;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Component(name = "SimpleDiscoveryFactory")
 @Provides(specifications = {SimulateBindingInterface.class, DiscoveryService.class})

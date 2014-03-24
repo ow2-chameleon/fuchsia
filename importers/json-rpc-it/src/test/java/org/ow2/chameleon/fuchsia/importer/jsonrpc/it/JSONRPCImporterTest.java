@@ -12,7 +12,7 @@ import org.ops4j.pax.exam.Option;
 import org.ow2.chameleon.fuchsia.core.constant.HttpStatus;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclarationBuilder;
-import org.ow2.chameleon.fuchsia.testing.ImporterComponentAbstractTest;
+import org.ow2.chameleon.fuchsia.testing.ImporterComponentAbstract;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -36,7 +36,7 @@ import static org.ow2.chameleon.fuchsia.core.declaration.Constants.*;
  *
  * @author Morgan Martinet
  */
-public class JSONRPCImporterTest extends ImporterComponentAbstractTest {
+public class JSONRPCImporterTest extends ImporterComponentAbstract {
     protected static Integer HTTP_PORT = 8042;
 
     private static final String SERVLET_NAME = "/JSONRPC";

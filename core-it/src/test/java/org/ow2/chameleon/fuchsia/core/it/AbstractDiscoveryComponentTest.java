@@ -10,7 +10,7 @@ import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclarationBuilder;
 import org.ow2.chameleon.fuchsia.core.it.components.SimpleDiscovery;
 import org.ow2.chameleon.fuchsia.core.it.services.SimulateBindingInterface;
-import org.ow2.chameleon.fuchsia.testing.CommonTest;
+import org.ow2.chameleon.fuchsia.testing.Common;
 
 import java.util.Arrays;
 import java.util.List;
@@ -19,7 +19,7 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-public class AbstractDiscoveryComponentTest extends CommonTest {
+public class AbstractDiscoveryComponentTest extends Common {
 
     private ComponentInstance testedCI;
 

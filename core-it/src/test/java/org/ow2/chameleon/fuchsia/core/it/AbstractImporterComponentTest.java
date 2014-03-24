@@ -11,18 +11,16 @@ import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclarationBuilder;
 import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
 import org.ow2.chameleon.fuchsia.core.it.components.SimpleImporter;
-import org.ow2.chameleon.fuchsia.testing.CommonTest;
+import org.ow2.chameleon.fuchsia.testing.Common;
 
 import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
 
 
-public class AbstractImporterComponentTest extends CommonTest {
+public class AbstractImporterComponentTest extends Common {
 
     private ComponentInstance testedCI;
 

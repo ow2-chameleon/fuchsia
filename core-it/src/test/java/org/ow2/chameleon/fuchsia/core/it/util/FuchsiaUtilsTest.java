@@ -3,11 +3,11 @@ package org.ow2.chameleon.fuchsia.core.it.util;
 import org.junit.Test;
 import org.ow2.chameleon.fuchsia.core.component.DefaultImportationLinker;
 import org.ow2.chameleon.fuchsia.core.FuchsiaUtils;
-import org.ow2.chameleon.fuchsia.testing.CommonTest;
+import org.ow2.chameleon.fuchsia.testing.Common;
 
 import static org.assertj.core.api.Assertions.*;
 
-public class FuchsiaUtilsTest extends CommonTest {
+public class FuchsiaUtilsTest extends Common {
 
     @Override
     public boolean deployTestBundle() {

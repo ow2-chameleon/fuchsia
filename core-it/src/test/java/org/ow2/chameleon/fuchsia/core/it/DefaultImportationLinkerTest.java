@@ -11,34 +11,27 @@ import org.ops4j.pax.exam.spi.reactors.PerMethod;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
+import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
 import org.ow2.chameleon.fuchsia.core.component.ImportationLinker;
 import org.ow2.chameleon.fuchsia.core.component.ImportationLinkerIntrospection;
-import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
 import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 import org.ow2.chameleon.fuchsia.core.component.manager.DeclarationBinder;
 import org.ow2.chameleon.fuchsia.core.declaration.Constants;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclarationBuilder;
 import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
-import org.ow2.chameleon.fuchsia.testing.CommonTest;
+import org.ow2.chameleon.fuchsia.testing.Common;
 
-import java.util.Dictionary;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.ow2.chameleon.fuchsia.core.FuchsiaConstants.DEFAULT_IMPORTATION_LINKER_FACTORY_NAME;
 
 @ExamReactorStrategy(PerMethod.class)
-public class DefaultImportationLinkerTest extends CommonTest {
+public class DefaultImportationLinkerTest extends Common {
 
     private final String linkerInstanceName = "linker";
 
