@@ -23,7 +23,7 @@ import java.util.Map;
 @Provides
 public class PiController {
 
-    private static final GpioController GPIO_CONTROLLER = GpioFactory.getInstance();
+    private final GpioController GPIO_CONTROLLER = GpioFactory.getInstance();
 
     private Map<Integer, Pin> pins = new HashMap<Integer, Pin>();
     private Map<Integer, GpioPinDigitalMultipurpose> pinMp = new HashMap<Integer, GpioPinDigitalMultipurpose>();
