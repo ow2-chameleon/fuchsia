@@ -2,7 +2,8 @@ package org.ow2.chameleon.fuchsia.importer.jsonrpc;
 
 import com.googlecode.jsonrpc4j.JsonRpcHttpClient;
 import com.googlecode.jsonrpc4j.ProxyUtil;
-import org.apache.felix.ipojo.*;
+import org.apache.felix.ipojo.ComponentInstance;
+import org.apache.felix.ipojo.Factory;
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -69,7 +70,6 @@ public class JSONRPCImporter extends AbstractImporterComponent {
 
     @Override
     public void useImportDeclaration(ImportDeclaration importDeclaration) throws BinderException {
-
         final JsonRpcHttpClient client;
         final String url, id, klassName;
 
@@ -116,7 +116,7 @@ public class JSONRPCImporter extends AbstractImporterComponent {
         proxy = ProxyUtil.createClientProxy(klass.getClassLoader(), klass, client);
         ServiceRegistration sReg = context.registerService(klassName, proxy, props);
 
-        importDeclaration.handle(serviceReference);
+        handleImportDeclaration(importDeclaration);
 
         String id = (String) importDeclaration.getMetadata().get(ID);
         // Add the registration to the registration list
@@ -133,7 +133,7 @@ public class JSONRPCImporter extends AbstractImporterComponent {
             LOG.error("Error during creation of defaultProxy", e);
             throw new BinderException("Error during creation of defaultProxy", e);
         }
-        importDeclaration.handle(serviceReference);
+        handleImportDeclaration(importDeclaration);
 
         String id = (String) importDeclaration.getMetadata().get(ID);
         componentInstances.put(id, componentInstance);
@@ -143,15 +143,14 @@ public class JSONRPCImporter extends AbstractImporterComponent {
     @Override
     public void denyImportDeclaration(ImportDeclaration importDeclaration) throws BinderException {
         String id = (String) importDeclaration.getMetadata().get(ID);
+        unhandleImportDeclaration(importDeclaration);
         if (clients.containsKey(id)) {
-
             String klassName = (String) importDeclaration.getMetadata().get(SERVICE_CLASS);
             if (klassName != null) {
                 // Unregister the proxy from OSGi
                 ServiceRegistration sReg = registrations.remove(id);
                 if (sReg != null) {
                     sReg.unregister();
-                    importDeclaration.unhandle(serviceReference);
                 } else {
                     throw new IllegalStateException("The serviceRegistration of the given object is null." +
                             "It could not be unregister.");
@@ -160,7 +159,6 @@ public class JSONRPCImporter extends AbstractImporterComponent {
                 ComponentInstance componentInstance = componentInstances.remove(id);
                 if (componentInstance != null) {
                     componentInstance.dispose();
-                    importDeclaration.unhandle(serviceReference);
                 }
             }
             // Remove the client
@@ -181,7 +179,7 @@ public class JSONRPCImporter extends AbstractImporterComponent {
 
     @PostRegistration
     public void registration(ServiceReference serviceReference) {
-        this.serviceReference = serviceReference;
+        setServiceReference(serviceReference);
     }
 
     /*
