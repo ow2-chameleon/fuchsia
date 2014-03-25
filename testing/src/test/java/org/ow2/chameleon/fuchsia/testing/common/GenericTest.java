@@ -8,7 +8,7 @@ import org.ow2.chameleon.fuchsia.core.declaration.Declaration;
 import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
 
 /**
- * Basic Tests that can be done with DeclarationBinder
+ * Basic Tests that can be done with DeclarationBinder.
  * @param <T>
  * @param <S>
  */

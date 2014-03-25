@@ -15,7 +15,7 @@ import static org.ow2.chameleon.fuchsia.core.FuchsiaUtils.getFilter;
 import static org.ow2.chameleon.fuchsia.core.component.manager.DeclarationBinder.TARGET_FILTER_PROPERTY;
 
 /**
- * <p/>
+ * <p/>.
  * Provides methods to add/remove/retrieve informations/do operations on the DeclarationBinders.
  * <p/>
  * This class doesn't use the DeclarationBinder objects but the ServiceReference of the DeclarationBinder.

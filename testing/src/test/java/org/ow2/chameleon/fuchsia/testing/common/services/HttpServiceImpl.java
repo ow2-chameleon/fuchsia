@@ -14,7 +14,7 @@ import java.util.Dictionary;
 
 
 /**
- * Basic implementation of HttpService from OSGi which can be injected in a mock instance
+ * Basic implementation of HttpService from OSGi which can be injected in a mock instance.
  */
 public class HttpServiceImpl implements HttpService {
 

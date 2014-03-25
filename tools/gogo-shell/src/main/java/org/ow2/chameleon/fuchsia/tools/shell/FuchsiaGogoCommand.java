@@ -23,7 +23,7 @@ import static org.ow2.chameleon.fuchsia.core.declaration.Constants.ID;
 @Provides(specifications = FuchsiaGogoCommand.class)
 @SuppressWarnings("PMD.SystemPrintln")
 /**
- * {@link FuchsiaGogoCommand} is basic shell command set
+ * {@link FuchsiaGogoCommand} is basic shell command set.
  * Gogo {@link http://felix.apache.org/site/apache-felix-gogo.html} is used as base for this command
  *
  * @author jander nascimento (botelho at imag.fr)

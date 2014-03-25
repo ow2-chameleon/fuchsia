@@ -1,5 +1,5 @@
 /**
- * Licensed to the Apache Software Foundation (ASF) under one
+ * Licensed to the Apache Software Foundation (ASF) under one.
  * or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information
  * regarding copyright ownership. The ASF licenses this file
@@ -22,7 +22,7 @@ package com.google.code.cxf.protobuf;
 import com.google.protobuf.Message;
 
 /**
- * An implementor of this interface defines a strategy for dispatching incoming
+ * An implementor of this interface defines a strategy for dispatching incoming.
  * protobuf messages to service bean methods. This is the server side
  * equivalent of {@link com.google.protobuf.RpcChannel}.
  *

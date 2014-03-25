@@ -3,7 +3,7 @@ package org.ow2.chameleon.fuchsia.importer.jaxws.test.ctd;
 import org.osgi.framework.Bundle;
 
 /**
- * CrashTestDummie class for the test
+ * CrashTestDummie class for the test.
  */
 public class ServiceForExportationimpl implements ServiceForExportation {
 

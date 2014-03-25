@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Map;
 
 /**
- * {@link DeclarationImpl} is the reference implementation of the {@link Declaration} interface of Fuchsia
+ * {@link DeclarationImpl} is the reference implementation of the {@link Declaration} interface of Fuchsia.
  *
  * @author jnascimento
  * @author Morgan Martinet

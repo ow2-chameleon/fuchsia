@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
 
 /**
- * This component instantiate a directory monitor (initially pointed to a directory in chameleon called "load/import") that reads all file placed there (as property files)
+ * This component instantiate a directory monitor (initially pointed to a directory in chameleon called "load/import") that reads all file placed there (as property files).
  * and publishes an {@link org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration}
  *
  * @author jeremy.savonet@gmail.com

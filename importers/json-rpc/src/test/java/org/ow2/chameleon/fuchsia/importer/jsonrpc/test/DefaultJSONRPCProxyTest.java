@@ -18,7 +18,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 /**
- * Test DefaultProxy
+ * Test DefaultProxy.
  */
 public class DefaultJSONRPCProxyTest {
 

@@ -5,7 +5,7 @@ import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import java.util.Set;
 
 /**
- *
+ *.
  */
 public interface ImporterIntrospection {
 
