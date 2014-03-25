@@ -1,9 +1,11 @@
 package org.ow2.chameleon.fuchsia.core.component;
 
+import org.osgi.framework.ServiceReference;
 import org.ow2.chameleon.fuchsia.core.component.manager.DeclarationBindManager;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -15,9 +17,12 @@ import java.util.Set;
  */
 public abstract class AbstractImporterComponent implements ImporterService, ImporterIntrospection {
     private final DeclarationBindManager<ImportDeclaration> declarationBindManager;
+    private final Set<ImportDeclaration> waitingImportDeclarationsToHandle;
+    private ServiceReference<ImporterService> serviceReference;
 
     public AbstractImporterComponent() {
         declarationBindManager = new DeclarationBindManager<ImportDeclaration>(this);
+        waitingImportDeclarationsToHandle = new HashSet<ImportDeclaration>();
     }
 
     /**
@@ -74,8 +79,45 @@ public abstract class AbstractImporterComponent implements ImporterService, Impo
         return declarationBindManager.getDeclarations();
     }
 
+
+    public ServiceReference<ImporterService> getServiceReference() {
+        return serviceReference;
+    }
+
+    public void setServiceReference(ServiceReference<ImporterService> serviceReference) {
+        synchronized (waitingImportDeclarationsToHandle) {
+            this.serviceReference = serviceReference;
+            for (ImportDeclaration importDeclaration : waitingImportDeclarationsToHandle) {
+                importDeclaration.handle(serviceReference);
+            }
+            waitingImportDeclarationsToHandle.clear();
+        }
+    }
+
+    public void handleImportDeclaration(ImportDeclaration importDeclaration) {
+        synchronized (waitingImportDeclarationsToHandle) {
+            if (this.serviceReference == null) {
+                waitingImportDeclarationsToHandle.add(importDeclaration);
+                return;
+            }
+        }
+        importDeclaration.handle(serviceReference);
+    }
+
+    public void unhandleImportDeclaration(ImportDeclaration importDeclaration) {
+        synchronized (waitingImportDeclarationsToHandle) {
+            if (this.serviceReference == null) {
+                waitingImportDeclarationsToHandle.remove(importDeclaration);
+                return;
+            }
+        }
+        importDeclaration.unhandle(serviceReference);
+
+    }
+
     @Override
     public String toString() {
         return getName();
     }
 }
+
