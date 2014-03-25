@@ -15,7 +15,7 @@ import java.util.Map;
 
 @Component
 @Provides(
-        specifications = FuchsiaProxy.class,
+        specifications = {FuchsiaProxy.class, ProxyFacetInvokable.class},
         properties = {
                 @StaticServiceProperty(name = "protocol", type = "java.lang.String", value = "json-rpc", immutable = true, mandatory = true),
         })
