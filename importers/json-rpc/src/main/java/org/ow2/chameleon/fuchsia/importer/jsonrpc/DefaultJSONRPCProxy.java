@@ -39,6 +39,6 @@ public class DefaultJSONRPCProxy implements ProxyFacetInvokable {
     }
 
     public void invoke(String method, Integer transactionID, Object callback, Object... args) {
-        throw new InvalidParameterException();
+        throw new UnsupportedOperationException("Assynchronous invocation not implemented");
     }
 }
