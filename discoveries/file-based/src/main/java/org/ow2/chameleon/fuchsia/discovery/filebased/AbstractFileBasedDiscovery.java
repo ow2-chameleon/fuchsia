@@ -3,10 +3,7 @@ package org.ow2.chameleon.fuchsia.discovery.filebased;
 import org.osgi.framework.BundleContext;
 import org.ow2.chameleon.fuchsia.core.component.manager.DeclarationRegistrationManager;
 import org.ow2.chameleon.fuchsia.core.declaration.*;
-import org.ow2.chameleon.fuchsia.discovery.filebased.monitor.Deployer;
-import org.ow2.chameleon.fuchsia.discovery.filebased.monitor.DirectoryMonitor;
-import org.ow2.chameleon.fuchsia.discovery.filebased.monitor.DirectoryMonitoringException;
-import org.ow2.chameleon.fuchsia.discovery.filebased.monitor.ExporterDeployer;
+import org.ow2.chameleon.fuchsia.discovery.filebased.monitor.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -146,7 +143,16 @@ abstract class AbstractFileBasedDiscovery<D extends Declaration> implements Depl
 
     void start(String monitoredDirectory, Long pollingTime) {
         this.monitoredDirectory = monitoredDirectory;
-        this.dm = new DirectoryMonitor(monitoredDirectory, pollingTime, ExporterDeployer.class.getName());
+        String deployerKlassName;
+        if (klass.equals(ImportDeclaration.class)) {
+            deployerKlassName = ImporterDeployer.class.getName();
+        }else if (klass.equals(ExportDeclaration.class)) {
+            deployerKlassName = ExporterDeployer.class.getName();
+        } else {
+            throw new IllegalStateException("");
+        }
+
+        this.dm = new DirectoryMonitor(monitoredDirectory, pollingTime, deployerKlassName);
         try {
             dm.start(getBundleContext());
         } catch (DirectoryMonitoringException e) {
