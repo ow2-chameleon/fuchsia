@@ -49,6 +49,11 @@ public class InputData {
             return this;
         }
 
+        public DeviceOutputBuilder actionsValues(Map<String, Object> avs) {
+            this.actionsValues.putAll(avs);
+            return this;
+        }
+
         public InputData create() {
             return new InputData(actionName, actionsValues);
         }
