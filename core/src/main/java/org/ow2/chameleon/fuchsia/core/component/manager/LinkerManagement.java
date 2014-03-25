@@ -69,13 +69,15 @@ public class LinkerManagement<D extends Declaration, S extends DeclarationBinder
      */
     public boolean unlink(D declaration, ServiceReference<S> declarationBinderRef) {
         S declarationBinder = bindersManager.getDeclarationBinder(declarationBinderRef);
-        declaration.unbind(declarationBinderRef);
         try {
             declarationBinder.removeDeclaration(declaration);
         } catch (BinderException e) {
             LOG.debug(declarationBinder + " throw an exception when removing of it the Declaration "
                     + declaration, e);
+            declaration.unhandle(declarationBinderRef);
             return false;
+        } finally {
+            declaration.unbind(declarationBinderRef);
         }
         return true;
     }
