@@ -44,7 +44,7 @@ import java.util.Map;
 import static org.ow2.chameleon.fuchsia.core.FuchsiaUtils.loadClass;
 
 /**
- * This component provides a JAX-WS, Apache CXF based implementation of an
+ * This component provides a JAX-WS, Apache CXF based implementation of an.
  *
  * @author Jonathan Bardin <jonathan.bardin@imag.fr>
  * @Edited Jeremy.Savonet@gmail.com
@@ -59,7 +59,7 @@ public class JAXWSImporter extends AbstractImporterComponent {
     public static final String CLASSNAME = "className";
 
     /**
-     * logger
+     * logger.
      */
     private static final Logger LOG = LoggerFactory.getLogger(JAXWSImporter.class);
 
@@ -101,7 +101,7 @@ public class JAXWSImporter extends AbstractImporterComponent {
 
 
     /**
-     * Return the name of the instance
+     * Return the name of the instance.
      *
      * @return name of this instance
      */
@@ -178,7 +178,7 @@ public class JAXWSImporter extends AbstractImporterComponent {
     }
 
     /**
-     * Destroy the proxy & update the map containing the registration ref
+     * Destroy the proxy & update the map containing the registration ref.
      *
      * @param importDeclaration
      */

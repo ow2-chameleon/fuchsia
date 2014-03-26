@@ -21,7 +21,7 @@ package org.ow2.chameleon.fuchsia.core.constant;
  */
 
 /**
- * See http://www.iana.org/assignments/media-types/media-types.xhtml
+ * See http://www.iana.org/assignments/media-types/media-types.xhtml.
  */
 public final class MediaType {
     /**
