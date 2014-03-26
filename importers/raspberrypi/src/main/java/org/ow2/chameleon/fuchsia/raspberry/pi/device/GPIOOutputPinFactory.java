@@ -51,14 +51,14 @@ public class GPIOOutputPinFactory implements ProxyFacetInvokable {
     }
 
     /**
-     * Changes the value of the pin to 1 - enable voltage to run on it
+     * Changes the value of the pin to 1 - enable voltage to run on it.
      */
     private void on() {
         controller.writePin(pin, 1);
     }
 
     /**
-     * Changes the value of the pin to 0 - disable voltage to run on it
+     * Changes the value of the pin to 0 - disable voltage to run on it.
      */
     private void off() {
         controller.writePin(pin, 0);

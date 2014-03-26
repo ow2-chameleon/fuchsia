@@ -65,17 +65,17 @@ public final class MediaType {
     public static final String APPLICATION_JSON = "application/json";
 
     /**
-     * "application/x-www-form-urlencoded"
+     * "application/x-www-form-urlencoded".
      */
     public static final String APPLICATION_FORM_URLENCODED = "application/x-www-form-urlencoded";
 
     /**
-     * "multipart/form-data"
+     * "multipart/form-data".
      */
     public static final String MULTIPART_FORM_DATA = "multipart/form-data";
 
     /**
-     * "application/octet-stream"
+     * "application/octet-stream".
      */
     public static final String APPLICATION_OCTET_STREAM = "application/octet-stream";
 
