@@ -133,7 +133,7 @@ public class JAXWSExporterWithoutHttpServiceTest extends JAXExporterAbstractTest
         exporter.addDeclaration(declaration);
 
         /**
-         * Configure CXF Client to connect to the endpoint
+         * Configure CXF Client to connect to the endpoint.
          */
 
         ClientProxyFactoryBean factory = new ClientProxyFactoryBean();

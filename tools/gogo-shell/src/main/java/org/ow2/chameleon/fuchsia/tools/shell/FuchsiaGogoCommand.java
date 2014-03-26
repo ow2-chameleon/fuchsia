@@ -43,7 +43,7 @@ import static org.ow2.chameleon.fuchsia.core.declaration.Constants.ID;
 @Provides(specifications = FuchsiaGogoCommand.class)
 @SuppressWarnings("PMD.SystemPrintln")
 /**
- * {@link FuchsiaGogoCommand} is basic shell command set
+ * {@link FuchsiaGogoCommand} is basic shell command set.
  * Gogo {@link http://felix.apache.org/site/apache-felix-gogo.html} is used as base for this command
  *
  * @author jander nascimento (botelho at imag.fr)
@@ -359,7 +359,7 @@ public class FuchsiaGogoCommand {
         for (int i = 0; i < params.length; i++) {
 
             /**
-             * In case of a Null option, returns the last parameter
+             * In case of a Null option, returns the last parameter.
              */
             if (option == null) {
                 return params[params.length - 1];

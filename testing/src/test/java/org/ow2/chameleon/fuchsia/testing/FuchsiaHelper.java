@@ -49,7 +49,7 @@ public class FuchsiaHelper {
     }
 
     /**
-     * Create an instance with the given factory and properties
+     * Create an instance with the given factory and properties.
      *
      * @param factory
      * @param properties
@@ -69,7 +69,7 @@ public class FuchsiaHelper {
     }
 
     /**
-     * Get the Factory linked to the given pid
+     * Get the Factory linked to the given pid.
      *
      * @param osgi
      * @param name

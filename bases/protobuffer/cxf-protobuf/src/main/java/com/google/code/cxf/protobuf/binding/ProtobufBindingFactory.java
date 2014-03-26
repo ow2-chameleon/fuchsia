@@ -1,5 +1,5 @@
 /**
- * Licensed to the Apache Software Foundation (ASF) under one
+ * Licensed to the Apache Software Foundation (ASF) under one.
  * or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information
  * regarding copyright ownership. The ASF licenses this file
@@ -34,7 +34,7 @@ import org.apache.cxf.service.model.ServiceInfo;
 import javax.xml.namespace.QName;
 
 /**
- * Binding factory for protobuf bindings. Adds interceptors for parsing and
+ * Binding factory for protobuf bindings. Adds interceptors for parsing and.
  * writing out protobuf messages to the CXF stream.
  *
  * @author Gyorgy Orban

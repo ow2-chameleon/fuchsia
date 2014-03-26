@@ -27,14 +27,14 @@ import java.util.Set;
 public interface ImportationLinkerIntrospection extends ImportationLinker {
 
     /**
-     * Return the importerServices linked the ImportationLinker
+     * Return the importerServices linked the ImportationLinker.
      *
      * @return The importerServices linked to the ImportationLinker
      */
     Set<ImporterService> getLinkedImporters();
 
     /**
-     * Return the importDeclarations bind by the ImportationLinker
+     * Return the importDeclarations bind by the ImportationLinker.
      *
      * @return The importDeclarations bind by the ImportationLinker
      */

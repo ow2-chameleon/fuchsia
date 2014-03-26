@@ -40,7 +40,7 @@ import static org.ow2.chameleon.fuchsia.core.FuchsiaUtils.getFilter;
 import static org.ow2.chameleon.fuchsia.core.component.manager.DeclarationBinder.TARGET_FILTER_PROPERTY;
 
 /**
- * The {@link DefaultImportationLinker} component is the default implementation of the interface
+ * The {@link DefaultImportationLinker} component is the default implementation of the interface.
  * {@link ImportationLinker}.
  * <p/>
  * The {@link DefaultImportationLinker} component take as mandatory ServiceProperty a filter on the
@@ -56,7 +56,7 @@ import static org.ow2.chameleon.fuchsia.core.component.manager.DeclarationBinder
 public class DefaultImportationLinker implements ImportationLinker, ImportationLinkerIntrospection {
 
     /**
-     * Logger
+     * Logger.
      */
     private static final Logger LOG = LoggerFactory.getLogger(DefaultImportationLinker.class);
 
@@ -108,7 +108,7 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
     }
 
     /**
-     * Get the filters ImporterServiceFilter and ImportDeclarationFilter from the properties, stop the instance if one of
+     * Get the filters ImporterServiceFilter and ImportDeclarationFilter from the properties, stop the instance if one of.
      * them is invalid.
      */
     private void processProperties() {
@@ -270,7 +270,7 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
     }
 
     /**
-     * Return the importerServices linked this DefaultImportationLinker
+     * Return the importerServices linked this DefaultImportationLinker.
      *
      * @return The importerServices linked to this DefaultImportationLinker
      */
@@ -279,7 +279,7 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
     }
 
     /**
-     * Return the importDeclarations bind by this DefaultImportationLinker
+     * Return the importDeclarations bind by this DefaultImportationLinker.
      *
      * @return The importDeclarations bind by this DefaultImportationLinker
      */

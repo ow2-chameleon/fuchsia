@@ -39,7 +39,7 @@ import static org.ow2.chameleon.fuchsia.core.declaration.Constants.PROTOCOL_NAME
 // FIXME ADD LOCKS !!
 public class BluetoothImporter extends AbstractImporterComponent {
     /**
-     * logger
+     * logger.
      */
     private static final Logger LOG = LoggerFactory.getLogger(BluetoothImporter.class);
 
@@ -61,7 +61,7 @@ public class BluetoothImporter extends AbstractImporterComponent {
     private final Map<ImportDeclaration, ComponentInstance> proxyComponentInstances;
 
     /**
-     * Constructor in order to have the bundle context injected
+     * Constructor in order to have the bundle context injected.
      *
      * @param bundleContext
      */
@@ -93,7 +93,7 @@ public class BluetoothImporter extends AbstractImporterComponent {
     }
 
     /**
-     * Call if an import declaration match with the LDAP filter
+     * Call if an import declaration match with the LDAP filter.
      *
      * @param importDeclaration : the matching import declaration
      */
@@ -135,7 +135,7 @@ public class BluetoothImporter extends AbstractImporterComponent {
 
 
     /**
-     * Call when an import declaration is leaving the OSGi register
+     * Call when an import declaration is leaving the OSGi register.
      *
      * @param importDeclaration : the leaving import declaration
      */

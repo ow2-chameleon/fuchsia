@@ -101,7 +101,7 @@ public abstract class ImporterComponentAbstract extends Common {
     }
 
     /**
-     * Test the {@link ImporterService#addDeclaration(ImportDeclaration)} with
+     * Test the {@link ImporterService#addDeclaration(ImportDeclaration)} with.
      * a valid {@link ImportDeclaration}.
      */
     @Test

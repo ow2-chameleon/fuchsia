@@ -25,42 +25,42 @@ package org.ow2.chameleon.fuchsia.core.constant;
  */
 public final class MediaType {
     /**
-     * The value of a type or subtype wildcard: "*"
+     * The value of a type or subtype wildcard: "*".
      */
     public static final String MEDIA_TYPE_WILDCARD = "*";
 
     /**
-     * "*&#47;*"
+     * "*&#47;*".
      */
     public static final String WILDCARD = "*/*";
 
     /**
-     * "application/xml"
+     * "application/xml".
      */
     public static final String APPLICATION_XML = "application/xml";
 
     /**
-     * "application/atom+xml"
+     * "application/atom+xml".
      */
     public static final String APPLICATION_ATOM_XML = "application/atom+xml";
 
     /**
-     * "application/xhtml+xml"
+     * "application/xhtml+xml".
      */
     public static final String APPLICATION_XHTML_XML = "application/xhtml+xml";
 
     /**
-     * "application/svg+xml"
+     * "application/svg+xml".
      */
     public static final String APPLICATION_SVG_XML = "application/svg+xml";
 
     /**
-     * "application/rss+xml"
+     * "application/rss+xml".
      */
     public static final String APPLICATION_RSS_XML = "application/rss+xml";
 
     /**
-     * "application/json"
+     * "application/json".
      */
     public static final String APPLICATION_JSON = "application/json";
 
@@ -80,17 +80,17 @@ public final class MediaType {
     public static final String APPLICATION_OCTET_STREAM = "application/octet-stream";
 
     /**
-     * "text/plain"
+     * "text/plain".
      */
     public static final String TEXT_PLAIN = "text/plain";
 
     /**
-     * "text/xml"
+     * "text/xml".
      */
     public static final String TEXT_XML = "text/xml";
 
     /**
-     * "text/html"
+     * "text/html".
      */
     public static final String TEXT_HTML = "text/html";
 

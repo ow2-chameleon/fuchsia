@@ -76,7 +76,7 @@ public abstract class JAXExporterAbstractTest {
     protected HttpService httpServiceMock;
 
     /**
-     * Instantiate all mocks necessary for the exportation, and invokes @Validate method from the exporter
+     * Instantiate all mocks necessary for the exportation, and invokes @Validate method from the exporter.
      */
     @Before
     public void setup() {
@@ -90,7 +90,7 @@ public abstract class JAXExporterAbstractTest {
     }
 
     /**
-     * Remove all instantiation (avoid leak) and invoke @Invalidate method
+     * Remove all instantiation (avoid leak) and invoke @Invalidate method.
      */
     @After
     public void setupClean() {

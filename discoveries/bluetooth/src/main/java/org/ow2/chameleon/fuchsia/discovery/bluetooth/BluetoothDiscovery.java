@@ -70,7 +70,7 @@ import static org.ow2.chameleon.fuchsia.core.declaration.Constants.PROTOCOL_NAME
 public class BluetoothDiscovery extends AbstractDiscoveryComponent {
 
     /**
-     * Logger
+     * Logger.
      */
     private static final Logger LOG = LoggerFactory.getLogger(BluetoothDiscovery.class);
 

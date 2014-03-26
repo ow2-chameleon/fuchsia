@@ -26,7 +26,7 @@ import org.ow2.chameleon.fuchsia.core.component.DiscoveryService;
 import java.util.Map;
 
 /**
- * {@link Declaration} is a data transfer object (DTO pattern) that transit between layers
+ * {@link Declaration} is a data transfer object (DTO pattern) that transit between layers.
  * in Fuchsia.
  * They are created by the {@link DiscoveryService}
  *

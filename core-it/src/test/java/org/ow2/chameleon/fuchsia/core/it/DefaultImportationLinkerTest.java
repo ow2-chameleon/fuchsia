@@ -105,7 +105,7 @@ public class DefaultImportationLinkerTest extends Common {
     }
 
     /**
-     * Test that ImportDeclaration are binded  when filter match
+     * Test that ImportDeclaration are binded  when filter match.
      *
      * @throws InvalidSyntaxException
      */
@@ -131,7 +131,7 @@ public class DefaultImportationLinkerTest extends Common {
     }
 
     /**
-     * Test that ImportDeclaration are not binded when filter doesn't match
+     * Test that ImportDeclaration are not binded when filter doesn't match.
      *
      * @throws InvalidSyntaxException
      */
@@ -156,7 +156,7 @@ public class DefaultImportationLinkerTest extends Common {
     }
 
     /**
-     * Test that ImporterServices are binded when filter match
+     * Test that ImporterServices are binded when filter match.
      */
     @Test
     public void testBindImporterServices() {
@@ -192,7 +192,7 @@ public class DefaultImportationLinkerTest extends Common {
     }
 
     /**
-     * Test that ImporterService are not binded when filter doesn't match
+     * Test that ImporterService are not binded when filter doesn't match.
      */
     @Test
     public void testBindImporterServiceFilterDoesNotMatch() {
@@ -214,7 +214,7 @@ public class DefaultImportationLinkerTest extends Common {
     }
 
     /**
-     * Test that ImportDeclaration are given to matching ImporterService when filter of ImporterService match
+     * Test that ImportDeclaration are given to matching ImporterService when filter of ImporterService match.
      */
     @Test
     public void testImportDeclarationToImporterService() throws BinderException {
@@ -248,7 +248,7 @@ public class DefaultImportationLinkerTest extends Common {
     }
 
     /**
-     * Test that ImportDeclaration are not given to matching ImporterService when filter of ImporterService doesn't match
+     * Test that ImportDeclaration are not given to matching ImporterService when filter of ImporterService doesn't match.
      */
     @Test
     public void testImportDeclarationToImporterServiceDoesNotMatch() throws BinderException {
@@ -282,7 +282,7 @@ public class DefaultImportationLinkerTest extends Common {
     }
 
     /**
-     * Test that bind() method is called when DefaultImportationLinker bind it with an ImporterService and
+     * Test that bind() method is called when DefaultImportationLinker bind it with an ImporterService and.
      * that unbind() is called when DefaultImportationLinker unbind it from an ImporterService.
      *
      * @throws org.ow2.chameleon.fuchsia.core.exceptions.BinderException
@@ -319,7 +319,7 @@ public class DefaultImportationLinkerTest extends Common {
     }
 
     /**
-     * Test that unbind() is called when DefaultImportationLinker unbind it from an ImporterService when the
+     * Test that unbind() is called when DefaultImportationLinker unbind it from an ImporterService when the.
      * ImporterService leave.
      */
     @Test

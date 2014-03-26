@@ -49,7 +49,7 @@ import java.util.*;
 import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
 
 /**
- * Provides an {@link ImporterService} allowing to access a
+ * Provides an {@link ImporterService} allowing to access a.
  * remote endpoint through jsonrpc thanks to the jsonrpc4j implementation.
  * <p/>
  * A valid {@link ImportDeclaration} for this ImporterService contains has metadata :
@@ -156,7 +156,7 @@ public class JSONRPCExporter extends AbstractExporterComponent {
     }
 
     /**
-     * Unregister all servlets registered by this exporter
+     * Unregister all servlets registered by this exporter.
      */
     private void unregisterAllServlets() {
 

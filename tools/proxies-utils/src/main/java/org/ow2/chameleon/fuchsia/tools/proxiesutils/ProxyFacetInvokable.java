@@ -23,7 +23,7 @@ package org.ow2.chameleon.fuchsia.tools.proxiesutils;
 public interface ProxyFacetInvokable extends FuchsiaProxy  {
 
     /**
-     * Sync
+     * Sync.
      *
      * @param method
      * @param args
@@ -32,7 +32,7 @@ public interface ProxyFacetInvokable extends FuchsiaProxy  {
     Object invoke(String method, Object... args) throws ProxyInvokationException;
 
     /**
-     * Async
+     * Async.
      *
      * @param method
      * @param transactionID

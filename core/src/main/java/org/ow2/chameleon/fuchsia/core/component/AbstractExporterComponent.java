@@ -41,12 +41,12 @@ public abstract class AbstractExporterComponent implements ExporterService, Expo
     }
 
     /**
-     * Abstract method, is called when the sub class must export the service describe in the given ExportDeclaration
+     * Abstract method, is called when the sub class must export the service describe in the given ExportDeclaration.
      */
     protected abstract void useExportDeclaration(final ExportDeclaration exportDeclaration) throws BinderException;
 
     /**
-     * Abstract method, is called when the sub class must stop the export of the service describe in the given
+     * Abstract method, is called when the sub class must stop the export of the service describe in the given.
      * ExportDeclaration.
      */
     protected abstract void denyExportDeclaration(final ExportDeclaration exportDeclaration) throws BinderException;

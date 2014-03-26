@@ -1,5 +1,5 @@
 /**
- * Licensed to the Apache Software Foundation (ASF) under one
+ * Licensed to the Apache Software Foundation (ASF) under one.
  * or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information
  * regarding copyright ownership. The ASF licenses this file
@@ -66,7 +66,7 @@ public class ProtobufQueryHandler implements StemMatchingQueryHandler {
     }
 
     /**
-     * @see org.apache.cxf.transports.http.QueryHandler#getResponseContentType(String,
+     * @see org.apache.cxf.transports.http.QueryHandler#getResponseContentType(String,.
      * String)
      */
     public String getResponseContentType(String fullQueryString, String ctx) {
@@ -74,7 +74,7 @@ public class ProtobufQueryHandler implements StemMatchingQueryHandler {
     }
 
     /**
-     * @see org.apache.cxf.transports.http.QueryHandler#isRecognizedQuery(String,
+     * @see org.apache.cxf.transports.http.QueryHandler#isRecognizedQuery(String,.
      * String, org.apache.cxf.service.model.EndpointInfo)
      */
     public boolean isRecognizedQuery(String fullQueryString, String ctx,
@@ -83,7 +83,7 @@ public class ProtobufQueryHandler implements StemMatchingQueryHandler {
     }
 
     /**
-     * @see org.apache.cxf.transports.http.QueryHandler#writeResponse(String,
+     * @see org.apache.cxf.transports.http.QueryHandler#writeResponse(String,.
      * String, org.apache.cxf.service.model.EndpointInfo,
      * java.io.OutputStream)
      */

@@ -23,7 +23,7 @@ package org.ow2.chameleon.fuchsia.importer.jaxws.test.ctd;
 import org.osgi.framework.ServiceReference;
 
 /**
- * CrashTestDummie interface for the test
+ * CrashTestDummie interface for the test.
  */
 public interface ServiceForExportation extends ServiceReference {
 

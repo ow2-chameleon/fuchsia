@@ -60,7 +60,7 @@ public class FuchsiaUtils {
     }
 
     /**
-     * Load the Class of name <code>klassName</code>
+     * Load the Class of name <code>klassName</code>.
      * TODO : handle class version
      *
      * @param context   The BundleContext
@@ -112,7 +112,7 @@ public class FuchsiaUtils {
     }
 
     /**
-     * Load the Class of name <code>klassName</code>
+     * Load the Class of name <code>klassName</code>.
      * TODO : handle class version
      *
      * @param context   The BundleContext
@@ -149,7 +149,7 @@ public class FuchsiaUtils {
     }
 
     /**
-     * Load the Classes of names <code>klassNames</code>
+     * Load the Classes of names <code>klassNames</code>.
      * TODO : handle class version
      *
      * @param context   The BundleContext

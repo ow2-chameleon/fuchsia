@@ -36,7 +36,7 @@ import static org.ow2.chameleon.fuchsia.core.component.ImportationLinker.FILTER_
 import static org.ow2.chameleon.fuchsia.core.component.ImportationLinker.FILTER_IMPORTERSERVICE_PROPERTY;
 
 /**
- * Test class MQTT
+ * Test class MQTT.
  *
  * @author botelho@imag.fr
  */

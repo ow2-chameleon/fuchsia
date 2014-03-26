@@ -74,7 +74,7 @@ public class LinkerDeclarationsManager<D extends Declaration, S extends Declarat
     }
 
     /**
-     * Calculate the matching of the Declaration modified with the DeclarationFilter of the
+     * Calculate the matching of the Declaration modified with the DeclarationFilter of the.
      * Linker.
      *
      * @param declarationSRef the ServiceReference<Declaration> of the Declaration
@@ -96,7 +96,7 @@ public class LinkerDeclarationsManager<D extends Declaration, S extends Declarat
     }
 
     /**
-     * Return the Declaration corresponding to the declarationSRef
+     * Return the Declaration corresponding to the declarationSRef.
      *
      * @param declarationSRef the ServiceReference<Declaration> of the Declaration
      * @return the Declaration corresponding to the declarationSRef
@@ -106,7 +106,7 @@ public class LinkerDeclarationsManager<D extends Declaration, S extends Declarat
     }
 
     /**
-     * Create all the links possible between the Declaration and all the ImporterService matching the
+     * Create all the links possible between the Declaration and all the ImporterService matching the.
      * ImporterServiceFilter of the Linker.
      *
      * @param declarationSRef the ServiceReference<Declaration> of the Declaration
@@ -135,7 +135,7 @@ public class LinkerDeclarationsManager<D extends Declaration, S extends Declarat
     }
 
     /**
-     * Return a set of all the Declaration matching the DeclarationFilter of the
+     * Return a set of all the Declaration matching the DeclarationFilter of the.
      * Linker.
      *
      * @return a set of all the Declaration matching the DeclarationFilter of the

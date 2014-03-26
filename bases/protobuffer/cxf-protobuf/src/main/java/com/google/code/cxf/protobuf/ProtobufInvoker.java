@@ -1,5 +1,5 @@
 /**
- * Licensed to the Apache Software Foundation (ASF) under one
+ * Licensed to the Apache Software Foundation (ASF) under one.
  * or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information
  * regarding copyright ownership. The ASF licenses this file
@@ -56,7 +56,7 @@ public class ProtobufInvoker implements Invoker {
     }
 
     /**
-     * @see org.apache.cxf.service.invoker.Invoker#invoke(org.apache.cxf.message.Exchange, Object)
+     * @see org.apache.cxf.service.invoker.Invoker#invoke(org.apache.cxf.message.Exchange, Object).
      */
     public Object invoke(Exchange exchange, Object o) {
         Message message = exchange.getInMessage().getContent(Message.class);

@@ -47,7 +47,7 @@ import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
 import static org.ow2.chameleon.fuchsia.core.declaration.Constants.*;
 
 /**
- * Provides an {@link ImporterService} allowing to access a
+ * Provides an {@link ImporterService} allowing to access a.
  * remote endpoint through jsonrpc thanks to the jsonrpc4j implementation.
  * <p/>
  * A valid {@link ImportDeclaration} for this ImporterService contains has metadata :

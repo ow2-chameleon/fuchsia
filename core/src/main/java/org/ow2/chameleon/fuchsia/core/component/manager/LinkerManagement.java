@@ -44,7 +44,7 @@ public class LinkerManagement<D extends Declaration, S extends DeclarationBinder
     }
 
     /**
-     * Return true if the Declaration can be linked to the ImporterService
+     * Return true if the Declaration can be linked to the ImporterService.
      *
      * @param declaration          The Declaration
      * @param declarationBinderRef The ServiceReference<ImporterService> of the ImporterService
@@ -57,7 +57,7 @@ public class LinkerManagement<D extends Declaration, S extends DeclarationBinder
     }
 
     /**
-     * Try to link the declaration with the importerService referenced by the ServiceReference,
+     * Try to link the declaration with the importerService referenced by the ServiceReference,.
      * return true if they have been link together, false otherwise.
      *
      * @param declaration          The Declaration
@@ -80,7 +80,7 @@ public class LinkerManagement<D extends Declaration, S extends DeclarationBinder
     }
 
     /**
-     * Try to unlink the declaration from the importerService referenced by the ServiceReference,
+     * Try to unlink the declaration from the importerService referenced by the ServiceReference,.
      * return true if they have been cleanly unlink, false otherwise.
      *
      * @param declaration          The Declaration

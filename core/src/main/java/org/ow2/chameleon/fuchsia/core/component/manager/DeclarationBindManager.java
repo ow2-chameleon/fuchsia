@@ -30,7 +30,7 @@ import java.util.Set;
 
 public class DeclarationBindManager<T extends Declaration> {
     /**
-     * Logger
+     * Logger.
      */
     private static final Logger LOG = LoggerFactory.getLogger(DeclarationBindManager.class);
 

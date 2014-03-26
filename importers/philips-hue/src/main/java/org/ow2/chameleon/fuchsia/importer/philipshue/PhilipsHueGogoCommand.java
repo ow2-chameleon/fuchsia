@@ -113,7 +113,7 @@ public class PhilipsHueGogoCommand {
     }
 
     /**
-     * Look up for the value of a parameter in a sequence of string
+     * Look up for the value of a parameter in a sequence of string.
      * @param option the option that we are looking for. e.g. '-k'
      * @param params the list of parameters
      * @return the value associated with the parameter or Null in case it is not present

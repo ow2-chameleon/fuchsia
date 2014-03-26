@@ -29,14 +29,14 @@ import java.util.Set;
  */
 public interface ExportationLinkerIntrospection {
     /**
-     * Return the exporterServices linked the ExportationLinker
+     * Return the exporterServices linked the ExportationLinker.
      *
      * @return The exporterServices linked to the ExportationLinker
      */
     Set<ExporterService> getLinkedExporters();
 
     /**
-     * Return the exportDeclarations bind by the ExportationLinker
+     * Return the exportDeclarations bind by the ExportationLinker.
      *
      * @return The exportDeclarations bind by the ExportationLinker
      */

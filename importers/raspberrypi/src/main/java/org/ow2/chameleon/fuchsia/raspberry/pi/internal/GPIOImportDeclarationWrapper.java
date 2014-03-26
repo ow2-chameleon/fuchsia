@@ -34,7 +34,7 @@ import static org.ow2.chameleon.fuchsia.raspberry.pi.internal.Constants.IMPORTER
 import static org.ow2.chameleon.fuchsia.raspberry.pi.internal.Constants.IMPORTER_GPIO_PIN;
 
 /**
- * Makes easier to access the Declaration metadata
+ * Makes easier to access the Declaration metadata.
  */
 public class GPIOImportDeclarationWrapper {
 

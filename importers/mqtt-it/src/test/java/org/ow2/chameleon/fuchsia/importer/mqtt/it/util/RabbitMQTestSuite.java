@@ -53,7 +53,7 @@ public class RabbitMQTestSuite extends BaseTest {
     }
 
     /**
-     * This pack enable the access to the console while debugging in Eclipse (doesnt work in IntelliJ)
+     * This pack enable the access to the console while debugging in Eclipse (doesnt work in IntelliJ).
      * @return
      */
     protected CompositeOption packConsole() {
@@ -109,7 +109,7 @@ public class RabbitMQTestSuite extends BaseTest {
     }
 
     /**
-     * Verify is Rabbit MQ service is available in the current platform
+     * Verify is Rabbit MQ service is available in the current platform.
      * @return the availability of the rabbitmq daemon, true in case its available, or false otherwise
      */
     protected final void assertRabbitMQisRunning() throws AssumptionViolatedException {

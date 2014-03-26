@@ -35,7 +35,7 @@ import static org.ow2.chameleon.fuchsia.core.FuchsiaUtils.getFilter;
 import static org.ow2.chameleon.fuchsia.core.component.manager.DeclarationBinder.TARGET_FILTER_PROPERTY;
 
 /**
- * <p/>
+ * <p/>.
  * Provides methods to add/remove/retrieve informations/do operations on the DeclarationBinders.
  * <p/>
  * This class doesn't use the DeclarationBinder objects but the ServiceReference of the DeclarationBinder.
@@ -55,7 +55,7 @@ public class LinkerBinderManager<D extends Declaration, S extends DeclarationBin
     }
 
     /**
-     * Add the declarationBinderRef to the ImportersManager, create the corresponding
+     * Add the declarationBinderRef to the ImportersManager, create the corresponding.
      * BinderDescriptor.
      *
      * @param declarationBinderRef the ServiceReference<DeclarationBinder> of the DeclarationBinder
@@ -67,7 +67,7 @@ public class LinkerBinderManager<D extends Declaration, S extends DeclarationBin
     }
 
     /**
-     * Remove the declarationBinderRef of the ImportersManager
+     * Remove the declarationBinderRef of the ImportersManager.
      *
      * @param declarationBinderRef the ServiceReference<DeclarationBinder> of the DeclarationBinder
      */
@@ -76,7 +76,7 @@ public class LinkerBinderManager<D extends Declaration, S extends DeclarationBin
     }
 
     /**
-     * Update the BinderDescriptor of the  declarationBinderRef
+     * Update the BinderDescriptor of the  declarationBinderRef.
      *
      * @param declarationBinderRef the ServiceReference<DeclarationBinder> of the DeclarationBinder
      */
@@ -95,7 +95,7 @@ public class LinkerBinderManager<D extends Declaration, S extends DeclarationBin
     }
 
     /**
-     * Return the DeclarationBinder of the declarationBinderRef
+     * Return the DeclarationBinder of the declarationBinderRef.
      *
      * @param declarationBinderRef the ServiceReference<DeclarationBinder> of the DeclarationBinder
      * @return the DeclarationBinder of the declarationBinderRef
@@ -105,7 +105,7 @@ public class LinkerBinderManager<D extends Declaration, S extends DeclarationBin
     }
 
     /**
-     * Return the Target Filter of the DeclarationBinder
+     * Return the Target Filter of the DeclarationBinder.
      *
      * @param declarationBinderRef the ServiceReference<DeclarationBinder> of the DeclarationBinder
      * @return the Target Filter of the DeclarationBinder.
@@ -115,7 +115,7 @@ public class LinkerBinderManager<D extends Declaration, S extends DeclarationBin
     }
 
     /**
-     * Create all the links possible between the DeclarationBinder and all the ImportDeclaration matching the
+     * Create all the links possible between the DeclarationBinder and all the ImportDeclaration matching the.
      * ImportDeclarationFilter of the Linker.
      *
      * @param declarationBinderRef the ServiceReference<DeclarationBinder> of the DeclarationBinder
@@ -174,7 +174,7 @@ public class LinkerBinderManager<D extends Declaration, S extends DeclarationBin
     }
 
     /**
-     * Return a set of all ServiceReference<DeclarationBinder> matching the DeclarationBinderFilter of the
+     * Return a set of all ServiceReference<DeclarationBinder> matching the DeclarationBinderFilter of the.
      * Linker.
      *
      * @return a Set of all ServiceReference<DeclarationBinder> matching the DeclarationBinderFilter of the
@@ -225,7 +225,7 @@ public class LinkerBinderManager<D extends Declaration, S extends DeclarationBin
 
 
     /**
-     * Stock some informations processed/retrieved from the DeclarationBinder
+     * Stock some informations processed/retrieved from the DeclarationBinder.
      */
     private class BinderDescriptor {
         Filter targetFilter;
@@ -238,7 +238,7 @@ public class LinkerBinderManager<D extends Declaration, S extends DeclarationBin
         }
 
         /**
-         * Extract the information of the declarationBinderRef to update the BinderDescriptor
+         * Extract the information of the declarationBinderRef to update the BinderDescriptor.
          * information.
          *
          * @param declarationBinderRef the ServiceReference<DeclarationBinder> of the DeclarationBinder

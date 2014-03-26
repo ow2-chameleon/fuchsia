@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 
 /**
- * Discovery UPnP  Detects the presence of a UPnP device (in a basedriver interface level) and publishes it as a importation declaration that can be seen by Fuchsia
+ * Discovery UPnP  Detects the presence of a UPnP device (in a basedriver interface level) and publishes it as a importation declaration that can be seen by Fuchsia.
  *
  * @author jeremy.savonet@gmail.com
  * @author jander nascimento (botelho at imag.fr)
@@ -104,7 +104,7 @@ public class UPnPDiscovery extends AbstractDiscoveryComponent {
     }
 
     /**
-     * Create an import declaration and delegates its registration for an upper class
+     * Create an import declaration and delegates its registration for an upper class.
      */
     public synchronized void createImportationDeclaration(String deviceId, String deviceType, String deviceSubType, ServiceReference reference) {
 

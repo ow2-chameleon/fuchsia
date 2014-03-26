@@ -46,7 +46,7 @@ public class DirectoryMonitor implements BundleActivator, ServiceTrackerCustomiz
     private static final Logger LOG = LoggerFactory.getLogger(DirectoryMonitor.class);
 
     /**
-     * List of deployers
+     * List of deployers.
      */
     private final List<Deployer> deployers = new ArrayList<Deployer>();
     /**

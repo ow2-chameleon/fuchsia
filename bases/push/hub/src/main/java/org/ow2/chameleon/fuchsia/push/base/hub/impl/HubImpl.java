@@ -88,7 +88,7 @@ public class HubImpl implements Hub {
     }
 
     /**
-     * Input method, called by a Publisher indicating that a new content is available. This method should either analyse
+     * Input method, called by a Publisher indicating that a new content is available. This method should either analyse.
      * the http header info to verify that changes were really made or download the content and verify for himself if the content has changed
      *
      * @param cn DTO with the notification info given by the protocol
@@ -102,7 +102,7 @@ public class HubImpl implements Hub {
     }
 
     /**
-     * Input method, called by a Subscriber indicating its intent into receive notification about a given topic
+     * Input method, called by a Subscriber indicating its intent into receive notification about a given topic.
      *
      * @param sr DTO containing the info given by the protocol
      */
@@ -129,7 +129,7 @@ public class HubImpl implements Hub {
     }
 
     /**
-     * Output method that sends a subscription confirmation for the subscriber to avoid DoS attacks, or false subscription
+     * Output method that sends a subscription confirmation for the subscriber to avoid DoS attacks, or false subscription.
      *
      * @param sr
      * @return True case the subscription was confirmed, or False otherwise
@@ -169,7 +169,7 @@ public class HubImpl implements Hub {
     }
 
     /**
-     * Output method responsible for sending the updated content to the Subscribers
+     * Output method responsible for sending the updated content to the Subscribers.
      *
      * @param cn
      */
