@@ -34,7 +34,7 @@ import static org.ow2.chameleon.fuchsia.core.component.ImportationLinker.FILTER_
 import static org.ow2.chameleon.fuchsia.core.component.ImportationLinker.FILTER_IMPORTERSERVICE_PROPERTY;
 
 /**
- * Test class AMQP (low level) message receiving.
+ * Test class AMQP (low level) message receiving
  *
  * @author botelho@imag.fr
  */

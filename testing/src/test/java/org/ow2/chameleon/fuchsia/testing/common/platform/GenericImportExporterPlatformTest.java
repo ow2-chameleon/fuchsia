@@ -45,7 +45,7 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
 /**
- * This class is responsible in filling the main field by to be used by the test, all basic needs from an importer/exporter are filled up with Mockito.
+ * This class is responsible in filling the main field by to be used by the test, all basic needs from an importer/exporter are filled up with Mockito
  * @param <T> The declaration type (ImportDeclaration or ExportDeclaration)
  * @param <S> Importer or an Exporter
  */

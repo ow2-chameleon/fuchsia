@@ -28,7 +28,7 @@ import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
 import org.ow2.chameleon.fuchsia.testing.common.platform.GenericImportExporterPlatformTest;
 
 /**
- * Basic Tests that can be done with DeclarationBinder.
+ * Basic Tests that can be done with DeclarationBinder
  * @param <T>
  * @param <S>
  */

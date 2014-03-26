@@ -33,7 +33,7 @@ import java.util.Map;
 
 
 /**
- * Provides a singleton access to the device, as specified in the pi4j api, this object should be unique and shared.
+ * Provides a singleton access to the device, as specified in the pi4j api, this object should be unique and shared
  * among the application to access the device pin
  *
  * @author Jander Nascimento <botelho@imag.fr>

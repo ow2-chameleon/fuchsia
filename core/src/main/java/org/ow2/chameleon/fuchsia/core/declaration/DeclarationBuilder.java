@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * A Builder for Declaration. There's two way to use it.
+ * A Builder for Declaration. There's two way to use it :
  * - Build a Declaration with metadata
  * - Build a Declaration from another Declaration with extra-metadata
  * <p/>

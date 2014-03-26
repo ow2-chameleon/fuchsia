@@ -40,7 +40,7 @@ import static org.ow2.chameleon.fuchsia.core.FuchsiaUtils.getFilter;
 import static org.ow2.chameleon.fuchsia.core.component.manager.DeclarationBinder.TARGET_FILTER_PROPERTY;
 
 /**
- * The {@link DefaultImportationLinker} component is the default implementation of the interface.
+ * The {@link DefaultImportationLinker} component is the default implementation of the interface
  * {@link ImportationLinker}.
  * <p/>
  * The {@link DefaultImportationLinker} component take as mandatory ServiceProperty a filter on the

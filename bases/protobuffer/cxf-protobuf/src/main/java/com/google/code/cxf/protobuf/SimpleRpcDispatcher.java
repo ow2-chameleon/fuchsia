@@ -1,5 +1,5 @@
 /**
- * Licensed to the Apache Software Foundation (ASF) under one.
+ * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information
  * regarding copyright ownership. The ASF licenses this file
@@ -34,7 +34,7 @@ import com.google.protobuf.Descriptors.FieldDescriptor;
 import org.slf4j.LoggerFactory;
 
 /**
- * Simple dispatcher for dispatching protobuf messages to user defined service.
+ * Simple dispatcher for dispatching protobuf messages to user defined service
  * beans. Dispatching is based on matching the payload field name with the java method name.
  *
  * @author Gyorgy Orban

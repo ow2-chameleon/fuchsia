@@ -1,5 +1,5 @@
 /**
- * Licensed to the Apache Software Foundation (ASF) under one.
+ * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information
  * regarding copyright ownership. The ASF licenses this file
@@ -36,7 +36,7 @@ import com.google.protobuf.Descriptors.ServiceDescriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor.Type;
 
 /**
- * Utility for generating .proto source based on the previously generated java.
+ * Utility for generating .proto source based on the previously generated java
  * classes.
  *
  * @author Gyorgy Orban

@@ -21,7 +21,7 @@ package org.ow2.chameleon.fuchsia.tools.grid.model;
  */
 
 /**
- * This is a transfer object used by the FreeMarker template.
+ * This is a transfer object used by the FreeMarker template
  */
 public class Edge {
 
