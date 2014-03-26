@@ -59,11 +59,10 @@ public abstract class FilebasedTestAbstract <D extends AbstractFileBasedDiscover
         File file= tempFolder.newFile(name);
 
         Properties props = new Properties();
-        props.setProperty("id", "mid");
+        props.setProperty("id", "my-id");
 
         OutputStream out = new FileOutputStream( file );
         props.store(out,"");
-
         out.close();
 
         return file;
@@ -113,14 +112,21 @@ public abstract class FilebasedTestAbstract <D extends AbstractFileBasedDiscover
     @Test
     public void shouldNotAcceptHiddenFiled(){
 
-        File file=mock(File.class);
-        when(file.exists()).thenReturn(true);
-        when(file.isFile()).thenReturn(true);
-        when(file.isHidden()).thenReturn(true);
+        File invalidFile=mock(File.class);
+        when(invalidFile.exists()).thenReturn(true);
+        when(invalidFile.isFile()).thenReturn(true);
+        when(invalidFile.isHidden()).thenReturn(true);
 
-        Boolean result=discovery.accept(file);
+        File validFile=mock(File.class);
+        when(validFile.exists()).thenReturn(true);
+        when(validFile.isFile()).thenReturn(true);
+        when(validFile.isHidden()).thenReturn(false);
 
-        Assert.assertFalse(result);
+        Boolean resultValid=discovery.accept(validFile);
+        Boolean resultInvalid=discovery.accept(invalidFile);
+
+        Assert.assertTrue(resultValid);
+        Assert.assertFalse(resultInvalid);
     }
 
 }
