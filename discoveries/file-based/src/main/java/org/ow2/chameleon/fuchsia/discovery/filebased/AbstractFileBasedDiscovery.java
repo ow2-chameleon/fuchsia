@@ -36,7 +36,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-abstract class AbstractFileBasedDiscovery<D extends Declaration> implements Deployer {
+public abstract class AbstractFileBasedDiscovery<D extends Declaration> implements Deployer {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractFileBasedDiscovery.class);
 

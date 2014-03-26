@@ -20,7 +20,7 @@ package org.ow2.chameleon.fuchsia.discovery.filebased;
  * #L%
  */
 
-class FileBasedDiscoveryConstants {
+public class FileBasedDiscoveryConstants {
 
     public static final String FILEBASED_DISCOVERY_MONITORED_DIR_KEY ="fuchsia.system.filebased.discovery.directory";
 
