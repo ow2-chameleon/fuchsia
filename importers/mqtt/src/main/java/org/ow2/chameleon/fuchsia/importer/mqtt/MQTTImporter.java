@@ -54,7 +54,7 @@ public class MQTTImporter extends AbstractImporterComponent {
 
     @PostRegistration
     public void registration(ServiceReference serviceReference) {
-        this.serviceReference = serviceReference;
+        super.setServiceReference(serviceReference);
     }
 
     @Override
@@ -72,7 +72,7 @@ public class MQTTImporter extends AbstractImporterComponent {
 
             String id=(String)importDeclaration.getMetadata().get(Constants.ID);
 
-            importDeclaration.handle(serviceReference);
+            super.handleImportDeclaration(importDeclaration);
 
             managedInstances.put(id, im);
 
@@ -96,7 +96,7 @@ public class MQTTImporter extends AbstractImporterComponent {
 
         if(instance!=null){
             instance.dispose();
-            importDeclaration.unhandle(serviceReference);
+            unhandleImportDeclaration(importDeclaration);
         }else {
             LOG.warn("Failed to destroy managed instance {}, such instance was not registered by this importer",id);
         }

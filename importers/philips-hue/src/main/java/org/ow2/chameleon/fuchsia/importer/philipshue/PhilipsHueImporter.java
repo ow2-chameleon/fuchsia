@@ -56,7 +56,7 @@ public class PhilipsHueImporter extends AbstractImporterComponent {
 
     @PostRegistration
     public void registration(ServiceReference serviceReference) {
-        this.serviceReference = serviceReference;
+        setServiceReference(serviceReference);
     }
 
     @Validate
@@ -100,7 +100,7 @@ public class PhilipsHueImporter extends AbstractImporterComponent {
 
             ServiceRegistration lampService=context.registerService(pojo.getType(),pojo.getObject(),props);
 
-            importDeclaration.handle(serviceReference);
+            super.handleImportDeclaration(importDeclaration);
 
             lamps.put(pojo.getId(),lampService);
 
@@ -122,7 +122,7 @@ public class PhilipsHueImporter extends AbstractImporterComponent {
             LOG.error("failed unregistering lamp", e);
         }
 
-        importDeclaration.unhandle(serviceReference);
+        unhandleImportDeclaration(importDeclaration);
     }
 
 

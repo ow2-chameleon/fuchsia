@@ -58,7 +58,7 @@ public class GpIOImporter extends AbstractImporterComponent {
 
     @PostRegistration
     public void registration(ServiceReference serviceReference) {
-        this.serviceReference = serviceReference;
+        super.setServiceReference(serviceReference);
     }
 
     @Validate
@@ -84,7 +84,7 @@ public class GpIOImporter extends AbstractImporterComponent {
         light.put("pin", pojo.getPin());
 
         try {
-            importDeclaration.handle(serviceReference);
+            super.handleImportDeclaration(importDeclaration);
             InstanceManager im = (InstanceManager) lightFactory.createComponentInstance(light);
 
             gpioPin.put(pojo.getId(), im);
@@ -97,7 +97,7 @@ public class GpIOImporter extends AbstractImporterComponent {
             importDeclaration.unhandle(serviceReference);
         } catch (ConfigurationException e) {
             LOG.error("Configuration exception", e);
-            importDeclaration.unhandle(serviceReference);
+            super.handleImportDeclaration(importDeclaration);
         }
     }
 
@@ -106,7 +106,8 @@ public class GpIOImporter extends AbstractImporterComponent {
         GPIOImportDeclarationWrapper pojo = GPIOImportDeclarationWrapper.create(importDeclaration);
 
         InstanceManager im = gpioPin.remove(pojo.getId());
-        importDeclaration.unhandle(serviceReference);
+        unhandleImportDeclaration(importDeclaration);
+
         if (im != null) {
             im.dispose();
         }

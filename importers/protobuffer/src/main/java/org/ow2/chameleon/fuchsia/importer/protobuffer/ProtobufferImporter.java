@@ -71,7 +71,7 @@ public class ProtobufferImporter extends AbstractImporterComponent {
 
     @PostRegistration
     public void registration(ServiceReference serviceReference) {
-        this.serviceReference = serviceReference;
+        super.setServiceReference(serviceReference);
     }
 
     @Validate
@@ -124,7 +124,7 @@ public class ProtobufferImporter extends AbstractImporterComponent {
 
             registeredImporter.put(pojo.getId(),sr);
 
-            importDeclaration.handle(serviceReference);
+            super.handleImportDeclaration(importDeclaration);
 
         } catch (ClassNotFoundException e) {
             LOG.error("Fail to import Protobuffer RPC service with the message", e);
@@ -143,7 +143,7 @@ public class ProtobufferImporter extends AbstractImporterComponent {
     @Override
     protected void denyImportDeclaration(ImportDeclaration importDeclaration) throws BinderException {
 
-        importDeclaration.unhandle(serviceReference);
+        unhandleImportDeclaration(importDeclaration);
 
         ProtobufferImportDeclarationWrapper pojo= ProtobufferImportDeclarationWrapper.create(importDeclaration);
 

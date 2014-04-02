@@ -82,7 +82,7 @@ public class JAXWSImporter extends AbstractImporterComponent {
 
     @PostRegistration
     public void registration(ServiceReference serviceReference) {
-        this.serviceReference = serviceReference;
+        super.setServiceReference(serviceReference);
     }
 
     @Override
@@ -157,7 +157,7 @@ public class JAXWSImporter extends AbstractImporterComponent {
             objectProxy = factory.create();
 
             // set the importDeclaration has handled
-            importDeclaration.handle(serviceReference);
+            handleImportDeclaration(importDeclaration);
 
             //Publish object
             map.put(importDeclaration, registerProxy(objectProxy, klass));
@@ -189,7 +189,7 @@ public class JAXWSImporter extends AbstractImporterComponent {
         serviceRegistration.unregister();
 
         // set the importDeclaration has unhandled
-        importDeclaration.unhandle(serviceReference);
+        super.unhandleImportDeclaration(importDeclaration);
 
         map.remove(importDeclaration);
     }

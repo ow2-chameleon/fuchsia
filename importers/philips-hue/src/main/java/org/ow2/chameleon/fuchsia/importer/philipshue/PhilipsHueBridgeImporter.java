@@ -61,7 +61,7 @@ public class PhilipsHueBridgeImporter extends AbstractImporterComponent {
 
     @PostRegistration
     public void registration(ServiceReference serviceReference) {
-        this.serviceReference = serviceReference;
+        super.setServiceReference(serviceReference);
     }
 
     @Validate
@@ -108,7 +108,7 @@ public class PhilipsHueBridgeImporter extends AbstractImporterComponent {
 
         timer.schedule(new FetchBridgeLampsTask((PHBridgeImpl) pojo.getBridgeObject()),0,5000);
 
-        importDeclaration.handle(serviceReference);
+        super.handleImportDeclaration(importDeclaration);
 
         bridges.put(pojo.getId(),bridgeService);
 
@@ -135,7 +135,7 @@ public class PhilipsHueBridgeImporter extends AbstractImporterComponent {
         }catch(IllegalStateException e){
             LOG.error("failed unregistering bridge", e);
         }
-        importDeclaration.unhandle(serviceReference);
+        unhandleImportDeclaration(importDeclaration);
     }
 
 
