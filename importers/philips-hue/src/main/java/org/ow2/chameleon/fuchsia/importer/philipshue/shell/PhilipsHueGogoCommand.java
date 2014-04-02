@@ -1,4 +1,4 @@
-package org.ow2.chameleon.fuchsia.importer.philipshue;
+package org.ow2.chameleon.fuchsia.importer.philipshue.shell;
 
 /*
  * #%L

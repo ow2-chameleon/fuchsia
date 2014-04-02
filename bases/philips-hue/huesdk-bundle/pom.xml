@@ -42,6 +42,7 @@
                         </Bundle-SymbolicName>
                         <Export-Package>*</Export-Package>
                         <Embed-Dependency>*;scope=compile|runtime;inline=true</Embed-Dependency>
+                        <Privage-Package>org.json</Privage-Package>
                     </instructions>
                 </configuration>
             </plugin>

@@ -61,7 +61,7 @@ public class PhilipsHueImporter extends AbstractImporterComponent {
 
     @Validate
     public void validate() {
-        LOG.info("Philips hue Importer RPC is up and running");
+        LOG.info("Philips hue Importer is up and running");
     }
 
     @Invalidate
@@ -99,12 +99,10 @@ public class PhilipsHueImporter extends AbstractImporterComponent {
             Dictionary<String, Object> props = new Hashtable<String, Object>();
 
             ServiceRegistration lampService=context.registerService(pojo.getType(),pojo.getObject(),props);
-            ServiceRegistration bridgeService=context.registerService(pojo.getBridgeType(),pojo.getBridgeObject(),props);
 
             importDeclaration.handle(serviceReference);
 
             lamps.put(pojo.getId(),lampService);
-            bridges.put(pojo.getId(),bridgeService);
 
         } catch (ClassNotFoundException e) {
             LOG.error("Failed to load type {}, importing process aborted.", pojo.getType(), e);
@@ -124,11 +122,6 @@ public class PhilipsHueImporter extends AbstractImporterComponent {
             LOG.error("failed unregistering lamp", e);
         }
 
-        try {
-            bridges.remove(pojo.getId()).unregister();
-        }catch(IllegalStateException e){
-            LOG.error("failed unregistering bridge", e);
-        }
         importDeclaration.unhandle(serviceReference);
     }
 
