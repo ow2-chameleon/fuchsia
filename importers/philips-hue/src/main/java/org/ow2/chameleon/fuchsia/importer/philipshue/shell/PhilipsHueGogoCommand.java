@@ -40,10 +40,10 @@ public class PhilipsHueGogoCommand {
     @ServiceProperty(name = "osgi.command.function", value = "{}")
     private String[] function = new String[]{"phlist","phset"};
 
-    @Requires(specification = "com.philips.lighting.model.PHLight")
+    @Requires(specification = "com.philips.lighting.model.PHLight",optional = true)
     Set<PHLight> lights;
 
-    @Requires
+    @Requires(optional = true)
     PHBridge bridge;
 
     public PhilipsHueGogoCommand() {
