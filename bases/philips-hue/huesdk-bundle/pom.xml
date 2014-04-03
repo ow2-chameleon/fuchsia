@@ -40,7 +40,7 @@
                         <Bundle-SymbolicName>
                             ${project.artifactId}
                         </Bundle-SymbolicName>
-                        <Export-Package>*</Export-Package>
+                        <Export-Package>!org.json,*</Export-Package>
                         <Embed-Dependency>*;scope=compile|runtime;inline=true</Embed-Dependency>
                         <Privage-Package>org.json</Privage-Package>
                     </instructions>
