@@ -102,9 +102,7 @@ public class PhilipsHueBridgeImporter extends AbstractImporterComponent {
 
         Dictionary<String, Object> props = new Hashtable<String, Object>();
 
-        System.out.println("registering service+"+pojo.getBridgeType()+" with "+pojo.getBridgeObject());
-
-        ServiceRegistration bridgeService=context.registerService(PHBridgeImpl.class.getName(),pojo.getBridgeObject(),props);
+        ServiceRegistration bridgeService=context.registerService(new String[]{PHBridge.class.getName(),PHBridgeImpl.class.getName()},pojo.getBridgeObject(),props);
 
         timer.schedule(new FetchBridgeLampsTask((PHBridgeImpl) pojo.getBridgeObject()),0,5000);
 
@@ -117,12 +115,17 @@ public class PhilipsHueBridgeImporter extends AbstractImporterComponent {
     @Override
     protected void denyImportDeclaration(final ImportDeclaration importDeclaration) throws BinderException {
 
+        LOG.info("philips hue bridge importer removal triggered");
+
         PhilipsHueBridgeImportDeclarationWrapper pojo= PhilipsHueBridgeImportDeclarationWrapper.create(importDeclaration);
 
         try {
 
             for(Map.Entry<String,ServiceRegistration> entry:lamps.entrySet()){
-                lamps.remove(entry.getKey()).unregister();
+                ServiceRegistration sr=lamps.remove(entry.getKey());
+                if(sr!=null) {
+                    sr.unregister();
+                }
             }
 
         }catch(IllegalStateException e){
@@ -131,10 +134,13 @@ public class PhilipsHueBridgeImporter extends AbstractImporterComponent {
 
         try {
             ServiceRegistration sr=bridges.remove(pojo.getId());
-            if(sr!=null) sr.unregister();
+            if(sr!=null) {
+                sr.unregister();
+            };
         }catch(IllegalStateException e){
             LOG.error("failed unregistering bridge", e);
         }
+
         unhandleImportDeclaration(importDeclaration);
     }
 
@@ -153,8 +159,6 @@ public class PhilipsHueBridgeImporter extends AbstractImporterComponent {
 
         @Override
         public void run() {
-
-            //System.out.println("on the bridge fetching lamps");
 
             for(PHLight light:bridge.getResourceCache().getAllLights()){
 
