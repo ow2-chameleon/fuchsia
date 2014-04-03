@@ -32,6 +32,9 @@ import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.*;
 
 import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
@@ -144,7 +147,10 @@ public class FuchsiaGogoCommand {
         String type = getArgumentValue("-t", parameters);
         Map<ServiceReference, Declaration> declarations = getDeclarations(type);
 
-        displayDeclarations(declarations, filter);
+        StringBuilder sb=displayDeclarations(declarations, filter);
+
+        System.out.println(sb);
+
     }
 
 
@@ -163,47 +169,63 @@ public class FuchsiaGogoCommand {
         return declarations;
     }
 
-    private void displayDeclarations(Map<ServiceReference, Declaration> declarations, Filter filter) {
+    private StringBuilder displayDeclarations(Map<ServiceReference, Declaration> declarations, Filter filter) {
+
+        StringBuilder sb=new StringBuilder();
+
         if (declarations.isEmpty()) {
-            System.err.println("No declarations found.");
-            return;
+            sb.append("No declarations found.");
         }
 
         for (Map.Entry<ServiceReference, Declaration> declaration : declarations.entrySet()) {
             if (filter == null || filter.matches(declaration.getValue().getMetadata())) {
-                displayDeclaration(getIdentifier(declaration.getValue()), declaration.getKey(), declaration.getValue());
+
+                StringBuilder boxedDeclaration=createASCIIBox("Declaration",displayDeclaration(getIdentifier(declaration.getValue()), declaration.getKey(), declaration.getValue()));
+                sb.append(boxedDeclaration);
+
             }
         }
+
+        return sb;
     }
 
-    private void displayDeclaration(String identifier, ServiceReference reference, Declaration declaration) {
+    private StringBuilder displayDeclaration(String identifier, ServiceReference reference, Declaration declaration) {
 
-        StringBuilder sg = new StringBuilder();
-        sg.append("Declaration Metadata : %n");
+        StringBuilder completeOutput = new StringBuilder();
+
+        completeOutput.append("Declaration binded to ")
+                .append(declaration.getStatus().getServiceReferencesBounded().size())
+                .append(" services.\n");
+        completeOutput.append("Declaration handled by ")
+                .append(declaration.getStatus().getServiceReferencesHandled().size())
+                .append(" services.\n");
+
+        StringBuilder sgMetadata = new StringBuilder();
         for (Map.Entry<String, Object> entry : declaration.getMetadata().entrySet()) {
-            sg.append(String.format("\t%s = %s%n", entry.getKey(), entry.getValue()));
-        }
-        sg.append("Declaration ExtraMetadata : %n");
-        for (Map.Entry<String, Object> entry : declaration.getExtraMetadata().entrySet()) {
-            sg.append(String.format("\t%s = %s%n", entry.getKey(), entry.getValue()));
+            sgMetadata.append(String.format("%s = %s\n", entry.getKey(), entry.getValue()));
         }
 
-        sg.append("Service Properties%n");
+        completeOutput.append(createASCIIBox("Metadata",sgMetadata));
+
+        StringBuilder sgExtraMetadata=new StringBuilder();
+        for (Map.Entry<String, Object> entry : declaration.getExtraMetadata().entrySet()) {
+            sgExtraMetadata.append(String.format("%s = %s\n", entry.getKey(), entry.getValue()));
+        }
+
+        completeOutput.append(createASCIIBox("Extra-Metadata",sgExtraMetadata));
+
+        StringBuilder sgProperties=new StringBuilder();
         for (String propertyKey : reference.getPropertyKeys()) {
-            sg.append(String.format("\t%s = %s%n", propertyKey, reference.getProperty(propertyKey)));
+            sgProperties.append(String.format("%s = %s\n", propertyKey, reference.getProperty(propertyKey)));
         }
         if (reference.getPropertyKeys().length == 0) {
-            sg.append("\tEMPTY%n");
+            sgProperties.append("EMPTY\n");
         }
 
-        sg.append("Declaration binded to ")
-                .append(declaration.getStatus().getServiceReferencesBounded().size())
-                .append(" services.%n");
-        sg.append("Declaration handled by ")
-                .append(declaration.getStatus().getServiceReferencesHandled().size())
-                .append(" services.%n");
+        completeOutput.append(createASCIIBox("Service Properties",sgProperties));
 
-        System.out.printf(sg.toString());
+
+        return completeOutput;
 
     }
 
@@ -214,22 +236,28 @@ public class FuchsiaGogoCommand {
     public void linker(@Descriptor("linker [-(import|export)] [ID name]") String... parameters) {
         List<ServiceReference> exportationLinkerRef = getAllServiceRefs(ExportationLinker.class);
         List<ServiceReference> importationLinkerRef = getAllServiceRefs(ImportationLinker.class);
+        StringBuilder sbFinal=new StringBuilder();
         if (exportationLinkerRef.isEmpty() && importationLinkerRef.isEmpty()) {
-            System.out.println("No linkers available.");
+            sbFinal.append("No linkers available.%s");
         } else {
             if (!exportationLinkerRef.isEmpty()) {
                 for (ServiceReference reference : exportationLinkerRef) {
-                    displayServiceInfo("Exportation Linker", reference);
-                    displayServiceProperties("Exportation Linker", reference, "\t\t");
+                    StringBuilder sb=new StringBuilder();
+                    sb.append(displayServiceInfo(reference));
+                    sb.append(createASCIIBox("Properties", displayServiceProperties(reference)));
+                    sbFinal.append(createASCIIBox("Exportation Linker",sb));
                 }
             }
             if (!importationLinkerRef.isEmpty()) {
                 for (ServiceReference reference : importationLinkerRef) {
-                    displayServiceInfo("Importation Linker", reference);
-                    displayServiceProperties("Importation Linker", reference, "\t\t");
+                    StringBuilder sb=new StringBuilder();
+                    sb.append(displayServiceInfo(reference));
+                    sb.append(createASCIIBox("Properties", displayServiceProperties(reference)));
+                    sbFinal.append(createASCIIBox("Importation Linker", sb));
                 }
             }
         }
+        System.out.println(sbFinal);
     }
 
     // ---------------- DISCOVERY
@@ -237,14 +265,20 @@ public class FuchsiaGogoCommand {
     @Descriptor("Gets the discovery available in the platform")
     public void discovery(@Descriptor("discovery [discovery name]") String... parameters) {
         List<ServiceReference> discoveryRef = getAllServiceRefs(DiscoveryService.class);
+        StringBuilder sbFinal=new StringBuilder();
         if (discoveryRef.isEmpty()) {
-            System.out.println("No discovery available.");
+            sbFinal.append("No discovery available.%s");
         } else {
             for (ServiceReference reference : discoveryRef) {
-                displayServiceInfo("Discovery", reference);
-                displayServiceProperties("Discovery", reference, "\t\t");
+                StringBuilder sb=new StringBuilder();
+                sb.append(displayServiceInfo(reference));
+                sb.append(createASCIIBox("Properties",displayServiceProperties(reference)));
+
+                sbFinal.append(createASCIIBox("Discovery",sb));
             }
         }
+
+        System.out.println(sbFinal.toString());
     }
 
     // ---------------- IMPORTER
@@ -252,15 +286,19 @@ public class FuchsiaGogoCommand {
     @Descriptor("Gets the importer available in the platform")
     public void importer(@Descriptor("importer [importer name]") String... parameters) {
         Map<ServiceReference, ImporterService> importerRefsAndServices = getAllServiceRefsAndServices(ImporterService.class);
+        StringBuilder sbFinal=new StringBuilder();
         if (importerRefsAndServices.isEmpty()) {
-            System.out.println("No importers available.");
+            sbFinal.append("No importers available.%s");
         } else {
             for (Map.Entry<ServiceReference, ImporterService> e : importerRefsAndServices.entrySet()) {
-                displayServiceInfo("Importer", e.getKey());
-                System.out.println(String.format("\t*importer name = %s", e.getValue().getName()));
-                displayServiceProperties("Importer", e.getKey(), "\t\t");
+                StringBuilder sb=new StringBuilder();
+                sb.append(displayServiceInfo(e.getKey()));
+                sb.append(String.format("importer name = %s\n", e.getValue().getName()));
+                sb.append(createASCIIBox("Properties", displayServiceProperties(e.getKey())));
+                sbFinal.append(createASCIIBox("Importer",sb));
             }
         }
+        System.out.println(sbFinal.toString());
     }
 
     // ---------------- EXPORTER
@@ -268,15 +306,19 @@ public class FuchsiaGogoCommand {
     @Descriptor("Gets the exporter available in the platform")
     public void exporter(@Descriptor("exporter [exporter name]") String... parameters) {
         Map<ServiceReference, ExporterService> exporterRefsAndServices = getAllServiceRefsAndServices(ExporterService.class);
+        StringBuilder sbFinal=new StringBuilder();
         if (exporterRefsAndServices.isEmpty()) {
             System.out.println("No exporter available.");
         } else {
             for (Map.Entry<ServiceReference, ExporterService> e : exporterRefsAndServices.entrySet()) {
-                displayServiceInfo("Exporter", e.getKey());
-                System.out.println(String.format("\t*exporter name = %s", e.getValue().getName()));
-                displayServiceProperties("Exporter", e.getKey(), "\t\t");
+                StringBuilder sb=new StringBuilder();
+                sb.append(displayServiceInfo(e.getKey()));
+                sb.append(String.format("exporter name = %s\n", e.getValue().getName()));
+                sb.append(createASCIIBox("Properties", displayServiceProperties(e.getKey())));
+                sbFinal.append(createASCIIBox("Exporter",sb));
             }
         }
+        System.out.println(sbFinal.toString());
     }
 
     // ---------------- SEND MESSAGE
@@ -336,18 +378,26 @@ public class FuchsiaGogoCommand {
 
     // ---------------- UTILS DISPLAY
 
-    private static void displayServiceProperties(String prolog, ServiceReference reference, String prefixTabulation) {
-        System.out.printf("%s Service Properties%n", prolog);
+    private static StringBuilder displayServiceProperties(ServiceReference reference) {
+
+        StringBuilder sb=new StringBuilder();
+
         for (String propertyKey : reference.getPropertyKeys()) {
-            System.out.println(String.format(prefixTabulation + "%s\t\t = %s", propertyKey, reference.getProperty(propertyKey)));
+            sb.append(String.format("%s = %s\n", propertyKey, reference.getProperty(propertyKey)));
         }
         if (reference.getPropertyKeys().length == 0) {
-            System.out.println(prefixTabulation + "EMPTY");
+            sb.append("EMPTY");
         }
+
+        return sb;
     }
 
-    private static void displayServiceInfo(String prolog, ServiceReference reference) {
-        System.out.println(String.format("%s [%s] provided by bundle %s (%s)", prolog, reference.getProperty(INSTANCE_NAME_PROPERTY), reference.getBundle().getSymbolicName(), reference.getBundle().getBundleId()));
+    private static StringBuilder displayServiceInfo(ServiceReference reference) {
+        StringBuilder sb=new StringBuilder();
+        sb.append("name:"+reference.getProperty(INSTANCE_NAME_PROPERTY)+"\n");
+        sb.append("bundle:"+reference.getBundle().getSymbolicName()+"["+reference.getBundle().getBundleId()+"]"+"\n");
+
+        return sb;
     }
 
     // ---------------- UTILS GOGO ARGUMENTS
@@ -376,6 +426,67 @@ public class FuchsiaGogoCommand {
             return value;
         }
         return null;
+    }
+
+
+    private static String reproduceChar(String ch, Integer amount){
+
+        StringBuffer sb=new StringBuffer();
+
+        for(int x=0;x<amount;x++){
+            sb.append(ch);
+        }
+
+        return sb.toString();
+    }
+
+    private static StringBuilder createASCIIBox(String prolog, StringBuilder sb){
+        StringBuilder result=new StringBuilder();
+
+        StringReader sr=new StringReader(sb.toString());
+
+        List<Integer> sizeColums=new ArrayList<Integer>();
+
+        String line;
+        try {
+
+            BufferedReader br=new BufferedReader(sr);
+            while((line=br.readLine())!=null){
+                sizeColums.add(Integer.valueOf(line.length()));
+            }
+
+            Collections.sort(sizeColums);
+            Collections.reverse(sizeColums);
+
+            Integer maxColumn=sizeColums.isEmpty()?0:sizeColums.get(0);
+            if(maxColumn>45) maxColumn=45;
+            Integer prologSize=prolog.length();
+
+            result.append(reproduceChar(" ",prologSize)+"."+reproduceChar("_",maxColumn)+"\n");
+
+            sr=new StringReader(sb.toString());
+            br=new BufferedReader(sr);
+            int lineIndex=0;
+            while((line=br.readLine())!=null){
+
+                if(lineIndex==((Integer)(sizeColums.size()/2))){
+                    result.append(prolog);
+                }else {
+                    result.append(reproduceChar(" ",prologSize));
+                }
+
+                result.append("|" + line + "\n");
+                lineIndex++;
+            }
+
+            result.append(reproduceChar(" ",prologSize)+"|"+reproduceChar("_",maxColumn)+"\n");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+
     }
 
 }
