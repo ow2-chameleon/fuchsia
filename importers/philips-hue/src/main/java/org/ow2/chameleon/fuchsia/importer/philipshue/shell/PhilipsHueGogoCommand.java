@@ -20,28 +20,28 @@ package org.ow2.chameleon.fuchsia.importer.philipshue.shell;
  * #L%
  */
 
+import com.philips.lighting.hue.listener.PHLightListener;
 import com.philips.lighting.hue.sdk.utilities.PHUtilities;
 import com.philips.lighting.model.PHBridge;
+import com.philips.lighting.model.PHHueError;
 import com.philips.lighting.model.PHLight;
 import com.philips.lighting.model.PHLightState;
 import org.apache.felix.ipojo.annotations.*;
 import org.apache.felix.service.command.Descriptor;
 
-import java.util.Set;
+import java.util.Hashtable;
+import java.util.List;
 
 @Component(immediate = true)
 @Instantiate
 @Provides
-public class PhilipsHueGogoCommand {
+public class PhilipsHueGogoCommand extends PHLightListener{
 
     @ServiceProperty(name = "osgi.command.scope", value = "philips")
     private String scope;
 
     @ServiceProperty(name = "osgi.command.function", value = "{}")
     private String[] function = new String[]{"phlist","phset"};
-
-    @Requires(specification = "com.philips.lighting.model.PHLight",optional = true)
-    Set<PHLight> lights;
 
     @Requires(optional = true)
     PHBridge bridge;
@@ -50,12 +50,33 @@ public class PhilipsHueGogoCommand {
 
     }
 
+    private String reproduceChar(String ch, int amount){
+
+        StringBuffer sb=new StringBuffer();
+
+        for(int x=0;x<amount;x++){
+            sb.append(ch);
+        }
+
+        return sb.toString();
+    }
+
     @Descriptor  (value = "List all lights available")
     public void phlist(@Descriptor("phlist") String... parameters) {
-        for(PHLight light:lights){
-            System.out.println(light.toString());
-            System.out.println("state:"+light.getLastKnownLightState().isOn());
+        StringBuffer sb=new StringBuffer();
+        bridge.findNewLights(this);
+        for(PHLight light:bridge.getResourceCache().getAllLights()){
+            int lightNameLength=light.getName().length();
+            int lightTypeLength=light.getLightType().name().length();
+            sb.append(reproduceChar(" ", lightNameLength)+ reproduceChar("_",lightTypeLength)+"\n");
+            sb.append(reproduceChar(" ", lightNameLength)+"|ID:"+light.getIdentifier()+"\n");
+            sb.append(reproduceChar(" ", lightNameLength)+"|Name:"+light.getName()+"\n");
+            sb.append(light.getName()+"|Model:"+light.getModelNumber()+"\n");
+            sb.append(reproduceChar(" ", lightNameLength)+"|Type:"+light.getLightType()+"\n");
+            sb.append(reproduceChar(" ", lightNameLength)+"|State:" + (light.getLastKnownLightState().isOn() ? "ON" : "OFF")+"\n");
+            sb.append(reproduceChar(" ", lightNameLength)+"|"+ reproduceChar("_",lightTypeLength));
         }
+        System.out.println(sb.toString());
     }
 
     @Descriptor  (value = "Change light parameters, for a specific lamp or for all light plugged into the bridge")
@@ -71,7 +92,7 @@ public class PhilipsHueGogoCommand {
 
         Boolean value = Boolean.valueOf(valueStr);
 
-        for (PHLight light : lights) {
+        for (PHLight light : bridge.getResourceCache().getAllLights()) {
             if (nameStr == null || nameStr.equals(light.getName())) {
                 PHLightState lightState = new PHLightState();
 
@@ -128,4 +149,15 @@ public class PhilipsHueGogoCommand {
         return null;
     }
 
+    public void onSuccess() {
+
+    }
+
+    public void onError(int i, String s) {
+
+    }
+
+    public void onStateUpdate(Hashtable<String, String> stringStringHashtable, List<PHHueError> phHueErrors) {
+
+    }
 }
