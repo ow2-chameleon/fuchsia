@@ -2,11 +2,10 @@
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="generator" content="Asciidoctor 0.1.4">
+<meta name="generator" content="Asciidoctor 0.1.3">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Using as maven dependency</title>
-<style>
-</style>
+<link rel="stylesheet" href="./stylesheets/asciidoc.css">
 </head>
 <body class="article">
 <div id="header">
@@ -18,7 +17,7 @@
 <p>Adopting Fuchsia is a straightforward task if you are used to Maven. First we need to add the OW2 maven repository to our list of repositories (as below).</p>
 </div>
 <div class="listingblock">
-<div class="content">
+<div class="content monospaced">
 <pre class="highlight"><code class="xml language-xml">&lt;project ... &gt;
 ...
 &lt;repositories&gt;
@@ -41,7 +40,7 @@
 <p>Now, we have to declare one or more Fuchsia module <strong>as a maven dependency</strong> of your project.</p>
 </div>
 <div class="listingblock">
-<div class="content">
+<div class="content monospaced">
 <pre class="highlight"><code class="xml language-xml">&lt;dependency&gt;
     &lt;groupId&gt;org.ow2.chameleon.fuchsia&lt;/groupId&gt;
     &lt;artifactId&gt;org.ow2.chameleon.fuchsia.core&lt;/artifactId&gt;

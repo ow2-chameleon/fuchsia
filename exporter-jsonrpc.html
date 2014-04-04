@@ -2,11 +2,10 @@
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="generator" content="Asciidoctor 0.1.4">
+<meta name="generator" content="Asciidoctor 0.1.3">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Export JSONRPC</title>
-<style>
-</style>
+<link rel="stylesheet" href="./stylesheets/asciidoc.css">
 </head>
 <body class="article">
 <div id="header">
@@ -51,7 +50,7 @@
 <div class="sect4">
 <h5 id="_exporter_instantiation">Exporter instantiation</h5>
 <div class="listingblock">
-<div class="content">
+<div class="content monospaced">
 <pre class="highlight"><code class="java language-java">       Instance jsonRPCExporter = instance()
                 .of("org.ow2.chameleon.fuchsia.exporter.jsonrpc.JSONRPCExporter")
                 .with("target").setto("(fuchsia.export.jsonrpc.instance=*)");</code></pre>
@@ -61,7 +60,7 @@
 <div class="sect4">
 <h5 id="_linker_instantiation">Linker instantiation</h5>
 <div class="listingblock">
-<div class="content">
+<div class="content monospaced">
 <pre class="highlight"><code class="java language-java">        Instance jsonRPCExporterLinker = instance()
             .of(FuchsiaConstants.DEFAULT_EXPORTATION_LINKER_FACTORY_NAME)
             .with(ExportationLinker.FILTER_EXPORTDECLARATION_PROPERTY).setto("(fuchsia.export.jsonrpc.instance=*)")
@@ -72,7 +71,7 @@
 <div class="sect4">
 <h5 id="_export_declaration_instantiation">Export Declaration instantiation</h5>
 <div class="listingblock">
-<div class="content">
+<div class="content monospaced">
 <pre class="highlight"><code class="java language-java">
         Map&lt;String, Object&gt; metadata=new HashMap&lt;String, Object&gt;();
 
@@ -99,7 +98,7 @@
 <p>You can use <a href="http://fr.wikipedia.org/wiki/CURL">cURL</a> to test if your instance was properly exported.</p>
 </div>
 <div class="listingblock">
-<div class="content">
+<div class="content monospaced">
 <pre class="highlight"><code class="xml language-xml">linux-shell# curl -i -X POST -d '{"jsonrpc": "2.0", "method": "helloworld", "params": ["earth"], "id": 1}' http://localhost:8080/JSONRPC/DummyPojoInstance</code></pre>
 </div>
 </div>
