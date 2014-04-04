@@ -1,0 +1,145 @@
+Philips hue in Fuchsia
+~~~~~~~~~~~~~~~~~~~~~~
+
+Description
+^^^^^^^^^^^
+
+We are ready to use Philips Hue, simply by:
+
+* deploying a philips hue discovery - detects the presense of a Philips Hue bridge and authenticates on it.
+* deploying a philips hue importer - makes the lamp accessible by OSGi
+* configure a linker between the discovery and importer
+
+And at each step you can verify that they were correctly deployed, this is the biggest advantage of using Fuchsia as a device framework.
+
+Building the platform
+^^^^^^^^^^^^^^^^^^^^^
+
+In order to build the platform you are going to download the https://github.com/ow2-chameleon/fuchsia/[source code]. Then you need two other steps:
+
+* mvn clean install #compiles the project
+* mvn -f distribution/pom.xml clean install -Pcore,discovery-philips-hue,importer-philips-hue #creates a distribution with all philips base code
+
+The only thing left to do is to start your platform, on directory _distribution/target/chameleon-distribution_ launch the application:
+
+* sh chameleon.sh --interactive
+
+That is it, at this point you have all the platform running, now you need to declare your *intentions*.
+
+Declaring intentions
+^^^^^^^^^^^^^^^^^^^^
+
+This is done by java code, you have to deploy a bundle in the platform that creates the intentions, which is basically instantiate the components: discovery, importer and the linkers. This can be done with the code below:
+
+[source]
+----
+@Configuration
+public class Config {
+
+    Instance philipsBridgeImporter = instance()
+            .of("org.ow2.chameleon.fuchsia.importer.philipshue.PhilipsHueBridgeImporter");
+
+    Instance philipsImporter = instance()
+            .of("org.ow2.chameleon.fuchsia.importer.philipshue.PhilipsHueImporter");
+
+    Instance philipsLinkerBridge = instance()
+            .of(FuchsiaConstants.DEFAULT_IMPORTATION_LINKER_FACTORY_NAME)
+            .with(ImportationLinker.FILTER_IMPORTDECLARATION_PROPERTY).setto("(discovery.philips.bridge.type=*)")
+            .with(ImportationLinker.FILTER_IMPORTERSERVICE_PROPERTY).setto("(instance.name=philipsBridgeImporter)");
+
+    Instance philipsLinker = instance()
+            .of(FuchsiaConstants.DEFAULT_IMPORTATION_LINKER_FACTORY_NAME)
+            .with(ImportationLinker.FILTER_IMPORTDECLARATION_PROPERTY).setto("(discovery.philips.device.name=*)")
+            .with(ImportationLinker.FILTER_IMPORTERSERVICE_PROPERTY).setto("(instance.name=philipsImporter)");
+
+}
+----
+
+Check if everything is working
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+On the shell you can type the command below, and you should obtain the list of all installed importers
+
+[source]
+----
+user@shelbie$ importer
+        ._____________________________________________
+        |name:philipsImporter
+        |bundle:org.ow2.chameleon.fuchsia.importer.philips-hue[17]
+        |importer name = PhilipsHueImporter
+        |          ._____________________________________________
+        |          |factory.name = org.ow2.chameleon.fuchsia.importer.philipshue.PhilipsHueImporter
+Importer|          |instance.name = philipsImporter
+        |Properties|objectClass = [Ljava.lang.String;@1e10aef
+        |          |service.id = 317
+        |          |target = (discovery.philips.device.name=*)
+        |          |_____________________________________________
+        |_____________________________________________
+        ._____________________________________________
+        |name:philipsBridgeImporter
+        |bundle:org.ow2.chameleon.fuchsia.importer.philips-hue[17]
+        |importer name = PhilipsHueBridgeImporter
+        |          ._____________________________________________
+        |          |factory.name = org.ow2.chameleon.fuchsia.importer.philipshue.PhilipsHueBridgeImporter
+Importer|          |instance.name = philipsBridgeImporter
+        |Properties|objectClass = [Ljava.lang.String;@194ef9f
+        |          |service.id = 315
+        |          |target = (discovery.philips.bridge.type=*)
+        |          |_____________________________________________
+        |_____________________________________________
+
+user@shelbie$
+----
+
+After we can check is our linkers are all in place:
+
+[source]
+----
+user@shelbie$ linker
+                  ._____________________________________________
+                  |name:philipsLinker
+                  |bundle:org.ow2.chameleon.fuchsia.core[21]
+                  |          ._____________________________________________
+                  |          |factory.name = FuchsiaDefaultImportationLinkerFactory
+                  |          |fuchsia.linker.filter.importDeclaration = (discovery.philips.device.name=*)
+Importation Linker|          |fuchsia.linker.filter.importerService = (instance.name=philipsImporter)
+                  |Properties|instance.name = philipsLinker
+                  |          |objectClass = [Ljava.lang.String;@3e1a61
+                  |          |service.id = 323
+                  |          |_____________________________________________
+                  |_____________________________________________
+                  ._____________________________________________
+                  |name:philipsLinkerBridge
+                  |bundle:org.ow2.chameleon.fuchsia.core[21]
+                  |          ._____________________________________________
+                  |          |factory.name = FuchsiaDefaultImportationLinkerFactory
+                  |          |fuchsia.linker.filter.importDeclaration = (discovery.philips.bridge.type=*)
+Importation Linker|          |fuchsia.linker.filter.importerService = (instance.name=philipsBridgeImporter)
+                  |Properties|instance.name = philipsLinkerBridge
+                  |          |objectClass = [Ljava.lang.String;@1361707
+                  |          |service.id = 321
+                  |          |_____________________________________________
+                  |_____________________________________________
+
+user@shelbie$
+----
+
+Testing your PhilipsHue
+^^^^^^^^^^^^^^^^^^^^^^^
+
+There are two commands to manipulate and verify the actual state of the lamp, they are: *phlist* and *phset*
+
+If your lamp was corrected detected, just type _phlist_ (as below) and you should get the list of the philips light that are available along with their state.
+
+[source]
+----
+user@shelbie$ phlist
+----
+
+In case you wanna change its color (in fact change the color of all lamps) you can use the command _phset_ as below to set the color to red:
+
+[source]
+----
+user@shelbie$ phset -on true -r 255
+----
+

@@ -1,5 +1,5 @@
 Filebased-Discovery
-~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~
 
 First things first, in order to have an discovery we need to create a fuchsia distribution that embeds it, or to use an already existing distribution and add the modules required. Below we will show you how to use couples of discoveries that are available in the platform.
 

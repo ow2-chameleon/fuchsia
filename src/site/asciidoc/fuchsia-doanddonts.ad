@@ -1,5 +1,5 @@
 
-Fuchsia can materialize an OSGi outcast service (not visible in the platform) into the OSGi platform. Natively fuchsia can materialize:
+Fuchsia can materialize an outcast service (not visible in the OSGi platform) into the OSGi platform. Natively fuchsia can materialize:
 
 * mDNS/DNSSD, bringing up the provider's IP and the service type. This allows you to connect directly to the service without having to implement the discovery
 * UPnP services published on the network

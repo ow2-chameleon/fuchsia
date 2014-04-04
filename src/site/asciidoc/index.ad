@@ -39,6 +39,8 @@ include::examples.ad[]
 Tutorial Style
 --------------
 
+include::tutorial-philips-hue.ad[]
+
 include::exporter-jsonrpc.ad[]
 
 include::importer-jsonrpc.ad[]
