@@ -34,9 +34,18 @@ public class PhilipsHueImporterConfig {
             .of("org.ow2.chameleon.fuchsia.importer.philipshue.PhilipsHueImporter")
             .with("target").setto("(discovery.philips.device.name=*)");
 
+    Instance philipsBridgeImporter = instance()
+            .of("org.ow2.chameleon.fuchsia.importer.philipshue.PhilipsHueBridgeImporter")
+            .with("target").setto("(discovery.philips.bridge.type=*)");
+
     Instance philipsLinker = instance()
             .of(FuchsiaConstants.DEFAULT_IMPORTATION_LINKER_FACTORY_NAME)
             .with(ImportationLinker.FILTER_IMPORTDECLARATION_PROPERTY).setto("(discovery.philips.device.name=*)")
             .with(ImportationLinker.FILTER_IMPORTERSERVICE_PROPERTY).setto("(instance.name=philipsImporter)");
+
+    Instance philipsLinkerBridge = instance()
+            .of(FuchsiaConstants.DEFAULT_IMPORTATION_LINKER_FACTORY_NAME)
+            .with(ImportationLinker.FILTER_IMPORTDECLARATION_PROPERTY).setto("(discovery.philips.bridge.type=*)")
+            .with(ImportationLinker.FILTER_IMPORTERSERVICE_PROPERTY).setto("(instance.name=philipsBridgeImporter)");
 
 }

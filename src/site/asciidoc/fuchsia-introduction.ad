@@ -15,7 +15,7 @@ You can administrate and monitor all the exchange of your OSGi platform with ext
 .There exist essentially 4 types of entities inside fuchsia that you need to understand before go hands-on the code:
 * Declaration, it is the metadata that describes a device or a service
 * Discovery, responsible for the detection of a device/service, in Fuchsia that means create a *Declaration* and adding it to the OSGi registry
-* Processors, it represents the task itself.
+* Processors, it represents the task itself, being split in two types *Importer* or *Exporter*
 * Linkers, connects a declaration to a processor, evaluate the constraints to be respected in order to connect those two.
 
 Declarations

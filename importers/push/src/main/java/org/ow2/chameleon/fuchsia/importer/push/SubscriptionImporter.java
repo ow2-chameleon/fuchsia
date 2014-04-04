@@ -79,7 +79,7 @@ public class SubscriptionImporter extends AbstractImporterComponent implements S
 
     @PostRegistration
     public void registration(ServiceReference serviceReference) {
-        this.serviceReference = serviceReference;
+        super.setServiceReference(serviceReference);
     }
 
     @Validate
@@ -204,7 +204,7 @@ public class SubscriptionImporter extends AbstractImporterComponent implements S
 
             callbacksRegistered.add(callback);
 
-            importDeclaration.handle(serviceReference);
+            super.handleImportDeclaration(importDeclaration);
         } catch (Exception e) {
             LOG.error("failed to import declaration, with the message: " + e.getMessage(), e);
         }
@@ -221,7 +221,7 @@ public class SubscriptionImporter extends AbstractImporterComponent implements S
         String hubTopic = data.get("push.hub.topic").toString();//"http://blogname.blogspot.com/feeds/posts/default";
         String targetCallback = data.get("push.subscriber.callback").toString();
 
-        importDeclaration.unhandle(serviceReference);
+        super.unhandleImportDeclaration(importDeclaration);
 
         for (String callback : callbacksRegistered) {
 
