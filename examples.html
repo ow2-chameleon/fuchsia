@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="generator" content="Asciidoctor 0.1.3">
+<meta name="generator" content="Asciidoctor 0.1.4">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Filebased-Discovery</title>
-<link rel="stylesheet" href="./stylesheets/asciidoc.css">
+<style>
+</style>
 </head>
 <body class="article">
 <div id="header">
@@ -31,7 +32,7 @@
 <p>An example of such file is this one:</p>
 </div>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code>id=mqtt-dispatch-event-admin
 exporter.id=camera-exporter
 
@@ -45,7 +46,7 @@ mqtt.queue=public</code></pre>
 <p>If you type <strong>declaration</strong> in the console you should see:</p>
 </div>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code>Service properties:
 		objectClass = [Ljava.lang.String;@26f6a1
 		service.id = 319
@@ -82,7 +83,7 @@ Metadata
 <p>You should see all your printers in form of:</p>
 </div>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code>Metadata
 	id=hp LaserJet 2300 (scribe missions)
 	discovery.mdns.device.name=hp LaserJet 2300 (scribe missions)
@@ -99,7 +100,7 @@ Metadata
 <p>And if you type <strong>discovery</strong> in the console you should see:</p>
 </div>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code>Discovery [DNSSDDiscovery] provided by bundle mdns (19)
 	Service properties:
 		dnssd.service.type = _printer._tcp.local.
@@ -116,7 +117,7 @@ Metadata
 <p>The following configuration that makes available to import all the printers on the local network inside the platform with requiring any other information than the type of the device that interest us.</p>
 </div>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code class="java language-java">@Configuration
 public class DNSSDInitializer {
     Instance dnssdDiscovery = instance()

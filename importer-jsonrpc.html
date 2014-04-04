@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="generator" content="Asciidoctor 0.1.3">
+<meta name="generator" content="Asciidoctor 0.1.4">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Import JSONRPC</title>
-<link rel="stylesheet" href="./stylesheets/asciidoc.css">
+<style>
+</style>
 </head>
 <body class="article">
 <div id="header">
@@ -53,7 +54,7 @@
 <div class="sect4">
 <h5 id="_importer_instantiation">Importer instantiation</h5>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code class="java language-java">     Instance jsonRPCImporter = instance()
             .of("Fuchsia-Importer:JSON-RPC")
             .with(ImporterService.TARGET_FILTER_PROPERTY).setto("(configs=jsonrpc)");</code></pre>
@@ -63,7 +64,7 @@
 <div class="sect4">
 <h5 id="_linker_instantiation">Linker instantiation</h5>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code class="java language-java">        Instance jsonRPCImporterLinker = instance()
             .of(FuchsiaConstants.DEFAULT_IMPORTATION_LINKER_FACTORY_NAME)
             .with(FILTER_IMPORTDECLARATION_PROPERTY).setto("(configs=jsonrpc)")
@@ -74,7 +75,7 @@
 <div class="sect4">
 <h5 id="_importer_declaration_instantiation">Importer Declaration instantiation</h5>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code class="java language-java">        Map&lt;String, Object&gt; metadata=new HashMap&lt;String, Object&gt;();
         metadata.put(ID, "endipoint");
         metadata.put(URL, "http://localhost:8080/JSONRPC/DummyPojoInstance");
@@ -100,7 +101,7 @@
 <p>You can use <strong>felix shelbie shell</strong> and inspect the importer bundle to check if it has correcly imported our JSONRPC remote instance</p>
 </div>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code class="xml language-xml">shelbie-shell$ lb
 ..
    31|Active     |    1|OW2 Chameleon - Fuchsia Importer JSON-RPC (0.0.2.SNAPSHOT)
