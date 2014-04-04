@@ -50,6 +50,17 @@
 <li><a href="#_import_a_mqtt_service">Import a MQTT service</a></li>
 <li><a href="#_exporting_protobuffer_rpc_service">Exporting Protobuffer RPC service</a></li>
 <li><a href="#_importing_protobuffer_rpc_service">Importing Protobuffer RPC service</a></li>
+<li><a href="#_filebased_discovery">Filebased-Discovery</a></li>
+</ol>
+</li>
+<li><a href="#_tutorial_style">Tutorial Style</a></li>
+<li>
+<ol type="none" class="sectlevel2">
+<li><a href="#_philips_hue_in_fuchsia">Philips hue in Fuchsia</a></li>
+<li><a href="#_export_jsonrpc">Export JSONRPC</a></li>
+<li><a href="#_import_jsonrpc">Import JSONRPC</a></li>
+<li><a href="#_export_jaxws">Export JAXWS</a></li>
+<li><a href="#_import_jaxws">Import JAXWS</a></li>
 </ol>
 </li>
 </ol>
@@ -1367,41 +1378,44 @@ public class BookClient {
 <div class="paragraph">
 <p>The only reason we added the filter in <strong>@Required</strong> was to make sure that the remote instance (created by imported) is injected. So this is not mandatory in regular cases.</p>
 </div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_filebased_discovery">Filebased-Discovery</h3>
 <div class="paragraph">
-<p>Filebased-Discovery</p>
+<p>First things first, in order to have an discovery we need to create a fuchsia distribution that embeds it, or to use an already existing distribution and add the modules required. Below we will show you how to use couples of discoveries that are available in the platform.</p>
+</div>
+<div class="sect3">
+<h4 id="_what_it_does">What it does?!</h4>
+<div class="paragraph">
+<p>As seen in the introduction the fundamental task of a discovery is to create an instance of Declaration which represents the availability of a service/device, and the intrinsic information of such service/device are contained inside <strong>Declaration</strong> as properties (stored in a Map).</p>
+</div>
+<div class="paragraph">
+<p>The idea behind having a filebased discovery, is in fact be able to deploy a file (property file style, containing key value mapping).</p>
+</div>
+<div class="paragraph">
+<p>In order to activate the filebased discovery its enough to compile the distribution with the profile <strong>discovery-filebased</strong> (meaning mvn clean install -Pcore,discovery-filebased), from the moment you compile a distribution with this parameter and you launch this distribution a directory called <strong>load</strong> will be created in the root of the chameleon distribution ($FUCHSIA/distribution/target/chameleon-distribution), this directory will be used to deploy your files that contain the key-value that you need to be instantiated in the platform.</p>
+</div>
+<div class="paragraph">
+<p>An example of such file is this one:</p>
 </div>
 <div class="listingblock">
 <div class="content monospaced">
-<pre class="highlight"><code class="~~~~~~~~~~~ language-~~~~~~~~~~~">
-First things first, in order to have an discovery we need to create a fuchsia distribution that embeds it, or to use an already existing distribution and add the modules required. Below we will show you how to use couples of discoveries that are available in the platform.
-
-What it does?!
-^^^^^^^^^^^^^^
-
-As seen in the introduction the fundamental task of a discovery is to create an instance of Declaration which represents the availability of a service/device, and the intrinsic information of such service/device are contained inside **Declaration** as properties (stored in a Map).
-
-The idea behind having a filebased discovery, is in fact be able to deploy a file (property file style, containing key value mapping).
-
-In order to activate the filebased discovery its enough to compile the distribution with the profile **discovery-filebased** (meaning mvn clean install -Pcore,discovery-filebased), from the moment you compile a distribution with this parameter and you launch this distribution a directory called **load** will be created in the root of the chameleon distribution ($FUCHSIA/distribution/target/chameleon-distribution), this directory will be used to deploy your files that contain the key-value that you need to be instantiated in the platform.
-
-An example of such file is this one:
-
-[source]
-----
-id=mqtt-dispatch-event-admin
+<pre class="highlight"><code>id=mqtt-dispatch-event-admin
 exporter.id=camera-exporter
 
 deviceType=camera
 deviceSubType=another
 
-mqtt.queue=public
-----
-
-If you type **declaration** in the console you should see:
-
-[source]
-----
-Service properties:
+mqtt.queue=public</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you type <strong>declaration</strong> in the console you should see:</p>
+</div>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code>Service properties:
 		objectClass = [Ljava.lang.String;@26f6a1
 		service.id = 319
 Metadata
@@ -1409,29 +1423,36 @@ Metadata
 	deviceType=camera
 	deviceSubType=another
 	exporter.id=camera-exporter
-	mqtt.queue=public
-----
-
-This indicated that the file that you have just deployed have been read and turned into a declaration.
-
-mDNS
-^^^^
-
-mDNS is a discovery protocol based on the previous Bonjour(c), from Apple. To perform a simple test of such protocol, its enough to compile a fuchsia distribution with the following parameters:
-
-'mvn clean install -Pcore,mdns,mdns-config'
-
-core and mdns are the modules that we need, in this case, the fuchsia core types and the discovery module itself. The 3td element 'mdns-config' is the element responsible to configure the discovery. Even though the **mdns** module is available with the -Pmdns profile, it is necessary to create an instance of it, shaping it as we wish. We will explain in few paragraphs how to do that manually, but for now we will use an configuration example that setup the discovery to find out all the printers available in the local network, for that we add the profile -Pmdns-config.
-
-To verify that the discovery works properly you can use the console.
-
-If you type **declaration** on the console you should see an output similar to this:
-
-You should see all your printers in form of:
-
-[source]
-----
-Metadata
+	mqtt.queue=public</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This indicated that the file that you have just deployed have been read and turned into a declaration.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_mdns">mDNS</h4>
+<div class="paragraph">
+<p>mDNS is a discovery protocol based on the previous Bonjour(c), from Apple. To perform a simple test of such protocol, its enough to compile a fuchsia distribution with the following parameters:</p>
+</div>
+<div class="paragraph">
+<p><em>mvn clean install -Pcore,mdns,mdns-config</em></p>
+</div>
+<div class="paragraph">
+<p>core and mdns are the modules that we need, in this case, the fuchsia core types and the discovery module itself. The 3td element <em>mdns-config</em> is the element responsible to configure the discovery. Even though the <strong>mdns</strong> module is available with the -Pmdns profile, it is necessary to create an instance of it, shaping it as we wish. We will explain in few paragraphs how to do that manually, but for now we will use an configuration example that setup the discovery to find out all the printers available in the local network, for that we add the profile -Pmdns-config.</p>
+</div>
+<div class="paragraph">
+<p>To verify that the discovery works properly you can use the console.</p>
+</div>
+<div class="paragraph">
+<p>If you type <strong>declaration</strong> on the console you should see an output similar to this:</p>
+</div>
+<div class="paragraph">
+<p>You should see all your printers in form of:</p>
+</div>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code>Metadata
 	id=hp LaserJet 2300 (scribe missions)
 	discovery.mdns.device.name=hp LaserJet 2300 (scribe missions)
 Metadata
@@ -1440,82 +1461,123 @@ Metadata
 	Service properties:
 		objectClass = [Ljava.lang.String;@fcc720
 		service.id = 312
-...
-----
-
-And if you type **discovery** in the console you should see:
-
-[source]
-----
-Discovery [DNSSDDiscovery] provided by bundle mdns (19)
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And if you type <strong>discovery</strong> in the console you should see:</p>
+</div>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code>Discovery [DNSSDDiscovery] provided by bundle mdns (19)
 	Service properties:
 		dnssd.service.type = _printer._tcp.local.
 		factory.name = DNSSDDiscoveryFactory
 		instance.name = DNSSDDiscovery
 		objectClass = [Ljava.lang.String;@1db4108
-		service.id = 301
-----
-
-In this approach we used a configuration that was available in Fuchsia. But that is not usually the case; most of the time we are required to instantiate the discovery ourselves configure the filter in a way that is the application need it.
-
-The following configuration that makes available to import all the printers on the local network inside the platform with requiring any other information than the type of the device that interest us.
-
-[source,java]
-----
-@Configuration
+		service.id = 301</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this approach we used a configuration that was available in Fuchsia. But that is not usually the case; most of the time we are required to instantiate the discovery ourselves configure the filter in a way that is the application need it.</p>
+</div>
+<div class="paragraph">
+<p>The following configuration that makes available to import all the printers on the local network inside the platform with requiring any other information than the type of the device that interest us.</p>
+</div>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code class="java language-java">@Configuration
 public class DNSSDInitializer {
     Instance dnssdDiscovery = instance()
             .of("DNSSDDiscoveryFactory")
             .named("DNSSDDiscovery")
             .with("dnssd.service.type").setto("_printer._tcp.local.");
 
-}
-----
-
-[TIP]
-=====
-This instance can be created in any fashion, as long as it is an http://www.ipojo.org[iPOJO] instance.
-=====
-
-Tutorial Style
---------------
-
-Philips hue in Fuchsia
-~~~~~~~~~~~~~~~~~~~~~~
-
-Description
-^^^^^^^^^^^
-
-We are ready to use Philips Hue, simply by:
-
-* deploying a philips hue discovery - detects the presense of a Philips Hue bridge and authenticates on it.
-* deploying a philips hue importer - makes the lamp accessible by OSGi
-* configure a linker between the discovery and importer
-
-And at each step you can verify that they were correctly deployed, this is the biggest advantage of using Fuchsia as a device framework.
-
-Building the platform
-^^^^^^^^^^^^^^^^^^^^^
-
-In order to build the platform you are going to download the https://github.com/ow2-chameleon/fuchsia/[source code]. Then you need two other steps:
-
-* mvn clean install #compiles the project
-* mvn -f distribution/pom.xml clean install -Pcore,discovery-philips-hue,importer-philips-hue #creates a distribution with all philips base code
-
-The only thing left to do is to start your platform, on directory _distribution/target/chameleon-distribution_ launch the application:
-
-* sh chameleon.sh --interactive
-
-That is it, at this point you have all the platform running, now you need to declare your *intentions*.
-
-Declaring intentions
-^^^^^^^^^^^^^^^^^^^^
-
-This is done by java code, you have to deploy a bundle in the platform that creates the intentions, which is basically instantiate the components: discovery, importer and the linkers. This can be done with the code below:
-
-[source]
-----
-@Configuration
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<img src="./images/icons/tip.png" alt="Tip">
+</td>
+<td class="content">
+<div class="paragraph">
+<p>This instance can be created in any fashion, as long as it is an <a href="http://www.ipojo.org">iPOJO</a> instance.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_tutorial_style">Tutorial Style</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_philips_hue_in_fuchsia">Philips hue in Fuchsia</h3>
+<div class="sect3">
+<h4 id="_description">Description</h4>
+<div class="paragraph">
+<p>We are ready to use Philips Hue, simply by:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>deploying a philips hue discovery - detects the presense of a Philips Hue bridge and authenticates on it.</p>
+</li>
+<li>
+<p>deploying a philips hue importer - makes the lamp accessible by OSGi</p>
+</li>
+<li>
+<p>configure a linker between the discovery and importer</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>And at each step you can verify that they were correctly deployed, this is the biggest advantage of using Fuchsia as a device framework.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_building_the_platform">Building the platform</h4>
+<div class="paragraph">
+<p>In order to build the platform you are going to download the <a href="https://github.com/ow2-chameleon/fuchsia/">source code</a>. Then you need two other steps:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>mvn clean install #compiles the project</p>
+</li>
+<li>
+<p>mvn -f distribution/pom.xml clean install -Pcore,discovery-philips-hue,importer-philips-hue #creates a distribution with all philips base code</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The only thing left to do is to start your platform, on directory <em>distribution/target/chameleon-distribution</em> launch the application:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>sh chameleon.sh --interactive</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>That is it, at this point you have all the platform running, now you need to declare your <strong>intentions</strong>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_declaring_intentions">Declaring intentions</h4>
+<div class="paragraph">
+<p>This is done by java code, you have to deploy a bundle in the platform that creates the intentions, which is basically instantiate the components: discovery, importer and the linkers. This can be done with the code below:</p>
+</div>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code>@Configuration
 public class Config {
 
     Instance philipsBridgeImporter = instance()
@@ -1534,17 +1596,18 @@ public class Config {
             .with(ImportationLinker.FILTER_IMPORTDECLARATION_PROPERTY).setto("(discovery.philips.device.name=*)")
             .with(ImportationLinker.FILTER_IMPORTERSERVICE_PROPERTY).setto("(instance.name=philipsImporter)");
 
-}
-----
-
-Check if everything is working
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-On the shell you can type the command below, and you should obtain the list of all installed importers
-
-[source]
-----
-user@shelbie$ importer
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_check_if_everything_is_working">Check if everything is working</h4>
+<div class="paragraph">
+<p>On the shell you can type the command below, and you should obtain the list of all installed importers</p>
+</div>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code>user@shelbie$ importer
         ._____________________________________________
         |name:philipsImporter
         |bundle:org.ow2.chameleon.fuchsia.importer.philips-hue[17]
@@ -1570,14 +1633,15 @@ Importer|          |instance.name = philipsBridgeImporter
         |          |_____________________________________________
         |_____________________________________________
 
-user@shelbie$
-----
-
-After we can check is our linkers are all in place:
-
-[source]
-----
-user@shelbie$ linker
+user@shelbie$</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After we can check is our linkers are all in place:</p>
+</div>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code>user@shelbie$ linker
                   ._____________________________________________
                   |name:philipsLinker
                   |bundle:org.ow2.chameleon.fuchsia.core[21]
@@ -1603,77 +1667,95 @@ Importation Linker|          |fuchsia.linker.filter.importerService = (instance.
                   |          |_____________________________________________
                   |_____________________________________________
 
-user@shelbie$
-----
-
-Testing your PhilipsHue
-^^^^^^^^^^^^^^^^^^^^^^^
-
-There are two commands to manipulate and verify the actual state of the lamp, they are: *phlist* and *phset*
-
-If your lamp was corrected detected, just type _phlist_ (as below) and you should get the list of the philips light that are available along with their state.
-
-[source]
-----
-user@shelbie$ phlist
-----
-
-In case you wanna change its color (in fact change the color of all lamps) you can use the command _phset_ as below to set the color to red:
-
-[source]
-----
-user@shelbie$ phset -on true -r 255
-----
-
-
-Export JSONRPC
-~~~~~~~~~~~~~~
-
-Goal
-^^^^
-
-Expose an OSGi service instance as a JSONRPC service that can be accessed remotely through a URL.
-
-Requirements
-^^^^^^^^^^^^
-
-* service instance that will be exporter
-* declaration containing the metadata below:
-** *fuchsia.export.jsonrpc.class* - full name of the interface in which your instance implements. e.g. /org.ow2.chameleon.fuchsia.jsonrpc.exporter.experiment.DummyIface/
-** *fuchsia.export.jsonrpc.instance* - instance.name (in OSGi terms) of your service, which will be used to grab the proper instance to be exported. e.g. DummyPojoInstance
-** *fuchsia.export.jsonrpc.url.context* (optional) - indicated the context that will be added in URL, by default "JSONRPC", which will be used as a prefix in the URL for the instance as in the example: *http://localhost:8080/JSONRPC/DummyPojoInstance*
-
-Example
-^^^^^^^
-
-Exporter instantiation
-++++++++++++++++++++++
-
-[source,java]
-----
-       Instance jsonRPCExporter = instance()
+user@shelbie$</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_testing_your_philipshue">Testing your PhilipsHue</h4>
+<div class="paragraph">
+<p>There are two commands to manipulate and verify the actual state of the lamp, they are: <strong>phlist</strong> and <strong>phset</strong></p>
+</div>
+<div class="paragraph">
+<p>If your lamp was corrected detected, just type <em>phlist</em> (as below) and you should get the list of the philips light that are available along with their state.</p>
+</div>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code>user@shelbie$ phlist</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In case you wanna change its color (in fact change the color of all lamps) you can use the command <em>phset</em> as below to set the color to red:</p>
+</div>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code>user@shelbie$ phset -on true -r 255</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_export_jsonrpc">Export JSONRPC</h3>
+<div class="sect3">
+<h4 id="_goal">Goal</h4>
+<div class="paragraph">
+<p>Expose an OSGi service instance as a JSONRPC service that can be accessed remotely through a URL.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_requirements">Requirements</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>service instance that will be exporter</p>
+</li>
+<li>
+<p>declaration containing the metadata below:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>fuchsia.export.jsonrpc.class</strong> - full name of the interface in which your instance implements. e.g. /org.ow2.chameleon.fuchsia.jsonrpc.exporter.experiment.DummyIface/</p>
+</li>
+<li>
+<p><strong>fuchsia.export.jsonrpc.instance</strong> - instance.name (in OSGi terms) of your service, which will be used to grab the proper instance to be exported. e.g. DummyPojoInstance</p>
+</li>
+<li>
+<p><strong>fuchsia.export.jsonrpc.url.context</strong> (optional) - indicated the context that will be added in URL, by default "JSONRPC", which will be used as a prefix in the URL for the instance as in the example: <strong><a href="http://localhost:8080/JSONRPC/DummyPojoInstance">http://localhost:8080/JSONRPC/DummyPojoInstance</a></strong></p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_example">Example</h4>
+<div class="sect4">
+<h5 id="_exporter_instantiation">Exporter instantiation</h5>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code class="java language-java">       Instance jsonRPCExporter = instance()
                 .of("org.ow2.chameleon.fuchsia.exporter.jsonrpc.JSONRPCExporter")
-                .with("target").setto("(fuchsia.export.jsonrpc.instance=*)");
-----
-
-
-Linker instantiation
-++++++++++++++++++++
-
-[source,java]
-----
-        Instance jsonRPCExporterLinker = instance()
+                .with("target").setto("(fuchsia.export.jsonrpc.instance=*)");</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_linker_instantiation">Linker instantiation</h5>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code class="java language-java">        Instance jsonRPCExporterLinker = instance()
             .of(FuchsiaConstants.DEFAULT_EXPORTATION_LINKER_FACTORY_NAME)
             .with(ExportationLinker.FILTER_EXPORTDECLARATION_PROPERTY).setto("(fuchsia.export.jsonrpc.instance=*)")
-            .with(ExportationLinker.FILTER_EXPORTERSERVICE_PROPERTY).setto("(instance.name=jsonRPCExporter)");
-----
-
-Export Declaration instantiation
-++++++++++++++++++++++++++++++++
-
-[source,java]
-----
-
+            .with(ExportationLinker.FILTER_EXPORTERSERVICE_PROPERTY).setto("(instance.name=jsonRPCExporter)");</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_export_declaration_instantiation">Export Declaration instantiation</h5>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code class="java language-java">
         Map&lt;String, Object&gt; metadata=new HashMap&lt;String, Object&gt;();
 
         metadata.put("id","exporter-1");
@@ -1686,79 +1768,100 @@ Export Declaration instantiation
 
         String clazzes[] = new String[]{org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration.class.getName()};
         ServiceRegistration registration = context.registerService(clazzes, declaration, props);
-
-----
-
-
-Verification
-^^^^^^^^^^^^
-
-Service was properly exported
-+++++++++++++++++++++++++++++
-
-You can use http://fr.wikipedia.org/wiki/CURL[cURL] to test if your instance was properly exported.
-
-[source,xml]
-----
-linux-shell# curl -i -X POST -d '{"jsonrpc": "2.0", "method": "helloworld", "params": ["earth"], "id": 1}' http://localhost:8080/JSONRPC/DummyPojoInstance
-----
-
-*helloworld* should be replaced by the method name declared on your interface to be exported
-
-*earth* will be replaced by the parameters requested by your interface
-
-*http://localhost:8080/JSONRPC/DummyPojoInstance*, consider this example an instance of the pattern "http://A:B/C/D", A and B depend on your framework configuration; C is constant and will never change; D is in fact the same "instance.name" of your OSGi service instance;
-
-
-Import JSONRPC
-~~~~~~~~~~~~~~
-
-Goal
-^^^^
-
-Materialise an a remote JSONRPC service instance (available through a URL) into the current OSGi platform.
-
-Requirements
-^^^^^^^^^^^^
-
-* URL of the JSONRPC object to be imported
-* declaration containing the metadata below:
-** *id* - a platform unique identifier
-** *url* - URL where the object was published. e.g. http://localhost:8080/JSONRPC/DummyPojoInstance
-** *service.class* - full class identifier used as interface, this reference will be used to register in OSGi. e.g. org.ow2.chameleon.fuchsia.examples.jsonrpc.exporter.experiment.DummyIface
-** *configs* - this is a constant, always set with the value *jsonrpc*
-
-Example
-^^^^^^^
-
-Importer instantiation
-++++++++++++++++++++++
-
-[source,java]
-----
-     Instance jsonRPCImporter = instance()
+</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_verification">Verification</h4>
+<div class="sect4">
+<h5 id="_service_was_properly_exported">Service was properly exported</h5>
+<div class="paragraph">
+<p>You can use <a href="http://fr.wikipedia.org/wiki/CURL">cURL</a> to test if your instance was properly exported.</p>
+</div>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code class="xml language-xml">linux-shell# curl -i -X POST -d '{"jsonrpc": "2.0", "method": "helloworld", "params": ["earth"], "id": 1}' http://localhost:8080/JSONRPC/DummyPojoInstance</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>helloworld</strong> should be replaced by the method name declared on your interface to be exported</p>
+</div>
+<div class="paragraph">
+<p><strong>earth</strong> will be replaced by the parameters requested by your interface</p>
+</div>
+<div class="paragraph">
+<p><strong><a href="http://localhost:8080/JSONRPC/DummyPojoInstance">http://localhost:8080/JSONRPC/DummyPojoInstance</a></strong>, consider this example an instance of the pattern "http://A:B/C/D", A and B depend on your framework configuration; C is constant and will never change; D is in fact the same "instance.name" of your OSGi service instance;</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_import_jsonrpc">Import JSONRPC</h3>
+<div class="sect3">
+<h4 id="_goal_2">Goal</h4>
+<div class="paragraph">
+<p>Materialise an a remote JSONRPC service instance (available through a URL) into the current OSGi platform.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_requirements_2">Requirements</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>URL of the JSONRPC object to be imported</p>
+</li>
+<li>
+<p>declaration containing the metadata below:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>id</strong> - a platform unique identifier</p>
+</li>
+<li>
+<p><strong>url</strong> - URL where the object was published. e.g. <a href="http://localhost:8080/JSONRPC/DummyPojoInstance">http://localhost:8080/JSONRPC/DummyPojoInstance</a></p>
+</li>
+<li>
+<p><strong>service.class</strong> - full class identifier used as interface, this reference will be used to register in OSGi. e.g. org.ow2.chameleon.fuchsia.examples.jsonrpc.exporter.experiment.DummyIface</p>
+</li>
+<li>
+<p><strong>configs</strong> - this is a constant, always set with the value <strong>jsonrpc</strong></p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_example_2">Example</h4>
+<div class="sect4">
+<h5 id="_importer_instantiation">Importer instantiation</h5>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code class="java language-java">     Instance jsonRPCImporter = instance()
             .of("Fuchsia-Importer:JSON-RPC")
-            .with(ImporterService.TARGET_FILTER_PROPERTY).setto("(configs=jsonrpc)");
-----
-
-
-Linker instantiation
-++++++++++++++++++++
-
-[source,java]
-----
-        Instance jsonRPCImporterLinker = instance()
+            .with(ImporterService.TARGET_FILTER_PROPERTY).setto("(configs=jsonrpc)");</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_linker_instantiation_2">Linker instantiation</h5>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code class="java language-java">        Instance jsonRPCImporterLinker = instance()
             .of(FuchsiaConstants.DEFAULT_IMPORTATION_LINKER_FACTORY_NAME)
             .with(FILTER_IMPORTDECLARATION_PROPERTY).setto("(configs=jsonrpc)")
-            .with(FILTER_IMPORTERSERVICE_PROPERTY).setto("(instance.name=jsonRPCImporter)");
-----
-
-Importer Declaration instantiation
-++++++++++++++++++++++++++++++++++
-
-[source,java]
-----
-        Map&lt;String, Object&gt; metadata=new HashMap&lt;String, Object&gt;();
+            .with(FILTER_IMPORTERSERVICE_PROPERTY).setto("(instance.name=jsonRPCImporter)");</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_importer_declaration_instantiation">Importer Declaration instantiation</h5>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code class="java language-java">        Map&lt;String, Object&gt; metadata=new HashMap&lt;String, Object&gt;();
         metadata.put(ID, "endipoint");
         metadata.put(URL, "http://localhost:8080/JSONRPC/DummyPojoInstance");
         metadata.put(SERVICE_CLASS, "org.ow2.chameleon.fuchsia.examples.jsonrpc.exporter.experiment.DummyIface");
@@ -1770,21 +1873,21 @@ Importer Declaration instantiation
 
         Dictionary&lt;String, Object&gt; props = new Hashtable&lt;String, Object&gt;();
 
-        ServiceRegistration registration = context.registerService(clazzes, declaration, props);
-----
-
-
-Verification
-^^^^^^^^^^^^
-
-Service was properly imported
-+++++++++++++++++++++++++++++
-
-You can use *felix shelbie shell* and inspect the importer bundle to check if it has correcly imported our JSONRPC remote instance
-
-[source,xml]
-----
-shelbie-shell$ lb
+        ServiceRegistration registration = context.registerService(clazzes, declaration, props);</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_verification_2">Verification</h4>
+<div class="sect4">
+<h5 id="_service_was_properly_imported">Service was properly imported</h5>
+<div class="paragraph">
+<p>You can use <strong>felix shelbie shell</strong> and inspect the importer bundle to check if it has correcly imported our JSONRPC remote instance</p>
+</div>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code class="xml language-xml">shelbie-shell$ lb
 ..
    31|Active     |    1|OW2 Chameleon - Fuchsia Importer JSON-RPC (0.0.2.SNAPSHOT)
 ..
@@ -1792,59 +1895,77 @@ shelbie-shell$ inspect cap service 31
 ...
 service; org.ow2.chameleon.fuchsia.examples.jsonrpc.exporter.experiment.DummyIface with properties:
    service.id = 693
-
-----
-
-Importer should provide a service with the interface that we'd configured just before in the *Importer Declaration instantiation*.
-
-Export JAXWS
-~~~~~~~~~~~~
-
-Goal
-^^^^
-
-Expose an OSGi service instance as a JAXWS service that can be accessed remotely through a URL.
-
-Requirements
-^^^^^^^^^^^^
-
-* service instance that will be exporter
-* declaration containing the metadata below:
-** *fuchsia.export.cxf.class.name* - full name of the interface in which your instance implements. e.g. /org.ow2.chameleon.fuchsia.exporter.cxf.examples.base.PojoSampleToBeExportedIface/
-** *fuchsia.export.cxf.instance* - instance.name (in OSGi terms) of your service, which will be used to grab the proper instance to be exported. e.g. DummyPojoInstance
-** *fuchsia.export.cxf.url.context* - indicated the context that will be added in URL, which will be used as a prefix in the URL for the instance as in the example: */PojoSampleToBeExported*
-
-Example
-^^^^^^^
-
-Exporter instantiation
-++++++++++++++++++++++
-
-[source,java]
-----
-    Instance cxfexporter = instance()
+</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Importer should provide a service with the interface that we&#8217;d configured just before in the <strong>Importer Declaration instantiation</strong>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_export_jaxws">Export JAXWS</h3>
+<div class="sect3">
+<h4 id="_goal_3">Goal</h4>
+<div class="paragraph">
+<p>Expose an OSGi service instance as a JAXWS service that can be accessed remotely through a URL.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_requirements_3">Requirements</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>service instance that will be exporter</p>
+</li>
+<li>
+<p>declaration containing the metadata below:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>fuchsia.export.cxf.class.name</strong> - full name of the interface in which your instance implements. e.g. /org.ow2.chameleon.fuchsia.exporter.cxf.examples.base.PojoSampleToBeExportedIface/</p>
+</li>
+<li>
+<p><strong>fuchsia.export.cxf.instance</strong> - instance.name (in OSGi terms) of your service, which will be used to grab the proper instance to be exported. e.g. DummyPojoInstance</p>
+</li>
+<li>
+<p><strong>fuchsia.export.cxf.url.context</strong> - indicated the context that will be added in URL, which will be used as a prefix in the URL for the instance as in the example: <strong>/PojoSampleToBeExported</strong></p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_example_3">Example</h4>
+<div class="sect4">
+<h5 id="_exporter_instantiation_2">Exporter instantiation</h5>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code class="java language-java">    Instance cxfexporter = instance()
             .of("org.ow2.chameleon.fuchsia.exporter.jaxws.JAXWSExporter")
-            .with("target").setto("(fuchsia.export.cxf.instance=*)");
-----
-
-
-Linker instantiation
-++++++++++++++++++++
-
-[source,java]
-----
-    Instance cxfexporterlinker = instance()
+            .with("target").setto("(fuchsia.export.cxf.instance=*)");</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_linker_instantiation_3">Linker instantiation</h5>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code class="java language-java">    Instance cxfexporterlinker = instance()
             .of(FuchsiaConstants.DEFAULT_EXPORTATION_LINKER_FACTORY_NAME)
             .with(ExportationLinker.FILTER_EXPORTDECLARATION_PROPERTY).setto("(fuchsia.export.cxf.instance=*)")
-            .with(ExportationLinker.FILTER_EXPORTERSERVICE_PROPERTY).setto("(instance.name=cxfexporter)");
-----
-
-Export Declaration instantiation
-++++++++++++++++++++++++++++++++
-
-[source,java]
-----
-
+            .with(ExportationLinker.FILTER_EXPORTERSERVICE_PROPERTY).setto("(instance.name=cxfexporter)");</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_export_declaration_instantiation_2">Export Declaration instantiation</h5>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code class="java language-java">
         Map&lt;String, Object&gt;  metadata=new HashMap&lt;String, Object&gt;();
 
         metadata.put("id","a");
@@ -1858,84 +1979,105 @@ Export Declaration instantiation
         Dictionary&lt;String, Object&gt; props = new Hashtable&lt;String, Object&gt;();
         String clazzes[] = new String[]{org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration.class.getName()};
         ServiceRegistration registration = context.registerService(clazzes, declaration, props);
-
-----
-
-
-Verification
-^^^^^^^^^^^^
-
-Service was properly exported
-+++++++++++++++++++++++++++++
-
-Try to access the URL *http://localhost:8080/cxf/PojoSampleToBeExported?wsdl* this should show you the WSDL of the service exported
-
-Of course that this URL is based on the example created above, if you changed the property "fuchsia.export.cxf.url.context" (which it is always the case) you have to replace the "PojoSampleToBeExported" on the URL by the proper name.
-
-
-You should see something like:
-
-[source,xml]
-----
-&lt;wsdl:definitions xmlns:ns1="http://schemas.xmlsoap.org/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://base.examples.cxf.exporter.fuchsia.chameleon.ow2.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="PojoSampleToBeExported" targetNamespace="http://base.examples.cxf.exporter.fuchsia.chameleon.ow2.org/"&gt;
+</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_verification_3">Verification</h4>
+<div class="sect4">
+<h5 id="_service_was_properly_exported_2">Service was properly exported</h5>
+<div class="paragraph">
+<p>Try to access the URL <strong><a href="http://localhost:8080/cxf/PojoSampleToBeExported?wsdl">http://localhost:8080/cxf/PojoSampleToBeExported?wsdl</a></strong> this should show you the WSDL of the service exported</p>
+</div>
+<div class="paragraph">
+<p>Of course that this URL is based on the example created above, if you changed the property "fuchsia.export.cxf.url.context" (which it is always the case) you have to replace the "PojoSampleToBeExported" on the URL by the proper name.</p>
+</div>
+<div class="paragraph">
+<p>You should see something like:</p>
+</div>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code class="xml language-xml">&lt;wsdl:definitions xmlns:ns1="http://schemas.xmlsoap.org/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://base.examples.cxf.exporter.fuchsia.chameleon.ow2.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="PojoSampleToBeExported" targetNamespace="http://base.examples.cxf.exporter.fuchsia.chameleon.ow2.org/"&gt;
 ...
 &lt;/wsdl:service&gt;
-&lt;/wsdl:definitions&gt;
-----
-
-
-Import JAXWS
-~~~~~~~~~~~~
-
-Goal
-^^^^
-
-Materialise an a remote JAXWS service instance (available through a URL) into the current OSGi platform.
-
-Requirements
-^^^^^^^^^^^^
-
-* URL of the JAXWS (SOAP) object to be imported
-* declaration containing the metadata below:
-** *id* - a platform unique identifier
-** *endpoint.url* - URL where the object was published. e.g. *http://localhost:8080/cxf/PojoSampleToBeExported*
-** *className* - full class identifier used as interface, this reference will be used to register in OSGi. e.g. *org.ow2.chameleon.fuchsia.exporter.cxf.examples.base.PojoSampleToBeExportedIface*
-** *configs* - this is a constant, always set with the value *jsonrpc*
-** *jax-ws.importer.interfaces* (optional) - interfaces that will charged by the importer
-
-Example
-^^^^^^^
-
-Importer instantiation
-++++++++++++++++++++++
-
-[source,java]
-----
-    Instance cxfimporter = instance()
+&lt;/wsdl:definitions&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_import_jaxws">Import JAXWS</h3>
+<div class="sect3">
+<h4 id="_goal_4">Goal</h4>
+<div class="paragraph">
+<p>Materialise an a remote JAXWS service instance (available through a URL) into the current OSGi platform.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_requirements_4">Requirements</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>URL of the JAXWS (SOAP) object to be imported</p>
+</li>
+<li>
+<p>declaration containing the metadata below:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>id</strong> - a platform unique identifier</p>
+</li>
+<li>
+<p><strong>endpoint.url</strong> - URL where the object was published. e.g. <strong><a href="http://localhost:8080/cxf/PojoSampleToBeExported">http://localhost:8080/cxf/PojoSampleToBeExported</a></strong></p>
+</li>
+<li>
+<p><strong>className</strong> - full class identifier used as interface, this reference will be used to register in OSGi. e.g. <strong>org.ow2.chameleon.fuchsia.exporter.cxf.examples.base.PojoSampleToBeExportedIface</strong></p>
+</li>
+<li>
+<p><strong>configs</strong> - this is a constant, always set with the value <strong>jsonrpc</strong></p>
+</li>
+<li>
+<p><strong>jax-ws.importer.interfaces</strong> (optional) - interfaces that will charged by the importer</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_example_4">Example</h4>
+<div class="sect4">
+<h5 id="_importer_instantiation_2">Importer instantiation</h5>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code class="java language-java">    Instance cxfimporter = instance()
             .of("org.ow2.chameleon.fuchsia.importer.jaxws.JAXWSImporter")
             .named("cxfimporter")
-            .with("target").setto("(endpoint.url=*)");
-----
-
-
-Linker instantiation
-++++++++++++++++++++
-
-[source,java]
-----
-    Instance cxfimporterlinker = instance()
+            .with("target").setto("(endpoint.url=*)");</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_linker_instantiation_4">Linker instantiation</h5>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code class="java language-java">    Instance cxfimporterlinker = instance()
             .of(FuchsiaConstants.DEFAULT_IMPORTATION_LINKER_FACTORY_NAME)
             .named("cxfimporterlinker")
             .with(FILTER_IMPORTDECLARATION_PROPERTY).setto("(endpoint.url=*)")
-            .with(FILTER_IMPORTERSERVICE_PROPERTY).setto("(instance.name=cxfimporter)");
-----
-
-Importer Declaration instantiation
-++++++++++++++++++++++++++++++++++
-
-[source,java]
-----
-        Map&lt;String, Object&gt;  metadata=new HashMap&lt;String, Object&gt;();
+            .with(FILTER_IMPORTERSERVICE_PROPERTY).setto("(instance.name=cxfimporter)");</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_importer_declaration_instantiation_2">Importer Declaration instantiation</h5>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code class="java language-java">        Map&lt;String, Object&gt;  metadata=new HashMap&lt;String, Object&gt;();
 
         metadata.put("id","b");
         metadata.put("className","org.ow2.chameleon.fuchsia.exporter.cxf.examples.base.PojoSampleToBeExportedIface");
@@ -1947,30 +2089,31 @@ Importer Declaration instantiation
         Dictionary&lt;String, Object&gt; props = new Hashtable&lt;String, Object&gt;();
         props.put("endpoint.url","http://localhost:8080/cxf/PojoSampleToBeExported");
         String clazzes[] = new String[]{ImportDeclaration.class.getName()};
-        ServiceRegistration registration = context.registerService(clazzes, declaration, props);
-----
-
-
-Verification
-^^^^^^^^^^^^
-
-Service was properly imported
-+++++++++++++++++++++++++++++
-
-You can use *felix shelbie shell* and inspect the importer bundle to check if it has correcly imported our JAXWS remote instance
-
-[source,xml]
-----
-shelbie-shell$ lb
+        ServiceRegistration registration = context.registerService(clazzes, declaration, props);</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_verification_4">Verification</h4>
+<div class="sect4">
+<h5 id="_service_was_properly_imported_2">Service was properly imported</h5>
+<div class="paragraph">
+<p>You can use <strong>felix shelbie shell</strong> and inspect the importer bundle to check if it has correcly imported our JAXWS remote instance</p>
+</div>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code class="xml language-xml">shelbie-shell$ lb
 ..
    52|Active     |    1|OW2 Chameleon - Fuchsia Importer JAX-WS (0.0.2.SNAPSHOT)
 ..
 shelbie-shell$ inspect cap service 52 # you should find something similar to this output
 ...
-service; org.ow2.chameleon.fuchsia.exporter.cxf.examples.base.PojoSampleToBeExportedIface
-----
-
-Importer should provide a service with the interface that we'd configured just before in the *Importer Declaration instantiation*.</code></pre>
+service; org.ow2.chameleon.fuchsia.exporter.cxf.examples.base.PojoSampleToBeExportedIface</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Importer should provide a service with the interface that we&#8217;d configured just before in the <strong>Importer Declaration instantiation</strong>.</p>
 </div>
 </div>
 </div>
