@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="generator" content="Asciidoctor 0.1.3">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Export JAXWS</title>
+<link rel="stylesheet" href="./stylesheets/asciidoc.css">
+</head>
+<body class="article">
+<div id="header">
+</div>
+<div id="content">
+<div class="sect2">
+<h3 id="_export_jaxws">Export JAXWS</h3>
+<div class="sect3">
+<h4 id="_goal">Goal</h4>
+<div class="paragraph">
+<p>Expose an OSGi service instance as a JAXWS service that can be accessed remotely through a URL.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_requirements">Requirements</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>service instance that will be exporter</p>
+</li>
+<li>
+<p>declaration containing the metadata below:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>fuchsia.export.cxf.class.name</strong> - full name of the interface in which your instance implements. e.g. /org.ow2.chameleon.fuchsia.exporter.cxf.examples.base.PojoSampleToBeExportedIface/</p>
+</li>
+<li>
+<p><strong>fuchsia.export.cxf.instance</strong> - instance.name (in OSGi terms) of your service, which will be used to grab the proper instance to be exported. e.g. DummyPojoInstance</p>
+</li>
+<li>
+<p><strong>fuchsia.export.cxf.url.context</strong> - indicated the context that will be added in URL, which will be used as a prefix in the URL for the instance as in the example: <strong>/PojoSampleToBeExported</strong></p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_example">Example</h4>
+<div class="sect4">
+<h5 id="_exporter_instantiation">Exporter instantiation</h5>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code class="java language-java">    Instance cxfexporter = instance()
+            .of("org.ow2.chameleon.fuchsia.exporter.jaxws.JAXWSExporter")
+            .with("target").setto("(fuchsia.export.cxf.instance=*)");</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_linker_instantiation">Linker instantiation</h5>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code class="java language-java">    Instance cxfexporterlinker = instance()
+            .of(FuchsiaConstants.DEFAULT_EXPORTATION_LINKER_FACTORY_NAME)
+            .with(ExportationLinker.FILTER_EXPORTDECLARATION_PROPERTY).setto("(fuchsia.export.cxf.instance=*)")
+            .with(ExportationLinker.FILTER_EXPORTERSERVICE_PROPERTY).setto("(instance.name=cxfexporter)");</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_export_declaration_instantiation">Export Declaration instantiation</h5>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code class="java language-java">
+        Map&lt;String, Object&gt;  metadata=new HashMap&lt;String, Object&gt;();
+
+        metadata.put("id","a");
+        metadata.put("exporter.id","myservice");
+        metadata.put("fuchsia.export.cxf.class.name",dummyInstance.getClass().getName());
+        metadata.put("fuchsia.export.cxf.instance",dummyInstance);
+        metadata.put("fuchsia.export.cxf.url.context","/PojoSampleToBeExported");
+
+        ExportDeclaration declaration = ExportDeclarationBuilder.fromMetadata(metadata).build();
+
+        Dictionary&lt;String, Object&gt; props = new Hashtable&lt;String, Object&gt;();
+        String clazzes[] = new String[]{org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration.class.getName()};
+        ServiceRegistration registration = context.registerService(clazzes, declaration, props);
+</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_verification">Verification</h4>
+<div class="sect4">
+<h5 id="_service_was_properly_exported">Service was properly exported</h5>
+<div class="paragraph">
+<p>Try to access the URL <strong><a href="http://localhost:8080/cxf/PojoSampleToBeExported?wsdl">http://localhost:8080/cxf/PojoSampleToBeExported?wsdl</a></strong> this should show you the WSDL of the service exported</p>
+</div>
+<div class="paragraph">
+<p>Of course that this URL is based on the example created above, if you changed the property "fuchsia.export.cxf.url.context" (which it is always the case) you have to replace the "PojoSampleToBeExported" on the URL by the proper name.</p>
+</div>
+<div class="paragraph">
+<p>You should see something like:</p>
+</div>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code class="xml language-xml">&lt;wsdl:definitions xmlns:ns1="http://schemas.xmlsoap.org/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://base.examples.cxf.exporter.fuchsia.chameleon.ow2.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="PojoSampleToBeExported" targetNamespace="http://base.examples.cxf.exporter.fuchsia.chameleon.ow2.org/"&gt;
+...
+&lt;/wsdl:service&gt;
+&lt;/wsdl:definitions&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2014-02-14 10:36:51 CET
+</div>
+</div>
+</body>
+</html>

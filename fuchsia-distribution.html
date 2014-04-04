@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="generator" content="Asciidoctor 0.1.3">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Using as maven dependency</title>
+<link rel="stylesheet" href="./stylesheets/asciidoc.css">
+</head>
+<body class="article">
+<div id="header">
+</div>
+<div id="content">
+<div class="sect2">
+<h3 id="_using_as_maven_dependency">Using as maven dependency</h3>
+<div class="paragraph">
+<p>Adopting Fuchsia is a straightforward task if you are used to Maven. First we need to add the OW2 maven repository to our list of repositories (as below).</p>
+</div>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code class="xml language-xml">&lt;project ... &gt;
+...
+&lt;repositories&gt;
+	&lt;repository&gt;
+		&lt;id&gt;ow2-release&lt;/id&gt;
+		&lt;name&gt;OW2-Release&lt;/name&gt;
+		&lt;url&gt;http://repository.ow2.org/nexus/content/groups/public/&lt;/url&gt;
+	&lt;/repository&gt;
+	&lt;repository&gt;
+		&lt;id&gt;ow2-snapshot&lt;/id&gt;
+		&lt;name&gt;OW2-Snapshot&lt;/name&gt;
+		&lt;url&gt;http://repository.ow2.org/nexus/content/repositories/snapshots/&lt;/url&gt;
+	&lt;/repository&gt;
+&lt;/repositories&gt;
+...
+&lt;/project&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now, we have to declare one or more Fuchsia module <strong>as a maven dependency</strong> of your project.</p>
+</div>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code class="xml language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.ow2.chameleon.fuchsia&lt;/groupId&gt;
+    &lt;artifactId&gt;org.ow2.chameleon.fuchsia.core&lt;/artifactId&gt;
+    &lt;version&gt;0.0.1&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here we reference the version <strong>0.0.1</strong> of Fuchsia, but of course you can update that version for the version you are willing to use.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="title">The catch</div>
+<div class="paragraph">
+<p>This method is quick and fast to integrate for compilation, although, depending on the importer adopted, it may require 3td party dependencies to be installed in your runtime platform manually. In order to not worry in finding all the dependencies for the importer adopted, you can use <strong>Fuchsia</strong> compilation profiles to gather all the dependencies needed according to your importers.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_compiling_a_distribution">Compiling a distribution</h3>
+<div class="paragraph">
+<p>In order to generate a Fuchsia distribution there is only one mandatory profile the <strong>core</strong>, all the other modules are optional and can be included in the distribution by adding the appropriate maven profile ( <strong>mvn -P parameter</strong> ). The maven profile and its contents are specified right below.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>core - This module contains all the basic Fuchsia types, fuchsia shell tool is installed automatically in this profile as well, even though its not part of the bundle core</p>
+</li>
+<li>
+<p>discoveries</p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="http://jmdns.sourceforge.net/">mdns</a> - the implementation of dnssd/mdns discovery protocol</p>
+</li>
+<li>
+<p>upnp</p>
+</li>
+<li>
+<p>discovery-filebased</p>
+</li>
+<li>
+<p>discovery-philips-hue</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>importers</p>
+<div class="ulist">
+<ul>
+<li>
+<p>importer-jax-ws</p>
+</li>
+<li>
+<p>importer-philips-hue</p>
+</li>
+<li>
+<p><a href="http://mqtt.org/">mqtt</a></p>
+</li>
+<li>
+<p><a href="https://code.google.com/p/pubsubhubbub/">push</a></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>exporter</p>
+<div class="ulist">
+<ul>
+<li>
+<p>exporter-jaw-ws</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>tools</p>
+<div class="ulist">
+<ul>
+<li>
+<p>grid</p>
+</li>
+<li>
+<p>shell</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="_configuration_profiles">Configuration profiles</h4>
+<div class="paragraph">
+<p>Config profiles are the instantiation of the <em>linker</em> and the <em>processor</em>. Those two tend to be customized, since the filter adopted in the default instantiation of the linker might not be valid for for case</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>discoveries:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>mdns-config</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>importers:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>importer-cxf-config</p>
+</li>
+<li>
+<p>mqtt-config</p>
+</li>
+<li>
+<p>push-config</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>exporters:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>exporter-cxf-config</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Thus, in order to compile Fuchsia with the <strong>grid</strong>, <strong>exporter-jax-ws</strong> and <strong>mqtt</strong>, would be enough to:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>go to the <strong>distribution</strong> directory</p>
+</li>
+<li>
+<p>type <strong>mvn -Pcore,grid,exporter-jax-ws,mqtt</strong></p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>After the compilation process is finished, your Fuchsia distribution is ready to use:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>go to the <strong>distribution/target/chameleon-distribution/</strong></p>
+</li>
+<li>
+<p>type <strong>./chameleon.sh --interactive</strong> (or the apropriate script according to your OS)</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2014-02-26 17:36:46 CET
+</div>
+</div>
+</body>
+</html>

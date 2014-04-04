@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="generator" content="Asciidoctor 0.1.3">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Import JAXWS</title>
+<link rel="stylesheet" href="./stylesheets/asciidoc.css">
+</head>
+<body class="article">
+<div id="header">
+</div>
+<div id="content">
+<div class="sect2">
+<h3 id="_import_jaxws">Import JAXWS</h3>
+<div class="sect3">
+<h4 id="_goal">Goal</h4>
+<div class="paragraph">
+<p>Materialise an a remote JAXWS service instance (available through a URL) into the current OSGi platform.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_requirements">Requirements</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>URL of the JAXWS (SOAP) object to be imported</p>
+</li>
+<li>
+<p>declaration containing the metadata below:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>id</strong> - a platform unique identifier</p>
+</li>
+<li>
+<p><strong>endpoint.url</strong> - URL where the object was published. e.g. <strong><a href="http://localhost:8080/cxf/PojoSampleToBeExported">http://localhost:8080/cxf/PojoSampleToBeExported</a></strong></p>
+</li>
+<li>
+<p><strong>className</strong> - full class identifier used as interface, this reference will be used to register in OSGi. e.g. <strong>org.ow2.chameleon.fuchsia.exporter.cxf.examples.base.PojoSampleToBeExportedIface</strong></p>
+</li>
+<li>
+<p><strong>configs</strong> - this is a constant, always set with the value <strong>jsonrpc</strong></p>
+</li>
+<li>
+<p><strong>jax-ws.importer.interfaces</strong> (optional) - interfaces that will charged by the importer</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_example">Example</h4>
+<div class="sect4">
+<h5 id="_importer_instantiation">Importer instantiation</h5>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code class="java language-java">    Instance cxfimporter = instance()
+            .of("org.ow2.chameleon.fuchsia.importer.jaxws.JAXWSImporter")
+            .named("cxfimporter")
+            .with("target").setto("(endpoint.url=*)");</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_linker_instantiation">Linker instantiation</h5>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code class="java language-java">    Instance cxfimporterlinker = instance()
+            .of(FuchsiaConstants.DEFAULT_IMPORTATION_LINKER_FACTORY_NAME)
+            .named("cxfimporterlinker")
+            .with(FILTER_IMPORTDECLARATION_PROPERTY).setto("(endpoint.url=*)")
+            .with(FILTER_IMPORTERSERVICE_PROPERTY).setto("(instance.name=cxfimporter)");</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_importer_declaration_instantiation">Importer Declaration instantiation</h5>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code class="java language-java">        Map&lt;String, Object&gt;  metadata=new HashMap&lt;String, Object&gt;();
+
+        metadata.put("id","b");
+        metadata.put("className","org.ow2.chameleon.fuchsia.exporter.cxf.examples.base.PojoSampleToBeExportedIface");
+        metadata.put("jax-ws.importer.interfaces","[org.ow2.chameleon.fuchsia.exporter.cxf.examples.base.PojoSampleToBeExportedIface]");
+        metadata.put("endpoint.url","http://localhost:8080/cxf/PojoSampleToBeExported");
+
+        ImportDeclaration declaration = ImportDeclarationBuilder.fromMetadata(metadata).build();
+
+        Dictionary&lt;String, Object&gt; props = new Hashtable&lt;String, Object&gt;();
+        props.put("endpoint.url","http://localhost:8080/cxf/PojoSampleToBeExported");
+        String clazzes[] = new String[]{ImportDeclaration.class.getName()};
+        ServiceRegistration registration = context.registerService(clazzes, declaration, props);</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_verification">Verification</h4>
+<div class="sect4">
+<h5 id="_service_was_properly_imported">Service was properly imported</h5>
+<div class="paragraph">
+<p>You can use <strong>felix shelbie shell</strong> and inspect the importer bundle to check if it has correcly imported our JAXWS remote instance</p>
+</div>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code class="xml language-xml">shelbie-shell$ lb
+..
+   52|Active     |    1|OW2 Chameleon - Fuchsia Importer JAX-WS (0.0.2.SNAPSHOT)
+..
+shelbie-shell$ inspect cap service 52 # you should find something similar to this output
+...
+service; org.ow2.chameleon.fuchsia.exporter.cxf.examples.base.PojoSampleToBeExportedIface</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Importer should provide a service with the interface that we&#8217;d configured just before in the <strong>Importer Declaration instantiation</strong>.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2014-02-14 10:36:51 CET
+</div>
+</div>
+</body>
+</html>

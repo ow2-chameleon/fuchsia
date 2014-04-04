@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="generator" content="Asciidoctor 0.1.3">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title></title>
+<link rel="stylesheet" href="./stylesheets/asciidoc.css">
+</head>
+<body class="article">
+<div id="header">
+</div>
+<div id="content">
+<div class="paragraph">
+<p>Fuchsia can materialize an outcast service (not visible in the OSGi platform) into the OSGi platform. Natively fuchsia can materialize:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>mDNS/DNSSD, bringing up the provider&#8217;s IP and the service type. This allows you to connect directly to the service without having to implement the discovery</p>
+</li>
+<li>
+<p>UPnP services published on the network</p>
+</li>
+<li>
+<p>JAX-WS endpoint, creating an instance of the service in OSGi platform (the interfaces must be available in the platform)</p>
+</li>
+<li>
+<p>JSON-RPC endpoint, makes available into the platform a service for this remote instance, as expected it is mandatory to have the interfaces in order to create the OSGi instance of the endpoint</p>
+</li>
+<li>
+<p>PuSH (PUbSubHubbub) hub, if you have a feed that uses PuSH as hub, all updates are sent via eventAdmin. Thus, avoiding you to implement the protocol</p>
+</li>
+<li>
+<p>MQTT provider, so you can receive your MQTT messages locally (via EventAdmin) without having to implement the subscriber for this protocol</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>All those are already built-in features, the materialization of an external service into OSGi platform, this processor is called: <strong>Importer</strong>.</p>
+</div>
+<div class="paragraph">
+<p>The second type of processor is called <strong>Exporter</strong>, this type enables us to turn an OSGi service instance into a service that can be access outside of OSGi, exposed as a web service for instance. The built-in exporters are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>JAX-WS, based in an OSGi service instance, publishes a WebService to be accessed remotely. You can use Fuchsia to instantiate the exported service or use directly <a href="http://cxf.apache.org/">Apache CXF</a>.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Of course those processors (<strong>importers</strong> or <strong>exporters</strong>) are available without needing to code a single line.</p>
+</div>
+<div class="paragraph">
+<p>Albeit, Fuchsia has built-in processors, we are aware that most of applications use their own protocol or adopt their protocol specific device, knowing that Fuchsia was build to be extensible, thus implementing and deploying a customized processor is quite straight forward.</p>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2014-04-04 13:34:17 CEST
+</div>
+</div>
+</body>
+</html>

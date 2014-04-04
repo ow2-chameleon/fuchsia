@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="generator" content="Asciidoctor 0.1.3">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Creating a bundle</title>
+<link rel="stylesheet" href="./stylesheets/asciidoc.css">
+</head>
+<body class="article">
+<div id="header">
+</div>
+<div id="content">
+<div class="sect2">
+<h3 id="_creating_a_bundle">Creating a bundle</h3>
+<div class="paragraph">
+<p>We can use maven plugin to create an iPOJO artifact.</p>
+</div>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code class="bash language-bash">mvn org.apache.maven.plugins:maven-archetype-plugin:generate \
+-DinteractiveMode=false \
+-DarchetypeArtifactId=maven-ipojo-plugin \
+-DarchetypeGroupId=org.apache.felix \
+-DarchetypeVersion=1.11.0 \
+-DartifactId=config \
+-DgroupId=org.adele \
+-Dpackage=org.adele \
+-Dversion=0.0.1-EXAMPLE</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Make sure to add <strong>Fuchsia</strong> dependency:</p>
+</div>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code class="xml language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.ow2.chameleon.fuchsia&lt;/groupId&gt;
+    &lt;artifactId&gt;org.ow2.chameleon.fuchsia.core&lt;/artifactId&gt;
+    &lt;version&gt;0.0.1&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>That is it, now you are ready to add your custom code.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Warning</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Make sure to replace the version <strong>0.0.1</strong> of Fuchsia, by the version that you are using</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_import_a_jax_ws_service">Import a JAX-WS service</h3>
+<div class="paragraph">
+<p>After create your project, we have couple tasks to accomplish before be able to use the imported JAX-WS service:</p>
+</div>
+<div class="ulist">
+<div class="title">Prepare the environment</div>
+<ul>
+<li>
+<p>[ ] Instantiate the importer</p>
+</li>
+<li>
+<p>[ ] Instantiate the linker</p>
+</li>
+</ul>
+</div>
+<div class="ulist">
+<div class="title">As result of fuchsia</div>
+<ul>
+<li>
+<p>[ ] Inform fuchsia the JAX-WS info</p>
+</li>
+<li>
+<p>[ ] Fetch your local instance</p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="_preparation">Preparation</h4>
+<div class="paragraph">
+<p>One step at a time, so lets first instantiate our importer, we first need to find out the name of our importer JAX-WS, which is <em>org.ow2.chameleon.fuchsia.importer.jaxws.JAXWSImporter</em>, with that in mind we can instantiate it indicating what are the <strong>Declarations</strong> that he should consider as a declaration that concerns it.</p>
+</div>
+<div class="paragraph">
+<p>In our case we may say that, any declaration containing a value for the key <strong>endpoint.url</strong>, is a valid declaration to be processed by this importer, thus this give us:</p>
+</div>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code>    Instance cxfimporter = Instance.instance()
+            .of("org.ow2.chameleon.fuchsia.importer.jaxws.JAXWSImporter")
+            .with("target").setto("(endpoint.url=*)");</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>With this we can check our first task <strong>Instantiate the importer</strong>. Following our list we have instantiated the <strong>Linker</strong>.</p>
+</div>
+<div class="paragraph">
+<p>The <strong>Linkers</strong> job is to evaluate if a given <strong>Declaration</strong> and a <strong>Service</strong> match together, so essentially he impose the condition in order to connect this two entities. We can instantiate our linker in following manner:</p>
+</div>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code>    Instance cxfimporterlinker = instance()
+            .of(FuchsiaConstants.DEFAULT_IMPORTATION_LINKER_FACTORY_NAME)
+            .with("fuchsia.linker.filter.importDeclaration").setto("(endpoint.url=*)")
+            .with("fuchsia.linker.filter.importerService").setto("(instance.name=cxfimporterlinker)");</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this linker we are saying "if a declaration contains <em>endpoint.url</em> than connect it with the importer in which the instance is called <em>cxfimporterlinker</em>".</p>
+</div>
+<div class="paragraph">
+<p>In order to <em>Inform fuchsia the JAX-WS info</em>, we have several options, either we can publish a service that follows the interface <em>org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration</em>, or we can use the Filebased-Discovery, which translate files deployed in the folder named <em>load</em> into a ImportDeclaration.</p>
+</div>
+<div class="paragraph">
+<p>You can check that everything is up and running by typing <strong>importer</strong> on the console, you should see at least:</p>
+</div>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code>Importer [cxfimporter] provided by bundle org.ow2.chameleon.fuchsia.importer.jax-rs (46)
+	*importer name = cxfimporter
+	Service properties:
+		factory.name = org.ow2.chameleon.fuchsia.importer.jaxws.JAXWSImporter
+		instance.name = cxfimporter
+		objectClass = [Ljava.lang.String;@191c428
+		service.id = 335
+		target = (endpoint.url=*)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And check that the FilebasedDiscovery is running as well by typing <strong>discovery</strong> and you will see:</p>
+</div>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code>Discovery [Fuchsia-FilebasedDiscovery] provided by bundle fuchsia-filebased-discovery (37)
+	Service properties:
+		factory.name = Fuchsia-FilebasedDiscovery-Factory
+		fuchsia.system.filebased.discovery.directory = load
+		fuchsia.system.filebased.discovery.polling = 2000
+		instance.name = Fuchsia-FilebasedDiscovery
+		objectClass = [Ljava.lang.String;@20e9c6
+		service.id = 321
+</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_result">Result</h4>
+<div class="paragraph">
+<p>So far we&#8217;ve our checklist look like this:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>[*] Instantiate the importer</p>
+</li>
+<li>
+<p>[*] Instantiate the linker</p>
+</li>
+<li>
+<p>[ ] Inform fuchsia the JAX-WS info</p>
+</li>
+<li>
+<p>[ ] Use the remote instance</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The last two steps consist in informing the Fuchsia the address of our JAX-WS service. For that its enough to deploy a file in the folder <em>load</em> (thanks to the Filebased-Discovery) with the following content:</p>
+</div>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code>id=virtual-camera
+className=org.ow2.chameleon.fuchsia.exporter.cxf.examples.base.PojoSampleToBeExportedIface
+jax-ws.importer.interfaces=[org.ow2.chameleon.fuchsia.exporter.cxf.examples.base.PojoSampleToBeExportedIface]
+endpoint.url=http://localhost:8080/cxf/service/PojoSampleToBeExportedIface
+
+deviceType=camera
+deviceSubType=another
+device.serialNumber=virtual-camera</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then, just request your service as a regular dependency (as shown below), then you will see your dependency being injected and ready for use without much trouble.</p>
+</div>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code class="java language-java">@Component
+@Instantiate
+public class Client {
+
+    @Requires
+    PojoSampleToBeExportedIface myRemoteService;
+
+    @Validate
+    public void validate(){
+
+        System.out.println("----&gt;"+myRemoteService.getMessage2());
+
+    }
+
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_import_a_push_service">Import a PuSH service</h3>
+<div class="paragraph">
+<p>PubSubHubbub (PuSH) is a google protocol create to be fast, in fact it is a publish / subscribe mechanism that avoids the polling technique. A small diagram can show you the idea behind the protocol</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="diagram/push01.svg" alt="PuSH" width="800"></span></p>
+</div>
+<div class="sect3">
+<h4 id="_prepare">Prepare</h4>
+<div class="paragraph">
+<p>So we are going to need, we are assuming that the publisher and hub addresses are well known.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>[*] know the address of the publisher</p>
+</li>
+<li>
+<p>[*] know the address of the hub</p>
+</li>
+<li>
+<p>[ ] Instantiate the Importer</p>
+</li>
+<li>
+<p>[ ] Instantiate the linker</p>
+</li>
+<li>
+<p>[ ] Inform fuchsia the Hub and Publisher addresses</p>
+</li>
+<li>
+<p>[ ] Visualize the messages</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The first two steps you have to know already those addresses, the next two steps can be done by using maven profile. Meaning that we can generate a chameleon distribution with all our fuchsia dependencies, linker and importer instantiated just by typing into the project repository:</p>
+</div>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code class="bash language-bash">mvn clean install -f distribution/pom.xml -Pcore,push,push-config,discovery-filebased &amp;&amp; \
+cd distribution/target/chameleon-distribution/ &amp;&amp; \
+sh chameleon.sh --interactive</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now lets verify our checklist:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>[*] know the address of the publisher</p>
+</li>
+<li>
+<p>[*] know the address of the hub</p>
+</li>
+<li>
+<p>[*] Instantiate the Importer</p>
+</li>
+<li>
+<p>[*] Instantiate the linker</p>
+</li>
+<li>
+<p>[*] Inform fuchsia the Hub and Publisher addresses</p>
+</li>
+<li>
+<p>[ ] Visualize the messages</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The next step is done by add a file with all the information we already have about the PuSH server (example of the file below)</p>
+</div>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code class="bash language-bash">id=push-dispatch-event-admin
+deviceType=camera
+deviceSubType=another
+
+push.hub.topic=http://blogname.blogspot.com/feeds/posts/default
+push.hub.url=http://localhost:8080/hub/subscribe
+push.subscriber.callback=http://localhost:8080/push
+push.eventAdmin.queue=public
+
+device.serialNumber=push-dispatch-event-admin</code></pre>
+</div>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Warning</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The client must be accessible from the hub, since the hub is the one that pushes the change into clients callback</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>So we are able to see the redirection (from PuSH into Event admin) we install <a href="http://www.interior-dsgn.com/apache//felix/org.apache.felix.webconsole.plugins.event-1.1.0.jar">Web Console Event Admin Plugin</a>.</p>
+</div>
+<div class="paragraph">
+<p>By default fuchsia distribution will install the <em>felix webconsole</em>, that can be access in the URL <a href="http://localhost:8080/system/console/events">http://localhost:8080/system/console/events</a>.</p>
+</div>
+<div class="paragraph">
+<p>Now when you receive an update from the <em>Hub</em> it will be automatically redirected to eventAdmin message bus.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_import_a_mqtt_service">Import a MQTT service</h3>
+<div class="paragraph">
+<p>As MQTT is an efficient message exchange protocol, Fuchsia has built in a <strong>MQTT</strong> importer that receives and forward messages from MQTT bus into EventAdmin bus.</p>
+</div>
+<div class="paragraph">
+<p>The address of the MQTT server is supposedly known, and the next two steps (importer and linker instantiation) can be done with the maven profile, according to the command below.</p>
+</div>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code class="bash language-bash">mvn clean install -f distribution/pom.xml -Pcore,mqtt,mqtt-config,discovery-filebased &amp;&amp; \
+cd distribution/target/chameleon-distribution/ &amp;&amp; \
+sh chameleon.sh --interactive</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>So lets verify how are we in relation to our checklist:</p>
+</div>
+<div class="paragraph">
+<p>Lets create our checklist:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>[*] know the address of the MQTT server</p>
+</li>
+<li>
+<p>[*] Instantiate the Importer</p>
+</li>
+<li>
+<p>[*] Instantiate the linker</p>
+</li>
+<li>
+<p>[ ] Inform fuchsia about the MQTT server address</p>
+</li>
+<li>
+<p>[ ] Visualize the messages</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>We tell Fuchsia which MQTT server (and other parameters) by deploying a file into the <em>load</em> directory containing those info (with the content below):</p>
+</div>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code class="bash language-bash">id=mqtt-dispatch-event-admin
+deviceType=camera
+deviceSubType=another
+
+mqtt.queue=public
+mqtt.server.host=localhost
+mqtt.server.port=5672</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can use <a href="http://localhost:8080/system/console/event">WebConsole</a> to see all the messages that come from MQTT and redirected to <strong>EventAdmin</strong>. The information <strong>mqtt.server.host</strong> and <strong>mqtt.server.port</strong> are optional, in case those informations are not available it will use the information defined as default by <strong>RabbitMQ</strong>.</p>
+</div>
+<div class="paragraph">
+<p>So, after installing your MQTT server (in our case RabbitMQ) make sure its running</p>
+</div>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code class="bash language-bash">sudo /etc/init.d/rabbitmq-server status</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_exporting_protobuffer_rpc_service">Exporting Protobuffer RPC service</h3>
+<div class="paragraph">
+<p>In order to be able to export your <a href="https://code.google.com/p/protobuf/">Protobuffer</a> Service, feel things need to be done:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>[ ] Protobuffer class generated (Step 1)</p>
+</li>
+<li>
+<p>[ ] Implement the service methods for the Protobuffer generated class (Step 2)</p>
+</li>
+<li>
+<p>[ ] Protobuffer class instance added to OSGi Registry (Step 3)</p>
+</li>
+<li>
+<p>[ ] Instantiate the exporter and the linker (Step 4)</p>
+</li>
+<li>
+<p>[ ] Declare the exportation (Step 5)</p>
+</li>
+<li>
+<p>[ ] Create the runtime platform (Step 6)</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Warning</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Protobuffer <strong>version 2.5.0</strong> must be used, any version other than that may produce errors in the remote call</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_step_1">Step 1</h4>
+<div class="paragraph">
+<p>Follow the installation procedure in <a href="https://code.google.com/p/protobuf/">Protobuffer</a> website to get the command for compile <em>.proto</em> file.</p>
+</div>
+<div class="paragraph">
+<p>Here it is an example of a proto file that can be used for a first glance at the functionality.</p>
+</div>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code class="bash language-bash">
+package tutorial;
+
+option java_package = "com.google.code.cxf.protobuf.addressbook";
+option java_outer_classname = "AddressBookProtos";
+
+message Person {
+  required string name = 1;
+  required int32 id = 2;        // Unique ID number for this person.
+  optional string email = 3;
+
+  enum PhoneType {
+    MOBILE = 0;
+    HOME = 1;
+    WORK = 2;
+  }
+
+  message PhoneNumber {
+    required string number = 1;
+    optional PhoneType type = 2 [default = HOME];
+  }
+
+  repeated PhoneNumber phone = 4;
+}
+
+message AddressBook {
+  repeated Person person = 1;
+}
+
+service AddressBookService {
+  rpc addPerson(Person) returns(AddressBookSize);
+  rpc listPeople(NamePattern) returns(AddressBook);
+}
+
+message AddressBookServiceMessage {
+  optional Person addPerson = 1;
+  optional NamePattern listPeople = 2;
+}
+
+message AddressBookSize {
+  optional int32 size = 1;
+}
+
+message NamePattern {
+  optional string pattern = 1;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>From this file you can generate your class by invoking</p>
+</div>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code class="bash language-bash">protoc --java_out=src/main/java/ addressbook.proto</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_step_2">Step 2</h4>
+<div class="paragraph">
+<p>When <em>rpc service</em> is declared in the <em>proto</em> file, this will generate an interface that <strong>must</strong> to be implemented in order that this rpc service can be called. Since the <em>proto</em> file is not a language, we cannot define what the method should to at this point, it is pretty logic, right?</p>
+</div>
+<div class="paragraph">
+<p>So in our case we should implement two methods <strong>addPerson</strong> and <strong>listPeople</strong>, the exactly two services declared in the <em>proto</em> file.</p>
+</div>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code class="java language-java">public class AddressBookServiceImpl extends AddressBookProtos.AddressBookService {
+    Map&lt;Integer, AddressBookProtos.Person&gt; records = new ConcurrentHashMap&lt;Integer, AddressBookProtos.Person&gt;();
+
+    public void listPeople(RpcController controller,
+                           AddressBookProtos.NamePattern request, RpcCallback&lt;AddressBookProtos.AddressBook&gt; done) {
+	...
+    }
+
+    public void addPerson(RpcController controller,
+                          AddressBookProtos.Person request, RpcCallback&lt;AddressBookProtos.AddressBookSize&gt; done) {
+        ...
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>An example of body for these two methods can be:</p>
+</div>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code class="java language-java">public class AddressBookServiceImpl extends AddressBookProtos.AddressBookService {
+    Map&lt;Integer, AddressBookProtos.Person&gt; records = new ConcurrentHashMap&lt;Integer, AddressBookProtos.Person&gt;();
+
+    public void listPeople(RpcController controller,
+                           AddressBookProtos.NamePattern request, RpcCallback&lt;AddressBookProtos.AddressBook&gt; done) {
+        AddressBookProtos.AddressBook.Builder addressbook = AddressBookProtos.AddressBook
+                .newBuilder();
+
+        for (AddressBookProtos.Person person : records.values()) {
+            if (person.getName().indexOf(request.getPattern()) &gt;= 0) {
+                addressbook.addPerson(person);
+            }
+        }
+
+        done.run(addressbook.build());
+    }
+
+    public void addPerson(RpcController controller,
+                          AddressBookProtos.Person request, RpcCallback&lt;AddressBookProtos.AddressBookSize&gt; done) {
+        if (records.containsKey(request.getId())) {
+            System.out.println("Warning: will replace existing person: " + records.get(request.getId()).getName());
+        }
+        records.put(request.getId(), request);
+        done.run(AddressBookProtos.AddressBookSize.newBuilder().setSize(
+                records.size()).build());
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As you can see, its not something straight forward as you thought it should be.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_step_3">Step 3</h4>
+<div class="paragraph">
+<p>In this step, we instantiate our service (in java level) and publish it in the OSGi registry. There are several ways of doing this <strong>Step</strong> so pick up your flavor. We will do like this:</p>
+</div>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code class="java language-java">@Component
+@Instantiate
+public class RegisterBookService {
+
+    ...
+
+    @Validate
+    public void validate(){
+
+        Dictionary serviceProperties=new Hashtable&lt;String,Object&gt;();
+
+        context.registerService(
+		new String[]{com.google.protobuf.Service.class.getName(),AddressBookProtos.AddressBookService.class.getName()},
+		new AddressBookServiceImpl(),
+		serviceProperties);
+
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This procedure will allow the fuchsia exporter to fetch this instance and export it.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_step_4">Step 4</h4>
+<div class="paragraph">
+<p>As you should have seen in previous sections, the <strong>exporter</strong> (for our case) and a <strong>linker</strong> must be instantiated, they are not instantiated automatically.</p>
+</div>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code class="java language-java">@Configuration
+public class Config {
+    Instance ProtobufferExporter = instance()
+            .of("org.ow2.chameleon.fuchsia.exporter.protobuffer.ProtobufferExporter")
+            .with("target").setto("(rpc.export.address=*)");
+
+    Instance ProtobufferExporterLinker = instance()
+            .of(FuchsiaConstants.DEFAULT_EXPORTATION_LINKER_FACTORY_NAME)
+            .with(ExportationLinker.FILTER_EXPORTDECLARATION_PROPERTY).setto("(rpc.export.address=*)")
+            .with(ExportationLinker.FILTER_EXPORTERSERVICE_PROPERTY).setto("(instance.name=ProtobufferExporter)");
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>See that the filters can be customized, they defined the <strong>export declaration</strong> that should be catch by this exporter.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_step_5">Step 5</h4>
+<div class="paragraph">
+<p>The <strong>export declaration</strong> is the intention, in fact it is this file that you express to the framework "Look, i have X instance, and i would like to expose (export) that instance as a Protobuffer RPC service".</p>
+</div>
+<div class="paragraph">
+<p>This sentenced is converted in:</p>
+</div>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code class="java language-java">@Component
+@Instantiate
+public class ExportDeclaration {
+
+    ...
+
+    @Validate
+    public void validate(){
+
+        Map&lt;String, Object&gt; metadata=new HashMap&lt;String, Object&gt;();
+
+        metadata.put("id","export-tests");
+        metadata.put("exporter.id","myservice");
+        metadata.put("rpc.export.address","http://localhost:8889/AddressBookService");
+        metadata.put("rpc.export.class","org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos$AddressBookService");
+        metadata.put("rpc.export.message","org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos$AddressBookServiceMessage");
+
+        org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration declaration = ExportDeclarationBuilder.fromMetadata(metadata).build();
+
+        Dictionary&lt;String, Object&gt; props = new Hashtable&lt;String, Object&gt;();
+
+        String clazzes[] = new String[]{org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration.class.getName()};
+        ServiceRegistration registration = context.registerService(clazzes, declaration, props);
+
+    }
+
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_step_6">Step 6</h4>
+<div class="paragraph">
+<p>Assuming that you have compiled fuchsia (in previous sections), you can use <strong>distribution</strong> module to generate a distribution with dependencies needed.</p>
+</div>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code class="java language-java">mvn clean install -Pcore,discovery-filebased,protobuffer &amp;&amp; cd target/chameleon-distribution &amp;&amp; \
+sh chameleon.sh --interactive</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To verify that everything was published properly, it is enough to access the url <a href="http://localhost:8889/AddressBookService?proto">http://localhost:8889/AddressBookService?proto</a> (pay attention that the base url is the same URL we declared in out metadata file)</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_importing_protobuffer_rpc_service">Importing Protobuffer RPC service</h3>
+<div class="paragraph">
+<p>Here, we can see the similarity in the importation process, if a given protocol is supported by Fuchsia the processors are used similarly independently of the protocol.</p>
+</div>
+<div class="ulist">
+<div class="title">Prepare the environment</div>
+<ul>
+<li>
+<p>[ ] Instantiate the importer &amp; linker (Step 1)</p>
+</li>
+<li>
+<p>[ ] Publish your intention, in fuchsia the <strong>declaration</strong> (Step 2)</p>
+</li>
+<li>
+<p>[ ] Fetch your local instance (Step 3)</p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="_step_1_2">Step 1</h4>
+<div class="paragraph">
+<p>This step is mandatory for use of <strong>processors</strong> (importer, exporter). From the moment you instantiate one processor, it is usually required for you to create a <strong>linker</strong> otherwise your service cannot be notified in case of a <strong>declaration</strong> appearance.</p>
+</div>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code class="java language-java">@Configuration
+public class ProtobufferImporterConfig {
+	    Instance ProtobufferRPCImporter = instance()
+		    .of("org.ow2.chameleon.fuchsia.importer.protobuffer.ProtobufferImporter")
+		    .with("target").setto("(&amp;(rpc.server.address=*)(rpc.proto.class=*)(rpc.proto.service=*)(rpc.proto.message=*))");
+
+	    Instance ProtobufferRPCLinker = instance()
+		    .of(FuchsiaConstants.DEFAULT_IMPORTATION_LINKER_FACTORY_NAME)
+		    .with(ImportationLinker.FILTER_IMPORTDECLARATION_PROPERTY).setto("(&amp;(rpc.server.address=*)(rpc.proto.class=*)(rpc.proto.service=*)(rpc.proto.message=*))")
+		    .with(ImportationLinker.FILTER_IMPORTERSERVICE_PROPERTY).setto("(instance.name=ProtobufferRPCImporter)");
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_step_2_2">Step 2</h4>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code class="java language-java">id=cxf-protobuffer-importer
+
+deviceType=camera
+deviceSubType=another
+device.serialNumber=virtual-camera
+
+rpc.server.address=http://localhost:8889/AddressBookService
+rpc.proto.class=org.ow2.chameleon.fuchsia.protobuffer.protoclass.AddressBookProtos
+rpc.proto.service=AddressBookService
+rpc.proto.message=AddressBookServiceMessage</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_step_3_2">Step 3</h4>
+<div class="paragraph">
+<p>Now, you are ready to go, the only thing you have to do now is to annotate your dependency as usual, and enjoy it.</p>
+</div>
+<div class="paragraph">
+<p>As always here is it the example we put to work:</p>
+</div>
+<div class="listingblock">
+<div class="content monospaced">
+<pre class="highlight"><code class="java language-java">@Component
+@Instantiate
+public class BookClient {
+
+    private final BundleContext context;
+
+    @Requires (filter = "(fuchsia.importer.id=cxf-protobuffer-importer)")
+    AddressBookProtos.AddressBookService addressBook;
+
+    public BookClient(BundleContext context){
+        this.context=context;
+    }
+
+
+    @Validate
+    public void validate(){
+
+        SimpleRpcController controller = new SimpleRpcController();
+
+        AddressBookProtos.Person.Builder person = AddressBookProtos.Person.newBuilder();
+
+        person.setId(1);
+        person.setName("Alice");
+        AddressBookProtos.Person alice = person.build();
+
+        addressBook.addPerson(controller, alice, new RpcCallback&lt;AddressBookProtos.AddressBookSize&gt;() {
+            public void run(AddressBookProtos.AddressBookSize size) {
+                System.out.println("\nThere are " + size.getSize()
+                        + " person(s) in the address book now.");
+            }
+        });
+
+        controller.reset();
+
+        System.out.println("\nSearching for people with 'A' in their name.");
+        addressBook.listPeople(controller, AddressBookProtos.NamePattern.newBuilder().setPattern("A")
+                .build(), new RpcCallback&lt;AddressBookProtos.AddressBook&gt;() {
+            public void run(AddressBookProtos.AddressBook response) {
+
+                System.out.println("\nList of people found: \n");
+
+                for (AddressBookProtos.Person person : response.getPersonList()) {
+
+                    System.out.println("--&gt;" + person.getName());
+
+                }
+
+
+            }
+        });
+
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The only reason we added the filter in <strong>@Required</strong> was to make sure that the remote instance (created by imported) is injected. So this is not mandatory in regular cases.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2014-02-26 17:36:46 CET
+</div>
+</div>
+</body>
+</html>
