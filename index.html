@@ -2,48 +2,46 @@
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="generator" content="Asciidoctor 0.1.3">
+<meta name="generator" content="Asciidoctor 0.1.4">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fuchsia</title>
-<link rel="stylesheet" href="./stylesheets/asciidoc.css">
-<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/7.3/styles/default.min.css">
-<script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/7.3/highlight.min.js"></script>
-<script>hljs.initHighlightingOnLoad()</script>
+<style>
+</style>
 </head>
-<body class="article toc2">
+<body class="article toc2 toc-right">
 <div id="header">
 <h1>Fuchsia</h1>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
-<ol type="none" class="sectlevel1">
+<ul class="sectlevel1">
 <li><a href="#_what_can_fuchsia_do_for_me">What can Fuchsia do for me?</a></li>
 <li><a href="#_core_concepts">Core concepts</a></li>
 <li>
-<ol type="none" class="sectlevel2">
+<ul class="sectlevel2">
 <li><a href="#_declarations">Declarations</a></li>
 <li><a href="#_discoveries">Discoveries</a></li>
 <li><a href="#_processors">Processors</a></li>
 <li><a href="#_linkers">Linkers</a></li>
-</ol>
+</ul>
 </li>
 <li><a href="#_installation">Installation</a></li>
 <li>
-<ol type="none" class="sectlevel2">
+<ul class="sectlevel2">
 <li><a href="#_using_as_maven_dependency">Using as maven dependency</a></li>
 <li><a href="#_compiling_a_distribution">Compiling a distribution</a></li>
-</ol>
+</ul>
 </li>
 <li><a href="#_input_output_of_processors">Input-Output of processors</a></li>
 <li>
-<ol type="none" class="sectlevel2">
+<ul class="sectlevel2">
 <li><a href="#_jax_ws_importer">JAX-WS importer</a></li>
 <li><a href="#_mqtt_importer">MQTT importer</a></li>
 <li><a href="#_pubsubhubbub_importer">PubSubHubBub importer</a></li>
-</ol>
+</ul>
 </li>
 <li><a href="#_basic">Basic</a></li>
 <li>
-<ol type="none" class="sectlevel2">
+<ul class="sectlevel2">
 <li><a href="#_creating_a_bundle">Creating a bundle</a></li>
 <li><a href="#_import_a_jax_ws_service">Import a JAX-WS service</a></li>
 <li><a href="#_import_a_push_service">Import a PuSH service</a></li>
@@ -51,19 +49,19 @@
 <li><a href="#_exporting_protobuffer_rpc_service">Exporting Protobuffer RPC service</a></li>
 <li><a href="#_importing_protobuffer_rpc_service">Importing Protobuffer RPC service</a></li>
 <li><a href="#_filebased_discovery">Filebased-Discovery</a></li>
-</ol>
+</ul>
 </li>
 <li><a href="#_tutorial_style">Tutorial Style</a></li>
 <li>
-<ol type="none" class="sectlevel2">
+<ul class="sectlevel2">
 <li><a href="#_philips_hue_in_fuchsia">Philips hue in Fuchsia</a></li>
 <li><a href="#_export_jsonrpc">Export JSONRPC</a></li>
 <li><a href="#_import_jsonrpc">Import JSONRPC</a></li>
 <li><a href="#_export_jaxws">Export JAXWS</a></li>
 <li><a href="#_import_jaxws">Import JAXWS</a></li>
-</ol>
+</ul>
 </li>
-</ol>
+</ul>
 </div>
 </div>
 <div id="content">
@@ -120,7 +118,7 @@
 <h2 id="_core_concepts">Core concepts</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p><span class="image"><a class="image" href="diagram/importer01.svg"><img src="diagram/importer01.svg" alt="Fuchsia" width="1024"></a></span></p>
+<p><span class="image"><a class="image" href="diagram/importer01.svg"><img src="images/diagram/importer01.svg" alt="Fuchsia" width="1024"></a></span></p>
 </div>
 <div class="paragraph">
 <p>Fuchsia is an extensible tool for integrating external communication protocols inside an OSGi platform. It provides a common interface for creating and managing external connections.</p>
@@ -252,7 +250,7 @@
 <p>Adopting Fuchsia is a straightforward task if you are used to Maven. First we need to add the OW2 maven repository to our list of repositories (as below).</p>
 </div>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code class="xml language-xml">&lt;project ... &gt;
 ...
 &lt;repositories&gt;
@@ -275,7 +273,7 @@
 <p>Now, we have to declare one or more Fuchsia module <strong>as a maven dependency</strong> of your project.</p>
 </div>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code class="xml language-xml">&lt;dependency&gt;
     &lt;groupId&gt;org.ow2.chameleon.fuchsia&lt;/groupId&gt;
     &lt;artifactId&gt;org.ow2.chameleon.fuchsia.core&lt;/artifactId&gt;
@@ -290,7 +288,7 @@
 <table>
 <tr>
 <td class="icon">
-<img src="./images/icons/note.png" alt="Note">
+<img src="images/icons/note.png" alt="Note">
 </td>
 <td class="content">
 <div class="title">The catch</div>
@@ -593,7 +591,7 @@
 <p>We can use maven plugin to create an iPOJO artifact.</p>
 </div>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code class="bash language-bash">mvn org.apache.maven.plugins:maven-archetype-plugin:generate \
 -DinteractiveMode=false \
 -DarchetypeArtifactId=maven-ipojo-plugin \
@@ -609,7 +607,7 @@
 <p>Make sure to add <strong>Fuchsia</strong> dependency:</p>
 </div>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code class="xml language-xml">&lt;dependency&gt;
     &lt;groupId&gt;org.ow2.chameleon.fuchsia&lt;/groupId&gt;
     &lt;artifactId&gt;org.ow2.chameleon.fuchsia.core&lt;/artifactId&gt;
@@ -624,7 +622,7 @@
 <table>
 <tr>
 <td class="icon">
-<img src="./images/icons/warning.png" alt="Warning">
+<img src="images/icons/warning.png" alt="Warning">
 </td>
 <td class="content">
 <div class="paragraph">
@@ -640,25 +638,25 @@
 <div class="paragraph">
 <p>After create your project, we have couple tasks to accomplish before be able to use the imported JAX-WS service:</p>
 </div>
-<div class="ulist">
+<div class="ulist checklist">
 <div class="title">Prepare the environment</div>
-<ul>
+<ul class="checklist">
 <li>
-<p>[ ] Instantiate the importer</p>
+<p><input type="checkbox" data-item-complete="0" disabled> Instantiate the importer</p>
 </li>
 <li>
-<p>[ ] Instantiate the linker</p>
+<p><input type="checkbox" data-item-complete="0" disabled> Instantiate the linker</p>
 </li>
 </ul>
 </div>
-<div class="ulist">
+<div class="ulist checklist">
 <div class="title">As result of fuchsia</div>
-<ul>
+<ul class="checklist">
 <li>
-<p>[ ] Inform fuchsia the JAX-WS info</p>
+<p><input type="checkbox" data-item-complete="0" disabled> Inform fuchsia the JAX-WS info</p>
 </li>
 <li>
-<p>[ ] Fetch your local instance</p>
+<p><input type="checkbox" data-item-complete="0" disabled> Fetch your local instance</p>
 </li>
 </ul>
 </div>
@@ -671,7 +669,7 @@
 <p>In our case we may say that, any declaration containing a value for the key <strong>endpoint.url</strong>, is a valid declaration to be processed by this importer, thus this give us:</p>
 </div>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code>    Instance cxfimporter = Instance.instance()
             .of("org.ow2.chameleon.fuchsia.importer.jaxws.JAXWSImporter")
             .with("target").setto("(endpoint.url=*)");</code></pre>
@@ -684,7 +682,7 @@
 <p>The <strong>Linkers</strong> job is to evaluate if a given <strong>Declaration</strong> and a <strong>Service</strong> match together, so essentially he impose the condition in order to connect this two entities. We can instantiate our linker in following manner:</p>
 </div>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code>    Instance cxfimporterlinker = instance()
             .of(FuchsiaConstants.DEFAULT_IMPORTATION_LINKER_FACTORY_NAME)
             .with("fuchsia.linker.filter.importDeclaration").setto("(endpoint.url=*)")
@@ -701,7 +699,7 @@
 <p>You can check that everything is up and running by typing <strong>importer</strong> on the console, you should see at least:</p>
 </div>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code>Importer [cxfimporter] provided by bundle org.ow2.chameleon.fuchsia.importer.jax-rs (46)
 	*importer name = cxfimporter
 	Service properties:
@@ -716,7 +714,7 @@
 <p>And check that the FilebasedDiscovery is running as well by typing <strong>discovery</strong> and you will see:</p>
 </div>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code>Discovery [Fuchsia-FilebasedDiscovery] provided by bundle fuchsia-filebased-discovery (37)
 	Service properties:
 		factory.name = Fuchsia-FilebasedDiscovery-Factory
@@ -734,19 +732,19 @@
 <div class="paragraph">
 <p>So far we&#8217;ve our checklist look like this:</p>
 </div>
-<div class="ulist">
-<ul>
+<div class="ulist checklist">
+<ul class="checklist">
 <li>
-<p>[*] Instantiate the importer</p>
+<p><input type="checkbox" data-item-complete="1" checked disabled> Instantiate the importer</p>
 </li>
 <li>
-<p>[*] Instantiate the linker</p>
+<p><input type="checkbox" data-item-complete="1" checked disabled> Instantiate the linker</p>
 </li>
 <li>
-<p>[ ] Inform fuchsia the JAX-WS info</p>
+<p><input type="checkbox" data-item-complete="0" disabled> Inform fuchsia the JAX-WS info</p>
 </li>
 <li>
-<p>[ ] Use the remote instance</p>
+<p><input type="checkbox" data-item-complete="0" disabled> Use the remote instance</p>
 </li>
 </ul>
 </div>
@@ -754,7 +752,7 @@
 <p>The last two steps consist in informing the Fuchsia the address of our JAX-WS service. For that its enough to deploy a file in the folder <em>load</em> (thanks to the Filebased-Discovery) with the following content:</p>
 </div>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code>id=virtual-camera
 className=org.ow2.chameleon.fuchsia.exporter.cxf.examples.base.PojoSampleToBeExportedIface
 jax-ws.importer.interfaces=[org.ow2.chameleon.fuchsia.exporter.cxf.examples.base.PojoSampleToBeExportedIface]
@@ -769,7 +767,7 @@ device.serialNumber=virtual-camera</code></pre>
 <p>Then, just request your service as a regular dependency (as shown below), then you will see your dependency being injected and ready for use without much trouble.</p>
 </div>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code class="java language-java">@Component
 @Instantiate
 public class Client {
@@ -795,32 +793,32 @@ public class Client {
 <p>PubSubHubbub (PuSH) is a google protocol create to be fast, in fact it is a publish / subscribe mechanism that avoids the polling technique. A small diagram can show you the idea behind the protocol</p>
 </div>
 <div class="paragraph">
-<p><span class="image"><img src="diagram/push01.svg" alt="PuSH" width="800"></span></p>
+<p><span class="image"><img src="images/diagram/push01.svg" alt="PuSH" width="800"></span></p>
 </div>
 <div class="sect3">
 <h4 id="_prepare">Prepare</h4>
 <div class="paragraph">
 <p>So we are going to need, we are assuming that the publisher and hub addresses are well known.</p>
 </div>
-<div class="ulist">
-<ul>
+<div class="ulist checklist">
+<ul class="checklist">
 <li>
-<p>[*] know the address of the publisher</p>
+<p><input type="checkbox" data-item-complete="1" checked disabled> know the address of the publisher</p>
 </li>
 <li>
-<p>[*] know the address of the hub</p>
+<p><input type="checkbox" data-item-complete="1" checked disabled> know the address of the hub</p>
 </li>
 <li>
-<p>[ ] Instantiate the Importer</p>
+<p><input type="checkbox" data-item-complete="0" disabled> Instantiate the Importer</p>
 </li>
 <li>
-<p>[ ] Instantiate the linker</p>
+<p><input type="checkbox" data-item-complete="0" disabled> Instantiate the linker</p>
 </li>
 <li>
-<p>[ ] Inform fuchsia the Hub and Publisher addresses</p>
+<p><input type="checkbox" data-item-complete="0" disabled> Inform fuchsia the Hub and Publisher addresses</p>
 </li>
 <li>
-<p>[ ] Visualize the messages</p>
+<p><input type="checkbox" data-item-complete="0" disabled> Visualize the messages</p>
 </li>
 </ul>
 </div>
@@ -828,7 +826,7 @@ public class Client {
 <p>The first two steps you have to know already those addresses, the next two steps can be done by using maven profile. Meaning that we can generate a chameleon distribution with all our fuchsia dependencies, linker and importer instantiated just by typing into the project repository:</p>
 </div>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code class="bash language-bash">mvn clean install -f distribution/pom.xml -Pcore,push,push-config,discovery-filebased &amp;&amp; \
 cd distribution/target/chameleon-distribution/ &amp;&amp; \
 sh chameleon.sh --interactive</code></pre>
@@ -837,25 +835,25 @@ sh chameleon.sh --interactive</code></pre>
 <div class="paragraph">
 <p>Now lets verify our checklist:</p>
 </div>
-<div class="ulist">
-<ul>
+<div class="ulist checklist">
+<ul class="checklist">
 <li>
-<p>[*] know the address of the publisher</p>
+<p><input type="checkbox" data-item-complete="1" checked disabled> know the address of the publisher</p>
 </li>
 <li>
-<p>[*] know the address of the hub</p>
+<p><input type="checkbox" data-item-complete="1" checked disabled> know the address of the hub</p>
 </li>
 <li>
-<p>[*] Instantiate the Importer</p>
+<p><input type="checkbox" data-item-complete="1" checked disabled> Instantiate the Importer</p>
 </li>
 <li>
-<p>[*] Instantiate the linker</p>
+<p><input type="checkbox" data-item-complete="1" checked disabled> Instantiate the linker</p>
 </li>
 <li>
-<p>[*] Inform fuchsia the Hub and Publisher addresses</p>
+<p><input type="checkbox" data-item-complete="1" checked disabled> Inform fuchsia the Hub and Publisher addresses</p>
 </li>
 <li>
-<p>[ ] Visualize the messages</p>
+<p><input type="checkbox" data-item-complete="0" disabled> Visualize the messages</p>
 </li>
 </ul>
 </div>
@@ -863,7 +861,7 @@ sh chameleon.sh --interactive</code></pre>
 <p>The next step is done by add a file with all the information we already have about the PuSH server (example of the file below)</p>
 </div>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code class="bash language-bash">id=push-dispatch-event-admin
 deviceType=camera
 deviceSubType=another
@@ -880,7 +878,7 @@ device.serialNumber=push-dispatch-event-admin</code></pre>
 <table>
 <tr>
 <td class="icon">
-<img src="./images/icons/warning.png" alt="Warning">
+<img src="images/icons/warning.png" alt="Warning">
 </td>
 <td class="content">
 <div class="paragraph">
@@ -910,7 +908,7 @@ device.serialNumber=push-dispatch-event-admin</code></pre>
 <p>The address of the MQTT server is supposedly known, and the next two steps (importer and linker instantiation) can be done with the maven profile, according to the command below.</p>
 </div>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code class="bash language-bash">mvn clean install -f distribution/pom.xml -Pcore,mqtt,mqtt-config,discovery-filebased &amp;&amp; \
 cd distribution/target/chameleon-distribution/ &amp;&amp; \
 sh chameleon.sh --interactive</code></pre>
@@ -922,22 +920,22 @@ sh chameleon.sh --interactive</code></pre>
 <div class="paragraph">
 <p>Lets create our checklist:</p>
 </div>
-<div class="ulist">
-<ul>
+<div class="ulist checklist">
+<ul class="checklist">
 <li>
-<p>[*] know the address of the MQTT server</p>
+<p><input type="checkbox" data-item-complete="1" checked disabled> know the address of the MQTT server</p>
 </li>
 <li>
-<p>[*] Instantiate the Importer</p>
+<p><input type="checkbox" data-item-complete="1" checked disabled> Instantiate the Importer</p>
 </li>
 <li>
-<p>[*] Instantiate the linker</p>
+<p><input type="checkbox" data-item-complete="1" checked disabled> Instantiate the linker</p>
 </li>
 <li>
-<p>[ ] Inform fuchsia about the MQTT server address</p>
+<p><input type="checkbox" data-item-complete="0" disabled> Inform fuchsia about the MQTT server address</p>
 </li>
 <li>
-<p>[ ] Visualize the messages</p>
+<p><input type="checkbox" data-item-complete="0" disabled> Visualize the messages</p>
 </li>
 </ul>
 </div>
@@ -945,7 +943,7 @@ sh chameleon.sh --interactive</code></pre>
 <p>We tell Fuchsia which MQTT server (and other parameters) by deploying a file into the <em>load</em> directory containing those info (with the content below):</p>
 </div>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code class="bash language-bash">id=mqtt-dispatch-event-admin
 deviceType=camera
 deviceSubType=another
@@ -962,7 +960,7 @@ mqtt.server.port=5672</code></pre>
 <p>So, after installing your MQTT server (in our case RabbitMQ) make sure its running</p>
 </div>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code class="bash language-bash">sudo /etc/init.d/rabbitmq-server status</code></pre>
 </div>
 </div>
@@ -972,25 +970,25 @@ mqtt.server.port=5672</code></pre>
 <div class="paragraph">
 <p>In order to be able to export your <a href="https://code.google.com/p/protobuf/">Protobuffer</a> Service, feel things need to be done:</p>
 </div>
-<div class="ulist">
-<ul>
+<div class="ulist checklist">
+<ul class="checklist">
 <li>
-<p>[ ] Protobuffer class generated (Step 1)</p>
+<p><input type="checkbox" data-item-complete="0" disabled> Protobuffer class generated (Step 1)</p>
 </li>
 <li>
-<p>[ ] Implement the service methods for the Protobuffer generated class (Step 2)</p>
+<p><input type="checkbox" data-item-complete="0" disabled> Implement the service methods for the Protobuffer generated class (Step 2)</p>
 </li>
 <li>
-<p>[ ] Protobuffer class instance added to OSGi Registry (Step 3)</p>
+<p><input type="checkbox" data-item-complete="0" disabled> Protobuffer class instance added to OSGi Registry (Step 3)</p>
 </li>
 <li>
-<p>[ ] Instantiate the exporter and the linker (Step 4)</p>
+<p><input type="checkbox" data-item-complete="0" disabled> Instantiate the exporter and the linker (Step 4)</p>
 </li>
 <li>
-<p>[ ] Declare the exportation (Step 5)</p>
+<p><input type="checkbox" data-item-complete="0" disabled> Declare the exportation (Step 5)</p>
 </li>
 <li>
-<p>[ ] Create the runtime platform (Step 6)</p>
+<p><input type="checkbox" data-item-complete="0" disabled> Create the runtime platform (Step 6)</p>
 </li>
 </ul>
 </div>
@@ -998,7 +996,7 @@ mqtt.server.port=5672</code></pre>
 <table>
 <tr>
 <td class="icon">
-<img src="./images/icons/warning.png" alt="Warning">
+<img src="images/icons/warning.png" alt="Warning">
 </td>
 <td class="content">
 <div class="paragraph">
@@ -1017,7 +1015,7 @@ mqtt.server.port=5672</code></pre>
 <p>Here it is an example of a proto file that can be used for a first glance at the functionality.</p>
 </div>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code class="bash language-bash">
 package tutorial;
 
@@ -1070,7 +1068,7 @@ message NamePattern {
 <p>From this file you can generate your class by invoking</p>
 </div>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code class="bash language-bash">protoc --java_out=src/main/java/ addressbook.proto</code></pre>
 </div>
 </div>
@@ -1084,7 +1082,7 @@ message NamePattern {
 <p>So in our case we should implement two methods <strong>addPerson</strong> and <strong>listPeople</strong>, the exactly two services declared in the <em>proto</em> file.</p>
 </div>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code class="java language-java">public class AddressBookServiceImpl extends AddressBookProtos.AddressBookService {
     Map&lt;Integer, AddressBookProtos.Person&gt; records = new ConcurrentHashMap&lt;Integer, AddressBookProtos.Person&gt;();
 
@@ -1105,7 +1103,7 @@ message NamePattern {
 <p>An example of body for these two methods can be:</p>
 </div>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code class="java language-java">public class AddressBookServiceImpl extends AddressBookProtos.AddressBookService {
     Map&lt;Integer, AddressBookProtos.Person&gt; records = new ConcurrentHashMap&lt;Integer, AddressBookProtos.Person&gt;();
 
@@ -1146,7 +1144,7 @@ message NamePattern {
 <p>In this step, we instantiate our service (in java level) and publish it in the OSGi registry. There are several ways of doing this <strong>Step</strong> so pick up your flavor. We will do like this:</p>
 </div>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code class="java language-java">@Component
 @Instantiate
 public class RegisterBookService {
@@ -1178,7 +1176,7 @@ public class RegisterBookService {
 <p>As you should have seen in previous sections, the <strong>exporter</strong> (for our case) and a <strong>linker</strong> must be instantiated, they are not instantiated automatically.</p>
 </div>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code class="java language-java">@Configuration
 public class Config {
     Instance ProtobufferExporter = instance()
@@ -1205,7 +1203,7 @@ public class Config {
 <p>This sentenced is converted in:</p>
 </div>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code class="java language-java">@Component
 @Instantiate
 public class ExportDeclaration {
@@ -1242,7 +1240,7 @@ public class ExportDeclaration {
 <p>Assuming that you have compiled fuchsia (in previous sections), you can use <strong>distribution</strong> module to generate a distribution with dependencies needed.</p>
 </div>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code class="java language-java">mvn clean install -Pcore,discovery-filebased,protobuffer &amp;&amp; cd target/chameleon-distribution &amp;&amp; \
 sh chameleon.sh --interactive</code></pre>
 </div>
@@ -1257,17 +1255,17 @@ sh chameleon.sh --interactive</code></pre>
 <div class="paragraph">
 <p>Here, we can see the similarity in the importation process, if a given protocol is supported by Fuchsia the processors are used similarly independently of the protocol.</p>
 </div>
-<div class="ulist">
+<div class="ulist checklist">
 <div class="title">Prepare the environment</div>
-<ul>
+<ul class="checklist">
 <li>
-<p>[ ] Instantiate the importer &amp; linker (Step 1)</p>
+<p><input type="checkbox" data-item-complete="0" disabled> Instantiate the importer &amp; linker (Step 1)</p>
 </li>
 <li>
-<p>[ ] Publish your intention, in fuchsia the <strong>declaration</strong> (Step 2)</p>
+<p><input type="checkbox" data-item-complete="0" disabled> Publish your intention, in fuchsia the <strong>declaration</strong> (Step 2)</p>
 </li>
 <li>
-<p>[ ] Fetch your local instance (Step 3)</p>
+<p><input type="checkbox" data-item-complete="0" disabled> Fetch your local instance (Step 3)</p>
 </li>
 </ul>
 </div>
@@ -1277,7 +1275,7 @@ sh chameleon.sh --interactive</code></pre>
 <p>This step is mandatory for use of <strong>processors</strong> (importer, exporter). From the moment you instantiate one processor, it is usually required for you to create a <strong>linker</strong> otherwise your service cannot be notified in case of a <strong>declaration</strong> appearance.</p>
 </div>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code class="java language-java">@Configuration
 public class ProtobufferImporterConfig {
 	    Instance ProtobufferRPCImporter = instance()
@@ -1295,7 +1293,7 @@ public class ProtobufferImporterConfig {
 <div class="sect3">
 <h4 id="_step_2_2">Step 2</h4>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code class="java language-java">id=cxf-protobuffer-importer
 
 deviceType=camera
@@ -1318,7 +1316,7 @@ rpc.proto.message=AddressBookServiceMessage</code></pre>
 <p>As always here is it the example we put to work:</p>
 </div>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code class="java language-java">@Component
 @Instantiate
 public class BookClient {
@@ -1400,7 +1398,7 @@ public class BookClient {
 <p>An example of such file is this one:</p>
 </div>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code>id=mqtt-dispatch-event-admin
 exporter.id=camera-exporter
 
@@ -1414,7 +1412,7 @@ mqtt.queue=public</code></pre>
 <p>If you type <strong>declaration</strong> in the console you should see:</p>
 </div>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code>Service properties:
 		objectClass = [Ljava.lang.String;@26f6a1
 		service.id = 319
@@ -1451,7 +1449,7 @@ Metadata
 <p>You should see all your printers in form of:</p>
 </div>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code>Metadata
 	id=hp LaserJet 2300 (scribe missions)
 	discovery.mdns.device.name=hp LaserJet 2300 (scribe missions)
@@ -1468,7 +1466,7 @@ Metadata
 <p>And if you type <strong>discovery</strong> in the console you should see:</p>
 </div>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code>Discovery [DNSSDDiscovery] provided by bundle mdns (19)
 	Service properties:
 		dnssd.service.type = _printer._tcp.local.
@@ -1485,7 +1483,7 @@ Metadata
 <p>The following configuration that makes available to import all the printers on the local network inside the platform with requiring any other information than the type of the device that interest us.</p>
 </div>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code class="java language-java">@Configuration
 public class DNSSDInitializer {
     Instance dnssdDiscovery = instance()
@@ -1500,7 +1498,7 @@ public class DNSSDInitializer {
 <table>
 <tr>
 <td class="icon">
-<img src="./images/icons/tip.png" alt="Tip">
+<img src="images/icons/tip.png" alt="Tip">
 </td>
 <td class="content">
 <div class="paragraph">
@@ -1576,7 +1574,7 @@ public class DNSSDInitializer {
 <p>This is done by java code, you have to deploy a bundle in the platform that creates the intentions, which is basically instantiate the components: discovery, importer and the linkers. This can be done with the code below:</p>
 </div>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code>@Configuration
 public class Config {
 
@@ -1606,7 +1604,7 @@ public class Config {
 <p>On the shell you can type the command below, and you should obtain the list of all installed importers</p>
 </div>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code>user@shelbie$ importer
         ._____________________________________________
         |name:philipsImporter
@@ -1640,7 +1638,7 @@ user@shelbie$</code></pre>
 <p>After we can check is our linkers are all in place:</p>
 </div>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code>user@shelbie$ linker
                   ._____________________________________________
                   |name:philipsLinker
@@ -1680,7 +1678,7 @@ user@shelbie$</code></pre>
 <p>If your lamp was corrected detected, just type <em>phlist</em> (as below) and you should get the list of the philips light that are available along with their state.</p>
 </div>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code>user@shelbie$ phlist</code></pre>
 </div>
 </div>
@@ -1688,7 +1686,7 @@ user@shelbie$</code></pre>
 <p>In case you wanna change its color (in fact change the color of all lamps) you can use the command <em>phset</em> as below to set the color to red:</p>
 </div>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code>user@shelbie$ phset -on true -r 255</code></pre>
 </div>
 </div>
@@ -1733,7 +1731,7 @@ user@shelbie$</code></pre>
 <div class="sect4">
 <h5 id="_exporter_instantiation">Exporter instantiation</h5>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code class="java language-java">       Instance jsonRPCExporter = instance()
                 .of("org.ow2.chameleon.fuchsia.exporter.jsonrpc.JSONRPCExporter")
                 .with("target").setto("(fuchsia.export.jsonrpc.instance=*)");</code></pre>
@@ -1743,7 +1741,7 @@ user@shelbie$</code></pre>
 <div class="sect4">
 <h5 id="_linker_instantiation">Linker instantiation</h5>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code class="java language-java">        Instance jsonRPCExporterLinker = instance()
             .of(FuchsiaConstants.DEFAULT_EXPORTATION_LINKER_FACTORY_NAME)
             .with(ExportationLinker.FILTER_EXPORTDECLARATION_PROPERTY).setto("(fuchsia.export.jsonrpc.instance=*)")
@@ -1754,7 +1752,7 @@ user@shelbie$</code></pre>
 <div class="sect4">
 <h5 id="_export_declaration_instantiation">Export Declaration instantiation</h5>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code class="java language-java">
         Map&lt;String, Object&gt; metadata=new HashMap&lt;String, Object&gt;();
 
@@ -1781,7 +1779,7 @@ user@shelbie$</code></pre>
 <p>You can use <a href="http://fr.wikipedia.org/wiki/CURL">cURL</a> to test if your instance was properly exported.</p>
 </div>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code class="xml language-xml">linux-shell# curl -i -X POST -d '{"jsonrpc": "2.0", "method": "helloworld", "params": ["earth"], "id": 1}' http://localhost:8080/JSONRPC/DummyPojoInstance</code></pre>
 </div>
 </div>
@@ -1839,7 +1837,7 @@ user@shelbie$</code></pre>
 <div class="sect4">
 <h5 id="_importer_instantiation">Importer instantiation</h5>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code class="java language-java">     Instance jsonRPCImporter = instance()
             .of("Fuchsia-Importer:JSON-RPC")
             .with(ImporterService.TARGET_FILTER_PROPERTY).setto("(configs=jsonrpc)");</code></pre>
@@ -1849,7 +1847,7 @@ user@shelbie$</code></pre>
 <div class="sect4">
 <h5 id="_linker_instantiation_2">Linker instantiation</h5>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code class="java language-java">        Instance jsonRPCImporterLinker = instance()
             .of(FuchsiaConstants.DEFAULT_IMPORTATION_LINKER_FACTORY_NAME)
             .with(FILTER_IMPORTDECLARATION_PROPERTY).setto("(configs=jsonrpc)")
@@ -1860,7 +1858,7 @@ user@shelbie$</code></pre>
 <div class="sect4">
 <h5 id="_importer_declaration_instantiation">Importer Declaration instantiation</h5>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code class="java language-java">        Map&lt;String, Object&gt; metadata=new HashMap&lt;String, Object&gt;();
         metadata.put(ID, "endipoint");
         metadata.put(URL, "http://localhost:8080/JSONRPC/DummyPojoInstance");
@@ -1886,7 +1884,7 @@ user@shelbie$</code></pre>
 <p>You can use <strong>felix shelbie shell</strong> and inspect the importer bundle to check if it has correcly imported our JSONRPC remote instance</p>
 </div>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code class="xml language-xml">shelbie-shell$ lb
 ..
    31|Active     |    1|OW2 Chameleon - Fuchsia Importer JSON-RPC (0.0.2.SNAPSHOT)
@@ -1943,7 +1941,7 @@ service; org.ow2.chameleon.fuchsia.examples.jsonrpc.exporter.experiment.DummyIfa
 <div class="sect4">
 <h5 id="_exporter_instantiation_2">Exporter instantiation</h5>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code class="java language-java">    Instance cxfexporter = instance()
             .of("org.ow2.chameleon.fuchsia.exporter.jaxws.JAXWSExporter")
             .with("target").setto("(fuchsia.export.cxf.instance=*)");</code></pre>
@@ -1953,7 +1951,7 @@ service; org.ow2.chameleon.fuchsia.examples.jsonrpc.exporter.experiment.DummyIfa
 <div class="sect4">
 <h5 id="_linker_instantiation_3">Linker instantiation</h5>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code class="java language-java">    Instance cxfexporterlinker = instance()
             .of(FuchsiaConstants.DEFAULT_EXPORTATION_LINKER_FACTORY_NAME)
             .with(ExportationLinker.FILTER_EXPORTDECLARATION_PROPERTY).setto("(fuchsia.export.cxf.instance=*)")
@@ -1964,7 +1962,7 @@ service; org.ow2.chameleon.fuchsia.examples.jsonrpc.exporter.experiment.DummyIfa
 <div class="sect4">
 <h5 id="_export_declaration_instantiation_2">Export Declaration instantiation</h5>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code class="java language-java">
         Map&lt;String, Object&gt;  metadata=new HashMap&lt;String, Object&gt;();
 
@@ -1998,7 +1996,7 @@ service; org.ow2.chameleon.fuchsia.examples.jsonrpc.exporter.experiment.DummyIfa
 <p>You should see something like:</p>
 </div>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code class="xml language-xml">&lt;wsdl:definitions xmlns:ns1="http://schemas.xmlsoap.org/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://base.examples.cxf.exporter.fuchsia.chameleon.ow2.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="PojoSampleToBeExported" targetNamespace="http://base.examples.cxf.exporter.fuchsia.chameleon.ow2.org/"&gt;
 ...
 &lt;/wsdl:service&gt;
@@ -2053,7 +2051,7 @@ service; org.ow2.chameleon.fuchsia.examples.jsonrpc.exporter.experiment.DummyIfa
 <div class="sect4">
 <h5 id="_importer_instantiation_2">Importer instantiation</h5>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code class="java language-java">    Instance cxfimporter = instance()
             .of("org.ow2.chameleon.fuchsia.importer.jaxws.JAXWSImporter")
             .named("cxfimporter")
@@ -2064,7 +2062,7 @@ service; org.ow2.chameleon.fuchsia.examples.jsonrpc.exporter.experiment.DummyIfa
 <div class="sect4">
 <h5 id="_linker_instantiation_4">Linker instantiation</h5>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code class="java language-java">    Instance cxfimporterlinker = instance()
             .of(FuchsiaConstants.DEFAULT_IMPORTATION_LINKER_FACTORY_NAME)
             .named("cxfimporterlinker")
@@ -2076,7 +2074,7 @@ service; org.ow2.chameleon.fuchsia.examples.jsonrpc.exporter.experiment.DummyIfa
 <div class="sect4">
 <h5 id="_importer_declaration_instantiation_2">Importer Declaration instantiation</h5>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code class="java language-java">        Map&lt;String, Object&gt;  metadata=new HashMap&lt;String, Object&gt;();
 
         metadata.put("id","b");
@@ -2102,7 +2100,7 @@ service; org.ow2.chameleon.fuchsia.examples.jsonrpc.exporter.experiment.DummyIfa
 <p>You can use <strong>felix shelbie shell</strong> and inspect the importer bundle to check if it has correcly imported our JAXWS remote instance</p>
 </div>
 <div class="listingblock">
-<div class="content monospaced">
+<div class="content">
 <pre class="highlight"><code class="xml language-xml">shelbie-shell$ lb
 ..
    52|Active     |    1|OW2 Chameleon - Fuchsia Importer JAX-WS (0.0.2.SNAPSHOT)
