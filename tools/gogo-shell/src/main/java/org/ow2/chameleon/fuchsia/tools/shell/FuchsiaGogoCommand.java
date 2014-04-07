@@ -238,7 +238,7 @@ public class FuchsiaGogoCommand {
         List<ServiceReference> importationLinkerRef = getAllServiceRefs(ImportationLinker.class);
         StringBuilder sbFinal=new StringBuilder();
         if (exportationLinkerRef.isEmpty() && importationLinkerRef.isEmpty()) {
-            sbFinal.append("No linkers available.%s");
+            sbFinal.append("No linkers available.\n");
         } else {
             if (!exportationLinkerRef.isEmpty()) {
                 for (ServiceReference reference : exportationLinkerRef) {
@@ -267,7 +267,7 @@ public class FuchsiaGogoCommand {
         List<ServiceReference> discoveryRef = getAllServiceRefs(DiscoveryService.class);
         StringBuilder sbFinal=new StringBuilder();
         if (discoveryRef.isEmpty()) {
-            sbFinal.append("No discovery available.%s");
+            sbFinal.append("No discovery available.\n");
         } else {
             for (ServiceReference reference : discoveryRef) {
                 StringBuilder sb=new StringBuilder();
@@ -288,7 +288,7 @@ public class FuchsiaGogoCommand {
         Map<ServiceReference, ImporterService> importerRefsAndServices = getAllServiceRefsAndServices(ImporterService.class);
         StringBuilder sbFinal=new StringBuilder();
         if (importerRefsAndServices.isEmpty()) {
-            sbFinal.append("No importers available.%s");
+            sbFinal.append("No importers available.\n");
         } else {
             for (Map.Entry<ServiceReference, ImporterService> e : importerRefsAndServices.entrySet()) {
                 StringBuilder sb=new StringBuilder();
