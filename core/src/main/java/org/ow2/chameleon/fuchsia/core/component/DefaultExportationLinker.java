@@ -153,7 +153,7 @@ public class DefaultExportationLinker implements ExportationLinker, ExportationL
      * Check all the already bound {@link ExportDeclaration}s, if the metadata of the ExportDeclaration match the filter
      * exposed by the ExporterService, link them together.
      */
-    @Bind(id = "exporterServices", specification = "org.ow2.chameleon.fuchsia.core.component.ExporterService", aggregate = true, optional = true)
+    @Bind(id = "exporterServices", specification = ExporterService.class, aggregate = true, optional = true)
     void bindExporterService(ServiceReference<ExporterService> serviceReference) {
         synchronized (lock) {
             try {
@@ -218,7 +218,7 @@ public class DefaultExportationLinker implements ExportationLinker, ExportationL
      * Check if metadata of the ExportDeclaration match the filter exposed by the {@link ExporterService}s bound.
      * If the ExportDeclaration matches the ExporterService filter, link them together.
      */
-    @Bind(id = "exportDeclarations", specification = "org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration", aggregate = true, optional = true)
+    @Bind(id = "exportDeclarations", specification = ExportDeclaration.class, aggregate = true, optional = true)
     void bindExportDeclaration(ServiceReference<ExportDeclaration> exportDeclarationSRef) {
         synchronized (lock) {
             declarationsManager.add(exportDeclarationSRef);
