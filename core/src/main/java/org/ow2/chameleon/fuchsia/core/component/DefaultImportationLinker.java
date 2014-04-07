@@ -153,7 +153,7 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
      * Check all the already bound {@link ImportDeclaration}s, if the metadata of the ImportDeclaration match the filter
      * exposed by the ImporterService, link them together.
      */
-    @Bind(id = "importerServices", specification = "org.ow2.chameleon.fuchsia.core.component.ImporterService", aggregate = true, optional = true)
+    @Bind(id = "importerServices", specification = ImporterService.class, aggregate = true, optional = true)
     void bindImporterService(ServiceReference<ImporterService> serviceReference) {
         synchronized (lock) {
             try {
@@ -218,7 +218,7 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
      * Check if metadata of the ImportDeclaration match the filter exposed by the {@link ImporterService}s bound.
      * If the ImportDeclaration matches the ImporterService filter, link them together.
      */
-    @Bind(id = "importDeclarations", specification = "org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration", aggregate = true, optional = true)
+    @Bind(id = "importDeclarations", specification = ImportDeclaration.class, aggregate = true, optional = true)
     void bindImportDeclaration(ServiceReference<ImportDeclaration> importDeclarationSRef) {
         synchronized (lock) {
             declarationsManager.add(importDeclarationSRef);
