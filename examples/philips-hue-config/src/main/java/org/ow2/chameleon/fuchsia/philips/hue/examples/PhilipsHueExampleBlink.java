@@ -33,7 +33,7 @@ import java.util.Set;
 //@Instantiate
 public class PhilipsHueExampleBlink {
 
-    @Requires(specification = "com.philips.lighting.model.PHLight")
+    @Requires(specification = PHLight.class)
     Set<PHLight> lights;
 
     @Requires
