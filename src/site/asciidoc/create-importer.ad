@@ -26,15 +26,15 @@ MQTT importer
 ~~~~~~~~~~~~~
 
 .External Requirement:
-* MQTT server with the address known
-* EventAdmin service configured in the machine that will import this service
+* MQTT server with a known address 
+* EventAdmin service configured in the machine that will receive MQTT event
 
 .Import Declaration information required: 
 * id
 * mqtt.queue
 
 .Output:
-* A message will be published in EventAdmin in the queue $mqtt.queue, meaning that it will use the same name of *queue* as MQTT
+* A message will be published in EventAdmin in the queue _mqtt.queue_, meaning that it will use the same name as the MQTT *queue*
 
 *Detailed Description*
 
