@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.ow2.chameleon.fuchsia.base</groupId>
         <artifactId>org.ow2.chameleon.fuchsia.base.json-rpc</artifactId>
-        <version>0.0.2-SNAPSHOT</version>
+        <version>0.0.2</version>
         <relativePath>../../bases/json-rpc/pom.xml</relativePath>
     </parent>
 
