@@ -907,7 +907,7 @@
                             <descriptors>
                                 <descriptor>distribution.xml</descriptor>
                             </descriptors>
-                            <appendAssemblyId>false</appendAssemblyId>
+                            <appendAssemblyId>true</appendAssemblyId>
                         </configuration>
                     </execution>
                 </executions>
