@@ -11,6 +11,7 @@
 
     <artifactId>fuchsia-distribution</artifactId>
     <name>OW2 Chameleon - Fuchsia Distribution</name>
+    <packaging>pom</packaging>
 
     <description>A distribution of fuchsia platform</description>
 
@@ -848,12 +849,6 @@
                         </goals>
                         <configuration>
                             <outputDirectory>${chameleon.destination}/runtime</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>src/main/resources</directory>
-                                    <filtering>true</filtering>
-                                </resource>
-                            </resources>
                         </configuration>
                     </execution>
                 </executions>
@@ -910,7 +905,7 @@
                         <phase>package</phase>
                         <configuration>
                             <descriptors>
-                                <descriptor>src/distribution.xml</descriptor>
+                                <descriptor>distribution.xml</descriptor>
                             </descriptors>
                             <appendAssemblyId>false</appendAssemblyId>
                         </configuration>

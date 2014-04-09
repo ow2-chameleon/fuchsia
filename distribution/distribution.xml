@@ -28,16 +28,16 @@
     <formats>
         <format>zip</format>
     </formats>
-    <includeBaseDirectory>true</includeBaseDirectory>
-    <baseDirectory>${distribution.baseDirectory}</baseDirectory>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <baseDirectory>${project.build.directory}/chameleon-distribution</baseDirectory>
     <fileSets>
         <fileSet>
             <directory>
                 ${chameleon.destination}
             </directory>
-            <outputDirectory/>
+            <outputDirectory>fuchsia-distribution-${project.version}</outputDirectory>
             <includes>
-                <include>./**</include>
+                <include>**/*</include>
             </includes>
         </fileSet>
     </fileSets>
