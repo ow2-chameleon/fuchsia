@@ -3,7 +3,7 @@
     <parent>
         <artifactId>org.ow2.chameleon.fuchsia.base.philips-hue</artifactId>
         <groupId>org.ow2.chameleon.fuchsia.base</groupId>
-        <version>0.0.2</version>
+        <version>0.0.3-SNAPSHOT</version>
         <relativePath>../../bases/philips-hue/pom.xml</relativePath>
     </parent>
 
