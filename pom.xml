@@ -557,6 +557,7 @@
                     <projectName>OW2 Chameleon - Fuchsia Framework</projectName>
                     <excludes>
                         <exclude>site/resources/**</exclude>
+                        <exclude>*/**/*Test*.java</exclude>
                     </excludes>
                     <roots>
                         <root>src/</root>
