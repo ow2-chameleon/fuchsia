@@ -17,12 +17,12 @@
         <dependency>
             <artifactId>hue-sdk-core</artifactId>
             <groupId>philips</groupId>
-            <version>0.0.2</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <artifactId>hue-sdk-resources</artifactId>
             <groupId>philips</groupId>
-            <version>0.0.2</version>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 
