@@ -22,7 +22,7 @@
     <parent>
         <artifactId>org.ow2.chameleon.fuchsia.base.bluetooth</artifactId>
         <groupId>org.ow2.chameleon.fuchsia.base</groupId>
-        <version>0.0.2-SNAPSHOT</version>
+        <version>0.0.3-SNAPSHOT</version>
         <relativePath>../../bases/bluetooth/pom.xml</relativePath>
     </parent>
 
