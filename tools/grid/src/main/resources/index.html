@@ -1,6 +1,6 @@
 <!--
   #%L
-  OW2 Chameleon - Fuchsia Tool Grid
+  OW2 Chameleon - Fuchsia Framework
   %%
   Copyright (C) 2009 - 2014 OW2 Chameleon
   %%
@@ -8,7 +8,7 @@
   you may not use this file except in compliance with the License.
   You may obtain a copy of the License at
   
-      http://www.apache.org/licenses/LICENSE-2.0
+       http://www.apache.org/licenses/LICENSE-2.0
   
   Unless required by applicable law or agreed to in writing, software
   distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,101 +17,402 @@
   limitations under the License.
   #L%
   -->
-<!DOCTYPE html>
 <html>
 <head>
-<meta name="description" content="Display fuchsia components as a graph" />
-<meta charset=utf-8 />
-<title>Fuchsia Grid WebView</title>
-<script src="/js/jquery.min.js"></script>
-<script src="/js/cytoscape.min.js"></script>
+
+    <style>
+
+
+
+        body {
+            font: 13px sans-serif;
+            position: relative;
+            width: 960px;
+            height: 500px;
+        }
+
+        .node {
+            fill: #000;
+            cursor: crosshair;
+        }
+
+        .node_selected {
+            fill: #ff7f0e;
+            stroke: #ff7f0e;
+        }
+
+        .drag_line {
+            stroke: #999;
+            stroke-width: 5;
+            pointer-events: none;
+        }
+
+        .drag_line_hidden {
+            stroke: #999;
+            stroke-width: 0;
+            pointer-events: none;
+        }
+
+        .link {
+            stroke: #999;
+            stroke-width: 5;
+            cursor: crosshair;
+        }
+
+        .link_selected {
+            stroke: #ff7f0e;
+        }
+
+
+
+    </style>
+
+    <style type="text/css"></style>
+
+    <script src="http://d3js.org/d3.v2.min.js"></script>
+    <script type='text/javascript' src='http://code.jquery.com/jquery-2.1.0.js'></script>
+    <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js"></script>
+
+</head>
+<body>
+
+<svg width="1024" height="768"><rect width="1024" height="768"/></svg>
+
+<a href="javascript:void(0)" class="add-data action-button">Add data</a>
+
+
 <script>
 
-	function launchgraph(){
-
-		$('#cy').cytoscape({
-		  style: cytoscape.stylesheet()
-		    .selector('node')
-		      .css({
-			'content': 'data(name)',
-			'text-valign': 'center',
-			'color': 'white',
-			'text-outline-width': 2,
-			'text-outline-color': '#888'
-		      })
-		    .selector('edge')
-		      .css({
-			'target-arrow-shape': 'triangle'
-		      })
-		    .selector(':selected')
-		      .css({
-			'background-color': 'black',
-			'line-color': 'black',
-			'target-arrow-color': 'black',
-			'source-arrow-color': 'black'
-		      })
-		    .selector('.faded')
-		      .css({
-			'opacity': 0.25,
-			'text-opacity': 0
-		      }),
 
 
-		elements: {
-		    nodes: [
-			<#if nodes??>		
-			<#list nodes as node>
-						      { data: { id: '${node.id}', name: '${node.label}' } },
-					</#list>
-			</#if>
-						  
-						    ],  
-					    edges: [
-			<#if edges??>		
-					<#list edges as edge>
-					      { data: { source:'${edge.source}', target: '${edge.target}' } },
-					</#list>
-			</#if>
-		    ]
-		  },
-		  
-		  ready: function(){
-		    window.cy = this;
-		    
-		    cy.elements().unselectify();
-		    
-		    cy.on('tap', 'node', function(e){
-		      var node = e.cyTarget; 
-		      var neighborhood = node.neighborhood().add(node);
-		      
-		      cy.elements().addClass('faded');
-		      neighborhood.removeClass('faded');
-		    });
-		    
-		    cy.on('tap', function(e){
-		      if( e.cyTarget === cy ){
-			cy.elements().removeClass('faded');
-		      }
-		    });
-		  }
-		});
-	}
+    (function poll() {
+        setTimeout(function() {
+            $.ajax({
+                url: "/content",
+                type: "GET",
+                success: function(data) {
+
+                    if(lastData!=CryptoJS.MD5(data).toString()){
+                        //letcontent(data.toString());
+                        updata(data.toString());
+                        lastData=CryptoJS.MD5(data).toString();
+                    }
+
+                },
+                contentType: "text/plain",
+                dataType: "text",
+                complete: poll,
+                timeout: 2000
+            })
+        }, 5000);
+    })();
+
+
+
+    var lastData;
+
+    function httpGet()
+    {
+        var address="/content";
+        if (window.XMLHttpRequest)
+        {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp=new XMLHttpRequest();
+        }
+        else
+        {// code for IE6, IE5
+            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange=function()
+        {
+            if (xmlhttp.readyState==4 && xmlhttp.status==200)
+            {
+                letcontent(xmlhttp.responseText);
+                lastData=CryptoJS.MD5(xmlhttp.responseText);
+                return xmlhttp.responseText;
+            }
+        }
+        xmlhttp.open("GET", address,false);
+        xmlhttp.send();
+    }
+
+    function updata(mycontent){
+
+        var inNodes = JSON.parse(mycontent);
+        console.log("mucontent:", mycontent);
+
+        var w = 1024,
+                h = 768,
+                z = d3.scale.category20c();
+
+        var force = d3.layout.force()
+                .linkDistance(300)
+                .size([w, h])
+                .charge(-430);
+
+        var svg = d3.select("svg")
+                .attr("width", w)
+                .attr("height", h);
+
+
+
+         svg.append("svg:rect")
+         .attr("width", w)
+         .attr("height", h);
+
+
+
+        var nodes = flatten(inNodes);
+        links = d3.layout.tree().links(nodes);
+
+        //svg.selectAll("line").remove();
+
+        force
+                .nodes(nodes)
+                .links(links)
+                .start();
+                     /*
+        var link = svg.selectAll("line")
+                .data(links)
+                .enter().insert("svg:line")
+                .classed('node', true)
+                .style("stroke", "#999")
+                .style("stroke-width", "1px");
+                */
+
+
+        /*
+         var node = svg.selectAll("rect.node")
+         .data(nodes)
+         .enter().append("svg:rect")
+         .attr("width", function(d){return d.size*5})
+         .attr("height", function(d){return 15})
+         .style("fill", function(d) { return z(d.parent && d.parent.name); })
+         .style("stroke", "#000")
+         .call(force.drag);
+         */
+
+        var node = svg.selectAll("ellipse.node")
+                .data(nodes)
+                .enter().append("svg:ellipse")
+                .attr("rx", function(d){return d.size*4})
+                .attr("ry", function(d){return d.size*1})
+                .classed('node', true)
+                .style("fill", function(d) { return z(d.parent && d.parent.name); })
+                .style("stroke", "#000")
+                .call(force.drag);
+
+        var text = svg.selectAll("text.node")
+                .data(nodes)
+                .enter().append("text")
+                .classed('node', true)
+                .text(function(d) {return d.name;})
+                .style("font-size","12px")
+                .attr("text-anchor","middle");
+
+        force.on("tick", function(e) {
+            /*
+            link.attr("x1", function(d) { return d.source.x; })
+                    .attr("y1", function(d) { return d.source.y; })
+                    .attr("x2", function(d) { return d.target.x; })
+                    .attr("y2", function(d) { return d.target.y; });
+            */
+            node.attr("cx", function(d) { return d.x; })
+                    .attr("cy", function(d) { return d.y; });
+
+            text.attr("dx", function (d) {return d.x; })
+                    .attr("dy", function (d) {return d.y + 4; });
+        });
+
+        svg.selectAll("ellipse.node").data(nodes).exit().remove();
+        svg.selectAll("text.node").data(nodes).exit().remove();
+        svg.selectAll("line").data(nodes).exit().remove();
+
+
+
+
+    }
+
+    function letcontent(mycontent){
+
+        var inNodes = JSON.parse(mycontent);
+        console.log("mucontent:", mycontent);
+
+        var w = 1024,
+                h = 768,
+                z = d3.scale.category20c();
+
+        var force = d3.layout.force()
+                .linkDistance(300)
+                .size([w, h])
+                .charge(-430);
+
+        var svg = d3.select("svg")
+                .attr("width", w)
+                .attr("height", h);
+
+
+
+        svg.append("svg:rect")
+                .attr("width", w)
+                .attr("height", h);
+
+
+        var nodes = flatten(inNodes);
+                links = d3.layout.tree().links(nodes);
+
+        force
+                .nodes(nodes)
+                .links(links)
+                .start();
+
+         /*
+        var link = svg.selectAll("line")
+                .data(links)
+                .enter().insert("svg:line")
+                .classed('node', true)
+                .style("stroke", "#999")
+                .style("stroke-width", "1px");
+                */
+
+
+        /*
+        var node = svg.selectAll("rect.node")
+                .data(nodes)
+                .enter().append("svg:rect")
+                .attr("width", function(d){return d.size*5})
+                .attr("height", function(d){return 15})
+                .style("fill", function(d) { return z(d.parent && d.parent.name); })
+                .style("stroke", "#000")
+                .call(force.drag);
+        */
+
+        var node = svg.selectAll("ellipse.node")
+                .data(nodes)
+                .enter().append("svg:ellipse")
+                .attr("rx", function(d){return d.size*4})
+                .attr("ry", function(d){return d.size*1})
+                .classed('node', true)
+                .style("fill", function(d) { return z(d.parent && d.parent.name); })
+                .style("stroke", "#000")
+                .call(force.drag);
+
+
+
+
+        var text = svg.selectAll("text.node")
+                .data(nodes)
+                .enter().append("text")
+                .classed('node', true)
+                .text(function(d) {return d.name;})
+                .style("font-size","12px")
+                .attr("text-anchor","middle");
+
+        force.on("tick", function(e) {
+            /*
+            link.attr("x1", function(d) { return d.source.x; })
+                    .attr("y1", function(d) { return d.source.y; })
+                    .attr("x2", function(d) { return d.target.x; })
+                    .attr("y2", function(d) { return d.target.y; });
+            */
+            node.attr("cx", function(d) { return d.x; })
+                    .attr("cy", function(d) { return d.y; });
+
+            text.attr("dx", function (d) {return d.x; })
+                    .attr("dy", function (d) {return d.y + 4; });
+        });
+
+    }
+
+    function flatten(root) {
+        var nodes = [];
+        function recurse(node, depth) {
+            if (node.children) {
+                node.children.forEach(function(child) {
+                    child.parent = node;
+                    recurse(child, depth + 1);
+                });
+            }
+            node.depth = depth;
+            nodes.push(node);
+        }
+        recurse(root, 1);
+        return nodes;
+    }
+
+    d3.selectAll(".add-data")
+            .on("click", function() {
+
+                var xinNodes = "{\"name\": \"APP\",\"size\":20}";
+                var inNodes = JSON.parse(xinNodes);
+
+                var svg = d3.select("svg");
+
+                var nodes = flatten(inNodes);
+
+                var w = 1024,
+                        h = 768,
+                        z = d3.scale.category20c();
+
+                var force = d3.layout.force()
+                        .linkDistance(300)
+                        .size([w, h])
+                        .charge(-430);
+
+                var node = svg.selectAll("ellipse.node").data(nodes)
+                        .enter().append("svg:ellipse")
+                        .attr("rx", function(d){return d.size*4})
+                        .attr("ry", function(d){return d.size*1})
+                        .classed('node', true)
+                        .style("fill", function(d) { return z(d.parent && d.parent.name); })
+                        .style("stroke", "#000")
+                        .call(force.drag);
+
+                var text = svg.selectAll("text.node")
+                        .data(nodes)
+                        .enter().append("text")
+                        .classed('node', true)
+                        .text(function(d) {return d.name;})
+                        .style("font-size","12px")
+                        .attr("text-anchor","middle");
+
+                links = d3.layout.tree().links(nodes);
+
+                var link = svg.selectAll("line")
+                        .data(links)
+                        .enter().insert("svg:line")
+                        .classed('node', true)
+                        .style("stroke", "#999")
+                        .style("stroke-width", "1px");
+
+                svg.selectAll("ellipse.node").data(nodes).exit().remove();
+                svg.selectAll("text.node").data(nodes).exit().remove();
+                svg.selectAll("line").data(nodes).exit().remove();
+
+
+
+                force.on("tick", function(e) {
+
+                    link.attr("x1", function(d) { return d.source.x; })
+                            .attr("y1", function(d) { return d.source.y; })
+                            .attr("x2", function(d) { return d.target.x; })
+                            .attr("y2", function(d) { return d.target.y; });
+
+                    node.attr("cx", function(d) { return d.x; })
+                            .attr("cy", function(d) { return d.y; });
+
+                    text.attr("dx", function (d) {return d.x; })
+                            .attr("dy", function (d) {return d.y + 4; });
+
+                });
+
+
+
+            });
+
+    httpGet();
+
 </script>
-<style>
-body { 
-  font: 14px helvetica neue, helvetica, arial, sans-serif;
-}
-#cy {
-  height: 100%;
-  width: 100%;
-  position: absolute;
-  left: 0;
-  top: 0;
-}
-</style>
-</head>
 
-<body onload="launchgraph()">
-  <div id="cy"></div>
 </body>
+
 </html>

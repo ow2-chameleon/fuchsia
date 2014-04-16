@@ -92,37 +92,6 @@ public class GridWebView {
         }
     }
 
-    public void invalidate(){
-        web.unregister(SERVLET);
-        web.unregister(RESOURCES);
-    }
-
-    private List<ImportationLinkerIntrospection> fetchLinkerIntrospections(){
-
-        List<ImportationLinkerIntrospection> linkers=null;
-
-        try {
-
-            linkers=new ArrayList<ImportationLinkerIntrospection>();
-
-            ServiceReference[] references=bundleContext.getServiceReferences(ImportationLinkerIntrospection.class.getName(),null);
-
-            if(references!=null) {
-                for (ServiceReference sr : bundleContext.getServiceReferences(ImportationLinkerIntrospection.class.getName(), null)) {
-
-                    linkers.add((ImportationLinkerIntrospection) bundleContext.getService(sr));
-
-                }
-            }
-
-        } catch (InvalidSyntaxException e) {
-            LOG.error("Failed with the message {}", e.getMessage(), e);
-        }
-
-        return linkers;
-
-    }
-
     public Map generateTemplateModel(){
 
         List nodes=new ArrayList();
@@ -133,22 +102,12 @@ public class GridWebView {
         templateVariables.put("nodes", nodes);
         templateVariables.put("edges", edges);
 
-        for(ImportationLinkerIntrospection linker:fetchLinkerIntrospections()){
-
-            nodes.add(new Node(linker.getName()));
-
-            for(ImporterService importer:linker.getLinkedImporters()){
-                nodes.add(new Node(importer.getName()));
-                edges.add(new Edge(linker.getName(),importer.getName()));
-            }
-
-            for(ImportDeclaration declaration:linker.getImportDeclarations()){
-                nodes.add(new Node(declaration.getMetadata().get("id").toString()));
-                edges.add(new Edge(linker.getName(),declaration.getMetadata().get("id").toString()));
-            }
-
-        }
         return templateVariables;
+    }
+
+    public void invalidate(){
+        web.unregister(SERVLET);
+        web.unregister(RESOURCES);
     }
 
    class MainPage extends HttpServlet {
