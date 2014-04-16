@@ -26,8 +26,11 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.http.NamespaceException;
+import org.ow2.chameleon.fuchsia.core.component.ExportationLinkerIntrospection;
+import org.ow2.chameleon.fuchsia.core.component.ExporterService;
 import org.ow2.chameleon.fuchsia.core.component.ImportationLinkerIntrospection;
 import org.ow2.chameleon.fuchsia.core.component.ImporterService;
+import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.tools.grid.model.Edge;
 import org.ow2.chameleon.fuchsia.tools.grid.model.Node;
@@ -76,45 +79,20 @@ public class Content extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        /*
-
-        TreeNode tn=new TreeNode();
-        tn.setName("Fuchsia");
-        tn.setSize(10);
-
-        TreeNode tnChild=new TreeNode();
-        tnChild.setName("APP2");
-        tnChild.setSize(10);
+        List<TreeNode> rootList=new ArrayList<TreeNode>();
 
         ObjectMapper mapper=new ObjectMapper();
 
-        mapper.writeValue(resp.getWriter(),tn);
-
-         */
-
-        TreeNode root=new TreeNode();
-        root.setName("Fuchsia");
-        root.setSize(20);
-
-        ObjectMapper mapper=new ObjectMapper();
-
-
+        rootList.add(new TreeNode("Fuchsia","Importer","licensing"));
 
         for(ImportationLinkerIntrospection linker:fetchLinkerIntrospections()){
 
-            TreeNode linkerNode=new TreeNode();
-
-            linkerNode.setName(linker.getName());
-            linkerNode.setSize(linkerNode.getName().length());
-
-            root.getChildren().add(linkerNode);
+            rootList.add(new TreeNode("Importer",linker.getName(),"licensing"));
 
             for(ImporterService importer:linker.getLinkedImporters()){
 
-                TreeNode importerNode=new TreeNode();
-                importerNode.setName(importer.getName());
-                importerNode.setSize(importerNode.getName().length());
-                linkerNode.getChildren().add(importerNode);
+                TreeNode linkerNode=new TreeNode(linker.getName(),importer.getName(),"licensing");
+                rootList.add(linkerNode);
 
             }
 
@@ -127,7 +105,29 @@ public class Content extends HttpServlet {
 
         }
 
-        mapper.writeValue(resp.getWriter(),root);
+        rootList.add(new TreeNode("Fuchsia","Exporter","licensing"));
+
+        for(ExportationLinkerIntrospection linker:fetchLinkerIntrospectionsExporter()){
+
+            rootList.add(new TreeNode("Exporter",linker.getName(),"licensing"));
+
+            for(ExporterService exporter:linker.getLinkedExporters()){
+
+                TreeNode linkerNode=new TreeNode(linker.getName(),exporter.getName(),"licensing");
+                rootList.add(linkerNode);
+
+            }
+
+            /*
+            for(ImportDeclaration declaration:linker.getImportDeclarations()){
+                nodes.add(new Node(declaration.getMetadata().get("id").toString()));
+                edges.add(new Edge(linker.getName(),declaration.getMetadata().get("id").toString()));
+            }
+            */
+
+        }
+
+        mapper.writeValue(resp.getWriter(),rootList);
 
         resp.addHeader("Origin","http://localhost:8080/content");
         resp.addHeader("access-control-allow-origin","*");
@@ -149,6 +149,32 @@ public class Content extends HttpServlet {
                 for (ServiceReference sr : context.getServiceReferences(ImportationLinkerIntrospection.class.getName(), null)) {
 
                     linkers.add((ImportationLinkerIntrospection) context.getService(sr));
+
+                }
+            }
+
+        } catch (InvalidSyntaxException e) {
+            e.printStackTrace();
+        }
+
+        return linkers;
+
+    }
+
+    private List<ExportationLinkerIntrospection> fetchLinkerIntrospectionsExporter(){
+
+        List<ExportationLinkerIntrospection> linkers=null;
+
+        try {
+
+            linkers=new ArrayList<ExportationLinkerIntrospection>();
+
+            ServiceReference[] references=context.getServiceReferences(ExportationLinkerIntrospection.class.getName(),null);
+
+            if(references!=null) {
+                for (ServiceReference sr : context.getServiceReferences(ExportationLinkerIntrospection.class.getName(), null)) {
+
+                    linkers.add((ExportationLinkerIntrospection) context.getService(sr));
 
                 }
             }
