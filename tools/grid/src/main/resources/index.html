@@ -22,52 +22,37 @@
 
     <style>
 
-
-
-        body {
-            font: 13px sans-serif;
-            position: relative;
-            width: 960px;
-            height: 500px;
-        }
-
-        .node {
-            fill: #000;
-            cursor: crosshair;
-        }
-
-        .node_selected {
-            fill: #ff7f0e;
-            stroke: #ff7f0e;
-        }
-
-        .drag_line {
-            stroke: #999;
-            stroke-width: 5;
-            pointer-events: none;
-        }
-
-        .drag_line_hidden {
-            stroke: #999;
-            stroke-width: 0;
-            pointer-events: none;
-        }
-
         .link {
-            stroke: #999;
-            stroke-width: 5;
-            cursor: crosshair;
+            fill: none;
+            stroke: #666;
+            stroke-width: 1.5px;
         }
 
-        .link_selected {
-            stroke: #ff7f0e;
+        #licensing {
+            fill: green;
         }
 
+        .link.licensing {
+            stroke: green;
+        }
 
+        .link.resolved {
+            stroke-dasharray: 0,2 1;
+        }
+
+        circle {
+            fill: #ccc;
+            stroke: #333;
+            stroke-width: 1.5px;
+        }
+
+        text {
+            font: 10px sans-serif;
+            pointer-events: none;
+            text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+        }
 
     </style>
-
-    <style type="text/css"></style>
 
     <script src="http://d3js.org/d3.v2.min.js"></script>
     <script type='text/javascript' src='http://code.jquery.com/jquery-2.1.0.js'></script>
@@ -76,10 +61,12 @@
 </head>
 <body>
 
+<!--
 <svg width="1024" height="768"><rect width="1024" height="768"/></svg>
 
-<a href="javascript:void(0)" class="add-data action-button">Add data</a>
 
+<a href="javascript:void(0)" class="add-data action-button">Add data</a>
+-->
 
 <script>
 
@@ -94,7 +81,8 @@
 
                     if(lastData!=CryptoJS.MD5(data).toString()){
                         //letcontent(data.toString());
-                        updata(data.toString());
+                        console.log("update fired");
+                        letcontent(data.toString());
                         lastData=CryptoJS.MD5(data).toString();
                     }
 
@@ -137,274 +125,154 @@
 
     function updata(mycontent){
 
-        var inNodes = JSON.parse(mycontent);
-        console.log("mucontent:", mycontent);
-
-        var w = 1024,
-                h = 768,
-                z = d3.scale.category20c();
-
-        var force = d3.layout.force()
-                .linkDistance(300)
-                .size([w, h])
-                .charge(-430);
-
-        var svg = d3.select("svg")
-                .attr("width", w)
-                .attr("height", h);
-
-
-
-         svg.append("svg:rect")
-         .attr("width", w)
-         .attr("height", h);
-
-
-
-        var nodes = flatten(inNodes);
-        links = d3.layout.tree().links(nodes);
-
-        //svg.selectAll("line").remove();
-
-        force
-                .nodes(nodes)
-                .links(links)
-                .start();
-                     /*
-        var link = svg.selectAll("line")
-                .data(links)
-                .enter().insert("svg:line")
-                .classed('node', true)
-                .style("stroke", "#999")
-                .style("stroke-width", "1px");
-                */
-
-
-        /*
-         var node = svg.selectAll("rect.node")
-         .data(nodes)
-         .enter().append("svg:rect")
-         .attr("width", function(d){return d.size*5})
-         .attr("height", function(d){return 15})
-         .style("fill", function(d) { return z(d.parent && d.parent.name); })
-         .style("stroke", "#000")
-         .call(force.drag);
-         */
-
-        var node = svg.selectAll("ellipse.node")
-                .data(nodes)
-                .enter().append("svg:ellipse")
-                .attr("rx", function(d){return d.size*4})
-                .attr("ry", function(d){return d.size*1})
-                .classed('node', true)
-                .style("fill", function(d) { return z(d.parent && d.parent.name); })
-                .style("stroke", "#000")
-                .call(force.drag);
-
-        var text = svg.selectAll("text.node")
-                .data(nodes)
-                .enter().append("text")
-                .classed('node', true)
-                .text(function(d) {return d.name;})
-                .style("font-size","12px")
-                .attr("text-anchor","middle");
-
-        force.on("tick", function(e) {
-            /*
-            link.attr("x1", function(d) { return d.source.x; })
-                    .attr("y1", function(d) { return d.source.y; })
-                    .attr("x2", function(d) { return d.target.x; })
-                    .attr("y2", function(d) { return d.target.y; });
-            */
-            node.attr("cx", function(d) { return d.x; })
-                    .attr("cy", function(d) { return d.y; });
-
-            text.attr("dx", function (d) {return d.x; })
-                    .attr("dy", function (d) {return d.y + 4; });
-        });
-
-        svg.selectAll("ellipse.node").data(nodes).exit().remove();
-        svg.selectAll("text.node").data(nodes).exit().remove();
-        svg.selectAll("line").data(nodes).exit().remove();
-
-
-
-
     }
 
     function letcontent(mycontent){
 
-        var inNodes = JSON.parse(mycontent);
-        console.log("mucontent:", mycontent);
-
-        var w = 1024,
-                h = 768,
-                z = d3.scale.category20c();
-
-        var force = d3.layout.force()
-                .linkDistance(300)
-                .size([w, h])
-                .charge(-430);
-
-        var svg = d3.select("svg")
-                .attr("width", w)
-                .attr("height", h);
-
-
-
-        svg.append("svg:rect")
-                .attr("width", w)
-                .attr("height", h);
-
-
-        var nodes = flatten(inNodes);
-                links = d3.layout.tree().links(nodes);
-
-        force
-                .nodes(nodes)
-                .links(links)
-                .start();
-
-         /*
-        var link = svg.selectAll("line")
-                .data(links)
-                .enter().insert("svg:line")
-                .classed('node', true)
-                .style("stroke", "#999")
-                .style("stroke-width", "1px");
-                */
-
+        var links = JSON.parse(mycontent);
 
         /*
-        var node = svg.selectAll("rect.node")
-                .data(nodes)
-                .enter().append("svg:rect")
-                .attr("width", function(d){return d.size*5})
-                .attr("height", function(d){return 15})
-                .style("fill", function(d) { return z(d.parent && d.parent.name); })
-                .style("stroke", "#000")
-                .call(force.drag);
-        */
+        var links = [
+            {source: "Microsoft", target: "Amazon", type: "licensing"},
+            {source: "Microsoft", target: "HTC", type: "licensing"},
+            {source: "Samsung", target: "Apple", type: "suit"},
+            {source: "Motorola", target: "Apple", type: "suit"},
+            {source: "Nokia", target: "Apple", type: "resolved"},
+            {source: "HTC", target: "Apple", type: "suit"},
+            {source: "Kodak", target: "Apple", type: "suit"},
+            {source: "Microsoft", target: "Barnes & Noble", type: "suit"},
+            {source: "Microsoft", target: "Foxconn", type: "suit"},
+            {source: "Oracle", target: "Google", type: "suit"},
+            {source: "Apple", target: "HTC", type: "suit"},
+            {source: "Microsoft", target: "Inventec", type: "suit"},
+            {source: "Samsung", target: "Kodak", type: "resolved"},
+            {source: "LG", target: "Kodak", type: "resolved"},
+            {source: "RIM", target: "Kodak", type: "suit"},
+            {source: "Sony", target: "LG", type: "suit"},
+            {source: "Kodak", target: "LG", type: "resolved"},
+            {source: "Apple", target: "Nokia", type: "resolved"},
+            {source: "Qualcomm", target: "Nokia", type: "resolved"},
+            {source: "Apple", target: "Motorola", type: "suit"},
+            {source: "Microsoft", target: "Motorola", type: "suit"},
+            {source: "Motorola", target: "Microsoft", type: "suit"},
+            {source: "Huawei", target: "ZTE", type: "suit"},
+            {source: "Ericsson", target: "ZTE", type: "suit"},
+            {source: "Kodak", target: "Samsung", type: "resolved"},
+            {source: "Apple", target: "Samsung", type: "suit"},
+            {source: "Kodak", target: "RIM", type: "suit"},
+            {source: "Nokia", target: "Qualcomm", type: "suit"}
+        ]; */
 
-        var node = svg.selectAll("ellipse.node")
-                .data(nodes)
-                .enter().append("svg:ellipse")
-                .attr("rx", function(d){return d.size*4})
-                .attr("ry", function(d){return d.size*1})
-                .classed('node', true)
-                .style("fill", function(d) { return z(d.parent && d.parent.name); })
-                .style("stroke", "#000")
-                .call(force.drag);
+        var nodes = {};
 
-
-
-
-        var text = svg.selectAll("text.node")
-                .data(nodes)
-                .enter().append("text")
-                .classed('node', true)
-                .text(function(d) {return d.name;})
-                .style("font-size","12px")
-                .attr("text-anchor","middle");
-
-        force.on("tick", function(e) {
-            /*
-            link.attr("x1", function(d) { return d.source.x; })
-                    .attr("y1", function(d) { return d.source.y; })
-                    .attr("x2", function(d) { return d.target.x; })
-                    .attr("y2", function(d) { return d.target.y; });
-            */
-            node.attr("cx", function(d) { return d.x; })
-                    .attr("cy", function(d) { return d.y; });
-
-            text.attr("dx", function (d) {return d.x; })
-                    .attr("dy", function (d) {return d.y + 4; });
+// Compute the distinct nodes from the links.
+        links.forEach(function(link) {
+            link.source = nodes[link.source] || (nodes[link.source] = {name: link.source});
+            link.target = nodes[link.target] || (nodes[link.target] = {name: link.target});
         });
 
-    }
+        var width = 960,
+                height = 500;
 
-    function flatten(root) {
-        var nodes = [];
-        function recurse(node, depth) {
-            if (node.children) {
-                node.children.forEach(function(child) {
-                    child.parent = node;
-                    recurse(child, depth + 1);
-                });
-            }
-            node.depth = depth;
-            nodes.push(node);
+        var force = d3.layout.force()
+                .nodes(d3.values(nodes))
+                .links(links)
+                .size([width, height])
+                .linkDistance(60)
+                .charge(-300)
+                .on("tick", tick)
+                .start();
+
+        var svg;
+
+        svg = d3.select("svg");
+
+        if(svg.toString()==""){
+            svg = d3.select("body").append("svg")
+                    .attr("width", width)
+                    .attr("height", height);
+        }else {
+            //d3.selectAll("circle").data(force.nodes(),function(d) {return d.name;}).exit().remove();
+            //d3.selectAll("text").data(force.nodes(),function(d) {return d.name;}).exit().remove();
+            //d3.selectAll("path").data(force.nodes(),function(d) {return d.name;}).exit().remove();
+            d3.selectAll("path").remove();
+            d3.selectAll("circle").remove();
+            d3.selectAll("g").remove();
+            d3.selectAll("path").remove();
+            d3.selectAll("text").remove();
         }
-        recurse(root, 1);
-        return nodes;
+
+
+// Per-type markers, as they don't inherit styles.
+        svg.append("defs").selectAll("marker")
+                .data(["suit", "licensing", "resolved"])
+                .enter().append("marker")
+                .attr("id", function(d) { return d; })
+                .attr("viewBox", "0 -5 10 10")
+                .attr("refX", 15)
+                .attr("refY", -1.5)
+                .attr("markerWidth", 6)
+                .attr("markerHeight", 6)
+                .attr("orient", "auto")
+                .append("path")
+                .attr("d", "M0,-5L10,0L0,5");
+
+        var path = svg.append("g").selectAll("path")
+                .data(force.links())
+                .enter().append("path")
+                .attr("class", function(d) { return "link " + d.type; })
+                .attr("marker-end", function(d) { return "url(#" + d.type + ")"; });
+
+        //console.log(force.nodes());
+
+        var circle1 = svg.append("g").selectAll("circle")
+                .data(force.nodes(),
+                function(d) {
+                    console.log("---->"+JSON.stringify(d, null, 4));
+                    return d.name;}
+        );
+
+        var circle = circle1
+                .enter().append("circle")
+                .attr("r", 6)
+                .call(force.drag);
+
+        var text = svg.append("g").selectAll("text")
+                .data(force.nodes())
+                .enter().append("text")
+                .attr("x", 8)
+                .attr("y", ".31em")
+                .text(function(d) { return d.name; });
+
+// Use elliptical arc path segments to doubly-encode directionality.
+        function tick() {
+            path.attr("d", linkArc);
+            circle.attr("transform", transform);
+            text.attr("transform", transform);
+        }
+
+        function linkArc(d) {
+            var dx = d.target.x - d.source.x,
+                    dy = d.target.y - d.source.y,
+                    dr = Math.sqrt(dx * dx + dy * dy);
+            return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
+        }
+
+        function transform(d) {
+            return "translate(" + d.x + "," + d.y + ")";
+        }
+
+
+        //d3.selectAll("marker").data(nodes).exit().remove();
+        //d3.selectAll("path").data(nodes).exit().remove();
+        //d3.selectAll("circle").data(nodes,function(d) { return d.name;}).exit().remove();
+        //function(d) { console.log(JSON.stringify(d, null, 4));}
+        //d3.selectAll("text").data(nodes).exit().remove();
+
     }
 
     d3.selectAll(".add-data")
             .on("click", function() {
-
-                var xinNodes = "{\"name\": \"APP\",\"size\":20}";
-                var inNodes = JSON.parse(xinNodes);
-
-                var svg = d3.select("svg");
-
-                var nodes = flatten(inNodes);
-
-                var w = 1024,
-                        h = 768,
-                        z = d3.scale.category20c();
-
-                var force = d3.layout.force()
-                        .linkDistance(300)
-                        .size([w, h])
-                        .charge(-430);
-
-                var node = svg.selectAll("ellipse.node").data(nodes)
-                        .enter().append("svg:ellipse")
-                        .attr("rx", function(d){return d.size*4})
-                        .attr("ry", function(d){return d.size*1})
-                        .classed('node', true)
-                        .style("fill", function(d) { return z(d.parent && d.parent.name); })
-                        .style("stroke", "#000")
-                        .call(force.drag);
-
-                var text = svg.selectAll("text.node")
-                        .data(nodes)
-                        .enter().append("text")
-                        .classed('node', true)
-                        .text(function(d) {return d.name;})
-                        .style("font-size","12px")
-                        .attr("text-anchor","middle");
-
-                links = d3.layout.tree().links(nodes);
-
-                var link = svg.selectAll("line")
-                        .data(links)
-                        .enter().insert("svg:line")
-                        .classed('node', true)
-                        .style("stroke", "#999")
-                        .style("stroke-width", "1px");
-
-                svg.selectAll("ellipse.node").data(nodes).exit().remove();
-                svg.selectAll("text.node").data(nodes).exit().remove();
-                svg.selectAll("line").data(nodes).exit().remove();
-
-
-
-                force.on("tick", function(e) {
-
-                    link.attr("x1", function(d) { return d.source.x; })
-                            .attr("y1", function(d) { return d.source.y; })
-                            .attr("x2", function(d) { return d.target.x; })
-                            .attr("y2", function(d) { return d.target.y; });
-
-                    node.attr("cx", function(d) { return d.x; })
-                            .attr("cy", function(d) { return d.y; });
-
-                    text.attr("dx", function (d) {return d.x; })
-                            .attr("dy", function (d) {return d.y + 4; });
-
-                });
-
 
 
             });

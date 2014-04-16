@@ -27,33 +27,39 @@ import java.util.List;
  */
 public class TreeNode {
 
-    String name;
+    String source;
 
-    Integer size;
+    String target;
 
-    List<TreeNode> children=new ArrayList<TreeNode>();
+    String type;
 
-    public String getName() {
-        return name;
+    public TreeNode(String source,String target,String type){
+        this.source=source;
+        this.target=target;
+        this.type=type;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getSource() {
+        return source;
     }
 
-    public List<TreeNode> getChildren() {
-        return children;
+    public void setSource(String source) {
+        this.source = source;
     }
 
-    public void setChildren(List<TreeNode> children) {
-        this.children = children;
+    public String getTarget() {
+        return target;
     }
 
-    public Integer getSize() {
-        return size;
+    public void setTarget(String target) {
+        this.target = target;
     }
 
-    public void setSize(Integer size) {
-        this.size = size;
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

@@ -27,7 +27,7 @@ import java.util.Set;
 /**
  * Created by mo on 19/02/14.
  */
-public interface ExportationLinkerIntrospection {
+public interface ExportationLinkerIntrospection extends ExportationLinker {
     /**
      * Return the exporterServices linked the ExportationLinker.
      *

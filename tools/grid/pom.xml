@@ -91,6 +91,7 @@
                         <Bundle-SymbolicName>
                             ${project.artifactId}
                         </Bundle-SymbolicName>
+                        <Export-Package>{local-packages}</Export-Package>
                     </instructions>
                 </configuration>
             </plugin>
