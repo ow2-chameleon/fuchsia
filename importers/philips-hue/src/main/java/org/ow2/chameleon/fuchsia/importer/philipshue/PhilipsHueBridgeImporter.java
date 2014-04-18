@@ -23,6 +23,7 @@ package org.ow2.chameleon.fuchsia.importer.philipshue;
 import com.philips.lighting.hue.sdk.bridge.impl.PHBridgeImpl;
 import com.philips.lighting.model.PHBridge;
 import com.philips.lighting.model.PHLight;
+import org.apache.felix.ipojo.Factory;
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -54,6 +55,9 @@ public class PhilipsHueBridgeImporter extends AbstractImporterComponent {
 
     @ServiceProperty(name = "target", value = "(discovery.philips.bridge.type=*)")
     private String filter;
+
+    @ServiceProperty(name = Factory.INSTANCE_NAME_PROPERTY)
+    private String name;
 
     public PhilipsHueBridgeImporter(BundleContext context) {
         this.context = context;
@@ -146,7 +150,7 @@ public class PhilipsHueBridgeImporter extends AbstractImporterComponent {
 
 
     public String getName() {
-        return this.getClass().getSimpleName();
+        return name;
     }
 
     class FetchBridgeLampsTask extends TimerTask {

@@ -26,15 +26,8 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceReference;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.http.NamespaceException;
-import org.ow2.chameleon.fuchsia.core.component.ImportationLinkerIntrospection;
-import org.ow2.chameleon.fuchsia.core.component.ImporterService;
-import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
-import org.ow2.chameleon.fuchsia.tools.grid.model.Edge;
-import org.ow2.chameleon.fuchsia.tools.grid.model.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
