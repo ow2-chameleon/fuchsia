@@ -20,6 +20,7 @@ package org.ow2.chameleon.fuchsia.importer.philipshue;
  * #L%
  */
 
+import org.apache.felix.ipojo.Factory;
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -49,6 +50,9 @@ public class PhilipsHueImporter extends AbstractImporterComponent {
 
     @ServiceProperty(name = "target", value = "(discovery.philips.device.name=*)")
     private String filter;
+
+    @ServiceProperty(name = Factory.INSTANCE_NAME_PROPERTY)
+    private String name;
 
     public PhilipsHueImporter(BundleContext context) {
         this.context = context;
@@ -127,7 +131,7 @@ public class PhilipsHueImporter extends AbstractImporterComponent {
 
 
     public String getName() {
-        return this.getClass().getSimpleName();
+        return name;
     }
 }
 

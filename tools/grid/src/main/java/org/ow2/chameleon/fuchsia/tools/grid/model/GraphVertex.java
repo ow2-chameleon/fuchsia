@@ -1,8 +1,6 @@
-package org.ow2.chameleon.fuchsia.tools.grid.model;
-
 /*
  * #%L
- * OW2 Chameleon - Fuchsia Tool Grid
+ * OW2 Chameleon - Fuchsia Framework
  * %%
  * Copyright (C) 2009 - 2014 OW2 Chameleon
  * %%
@@ -10,7 +8,7 @@ package org.ow2.chameleon.fuchsia.tools.grid.model;
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,18 +17,20 @@ package org.ow2.chameleon.fuchsia.tools.grid.model;
  * limitations under the License.
  * #L%
  */
+package org.ow2.chameleon.fuchsia.tools.grid.model;
 
-/**
- * This is a transfer object used by the FreeMarker template.
- */
-public class Edge {
+public class GraphVertex {
 
-    private String source;
-    private String target;
+    String source;
 
-    public Edge(String source,String target){
+    String target;
+
+    String type;
+
+    public GraphVertex(String source, String target, String type){
         this.source=source;
         this.target=target;
+        this.type=type;
     }
 
     public String getSource() {
@@ -49,4 +49,11 @@ public class Edge {
         this.target = target;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 }

@@ -19,47 +19,19 @@
  */
 package org.ow2.chameleon.fuchsia.tools.grid.model;
 
-import java.util.ArrayList;
-import java.util.List;
+public class ImportationLinkerNode {
 
-/**
- * Created by jnascimento on 10/04/14.
- */
-public class TreeNode {
-
-    String source;
-
-    String target;
-
-    String type;
-
-    public TreeNode(String source,String target,String type){
-        this.source=source;
-        this.target=target;
-        this.type=type;
+    public ImportationLinkerNode(String factoryName){
+        this.factoryName=factoryName;
     }
 
-    public String getSource() {
-        return source;
+    private String factoryName;
+
+    public String getFactoryName() {
+        return factoryName;
     }
 
-    public void setSource(String source) {
-        this.source = source;
-    }
-
-    public String getTarget() {
-        return target;
-    }
-
-    public void setTarget(String target) {
-        this.target = target;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
+    public void setFactoryName(String factoryName) {
+        this.factoryName = factoryName;
     }
 }
