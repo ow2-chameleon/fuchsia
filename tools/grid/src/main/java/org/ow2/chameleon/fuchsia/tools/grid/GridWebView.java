@@ -48,7 +48,8 @@ import java.util.Map;
 public class GridWebView {
 
     private static final String SERVLET="/grid";
-    private static final String RESOURCES="/js";
+    private static final String RESOURCES_JS ="/js";
+    private static final String RESOURCES_CSS ="/css";
     private static final String TEMPLATE_FILE="/index.html";
     private static final String TEMPLATE_ENCODING="UTF-8";
     private static final String TEMPLATE_FILE_REPOSITORY="/";
@@ -78,7 +79,8 @@ public class GridWebView {
         }
 
         try {
-            web.registerResources(RESOURCES, RESOURCES, web.createDefaultHttpContext());
+            web.registerResources(RESOURCES_JS, RESOURCES_JS, web.createDefaultHttpContext());
+            web.registerResources(RESOURCES_CSS, RESOURCES_CSS, web.createDefaultHttpContext());
         } catch (NamespaceException e) {
             LOG.error("Cannot register resources", e);
             state = false;
@@ -100,7 +102,8 @@ public class GridWebView {
 
     public void invalidate(){
         web.unregister(SERVLET);
-        web.unregister(RESOURCES);
+        web.unregister(RESOURCES_JS);
+        web.unregister(RESOURCES_CSS);
     }
 
    class MainPage extends HttpServlet {
