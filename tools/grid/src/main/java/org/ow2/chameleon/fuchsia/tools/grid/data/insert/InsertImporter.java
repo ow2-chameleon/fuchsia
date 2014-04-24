@@ -21,14 +21,20 @@ package org.ow2.chameleon.fuchsia.tools.grid.data.insert;
 
 import org.apache.felix.ipojo.*;
 import org.apache.felix.ipojo.annotations.*;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.node.JsonNodeFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.http.NamespaceException;
+import org.ow2.chameleon.fuchsia.core.FuchsiaUtils;
 import org.ow2.chameleon.fuchsia.core.component.ImportationLinker;
 import org.ow2.chameleon.fuchsia.core.component.ImporterService;
+import org.ow2.chameleon.fuchsia.core.constant.HttpStatus;
+import org.ow2.chameleon.fuchsia.core.exceptions.InvalidFilterException;
 import org.ow2.chameleon.fuchsia.tools.grid.ContentHelper;
+import org.ow2.chameleon.fuchsia.tools.grid.model.AjaxError;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -76,7 +82,7 @@ public class InsertImporter extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        Enumeration enu=req.getParameterNames();
+        ObjectMapper mapper=new ObjectMapper();
 
         try {
 
@@ -90,22 +96,27 @@ public class InsertImporter extends HttpServlet {
 
                 Hashtable<String,Object> hs=new Hashtable<String, Object>();
 
-                hs.put(ImporterService.TARGET_FILTER_PROPERTY,getValue(req.getParameter("importerTarget")));
-                hs.put(Factory.INSTANCE_NAME_PROPERTY,req.getParameter("importerInstanceName"));
+                String filter=getValue(req.getParameter("importerTarget"));
+
+                FuchsiaUtils.getFilter(filter);
+
+                hs.put(ImporterService.TARGET_FILTER_PROPERTY,filter);
+
+                String instanceName=req.getParameter("importerInstanceName");
+                if(instanceName!=null && instanceName.trim().length()!=0){
+                    hs.put(Factory.INSTANCE_NAME_PROPERTY,instanceName);
+                }
 
                 ComponentInstance ci=factory.createComponentInstance(hs);
 
             }
 
-        } catch (InvalidSyntaxException e) {
+        } catch (Exception e) {
+            mapper.writeValue(resp.getWriter(),new AjaxError("error",e.getMessage()));
             e.printStackTrace();
-        } catch (MissingHandlerException e) {
-            e.printStackTrace();
-        } catch (ConfigurationException e) {
-            e.printStackTrace();
-        } catch (UnacceptableConfiguration unacceptableConfiguration) {
-            unacceptableConfiguration.printStackTrace();
         }
+
+        mapper.writeValue(resp.getWriter(),new AjaxError("success","Importer created successfully."));
 
     }
 

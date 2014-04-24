@@ -90,8 +90,9 @@ public class ContentLinker extends HttpServlet {
         }
 
         //rootList.add(new ImportationLinkerNode("jander fact"));
-
         mapper.writeValue(resp.getWriter(),rootList);
+
+
 
     }
 

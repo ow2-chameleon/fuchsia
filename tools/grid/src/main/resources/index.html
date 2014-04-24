@@ -19,408 +19,314 @@
   -->
 <html>
 <head>
+<title>Fuchsia Grid</title>
 
-    <style>
+<link href="css/fuchsia.css" rel="stylesheet" type="text/css" media="all">
 
-        .link {
-            fill: none;
-            stroke: #666;
-            stroke-width: 1.5px;
+<script src="/js/md5.js"></script>
+
+<script src="/js/d3.v2.min.js"></script>
+
+<script src="/js/jquery-2.1.0.js"></script>
+
+<script src="/js/grid.js"></script>
+
+<script>
+
+fromSerletJsonToCombo("/contentImportationLinker", "#linkerImporterCombo");
+fromSerletJsonToCombo("/contentImporter", "#importerCombo");
+
+(function poll() {
+    setTimeout(function () {
+        $.ajax({
+            url: "/contentGraph",
+            type: "GET",
+            success: function (data) {
+                if (lastData != CryptoJS.MD5(data).toString()) {
+                    letcontent(data.toString());
+                    lastData = CryptoJS.MD5(data).toString();
+                }
+
+            },
+            contentType: "text/plain",
+            dataType: "text",
+            complete: poll,
+            timeout: 2000
+        })
+    }, 5000);
+})();
+
+var lastData;
+
+function loadGraph() {
+    var address = "/contentGraph";
+    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp = new XMLHttpRequest();
+    }
+    else {// code for IE6, IE5
+        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            letcontent(xmlhttp.responseText);
+            lastData = CryptoJS.MD5(xmlhttp.responseText);
+            return xmlhttp.responseText;
         }
+    }
+    xmlhttp.open("GET", address, false);
+    xmlhttp.send();
+}
 
-        #licensing {
-            fill: green;
-        }
+var forceg = d3.layout.force();
 
-        .link.licensing {
-            stroke: green;
-        }
+function letcontent(mycontent) {
 
-        .link.resolved {
-            stroke-dasharray: 0,2 1;
-        }
+    var links = JSON.parse(mycontent);
 
-        circle {
-            fill: #ccc;
-            stroke: #333;
-            stroke-width: 1.5px;
-        }
+    var nodes = {};
 
-        text {
-            font: 10px sans-serif;
-            pointer-events: none;
-            text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
-        }
+    // Compute the distinct nodes from the links.
+    links.forEach(function (link) {
+        link.source = nodes[link.source] || (nodes[link.source] = {name: link.source});
+        link.target = nodes[link.target] || (nodes[link.target] = {name: link.target});
+    });
 
-    </style>
+    var width = 960,
+            height = 500;
 
-    <script src="/js/md5.js"></script> <!-- http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js -->
-
-    <script src="/js/d3.v2.min.js"></script> <!-- http://d3js.org/d3.v2.min.js -->
-
-    <script src="/js/jquery-2.1.0.js"></script> <!-- http://code.jquery.com/jquery-2.1.0.js -->
+    var force =
+            forceg.nodes(d3.values(nodes))
+                    .links(links)
+                    .size([width, height])
+                    .linkDistance(100)
+                    .charge(-300)
+                    .on("tick", tick);
 
 
-  <script>
+    var svg;
 
-  (function poll() {
-      setTimeout(function() {
-          $.ajax({
-              url: "/contentImportationLinker",
-              type: "GET",
-              success: function(data) {
+    svg = d3.select("svg");
 
-                  data = JSON.parse(data.toString());
+    var idgen = function (d) {
+        return d.name;
+    };
 
-                  console.log(JSON.stringify(data,null,4));
+    if (svg.toString() == "") {
+        svg = d3.select("#graphplaceholder").append("svg")
+                .attr("width", width)
+                .attr("height", height);
+        svg.append("defs").selectAll("marker")
+                .data(["suit", "licensing", "resolved"])
+                .enter().append("marker")
+                .attr("id", function (d) {
+                    return d;
+                })
+                .attr("viewBox", "0 -5 10 10")
+                .attr("refX", 15)
+                .attr("refY", -1.5)
+                .attr("markerWidth", 6)
+                .attr("markerHeight", 6)
+                .attr("orient", "auto")
+                .append("path")
+                .attr("d", "M0,-5L10,0L0,5");
+    } else {
 
-                  sel=d3.select("body").select("#linkerImporterCombo").selectAll("option");
+        /*
 
-                  sel.data(data).enter().append("option").text(function(d){
-                      return d.factoryName;
-                  });
+         d3.selectAll("circle").data(force.nodes(),idgen).exit().remove();
+         d3.selectAll("text").data(force.nodes(),idgen).exit().remove();
+         d3.selectAll("path").data(force.nodes(),idgen).exit().remove();
 
-                  sel.data(data).exit().remove();
-
-              },
-              contentType: "text/plain",
-              dataType: "text",
-              complete: poll,
-              timeout: 2000
-          })
-      }, 5000);
-  })();
-
-  (function poll() {
-      setTimeout(function() {
-          $.ajax({
-              url: "/contentImporter",
-              type: "GET",
-              success: function(data) {
-
-                  data = JSON.parse(data.toString());
-
-                  console.log(JSON.stringify(data,null,4));
-
-                  sel=d3.select("body").select("#importerCombo").selectAll("option");
-
-                  sel.data(data).enter().append("option").text(function(d){
-                      return d.factoryName;
-                  });
-
-                  sel.data(data).exit().remove();
-
-              },
-              contentType: "text/plain",
-              dataType: "text",
-              complete: poll,
-              timeout: 2000
-          })
-      }, 5000);
-  })();
-
-  (function poll() {
-      setTimeout(function() {
-          $.ajax({
-              url: "/contentGraph",
-              type: "GET",
-              success: function(data) {
-
-                  if(lastData!=CryptoJS.MD5(data).toString()){
-                      //letcontent(data.toString());
-                      console.log("update fired");
-                      letcontent(data.toString());
-                      lastData=CryptoJS.MD5(data).toString();
-                  }
-
-              },
-              contentType: "text/plain",
-              dataType: "text",
-              complete: poll,
-              timeout: 2000
-          })
-      }, 5000);
-  })();
-
-  var lastData;
-
-  function loadGraph()
-  {
-      var address="/contentGraph";
-      if (window.XMLHttpRequest)
-      {// code for IE7+, Firefox, Chrome, Opera, Safari
-          xmlhttp=new XMLHttpRequest();
-      }
-      else
-      {// code for IE6, IE5
-          xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-      }
-      xmlhttp.onreadystatechange=function()
-      {
-          if (xmlhttp.readyState==4 && xmlhttp.status==200)
-          {
-              letcontent(xmlhttp.responseText);
-              lastData=CryptoJS.MD5(xmlhttp.responseText);
-              return xmlhttp.responseText;
-          }
-      }
-      xmlhttp.open("GET", address,false);
-      xmlhttp.send();
-  }
-
-  function updata(mycontent){
-
-  }
-
-  var forceg=d3.layout.force();
-
-  function letcontent(mycontent){
-
-      var links = JSON.parse(mycontent);
-
-      var nodes = {};
-
-      // Compute the distinct nodes from the links.
-      links.forEach(function(link) {
-          link.source = nodes[link.source] || (nodes[link.source] = {name: link.source});
-          link.target = nodes[link.target] || (nodes[link.target] = {name: link.target});
-      });
-
-      var width = 960,
-              height = 500;
-
-      var force =
-              forceg.nodes(d3.values(nodes))
-                      .links(links)
-                      .size([width, height])
-                      .linkDistance(100)
-                      .charge(-300)
-                      .on("tick", tick);
+         */
 
 
-      var svg;
+        d3.selectAll("path").remove();
+        d3.selectAll("circle").remove();
+        d3.selectAll("g").remove();
+        d3.selectAll("path").remove();
+        d3.selectAll("text").remove();
 
-      svg = d3.select("svg");
-
-      var idgen=function(d) {
-          console.log("---->"+JSON.stringify(d, null, 4));
-            return d.name;};
-
-        if(svg.toString()==""){
-            svg = d3.select("#graphplaceholder").append("svg")
-                    .attr("width", width)
-                    .attr("height", height);
-            svg.append("defs").selectAll("marker")
-                    .data(["suit", "licensing", "resolved"])
-                    .enter().append("marker")
-                    .attr("id", function(d) { return d; })
-                    .attr("viewBox", "0 -5 10 10")
-                    .attr("refX", 15)
-                    .attr("refY", -1.5)
-                    .attr("markerWidth", 6)
-                    .attr("markerHeight", 6)
-                    .attr("orient", "auto")
-                    .append("path")
-                    .attr("d", "M0,-5L10,0L0,5");
-        }else {
-
-            /*
-
-             d3.selectAll("circle").data(force.nodes(),idgen).exit().remove();
-             d3.selectAll("text").data(force.nodes(),idgen).exit().remove();
-             d3.selectAll("path").data(force.nodes(),idgen).exit().remove();
-
-             */
-
-
-            d3.selectAll("path").remove();
-            d3.selectAll("circle").remove();
-            d3.selectAll("g").remove();
-            d3.selectAll("path").remove();
-            d3.selectAll("text").remove();
-
-        }
+    }
 
 
 // Per-type markers, as they don't inherit styles.
 
-        var path1=svg.select("g.path");
+    var path1 = svg.select("g.path");
 
-        if(path1.toString()==""){
-            path1=svg.append("g").classed("path","path");
-        }
+    if (path1.toString() == "") {
+        path1 = svg.append("g").classed("path", "path");
+    }
 
-        var path = path1.selectAll("path")
-                .data(force.links(),idgen)
-                .enter().append("path")
-                .attr("class", function(d) { return "link " + d.type; })
-                .attr("marker-end", function(d) { return "url(#" + d.type + ")"; });
+    var path = path1.selectAll("path")
+            .data(force.links(), idgen)
+            .enter().append("path")
+            .attr("class", function (d) {
+                return "link " + d.type;
+            })
+            .attr("marker-end", function (d) {
+                return "url(#" + d.type + ")";
+            });
 
-        //console.log(force.nodes());
+    //console.log(force.nodes());
 
-        var circle2=svg.select("g.circle");
+    var circle2 = svg.select("g.circle");
 
-        if(circle2.toString()==""){
-            circle2=svg.append("g").classed("circle","circle");
-        }
+    if (circle2.toString() == "") {
+        circle2 = svg.append("g").classed("circle", "circle");
+    }
 
-        var circle1 = circle2.selectAll("circle")
-                .data(force.nodes(),
-                        idgen
-                );
+    var circle1 = circle2.selectAll("circle")
+            .data(force.nodes(),
+                    idgen
+            );
 
-        var circle = circle1
-                .enter().append("circle")
-                .attr("r", 6)
-                .call(force.drag);
+    var circle = circle1
+            .enter().append("circle")
+            .attr("r", 6)
+            .call(force.drag);
 
-        var text1=svg.select("g.text");
+    var text1 = svg.select("g.text");
 
-        if(text1.toString()==""){
-            text1 = svg.append("g").classed("text","text");
-        }
+    if (text1.toString() == "") {
+        text1 = svg.append("g").classed("text", "text");
+    }
 
 
-        var text = text1.selectAll("text")
-                .data(force.nodes(),idgen)
-                .enter().append("text")
-                .attr("nodename", function(d){return d.name;})
-                .attr("x", 8)
-                .attr("y", ".31em")
-                .text(function(d) { return d.name; });
+    var text = text1.selectAll("text")
+            .data(force.nodes(), idgen)
+            .enter().append("text")
+            .attr("nodename", function (d) {
+                return d.name;
+            })
+            .attr("x", 8)
+            .attr("y", ".31em")
+            .text(function (d) {
+                return d.name;
+            });
 
 // Use elliptical arc path segments to doubly-encode directionality.
 
-        function tick() {
-            path.attr("d", linkArc);
-            circle.attr("transform", transform);
-            text.attr("transform", transform);
-        }
-
-        function linkArc(d) {
-            var dx = d.target.x - d.source.x,
-                    dy = d.target.y - d.source.y,
-                    dr = Math.sqrt(dx * dx + dy * dy);
-            return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
-        }
-
-        function transform(d) {
-            return "translate(" + d.x + "," + d.y + ")";
-        }
-
-        //d3.selectAll("marker").data(nodes).exit().remove();
-        //d3.selectAll("path").data(nodes).exit().remove();
-        //d3.selectAll("circle").data(nodes,function(d) { return d.name;}).exit().remove();
-        //function(d) { console.log(JSON.stringify(d, null, 4));}
-        //d3.selectAll("text").data(nodes).exit().remove();
-
-        force.start();
-
+    function tick() {
+        path.attr("d", linkArc);
+        circle.attr("transform", transform);
+        text.attr("transform", transform);
     }
 
-    d3.selectAll(".add-data")
-            .on("click", function() {
+    function linkArc(d) {
+        var dx = d.target.x - d.source.x,
+                dy = d.target.y - d.source.y,
+                dr = Math.sqrt(dx * dx + dy * dy);
+        return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
+    }
+
+    function transform(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+    }
+
+    //d3.selectAll("marker").data(nodes).exit().remove();
+    //d3.selectAll("path").data(nodes).exit().remove();
+    //d3.selectAll("circle").data(nodes,function(d) { return d.name;}).exit().remove();
+    //function(d) { console.log(JSON.stringify(d, null, 4));}
+    //d3.selectAll("text").data(nodes).exit().remove();
+
+    force.start();
+
+}
+
+d3.selectAll(".add-data")
+        .on("click", function () {
 
 
-            });
+        });
 
 
-    </script>
-    <script>
-
-        function setupImportationLinkerForm(){
-
-            $( "#importationLinkerForm" ).submit(function( event ) {
-                event.preventDefault();
-                var $form = $( this ),url = $form.attr( "action" );
-                var posting = $.get( url, $form.serialize());
-                posting.done(function( data ) {
-                    /*
-                    var content = $( data ).find( "#content" );
-                    $( "#result" ).empty().append( content );
-                    */
-                });
-            });
-
-            $( "#importerForm" ).submit(function( event ) {
-                event.preventDefault();
-                var $form = $( this ),url = $form.attr( "action" );
-                var posting = $.get( url, $form.serialize());
-                posting.done(function( data ) {
-                    /*
-                     var content = $( data ).find( "#content" );
-                     $( "#result" ).empty().append( content );
-                     */
-                });
-            });
-
-        }
-
-    </script>
+</script>
 
 </head>
-<body onload="loadGraph();setupImportationLinkerForm();">
+<body onload="loadGraph();setupFormSubmission();">
 
 <div style="margin: 0px auto;width:100%">
-
-
 
     <table>
         <tr>
             <td>
 
-               <div id="graphplaceholder"/>
+                <div id="graphplaceholder"/>
 
             </td>
             <td>
 
                 <form id="importationLinkerForm" action="insertImportationLinker" method="GET">
 
-                    <table border="1">
-                        <tr><td>
-                            <label for="linkerImporterCombo">Linker</label>
-                            <select id="linkerImporterCombo" name="linkersCombo"/>
-                        </td></tr>
-                        <tr><td>
-                            <label for="linkerInstanceName">Instance-Name</label>
-                            <input id="linkerInstanceName" name="linkerInstanceName"/>
-                        </td></tr>
-                        <tr><td>
-                            <label for="linkerDeclarationProperty">Declaration Property</label>
-                            <input id="linkerDeclarationProperty" name="linkerDeclarationProperty"/>
-                        </td></tr>
-                        <tr><td>
-                            <label for="linkerServiceProperty">Service Property</label>
-                            <input id="linkerServiceProperty" name="linkerServiceProperty"/>
-                        </td></tr>
+                    <table border="0">
+                        <tr>
+                            <td>
+                                <label for="linkerImporterCombo">Linker</label>
+                                <select id="linkerImporterCombo" name="linkersCombo"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="linkerInstanceName">Instance-Name</label>
+                                <input id="linkerInstanceName" name="linkerInstanceName"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="linkerDeclarationProperty">Declaration Property</label>
+                                <input id="linkerDeclarationProperty" name="linkerDeclarationProperty"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="linkerServiceProperty">Service Property</label>
+                                <input id="linkerServiceProperty" name="linkerServiceProperty"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div id="messagePlaceholderLinker"/>
+                            </td>
+                        </tr>
                     </table>
 
                     <input type="submit" value="Create">
 
                 </form>
 
-                <br/>
 
                 <form id="importerForm" action="insertImporter" method="GET">
 
-                    <table border="1">
-                        <tr><td>
-                            <label for="importerCombo">Importer</label>
-                            <select id="importerCombo" name="importerCombo"/>
-                        </td></tr>
-                        <tr><td>
-                            <label for="importerInstanceName">Instance-Name</label>
-                            <input id="importerInstanceName" name="importerInstanceName"/>
-                        </td></tr>
-                        <tr><td>
-                            <label for="importerTarget">Taget Property</label>
-                            <input id="importerTarget" name="importerTarget"/>
-                        </td></tr>
+                    <table border="0">
+                        <tr>
+                            <td>
+                                <label for="importerCombo">Importer</label>
+                                <select id="importerCombo" name="importerCombo"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="importerInstanceName">Instance-Name</label>
+                                <input id="importerInstanceName" name="importerInstanceName"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="importerTarget">Target Property</label>
+                                <input id="importerTarget" name="importerTarget"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div id="messagePlaceholderImporter"/>
+                            </td>
+                        </tr>
                     </table>
 
                     <input type="submit" value="Create">
 
                 </form>
+
 
             </td>
         </tr>

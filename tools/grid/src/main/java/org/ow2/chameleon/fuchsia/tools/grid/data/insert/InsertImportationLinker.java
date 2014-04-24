@@ -21,12 +21,16 @@ package org.ow2.chameleon.fuchsia.tools.grid.data.insert;
 
 import org.apache.felix.ipojo.*;
 import org.apache.felix.ipojo.annotations.*;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.http.NamespaceException;
+import org.ow2.chameleon.fuchsia.core.FuchsiaUtils;
 import org.ow2.chameleon.fuchsia.core.component.*;
+import org.ow2.chameleon.fuchsia.core.exceptions.InvalidFilterException;
 import org.ow2.chameleon.fuchsia.tools.grid.ContentHelper;
+import org.ow2.chameleon.fuchsia.tools.grid.model.AjaxError;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -72,14 +76,7 @@ public class InsertImportationLinker extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        System.out.println("Submitting info!!!");
-
-        Enumeration enu=req.getParameterNames();
-
-        while(enu.hasMoreElements()){
-            String paramname= (String) enu.nextElement();
-            System.out.println(paramname+"-->"+req.getParameter(paramname));
-        }
+        ObjectMapper mapper=new ObjectMapper();
 
         try {
 
@@ -93,16 +90,27 @@ public class InsertImportationLinker extends HttpServlet {
 
                 Hashtable<String,Object> hs=new Hashtable<String, Object>();
 
-                hs.put(ImportationLinker.FILTER_IMPORTDECLARATION_PROPERTY,getValue(req.getParameter("linkerDeclarationProperty")));
-                hs.put(ImportationLinker.FILTER_IMPORTERSERVICE_PROPERTY,getValue(req.getParameter("linkerServiceProperty")));
-                hs.put(Factory.INSTANCE_NAME_PROPERTY,req.getParameter("linkerInstanceName"));
+                String declarationProperty=getValue(req.getParameter("linkerDeclarationProperty"));
+                String serviceProperty=getValue(req.getParameter("linkerServiceProperty"));
+
+                hs.put(ImportationLinker.FILTER_IMPORTDECLARATION_PROPERTY,declarationProperty);
+                hs.put(ImportationLinker.FILTER_IMPORTERSERVICE_PROPERTY,serviceProperty);
+
+                FuchsiaUtils.getFilter(declarationProperty);
+                FuchsiaUtils.getFilter(serviceProperty);
+
+                String instanceName=req.getParameter("linkerInstanceName");
+
+                if(instanceName!=null && instanceName.trim().length()!=0){
+                    hs.put(Factory.INSTANCE_NAME_PROPERTY,instanceName);
+                }
 
                 ComponentInstance ci=factory.createComponentInstance(hs);
 
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            mapper.writeValue(resp.getWriter(),new AjaxError("error",e.getMessage()));
         }
 
     }
