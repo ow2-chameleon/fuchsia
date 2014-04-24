@@ -20,10 +20,6 @@ package org.ow2.chameleon.fuchsia.tools.grid;
  * #L%
  */
 
-import freemarker.template.Configuration;
-import freemarker.template.DefaultObjectWrapper;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.http.HttpService;
@@ -35,12 +31,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.*;
 
 @Component(immediate = true)
 @Instantiate
@@ -89,19 +80,7 @@ public class GridWebView {
         }
     }
 
-    public Map generateTemplateModel(){
-
-        List nodes=new ArrayList();
-        List edges=new ArrayList();
-
-        Map templateVariables=new HashMap<String,Object>();
-
-        templateVariables.put("nodes", nodes);
-        templateVariables.put("edges", edges);
-
-        return templateVariables;
-    }
-
+    @Invalidate
     public void invalidate(){
         web.unregister(SERVLET);
         web.unregister(RESOURCES_JS);
@@ -116,18 +95,14 @@ public class GridWebView {
 
            PrintWriter out=resp.getWriter();
 
-           Configuration cfg = new Configuration();
+           InputStream is=this.getClass().getResourceAsStream(TEMPLATE_FILE);
 
-           cfg.setObjectWrapper(new DefaultObjectWrapper());
-           cfg.setDefaultEncoding(TEMPLATE_ENCODING);
-           cfg.setClassForTemplateLoading(this.getClass(),TEMPLATE_FILE_REPOSITORY);
+           BufferedReader br= new BufferedReader(new InputStreamReader(is));
 
-           Template templateRT = cfg.getTemplate(TEMPLATE_FILE);
+           String content;
 
-           try {
-               templateRT.process(generateTemplateModel(), out);
-           } catch (TemplateException e) {
-               LOG.error("Failed with the message {}", e.getMessage(), e);
+           while((content=br.readLine())!=null){
+               resp.getWriter().write(content + "\n");
            }
 
        }

@@ -19,7 +19,8 @@
  */
 package org.ow2.chameleon.fuchsia.tools.grid.data.insert;
 
-import org.apache.felix.ipojo.*;
+import org.apache.felix.ipojo.ComponentInstance;
+import org.apache.felix.ipojo.Factory;
 import org.apache.felix.ipojo.annotations.*;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.osgi.framework.BundleContext;
@@ -27,7 +28,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.http.NamespaceException;
 import org.ow2.chameleon.fuchsia.core.FuchsiaUtils;
-import org.ow2.chameleon.fuchsia.core.component.*;
+import org.ow2.chameleon.fuchsia.core.component.ImportationLinker;
 import org.ow2.chameleon.fuchsia.tools.grid.ContentHelper;
 import org.ow2.chameleon.fuchsia.tools.grid.model.ViewMessage;
 
@@ -36,7 +37,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.*;
+import java.util.Collection;
+import java.util.Hashtable;
 
 @Component
 @Instantiate
