@@ -22,19 +22,14 @@ package org.ow2.chameleon.fuchsia.tools.grid.data.insert;
 import org.apache.felix.ipojo.*;
 import org.apache.felix.ipojo.annotations.*;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.node.JsonNodeFactory;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.http.NamespaceException;
 import org.ow2.chameleon.fuchsia.core.FuchsiaUtils;
-import org.ow2.chameleon.fuchsia.core.component.ImportationLinker;
 import org.ow2.chameleon.fuchsia.core.component.ImporterService;
-import org.ow2.chameleon.fuchsia.core.constant.HttpStatus;
-import org.ow2.chameleon.fuchsia.core.exceptions.InvalidFilterException;
 import org.ow2.chameleon.fuchsia.tools.grid.ContentHelper;
-import org.ow2.chameleon.fuchsia.tools.grid.model.AjaxError;
+import org.ow2.chameleon.fuchsia.tools.grid.model.ViewMessage;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -42,7 +37,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.Hashtable;
 
 @Component
@@ -109,14 +103,13 @@ public class InsertImporter extends HttpServlet {
 
                 ComponentInstance ci=factory.createComponentInstance(hs);
 
+                mapper.writeValue(resp.getWriter(),new ViewMessage("success","Importer created successfully."));
+
             }
 
         } catch (Exception e) {
-            mapper.writeValue(resp.getWriter(),new AjaxError("error",e.getMessage()));
-            e.printStackTrace();
+            mapper.writeValue(resp.getWriter(),new ViewMessage("error",e.getMessage()));
         }
-
-        mapper.writeValue(resp.getWriter(),new AjaxError("success","Importer created successfully."));
 
     }
 
