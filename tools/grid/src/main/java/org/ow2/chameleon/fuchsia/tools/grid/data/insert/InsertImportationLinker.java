@@ -28,9 +28,8 @@ import org.osgi.service.http.HttpService;
 import org.osgi.service.http.NamespaceException;
 import org.ow2.chameleon.fuchsia.core.FuchsiaUtils;
 import org.ow2.chameleon.fuchsia.core.component.*;
-import org.ow2.chameleon.fuchsia.core.exceptions.InvalidFilterException;
 import org.ow2.chameleon.fuchsia.tools.grid.ContentHelper;
-import org.ow2.chameleon.fuchsia.tools.grid.model.AjaxError;
+import org.ow2.chameleon.fuchsia.tools.grid.model.ViewMessage;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -107,10 +106,12 @@ public class InsertImportationLinker extends HttpServlet {
 
                 ComponentInstance ci=factory.createComponentInstance(hs);
 
+                mapper.writeValue(resp.getWriter(),new ViewMessage("success","Linker created successfully."));
+
             }
 
         } catch (Exception e) {
-            mapper.writeValue(resp.getWriter(),new AjaxError("error",e.getMessage()));
+            mapper.writeValue(resp.getWriter(),new ViewMessage("error",e.getMessage()));
         }
 
     }

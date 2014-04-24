@@ -19,18 +19,18 @@
  */
 package org.ow2.chameleon.fuchsia.tools.grid.model;
 
-public class AjaxError {
+public class ViewMessage {
 
     private String type;
     private String field;
     private String message;
 
-    public AjaxError(String type, String message){
+    public ViewMessage(String type, String message){
         this.type=type;
         this.message=message;
     }
 
-    public AjaxError(String type, String field, String message){
+    public ViewMessage(String type, String field, String message){
         this.type=type;
         this.message=message;
         this.field=field;
