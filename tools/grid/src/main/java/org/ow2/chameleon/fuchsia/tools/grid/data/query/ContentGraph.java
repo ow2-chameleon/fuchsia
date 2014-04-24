@@ -24,7 +24,10 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.http.NamespaceException;
-import org.ow2.chameleon.fuchsia.core.component.*;
+import org.ow2.chameleon.fuchsia.core.component.ExportationLinkerIntrospection;
+import org.ow2.chameleon.fuchsia.core.component.ExporterService;
+import org.ow2.chameleon.fuchsia.core.component.ImportationLinkerIntrospection;
+import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 import org.ow2.chameleon.fuchsia.tools.grid.ContentHelper;
 import org.ow2.chameleon.fuchsia.tools.grid.model.GraphVertex;
 

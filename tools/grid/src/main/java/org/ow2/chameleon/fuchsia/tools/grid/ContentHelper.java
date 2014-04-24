@@ -29,7 +29,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.ow2.chameleon.fuchsia.core.component.ExportationLinkerIntrospection;
-import org.ow2.chameleon.fuchsia.core.component.ImportationLinker;
 import org.ow2.chameleon.fuchsia.core.component.ImportationLinkerIntrospection;
 
 import java.util.ArrayList;
