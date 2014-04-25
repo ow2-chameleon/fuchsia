@@ -44,9 +44,24 @@
 }
 
 circle {
+    fill: #DD6FD0;
+    stroke: #333;
+    stroke-width: 1.5px;
+}
+
+circle.native {
     fill: #ccc;
     stroke: #333;
     stroke-width: 1.5px;
+}
+
+circle.importer {
+}
+
+circle.exporter {
+}
+
+circle.linker {
 }
 
 text {

@@ -34,8 +34,8 @@
     <script src="/js/grid.js"></script>
     <script>
 
-    fromSerletJsonToCombo("/contentImportationLinker", "#linkerImporterCombo");
-    fromSerletJsonToCombo("/contentImporter", "#importerCombo");
+    fromServletToCombo("/contentImportationLinker", "#linkerImporterCombo");
+    fromServletToCombo("/contentImporter", "#importerCombo");
 
     (function poll() {
         setTimeout(function () {
@@ -88,8 +88,8 @@
 
         // Compute the distinct nodes from the links.
         links.forEach(function (link) {
-            link.source = nodes[link.source] || (nodes[link.source] = {name: link.source});
-            link.target = nodes[link.target] || (nodes[link.target] = {name: link.target});
+            link.source = nodes[link.source] || (nodes[link.source] = {name: link.source,type:link.type});
+            link.target = nodes[link.target] || (nodes[link.target] = {name: link.target,type:link.type});
         });
 
         var width = 640;
@@ -112,22 +112,8 @@
             return d.name;
         };
 
-        if (svg.toString() == "") {
-            svg = d3.select("#graphplaceholder").setAttribute("width", width).setAttribute("height", height);//.append("svg").attr("width", width).attr("height", height);
-            svg.append("defs").selectAll("marker")
-                    .data(["suit", "licensing", "resolved"])
-                    .enter().append("marker")
-                    .attr("id", function (d) {
-                        return d;
-                    })
-                    .attr("viewBox", "0 -5 10 10")
-                    .attr("refX", 15)
-                    .attr("refY", -1.5)
-                    .attr("markerWidth", 6)
-                    .attr("markerHeight", 6)
-                    .attr("orient", "auto")
-                    .append("path")
-                    .attr("d", "M0,-5L10,0L0,5");
+        if (svg.select("defs").toString() == "") {
+
         } else {
 
             /*
@@ -142,13 +128,27 @@
             d3.selectAll("path").remove();
             d3.selectAll("circle").remove();
             d3.selectAll("g").remove();
-            d3.selectAll("path").remove();
             d3.selectAll("text").remove();
+            d3.selectAll("marker").remove();
+            d3.selectAll("defs").remove();
 
         }
 
-
-// Per-type markers, as they don't inherit styles.
+        defs= svg.append("defs");//d3.select("#graphplaceholder").setAttribute("width", width).setAttribute("height", height);//.append("svg").attr("width", width).attr("height", height);
+        defs.selectAll("marker")
+                .data(["suit", "licensing", "resolved"])
+                .enter().append("marker")
+                .attr("id", function (d) {
+                    return d;
+                })
+                .attr("viewBox", "0 -5 10 10")
+                .attr("refX", 15)
+                .attr("refY", -1.5)
+                .attr("markerWidth", 6)
+                .attr("markerHeight", 6)
+                .attr("orient", "auto")
+                .append("path")
+                .attr("d", "M0,-5L10,0L0,5");
 
         var path1 = svg.select("g.path");
 
@@ -163,10 +163,8 @@
                     return "link " + d.type;
                 })
                 .attr("marker-end", function (d) {
-                    return "url(#" + d.type + ")";
+                    return "url(#resolved)";
                 });
-
-        //console.log(force.nodes());
 
         var circle2 = svg.select("g.circle");
 
@@ -182,6 +180,9 @@
         var circle = circle1
                 .enter().append("circle")
                 .attr("r", 6)
+                .attr("class",function (d){
+                    return d.type;
+                })
                 .call(force.drag);
 
         var text1 = svg.select("g.text");
@@ -202,8 +203,6 @@
                 .text(function (d) {
                     return d.name;
                 });
-
-// Use elliptical arc path segments to doubly-encode directionality.
 
         function tick() {
             path.attr("d", linkArc);
@@ -255,32 +254,11 @@
 </div>
 <div id="wrapper">
     <div id="wrapper-bgbtm">
-        <!--
-                <div id="featured" class="container">
-                    <div id="fbox1"> <a href="#"><img src="images/pic01.jpg" alt="" /></a>
-                        <h2>Mauris vulputate dolor</h2>
-                        <p>Praesent pellentesque facilisis elit. Class aptent taciti sociosqu ad litora torquent per conubia nostra.</p>
-                        <a href="#" class="button"><span>More Info</span></a> </div>
-                    <div id="fbox2"> <a href="#"><img src="images/pic02.jpg" alt="" /></a>
-                        <h2>Fusce ultrices fringilla</h2>
-                        <p>Pellentesque adipiscing purus ac magna. Pellentesque habitant morbi tristique senectus et netus et  fames ac turpis egestas.</p>
-                        <a href="#" class="button"><span>More Info</span></a> </div>
-                    <div id="fbox3"> <a href="#"><img src="images/pic03.jpg" alt="" /></a>
-                        <h2>Nulla luctus eleifend purus</h2>
-                        <p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed blandit. </p>
-                        <a href="#" class="button"><span>More Info</span></a> </div>
-                </div>
-        -->
         <div id="page" class="container">
             <div id="content">
                 <h2>Connection graph</h2>
                 <span class="byline">Runtime</span>
-
-                <!-- <p>l</p>-->
-
                 <svg id="graphplaceholder" width="640px" heigth="480px"/>
-
-                <!-- <a href="#" class="button2">More Info</a>-->
             </div>
             <div id="sidebar">
                 <div>

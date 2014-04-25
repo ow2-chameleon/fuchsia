@@ -84,34 +84,34 @@ public class ContentGraph extends HttpServlet {
 
         ObjectMapper mapper=new ObjectMapper();
 
-        rootList.add(new GraphVertex("Fuchsia","Importer","licensing"));
+        rootList.add(new GraphVertex("Fuchsia","Importer","native"));
 
         for(ImportationLinkerIntrospection linker:content.fetchLinkerIntrospectionsImporter()){
 
-            rootList.add(new GraphVertex("Importer",linker.getName(),"licensing"));
+            rootList.add(new GraphVertex("Importer",linker.getName(),"linker"));
 
             for(ImporterService importer:linker.getLinkedImporters()){
 
                 ignoredImporterService.remove(importer);
 
-                GraphVertex linkerNode=new GraphVertex(linker.getName(),importer.getName(),"licensing");
+                GraphVertex linkerNode=new GraphVertex(linker.getName(),importer.getName(),"importer");
                 rootList.add(linkerNode);
 
             }
 
         }
 
-        rootList.add(new GraphVertex("Fuchsia","Exporter","licensing"));
+        rootList.add(new GraphVertex("Fuchsia","Exporter","native"));
 
         for(ExportationLinkerIntrospection linker:content.fetchLinkerIntrospectionsExporter()){
 
-            rootList.add(new GraphVertex("Exporter",linker.getName(),"licensing"));
+            rootList.add(new GraphVertex("Exporter",linker.getName(),"linker"));
 
             for(ExporterService exporter:linker.getLinkedExporters()){
 
                 ignoredExporterService.remove(exporter);
 
-                GraphVertex linkerNode=new GraphVertex(linker.getName(),exporter.getName(),"licensing");
+                GraphVertex linkerNode=new GraphVertex(linker.getName(),exporter.getName(),"exporter");
                 rootList.add(linkerNode);
 
             }
@@ -119,11 +119,11 @@ public class ContentGraph extends HttpServlet {
         }
 
         for(ImporterService is:ignoredImporterService){
-            rootList.add(new GraphVertex(is.getName(),is.getName(),"licensing"));
+            rootList.add(new GraphVertex(is.getName(),is.getName(),"importer"));
         }
 
         for(ExporterService is:ignoredExporterService){
-            rootList.add(new GraphVertex(is.getName(),is.getName(),"licensing"));
+            rootList.add(new GraphVertex(is.getName(),is.getName(),"exporter"));
         }
 
         mapper.writeValue(resp.getWriter(),rootList);
