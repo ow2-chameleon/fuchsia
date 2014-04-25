@@ -1,5 +1,5 @@
 
-function fromSerletJsonToCombo(source, target) {
+function fromServletToCombo(source, target) {
 
     (function poll() {
         setTimeout(function () {
