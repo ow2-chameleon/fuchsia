@@ -1,6 +1,8 @@
 
 function fromServletToCombo(source, target) {
 
+    d3.select(target).attr("disabled","true").append("option").text("Loading..");
+
     (function poll() {
         setTimeout(function () {
             $.ajax({
@@ -8,17 +10,21 @@ function fromServletToCombo(source, target) {
                 type: "GET",
                 success: function (data) {
 
-                    data = JSON.parse(data.toString());
+                    var dataJSON = JSON.parse(data.toString());
 
-                    console.log(JSON.stringify(data, null, 4));
+                    d3.select("body").select(target).attr("disabled",null);
 
                     sel = d3.select("body").select(target).selectAll("option");
 
-                    sel.data(data).enter().append("option").text(function (d) {
+                    selectionData=sel.data(dataJSON,function(a,b,c) {
+                        return a;
+                    });
+
+                    selectionData.enter().append("option").text(function (d) {
                         return d.factoryName;
                     });
 
-                    sel.data(data).exit().remove();
+                    selectionData.exit().remove();
 
                 },
                 error: function (a, b, c) {

@@ -34,9 +34,6 @@
     <script src="/js/grid.js"></script>
     <script>
 
-    fromServletToCombo("/contentImportationLinker", "#linkerImporterCombo");
-    fromServletToCombo("/contentImporter", "#importerCombo");
-
     (function poll() {
         setTimeout(function () {
             $.ajax({
@@ -237,10 +234,14 @@
 
             });
 
+    function initForm(){
+        fromServletToCombo("/contentImportationLinker", "#linkerImporterCombo");
+        fromServletToCombo("/contentImporter", "#importerCombo");
+    }
 
     </script>
 </head>
-<body onload="loadGraph();setupFormSubmission();">
+<body onload="initForm();loadGraph();setupFormSubmission();">
 <div id="header" class="container">
     <div id="logo">
         <h1><a href="#">Fuchs<span>ia</span></a></h1>
