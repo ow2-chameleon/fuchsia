@@ -63,7 +63,16 @@ function setupFormSubmission() {
             displayMessage(data, "#messagePlaceholderImporter");
 
         });
+    });
 
+    $("#exporterForm").submit(function (event) {
+        event.preventDefault();
+        var $form = $(this), url = $form.attr("action");
+        var posting = $.get(url, $form.serialize());
+        posting.done(function (data) {
+            displayMessage(data, "#messagePlaceholderExporter");
+
+        });
     });
 
 }

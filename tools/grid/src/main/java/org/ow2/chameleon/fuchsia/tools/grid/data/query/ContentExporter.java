@@ -25,7 +25,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.http.NamespaceException;
-import org.ow2.chameleon.fuchsia.core.component.ImporterService;
+import org.ow2.chameleon.fuchsia.core.component.ExporterService;
 import org.ow2.chameleon.fuchsia.tools.grid.ContentHelper;
 import org.ow2.chameleon.fuchsia.tools.grid.model.LinkerNode;
 
@@ -39,19 +39,19 @@ import java.util.List;
 
 @Component
 @Instantiate
-public class ContentImporter extends HttpServlet {
+public class ContentExporter extends HttpServlet {
 
     @Requires
     HttpService web;
 
-    final String URL="/contentImporter";
+    final String URL="/contentExporter";
 
     @Requires
     ContentHelper content;
 
     BundleContext context;
 
-    public ContentImporter(BundleContext context){
+    public ContentExporter(BundleContext context){
         this.context=context;
     }
 
@@ -78,38 +78,12 @@ public class ContentImporter extends HttpServlet {
 
         ObjectMapper mapper=new ObjectMapper();
 
-        List<String> ifaces=new ArrayList<String>(){{add(ImporterService.class.getName());}};
+        List<String> ifaces=new ArrayList<String>(){{add(ExporterService.class.getName());}};
         List<String> props=new ArrayList<String>(){{}};
 
         for(Factory factory:content.getFuchsiaFactories(ifaces,props)){
             rootList.add(new LinkerNode(factory.getName()));
         }
-
-
-        /*
-        try {
-
-            ServiceReference[] references=context.getServiceReferences(Factory.class.getName(),null);
-
-            if(references!=null) {
-                for (ServiceReference sr : references) {
-
-                    for(String key:sr.getPropertyKeys()){
-                        System.out.println(key+"----->" + sr.getProperty(key));
-                    }
-
-                    System.out.println("######################################");
-                      
-                    Factory fact=(Factory) context.getService(sr);
-
-                }
-            }
-
-        } catch (InvalidSyntaxException e) {
-            e.printStackTrace();
-        } */
-
-        //rootList.add(new ImportationLinkerNode("jander fact"));
 
         mapper.writeValue(resp.getWriter(),rootList);
 
