@@ -17,7 +17,11 @@ function fromServletToCombo(source, target) {
                     sel = d3.select("body").select(target).selectAll("option");
 
                     selectionData=sel.data(dataJSON,function(a,b,c) {
-                        return a;
+                        if(b==0) {
+                            return a;
+                        }else {
+                            return a.factoryName;
+                        }
                     });
 
                     selectionData.enter().append("option").text(function (d) {
