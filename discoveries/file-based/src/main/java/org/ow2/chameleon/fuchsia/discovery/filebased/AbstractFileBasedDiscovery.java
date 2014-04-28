@@ -36,6 +36,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+/**
+ * An abstract class to handle the discovery and publication of file based declarations.
+ *
+ * @param <D> a class extending the Declaration class.
+ */
 public abstract class AbstractFileBasedDiscovery<D extends Declaration> implements Deployer {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractFileBasedDiscovery.class);
@@ -48,6 +53,12 @@ public abstract class AbstractFileBasedDiscovery<D extends Declaration> implemen
     private DirectoryMonitor dm;
     private String monitoredDirectory;
 
+    /**
+     * Initialize the abstract class. Take the bundleContext and the D class in parameter.
+     *
+     * @param bundleContext the BundleContext
+     * @param klass         the class D
+     */
     public AbstractFileBasedDiscovery(BundleContext bundleContext, Class<D> klass) {
         this.bundleContext = bundleContext;
         this.klass = klass;
@@ -55,10 +66,21 @@ public abstract class AbstractFileBasedDiscovery<D extends Declaration> implemen
         declarationRegistrationManager = new DeclarationRegistrationManager<D>(bundleContext, klass);
     }
 
+
+    /**
+     * @see org.ow2.chameleon.fuchsia.discovery.filebased.monitor.Deployer
+     */
     public boolean accept(File file) {
         return !file.exists() || (!file.isHidden() && file.isFile());
     }
 
+    /**
+     * Parse the given file to obtains a Properties object.
+     *
+     * @param file
+     * @return a properties object containing all the properties present in the file.
+     * @throws InvalidDeclarationFileException
+     */
     private Properties parseFile(File file) throws InvalidDeclarationFileException {
         Properties properties = new Properties();
         InputStream is = null;
@@ -83,6 +105,9 @@ public abstract class AbstractFileBasedDiscovery<D extends Declaration> implemen
         return properties;
     }
 
+    /**
+     * @see org.ow2.chameleon.fuchsia.discovery.filebased.monitor.Deployer
+     */
     public void onFileCreate(File file) {
         LOG.info("New file detected : {}", file.getAbsolutePath());
         try {
@@ -101,6 +126,9 @@ public abstract class AbstractFileBasedDiscovery<D extends Declaration> implemen
         }
     }
 
+    /**
+     * @see org.ow2.chameleon.fuchsia.discovery.filebased.monitor.Deployer
+     */
     // FIXME : this have to be rechecked, this is an pessimist approach
     public void onFileChange(File file) {
         LOG.info("File updated : {}", file.getAbsolutePath());
@@ -108,6 +136,9 @@ public abstract class AbstractFileBasedDiscovery<D extends Declaration> implemen
         onFileCreate(file);
     }
 
+    /**
+     * @see org.ow2.chameleon.fuchsia.discovery.filebased.monitor.Deployer
+     */
     public void onFileDelete(File file) {
         LOG.info("File removed : {}", file.getAbsolutePath());
         D declaration = declarationsFiles.get(file.getAbsolutePath());
@@ -129,16 +160,28 @@ public abstract class AbstractFileBasedDiscovery<D extends Declaration> implemen
         }
     }
 
+    /**
+     * @see org.ow2.chameleon.fuchsia.discovery.filebased.monitor.Deployer
+     */
     public void open(Collection<File> files) {
         for (File file : files) {
             onFileChange(file);
         }
     }
 
+    /**
+     * @see org.ow2.chameleon.fuchsia.discovery.filebased.monitor.Deployer
+     */
     public void close() {
         // nothing to do ?
     }
 
+    /**
+     * Create and register the declaration of class D with the given metadata
+     *
+     * @param metadata the metadata to create the declaration
+     * @return the created declaration of class D
+     */
     private D createAndRegisterDeclaration(Map<String, Object> metadata) {
         D declaration;
         if (klass.equals(ImportDeclaration.class)) {
@@ -152,15 +195,30 @@ public abstract class AbstractFileBasedDiscovery<D extends Declaration> implemen
         return declaration;
     }
 
+    /**
+     * Unregister the given declaration of class D.
+     *
+     * @param declaration
+     */
     private void unregisterDeclaration(D declaration) {
         declarationRegistrationManager.unregisterDeclaration(declaration);
     }
 
-
-    BundleContext getBundleContext() {
+    /**
+     * Return the bundleContext.
+     *
+     * @return the bundleContext
+     */
+    protected BundleContext getBundleContext() {
         return bundleContext;
     }
 
+    /**
+     * This method must be called on the start of the component. Initialize and start the directory monitor.
+     *
+     * @param monitoredDirectory
+     * @param pollingTime
+     */
     void start(String monitoredDirectory, Long pollingTime) {
         this.monitoredDirectory = monitoredDirectory;
         String deployerKlassName;
@@ -180,6 +238,10 @@ public abstract class AbstractFileBasedDiscovery<D extends Declaration> implemen
         }
     }
 
+    /**
+     * This method must be called on the stop of the component. Stop the directory monitor and unregister all the
+     * declarations.
+     */
     void stop() {
         try {
             dm.stop(getBundleContext());

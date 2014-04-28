@@ -20,19 +20,35 @@ package org.ow2.chameleon.fuchsia.discovery.filebased;
  * #L%
  */
 
+/**
+ * An exception thrown when a file is not a valid declaration file.
+ */
 public class InvalidDeclarationFileException extends Exception {
+
+    /**
+     * @see java.lang.Exception
+     */
     public InvalidDeclarationFileException() {
         super();
     }
 
+    /**
+     * @see java.lang.Exception
+     */
     public InvalidDeclarationFileException(String message) {
         super(message);
     }
 
+    /**
+     * @see java.lang.Exception
+     */
     public InvalidDeclarationFileException(String message, Throwable cause) {
         super(message, cause);
     }
 
+    /**
+     * @see java.lang.Exception
+     */
     public InvalidDeclarationFileException(Throwable cause) {
         super(cause);
     }

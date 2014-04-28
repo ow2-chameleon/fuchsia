@@ -27,13 +27,33 @@ import java.util.Collection;
  * Interface which should be implemented by the Component that wishes to monitor state change in a directory.
  */
 public interface Deployer {
-
+    /**
+     * Check if the file can be treated by the discovery. Return true if the given file is acceptable, false otherwise
+     *
+     * @param file
+     * @return true if the file is acceptable, false otherwise
+     */
     boolean accept(File file);
 
+    /**
+     * Call when a new file has been detected.
+     *
+     * @param file
+     */
     void onFileCreate(File file);
 
+    /**
+     * Call when a file has been modified.
+     *
+     * @param file
+     */
     void onFileChange(File file);
 
+    /**
+     * Call when a file has been deleted.
+     *
+     * @param file
+     */
     void onFileDelete(File file);
 
     void open(Collection<File> files);
