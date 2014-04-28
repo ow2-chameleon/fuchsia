@@ -25,10 +25,10 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.http.NamespaceException;
+import org.ow2.chameleon.fuchsia.core.component.ExportationLinker;
 import org.ow2.chameleon.fuchsia.core.component.ImportationLinker;
-import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 import org.ow2.chameleon.fuchsia.tools.grid.ContentHelper;
-import org.ow2.chameleon.fuchsia.tools.grid.model.ImportationLinkerNode;
+import org.ow2.chameleon.fuchsia.tools.grid.model.LinkerNode;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -42,11 +42,9 @@ import java.util.List;
 @Instantiate
 public class ContentLinker extends HttpServlet {
 
+    final String URL="/contentImportationLinker";
     @Requires
     HttpService web;
-
-    final String URL="/contentImportationLinker";
-
     @Requires
     ContentHelper content;
 
@@ -75,24 +73,29 @@ public class ContentLinker extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        List<ImportationLinkerNode> rootList=new ArrayList<ImportationLinkerNode>();
+        List<LinkerNode> rootList=new ArrayList<LinkerNode>();
 
         ObjectMapper mapper=new ObjectMapper();
 
-        List<String> ifaces=new ArrayList<String>(){{add(ImportationLinker.class.getName());}};
-        List<String> props=new ArrayList<String>(){{
-            add(ImportationLinker.FILTER_IMPORTDECLARATION_PROPERTY);
-            add(ImportationLinker.FILTER_IMPORTERSERVICE_PROPERTY);
-        }};
-
-        for(Factory factory:content.getFuchsiaFactories(ifaces,props)){
-            rootList.add(new ImportationLinkerNode(factory.getName()));
+        for(Factory factory:content.getFuchsiaFactories(new ArrayList<String>(){{
+                                                            add(ImportationLinker.class.getName());
+                                                        }},new ArrayList<String>(){{
+                                                            add(ImportationLinker.FILTER_IMPORTDECLARATION_PROPERTY);
+                                                            add(ImportationLinker.FILTER_IMPORTERSERVICE_PROPERTY);
+                                                        }})){
+            rootList.add(new LinkerNode(factory.getName()));
         }
 
-        //rootList.add(new ImportationLinkerNode("jander fact"));
+        for(Factory factory:content.getFuchsiaFactories(new ArrayList<String>(){{
+                                                            add(ExportationLinker.class.getName());
+                                                        }},new ArrayList<String>(){{
+                                                            add(ExportationLinker.FILTER_EXPORTDECLARATION_PROPERTY);
+                                                            add(ExportationLinker.FILTER_EXPORTERSERVICE_PROPERTY);
+                                                        }})){
+            rootList.add(new LinkerNode(factory.getName()));
+        }
+
         mapper.writeValue(resp.getWriter(),rootList);
-
-
 
     }
 

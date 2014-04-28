@@ -17,41 +17,44 @@
  * limitations under the License.
  * #L%
  */
-package org.ow2.chameleon.fuchsia.tools.grid.data.query;
+package org.ow2.chameleon.fuchsia.tools.grid.data.insert;
 
+import org.apache.felix.ipojo.ComponentInstance;
 import org.apache.felix.ipojo.Factory;
 import org.apache.felix.ipojo.annotations.*;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.http.NamespaceException;
+import org.ow2.chameleon.fuchsia.core.FuchsiaUtils;
 import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 import org.ow2.chameleon.fuchsia.tools.grid.ContentHelper;
-import org.ow2.chameleon.fuchsia.tools.grid.model.LinkerNode;
+import org.ow2.chameleon.fuchsia.tools.grid.model.ViewMessage;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.Hashtable;
 
 @Component
 @Instantiate
-public class ContentImporter extends HttpServlet {
+public class InsertExporter extends HttpServlet {
 
     @Requires
     HttpService web;
 
-    final String URL="/contentImporter";
-
     @Requires
     ContentHelper content;
 
+    final String URL="/insertExporter";
+
     BundleContext context;
 
-    public ContentImporter(BundleContext context){
+    public InsertExporter(BundleContext context){
         this.context=context;
     }
 
@@ -74,44 +77,50 @@ public class ContentImporter extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        List<LinkerNode> rootList=new ArrayList<LinkerNode>();
-
         ObjectMapper mapper=new ObjectMapper();
 
-        List<String> ifaces=new ArrayList<String>(){{add(ImporterService.class.getName());}};
-        List<String> props=new ArrayList<String>(){{}};
-
-        for(Factory factory:content.getFuchsiaFactories(ifaces,props)){
-            rootList.add(new LinkerNode(factory.getName()));
-        }
-
-
-        /*
         try {
 
-            ServiceReference[] references=context.getServiceReferences(Factory.class.getName(),null);
+            Collection<ServiceReference<Factory>> services=context.getServiceReferences(Factory.class,String.format("(factory.name=%s)",req.getParameter("exporterCombo")));
 
-            if(references!=null) {
-                for (ServiceReference sr : references) {
+            if(services.size()==1){
 
-                    for(String key:sr.getPropertyKeys()){
-                        System.out.println(key+"----->" + sr.getProperty(key));
-                    }
+                ServiceReference factorySR=(ServiceReference)services.iterator().next();
 
-                    System.out.println("######################################");
-                      
-                    Factory fact=(Factory) context.getService(sr);
+                Factory factory=(Factory)context.getService(factorySR);
 
+                Hashtable<String,Object> hs=new Hashtable<String, Object>();
+
+                String filter=getValue(req.getParameter("exporterTarget"));
+
+                FuchsiaUtils.getFilter(filter);
+
+                hs.put(ImporterService.TARGET_FILTER_PROPERTY,filter);
+
+                String instanceName=req.getParameter("exporterInstanceName");
+                if(instanceName!=null && instanceName.trim().length()!=0){
+                    hs.put(Factory.INSTANCE_NAME_PROPERTY,instanceName);
                 }
+
+                ComponentInstance ci=factory.createComponentInstance(hs);
+
+                mapper.writeValue(resp.getWriter(),new ViewMessage("success","Exporter created successfully."));
+
             }
 
-        } catch (InvalidSyntaxException e) {
-            e.printStackTrace();
-        } */
+        } catch (Exception e) {
+            mapper.writeValue(resp.getWriter(),new ViewMessage("error",e.getMessage()));
+        }
 
-        //rootList.add(new ImportationLinkerNode("jander fact"));
+    }
 
-        mapper.writeValue(resp.getWriter(),rootList);
+    private String getValue(String value){
+
+        if(value==null||value.trim().length()==0){
+            return "(objectClass=*)";
+        }
+
+        return value;
 
     }
 

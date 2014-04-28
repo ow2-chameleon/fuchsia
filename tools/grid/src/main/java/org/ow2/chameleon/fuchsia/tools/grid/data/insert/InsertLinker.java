@@ -28,6 +28,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.http.NamespaceException;
 import org.ow2.chameleon.fuchsia.core.FuchsiaUtils;
+import org.ow2.chameleon.fuchsia.core.component.ExportationLinker;
 import org.ow2.chameleon.fuchsia.core.component.ImportationLinker;
 import org.ow2.chameleon.fuchsia.tools.grid.ContentHelper;
 import org.ow2.chameleon.fuchsia.tools.grid.model.ViewMessage;
@@ -37,12 +38,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Hashtable;
+import java.util.*;
 
 @Component
 @Instantiate
-public class InsertImportationLinker extends HttpServlet {
+public class InsertLinker extends HttpServlet {
 
     @Requires
     HttpService web;
@@ -50,11 +50,11 @@ public class InsertImportationLinker extends HttpServlet {
     @Requires
     ContentHelper content;
 
-    final String URL="/insertImportationLinker";
+    final String URL="/insertLinker";
 
     BundleContext context;
 
-    public InsertImportationLinker(BundleContext context){
+    public InsertLinker(BundleContext context){
         this.context=context;
     }
 
@@ -94,9 +94,19 @@ public class InsertImportationLinker extends HttpServlet {
                 String declarationProperty=getValue(req.getParameter("linkerDeclarationProperty"));
                 String serviceProperty=getValue(req.getParameter("linkerServiceProperty"));
 
-                hs.put(ImportationLinker.FILTER_IMPORTDECLARATION_PROPERTY,declarationProperty);
-                hs.put(ImportationLinker.FILTER_IMPORTERSERVICE_PROPERTY,serviceProperty);
+                List<String> interfaces=Arrays.asList(factory.getComponentDescription().getprovidedServiceSpecification());
 
+                if(interfaces.contains(ImportationLinker.class.getName())){
+                    hs.put(ImportationLinker.FILTER_IMPORTDECLARATION_PROPERTY,declarationProperty);
+                    hs.put(ImportationLinker.FILTER_IMPORTERSERVICE_PROPERTY,serviceProperty);
+                }else if(interfaces.contains(ExportationLinker.class.getName())){
+                    hs.put(ExportationLinker.FILTER_EXPORTDECLARATION_PROPERTY,declarationProperty);
+                    hs.put(ExportationLinker.FILTER_EXPORTERSERVICE_PROPERTY,serviceProperty);
+                }
+
+                /**
+                 * This forces the filter to be evaluated before submit it to the fuchsia platform
+                 */
                 FuchsiaUtils.getFilter(declarationProperty);
                 FuchsiaUtils.getFilter(serviceProperty);
 

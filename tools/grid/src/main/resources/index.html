@@ -34,15 +34,20 @@
     <script src="/js/grid.js"></script>
     <script>
 
+    var lastData;
+
     (function poll() {
         setTimeout(function () {
             $.ajax({
                 url: "/contentGraph",
                 type: "GET",
                 success: function (data) {
-                    if (lastData != CryptoJS.MD5(data).toString()) {
-                        letcontent(data.toString());
-                        lastData = CryptoJS.MD5(data).toString();
+
+                    currentDataMD5=CryptoJS.MD5(data).toString()
+
+                    if (lastData != currentDataMD5 ) {
+                        fetchContent(data.toString());
+                        lastData = currentDataMD5;
                     }
 
                 },
@@ -54,8 +59,6 @@
         }, 5000);
     })();
 
-    var lastData;
-
     function loadGraph() {
         var address = "/contentGraph";
         if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
@@ -66,7 +69,7 @@
         }
         xmlhttp.onreadystatechange = function () {
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                letcontent(xmlhttp.responseText);
+                fetchContent(xmlhttp.responseText);
                 lastData = CryptoJS.MD5(xmlhttp.responseText);
                 return xmlhttp.responseText;
             }
@@ -77,7 +80,7 @@
 
     var forceg = d3.layout.force();
 
-    function letcontent(mycontent) {
+    function fetchContent(mycontent) {
 
         var links = JSON.parse(mycontent);
 
@@ -228,15 +231,10 @@
 
     }
 
-    d3.selectAll(".add-data")
-            .on("click", function () {
-
-
-            });
-
     function initForm(){
         fromServletToCombo("/contentImportationLinker", "#linkerImporterCombo");
         fromServletToCombo("/contentImporter", "#importerCombo");
+        fromServletToCombo("/contentExporter", "#exporterCombo");
     }
 
     </script>
@@ -267,7 +265,7 @@
                     <ul class="style1">
                         <li class="first">
                             <p>
-                            <form id="importationLinkerForm" name="importationLinkerForm" action="insertImportationLinker" method="GET">
+                            <form id="importationLinkerForm" name="importationLinkerForm" action="insertLinker" method="GET">
 
                                 <table border="0">
                                     <tr>
@@ -305,10 +303,7 @@
                                 <input type="submit" class="button2" value="Instantiate">
 
                             </form>
-                            <!--
-                            <a href="#">Ipsum ante vivamus semper faucibus varius. Nam risus nibh, commodo
-                                vulputate.</a></p>
-                            <span class="posted">8 hours ago</span>--> </li>
+                        </li>
                     </ul>
                     </div>
                 <div>
@@ -345,14 +340,46 @@
                                 </table>
 
                                 <input type="submit" class="button2" value="Instantiate">
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h2>Exporter</h2>
+                    <ul class="style1">
+                        <li class="first">
+                            <p>
+                            <form id="exporterForm" action="insertExporter" method="GET">
 
-                            <!--
-                                <a href="#" class="button2" onclick="this.form.submit();">Instantiate</a>
-                            -->
-                            </form>                                 <!--
-                            <a href="#">Sed amet consequat lorem ipsum dolor sit amet blandit feugiat lorem ipsum sed
-                                ante nibh.</a></p>
-                            <span class="posted">1 day ago</span>--></li>
+                                <table border="0">
+                                    <tr>
+                                        <td>
+                                            <label for="exporterCombo">Importer</label>
+                                            <select id="exporterCombo" name="exporterCombo"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label for="exporterInstanceName">Instance-Name</label>
+                                            <input id="exporterInstanceName" name="exporterInstanceName"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label for="exporterTarget">Target Property</label>
+                                            <input id="exporterTarget" name="exporterTarget"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div id="messagePlaceholderExporter"/>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                                <input type="submit" class="button2" value="Instantiate">
+                            </form>
+                        </li>
                     </ul>
                 </div>
             </div>
