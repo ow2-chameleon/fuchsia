@@ -28,6 +28,10 @@ import org.ow2.chameleon.fuchsia.core.component.ExportationLinkerIntrospection;
 import org.ow2.chameleon.fuchsia.core.component.ExporterService;
 import org.ow2.chameleon.fuchsia.core.component.ImportationLinkerIntrospection;
 import org.ow2.chameleon.fuchsia.core.component.ImporterService;
+import org.ow2.chameleon.fuchsia.core.declaration.Constants;
+import org.ow2.chameleon.fuchsia.core.declaration.Declaration;
+import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
+import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.tools.grid.ContentHelper;
 import org.ow2.chameleon.fuchsia.tools.grid.model.GraphVertex;
 
@@ -76,54 +80,78 @@ public class ContentGraph extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+        final String NODE_FUCHSIA="Fuchsia";
+        final String NODE_IMPORTER="Importer";
+        final String NODE_EXPORTER="Exporter";
+        final String NODE_TYPE_IMPORTER="importer";
+        final String NODE_TYPE_EXPORTER="exporter";
+        final String NODE_TYPE_DECLARATION="declaration";
+        final String NODE_TYPE_NATIVE="native";
+        final String NODE_TYPE_LINKER="linker";
+
         List<GraphVertex> rootList=new ArrayList<GraphVertex>();
-
         List<ImporterService> ignoredImporterService=content.getFuchsiaService(ImporterService.class);
-
         List<ExporterService> ignoredExporterService=content.getFuchsiaService(ExporterService.class);
 
+        List<ImportDeclaration> ignoredImporterDeclaration=content.getFuchsiaService(ImportDeclaration.class);
+        List<ExportDeclaration> ignoredExporterDeclaration=content.getFuchsiaService(ExportDeclaration.class);
         ObjectMapper mapper=new ObjectMapper();
-
-        rootList.add(new GraphVertex("Fuchsia","Importer","native"));
-
+        rootList.add(new GraphVertex(NODE_FUCHSIA,NODE_IMPORTER,NODE_TYPE_NATIVE));
         for(ImportationLinkerIntrospection linker:content.fetchLinkerIntrospectionsImporter()){
-
-            rootList.add(new GraphVertex("Importer",linker.getName(),"linker"));
-
+            rootList.add(new GraphVertex(NODE_IMPORTER,linker.getName(),NODE_TYPE_LINKER));
             for(ImporterService importer:linker.getLinkedImporters()){
-
                 ignoredImporterService.remove(importer);
-
-                GraphVertex linkerNode=new GraphVertex(linker.getName(),importer.getName(),"importer");
+                GraphVertex linkerNode=new GraphVertex(linker.getName(),importer.getName(),NODE_TYPE_IMPORTER);
                 rootList.add(linkerNode);
-
+                if(ImportationLinkerIntrospection.class.isInstance(importer)){
+                    ImportationLinkerIntrospection ili=(ImportationLinkerIntrospection)importer;
+                    for(ImportDeclaration id:ili.getImportDeclarations()){
+                        //This should be handled differently, since the ID can become optional in the future
+                        String declarationId=id.getMetadata().get(Constants.ID).toString();
+                        ignoredImporterDeclaration.remove(id);
+                        GraphVertex declarationNode=new GraphVertex(importer.getName(),declarationId,NODE_TYPE_DECLARATION);
+                        rootList.add(declarationNode);
+                    }
+                }
             }
-
         }
 
-        rootList.add(new GraphVertex("Fuchsia","Exporter","native"));
-
+        rootList.add(new GraphVertex(NODE_FUCHSIA,NODE_EXPORTER,NODE_TYPE_NATIVE));
         for(ExportationLinkerIntrospection linker:content.fetchLinkerIntrospectionsExporter()){
-
-            rootList.add(new GraphVertex("Exporter",linker.getName(),"linker"));
-
+            rootList.add(new GraphVertex(NODE_EXPORTER,linker.getName(),NODE_TYPE_LINKER));
             for(ExporterService exporter:linker.getLinkedExporters()){
-
                 ignoredExporterService.remove(exporter);
-
-                GraphVertex linkerNode=new GraphVertex(linker.getName(),exporter.getName(),"exporter");
+                GraphVertex linkerNode=new GraphVertex(linker.getName(),exporter.getName(),NODE_TYPE_EXPORTER);
                 rootList.add(linkerNode);
-
+                if(ExportationLinkerIntrospection.class.isInstance(exporter)){
+                    ExportationLinkerIntrospection ili=(ExportationLinkerIntrospection)exporter;
+                    for(ExportDeclaration id:ili.getExportDeclarations()){
+                        //This should be handled differently, since the ID can become optional in the future
+                        String declarationId=id.getMetadata().get(Constants.ID).toString();
+                        ignoredExporterDeclaration.remove(id);
+                        GraphVertex declarationNode=new GraphVertex(exporter.getName(),declarationId,NODE_TYPE_DECLARATION);
+                        rootList.add(declarationNode);
+                    }
+                }
             }
-
         }
 
         for(ImporterService is:ignoredImporterService){
-            rootList.add(new GraphVertex(is.getName(),is.getName(),"importer"));
+            rootList.add(new GraphVertex(is.getName(),is.getName(),NODE_TYPE_IMPORTER));
         }
 
         for(ExporterService is:ignoredExporterService){
-            rootList.add(new GraphVertex(is.getName(),is.getName(),"exporter"));
+            rootList.add(new GraphVertex(is.getName(),is.getName(),NODE_TYPE_EXPORTER));
+        }
+
+        for(ImportDeclaration id:ignoredImporterDeclaration){
+            String declarationId=id.getMetadata().get(Constants.ID).toString();
+            rootList.add(new GraphVertex(declarationId,declarationId,NODE_TYPE_DECLARATION));
+        }
+
+        for(ExportDeclaration id:ignoredExporterDeclaration){
+            String declarationId=id.getMetadata().get(Constants.ID).toString();
+            rootList.add(new GraphVertex(declarationId,declarationId,NODE_TYPE_DECLARATION));
         }
 
         mapper.writeValue(resp.getWriter(),rootList);

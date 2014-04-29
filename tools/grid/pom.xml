@@ -90,7 +90,8 @@
                             org.osgi.framework,javax.servlet,
                             javax.servlet.http,org.slf4j,
                             org.ow2.chameleon.fuchsia.core,
-                            org.ow2.chameleon.fuchsia.core.component
+                            org.ow2.chameleon.fuchsia.core.component,
+                            org.ow2.chameleon.fuchsia.core.declaration
                         </Import-Package>
                         <Export-Package></Export-Package>
 
