@@ -68,7 +68,7 @@ public class JSONRPCExporter extends AbstractExporterComponent {
     @ServiceProperty(name = INSTANCE_NAME_PROPERTY)
     private String name;
 
-    @ServiceProperty(name = "target")
+    @ServiceProperty(name = "target", value="(&(fuchsia.export.jsonrpc.instance=*)(scope=generic))")
     private String filter;
 
     @Requires

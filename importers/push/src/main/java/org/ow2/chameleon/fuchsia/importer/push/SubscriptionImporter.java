@@ -66,7 +66,7 @@ public class SubscriptionImporter extends AbstractImporterComponent implements S
     private List<String> callbacksRegistered = new ArrayList<String>();
 
 
-    @ServiceProperty(name = "target", value = "(push.hub.url=*)")
+    @ServiceProperty(name = "target", value = "(&(push.hub.url=*)(scope=generic))")
     private String filter;
 
     @Requires

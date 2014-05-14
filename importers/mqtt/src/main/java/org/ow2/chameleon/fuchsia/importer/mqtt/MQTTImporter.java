@@ -42,7 +42,7 @@ public class MQTTImporter extends AbstractImporterComponent {
     @ServiceProperty(name = "instance.name")
     private String name;
 
-    @ServiceProperty(name = "target", value = "(id=*)")
+    @ServiceProperty(name = "target", value = "(&(id=*)(mqtt.queue=*)(scope=generic))")
     private String filter;
 
     @Requires(filter = "(factory.name=org.ow2.chameleon.fuchsia.importer.mqtt.MQTTOutputRouter)")

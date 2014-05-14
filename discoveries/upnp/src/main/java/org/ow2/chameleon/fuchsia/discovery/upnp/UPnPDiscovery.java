@@ -112,6 +112,7 @@ public class UPnPDiscovery extends AbstractDiscoveryComponent {
         metadata.put(Constants.DEVICE_ID, deviceId);
         metadata.put(Constants.DEVICE_TYPE, deviceType);
         metadata.put(Constants.DEVICE_TYPE_SUB, deviceSubType);
+        metadata.put("scope", "generic");
 
         ImportDeclaration declaration = ImportDeclarationBuilder.fromMetadata(metadata).build();
 

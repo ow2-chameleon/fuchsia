@@ -67,10 +67,10 @@ public class JAXWSExporter extends AbstractExporterComponent {
 
     private Server httpServer;
 
-    @ServiceProperty(name = "org.osgi.service.http.port")
+    @ServiceProperty(name = "org.osgi.service.http.port", mandatory = true)
     private Integer httpPort;
 
-    @ServiceProperty(name = "target")
+    @ServiceProperty(name = "target", value="(&(fuchsia.export.cxf.instance=*)(scope=generic))")
     private String filter;
 
     public JAXWSExporter(BundleContext context) {

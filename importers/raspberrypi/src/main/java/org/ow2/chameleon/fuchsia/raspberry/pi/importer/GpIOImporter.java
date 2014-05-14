@@ -49,7 +49,7 @@ public class GpIOImporter extends AbstractImporterComponent {
     @Requires(filter = "(factory.name=org.ow2.chameleon.fuchsia.raspberry.pi.device.GPIOOutputPinFactory)")
     private Factory lightFactory;
 
-    @ServiceProperty(name = "target", value = "(&(importer.gpio.pin=*)(importer.gpio.name=*)(id=*))")
+    @ServiceProperty(name = "target", value = "(&(importer.gpio.pin=*)(importer.gpio.name=*)(id=*)(scope=generic))")
     private String filter;
 
     public GpIOImporter(BundleContext context) {

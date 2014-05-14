@@ -116,8 +116,11 @@ public abstract class AbstractFileBasedDiscovery<D extends Declaration> implemen
             for (Map.Entry<Object, Object> element : properties.entrySet()) {
                 Object replacedObject = metadata.put(element.getKey().toString(), element.getValue());
                 if (replacedObject != null) {
-                    LOG.warn("ExportDeclaration: replacing metadata key {}, that contained the value {} by the new value {}", new Object[]{element.getKey(), replacedObject, element.getValue()});
+                    LOG.warn("Declaration: replacing metadata key {}, that contained the value {} by the new value {}", new Object[]{element.getKey(), replacedObject, element.getValue()});
                 }
+            }
+            if(!metadata.containsKey("scope")){
+                metadata.put("scope", "generic");
             }
             D declaration = createAndRegisterDeclaration(metadata);
             declarationsFiles.put(file.getAbsolutePath(), declaration);

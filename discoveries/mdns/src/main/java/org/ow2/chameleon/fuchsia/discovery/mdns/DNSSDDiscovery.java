@@ -140,6 +140,7 @@ public class DNSSDDiscovery extends AbstractDiscoveryComponent implements Networ
         metadata.put("discovery.mdns.device.addresses", bufAddress.toString());
         metadata.put("discovery.mdns.device.isPersistent",event.getInfo().isPersistent());
         metadata.put("discovery.mdns.device.properties",bufProperty.toString());
+        metadata.put("scope", "generic");
 
         ImportDeclaration declaration = ImportDeclarationBuilder.fromMetadata(metadata).build();
 

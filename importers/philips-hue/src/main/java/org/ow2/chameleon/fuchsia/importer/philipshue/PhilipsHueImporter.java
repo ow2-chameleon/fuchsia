@@ -48,7 +48,7 @@ public class PhilipsHueImporter extends AbstractImporterComponent {
     private Map<String,ServiceRegistration> lamps=new HashMap<String, ServiceRegistration>();
     private Map<String,ServiceRegistration> bridges=new HashMap<String, ServiceRegistration>();
 
-    @ServiceProperty(name = "target", value = "(discovery.philips.device.name=*)")
+    @ServiceProperty(name = "target", value = "(&(discovery.philips.device.name=*)(scope=generic))")
     private String filter;
 
     @ServiceProperty(name = Factory.INSTANCE_NAME_PROPERTY)

@@ -53,7 +53,7 @@ public class PhilipsHueBridgeImporter extends AbstractImporterComponent {
     private Map<String,ServiceRegistration> lamps=new HashMap<String, ServiceRegistration>();
     private Map<String,ServiceRegistration> bridges=new HashMap<String, ServiceRegistration>();
 
-    @ServiceProperty(name = "target", value = "(discovery.philips.bridge.type=*)")
+    @ServiceProperty(name = "target", value = "(&(discovery.philips.bridge.type=*)(scope=generic))")
     private String filter;
 
     @ServiceProperty(name = Factory.INSTANCE_NAME_PROPERTY)
@@ -180,6 +180,7 @@ public class PhilipsHueBridgeImporter extends AbstractImporterComponent {
                     metadata.put("discovery.philips.device.name", light.getModelNumber());
                     metadata.put("discovery.philips.device.type", light.getClass().getName());
                     metadata.put("discovery.philips.device.object", light);
+                    metadata.put("scope", "generic");
 
                     Dictionary metatableService=new Hashtable(metadata);
 

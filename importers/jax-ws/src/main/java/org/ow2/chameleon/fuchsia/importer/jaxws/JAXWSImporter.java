@@ -65,7 +65,7 @@ public class JAXWSImporter extends AbstractImporterComponent {
 
     private final Map<ImportDeclaration, ServiceRegistration> map;
 
-    @ServiceProperty(name = "target", value = "(jax-ws.importer.interfaces=*)")
+    @ServiceProperty(name = "target", value = "(&(jax-ws.importer.interfaces=*)(scope=generic))")
     private String filter;
 
     @ServiceProperty(name = "instance.name")

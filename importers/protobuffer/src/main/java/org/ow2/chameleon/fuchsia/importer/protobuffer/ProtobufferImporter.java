@@ -62,7 +62,7 @@ public class ProtobufferImporter extends AbstractImporterComponent {
     @ServiceProperty(name = "instance.name")
     private String name;
 
-    @ServiceProperty(name = "target", value = "(id=*)")
+    @ServiceProperty(name = "target", value = "(&(rpc.server.address=*)(rpc.proto.class=*)(rpc.proto.service=*)(rpc.proto.message=*)(scope=generic))")
     private String filter;
 
     public ProtobufferImporter(BundleContext context) {

@@ -223,6 +223,7 @@ public class PhilipsHueBridgeDiscovery extends AbstractDiscoveryComponent implem
         metadata.put("id", bridge.toString());
         metadata.put("discovery.philips.bridge.type", PHBridge.class.getName());
         metadata.put("discovery.philips.bridge.object", bridge);
+        metadata.put("scope", "generic");
 
         ImportDeclaration declaration = ImportDeclarationBuilder.fromMetadata(metadata).build();
 
