@@ -32,6 +32,8 @@ import org.ow2.chameleon.fuchsia.core.component.ExportationLinker;
 import org.ow2.chameleon.fuchsia.core.component.ImportationLinker;
 import org.ow2.chameleon.fuchsia.tools.grid.ContentHelper;
 import org.ow2.chameleon.fuchsia.tools.grid.model.ViewMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -44,64 +46,65 @@ import java.util.*;
 @Instantiate
 public class InsertLinker extends HttpServlet {
 
+    private static final Logger LOG = LoggerFactory.getLogger(InsertLinker.class);
+
+    private static final String URL = "/insertLinker";
+
     @Requires
     HttpService web;
 
     @Requires
     ContentHelper content;
-
-    final String URL="/insertLinker";
-
     BundleContext context;
 
-    public InsertLinker(BundleContext context){
-        this.context=context;
+    public InsertLinker(BundleContext context) {
+        this.context = context;
     }
 
     @Validate
-    public void validate(){
+    public void validate() {
         try {
-            web.registerServlet(URL,this,null,null);
+            web.registerServlet(URL, this, null, null);
         } catch (ServletException e) {
-            e.printStackTrace();
+            LOG.error("Error while registering the servlet", e);
         } catch (NamespaceException e) {
-            e.printStackTrace();
+            LOG.error("Error while registering the servlet", e);
         }
     }
 
     @Invalidate
-    public void invalidate(){
+    public void invalidate() {
         web.unregister(URL);
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        ObjectMapper mapper=new ObjectMapper();
+        ObjectMapper mapper = new ObjectMapper();
 
         try {
 
-            Collection<ServiceReference<Factory>> services=context.getServiceReferences(Factory.class,String.format("(factory.name=%s)",req.getParameter("linkersCombo")));
+            Collection<ServiceReference<Factory>> services = context.getServiceReferences(Factory.class, String.format("(factory.name=%s)", req.getParameter("linkersCombo")));
 
-            if(services.size()==1){
+            if (services.size() == 1) {
 
-                ServiceReference factorySR=(ServiceReference)services.iterator().next();
+                ServiceReference factorySR = (ServiceReference) services.iterator().next();
 
-                Factory factory=(Factory)context.getService(factorySR);
+                Factory factory = (Factory) context.getService(factorySR);
 
-                Hashtable<String,Object> hs=new Hashtable<String, Object>();
+                Dictionary<String, Object> hs = new Hashtable<String, Object>();
 
-                String declarationProperty=getValue(req.getParameter("linkerDeclarationProperty"));
-                String serviceProperty=getValue(req.getParameter("linkerServiceProperty"));
+                String declarationProperty = getValue(req.getParameter("linkerDeclarationProperty"));
+                String serviceProperty = getValue(req.getParameter("linkerServiceProperty"));
 
-                List<String> interfaces=Arrays.asList(factory.getComponentDescription().getprovidedServiceSpecification());
+                List<String> interfaces = Arrays.asList(factory.getComponentDescription().getprovidedServiceSpecification());
 
-                if(interfaces.contains(ImportationLinker.class.getName())){
-                    hs.put(ImportationLinker.FILTER_IMPORTDECLARATION_PROPERTY,declarationProperty);
-                    hs.put(ImportationLinker.FILTER_IMPORTERSERVICE_PROPERTY,serviceProperty);
-                }else if(interfaces.contains(ExportationLinker.class.getName())){
-                    hs.put(ExportationLinker.FILTER_EXPORTDECLARATION_PROPERTY,declarationProperty);
-                    hs.put(ExportationLinker.FILTER_EXPORTERSERVICE_PROPERTY,serviceProperty);
+                if (interfaces.contains(ImportationLinker.class.getName())) {
+                    hs.put(ImportationLinker.FILTER_IMPORTDECLARATION_PROPERTY, declarationProperty);
+                    hs.put(ImportationLinker.FILTER_IMPORTERSERVICE_PROPERTY, serviceProperty);
+                } else if (interfaces.contains(ExportationLinker.class.getName())) {
+                    hs.put(ExportationLinker.FILTER_EXPORTDECLARATION_PROPERTY, declarationProperty);
+                    hs.put(ExportationLinker.FILTER_EXPORTERSERVICE_PROPERTY, serviceProperty);
                 }
 
                 /**
@@ -110,27 +113,28 @@ public class InsertLinker extends HttpServlet {
                 FuchsiaUtils.getFilter(declarationProperty);
                 FuchsiaUtils.getFilter(serviceProperty);
 
-                String instanceName=req.getParameter("linkerInstanceName");
+                String instanceName = req.getParameter("linkerInstanceName");
 
-                if(instanceName!=null && instanceName.trim().length()!=0){
-                    hs.put(Factory.INSTANCE_NAME_PROPERTY,instanceName);
+                if (instanceName != null && instanceName.trim().length() != 0) {
+                    hs.put(Factory.INSTANCE_NAME_PROPERTY, instanceName);
                 }
 
-                ComponentInstance ci=factory.createComponentInstance(hs);
+                ComponentInstance ci = factory.createComponentInstance(hs);
 
-                mapper.writeValue(resp.getWriter(),new ViewMessage("success","Linker created successfully."));
+                mapper.writeValue(resp.getWriter(), new ViewMessage("success", "Linker created successfully."));
 
             }
 
         } catch (Exception e) {
-            mapper.writeValue(resp.getWriter(),new ViewMessage("error",e.getMessage()));
+            LOG.info("Error while preparing response", e);
+            mapper.writeValue(resp.getWriter(), new ViewMessage("error", e.getMessage()));
         }
 
     }
 
-    private String getValue(String value){
+    private String getValue(String value) {
 
-        if(value==null||value.trim().length()==0){
+        if (value == null || value.trim().length() == 0) {
             return "(objectClass=*)";
         }
 

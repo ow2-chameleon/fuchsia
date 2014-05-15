@@ -19,7 +19,8 @@
  */
 package org.ow2.chameleon.fuchsia.tools.grid.data.insert;
 
-import org.apache.felix.ipojo.*;
+import org.apache.felix.ipojo.ComponentInstance;
+import org.apache.felix.ipojo.Factory;
 import org.apache.felix.ipojo.annotations.*;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.osgi.framework.BundleContext;
@@ -30,6 +31,8 @@ import org.ow2.chameleon.fuchsia.core.FuchsiaUtils;
 import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 import org.ow2.chameleon.fuchsia.tools.grid.ContentHelper;
 import org.ow2.chameleon.fuchsia.tools.grid.model.ViewMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -37,11 +40,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Dictionary;
 import java.util.Hashtable;
 
 @Component
 @Instantiate
 public class InsertImporter extends HttpServlet {
+
+    private static final Logger LOG = LoggerFactory.getLogger(InsertImporter.class);
+
+    private static final String URL = "/insertImporter";
 
     @Requires
     HttpService web;
@@ -49,73 +57,72 @@ public class InsertImporter extends HttpServlet {
     @Requires
     ContentHelper content;
 
-    final String URL="/insertImporter";
-
     BundleContext context;
 
-    public InsertImporter(BundleContext context){
-        this.context=context;
+    public InsertImporter(BundleContext context) {
+        this.context = context;
     }
 
     @Validate
-    public void validate(){
+    public void validate() {
         try {
-            web.registerServlet(URL,this,null,null);
+            web.registerServlet(URL, this, null, null);
         } catch (ServletException e) {
-            e.printStackTrace();
+            LOG.error("Error while registering the servlet", e);
         } catch (NamespaceException e) {
-            e.printStackTrace();
+            LOG.error("Error while registering the servlet", e);
         }
     }
 
     @Invalidate
-    public void invalidate(){
+    public void invalidate() {
         web.unregister(URL);
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        ObjectMapper mapper=new ObjectMapper();
+        ObjectMapper mapper = new ObjectMapper();
 
         try {
 
-            Collection<ServiceReference<Factory>> services=context.getServiceReferences(Factory.class,String.format("(factory.name=%s)",req.getParameter("importerCombo")));
+            Collection<ServiceReference<Factory>> services = context.getServiceReferences(Factory.class, String.format("(factory.name=%s)", req.getParameter("importerCombo")));
 
-            if(services.size()==1){
+            if (services.size() == 1) {
 
-                ServiceReference factorySR=(ServiceReference)services.iterator().next();
+                ServiceReference factorySR = (ServiceReference) services.iterator().next();
 
-                Factory factory=(Factory)context.getService(factorySR);
+                Factory factory = (Factory) context.getService(factorySR);
 
-                Hashtable<String,Object> hs=new Hashtable<String, Object>();
+                Dictionary<String, Object> hs = new Hashtable<String, Object>();
 
-                String filter=getValue(req.getParameter("importerTarget"));
+                String filter = getValue(req.getParameter("importerTarget"));
 
                 FuchsiaUtils.getFilter(filter);
 
-                hs.put(ImporterService.TARGET_FILTER_PROPERTY,filter);
+                hs.put(ImporterService.TARGET_FILTER_PROPERTY, filter);
 
-                String instanceName=req.getParameter("importerInstanceName");
-                if(instanceName!=null && instanceName.trim().length()!=0){
-                    hs.put(Factory.INSTANCE_NAME_PROPERTY,instanceName);
+                String instanceName = req.getParameter("importerInstanceName");
+                if (instanceName != null && instanceName.trim().length() != 0) {
+                    hs.put(Factory.INSTANCE_NAME_PROPERTY, instanceName);
                 }
 
-                ComponentInstance ci=factory.createComponentInstance(hs);
+                ComponentInstance ci = factory.createComponentInstance(hs);
 
-                mapper.writeValue(resp.getWriter(),new ViewMessage("success","Importer created successfully."));
+                mapper.writeValue(resp.getWriter(), new ViewMessage("success", "Importer created successfully."));
 
             }
 
         } catch (Exception e) {
-            mapper.writeValue(resp.getWriter(),new ViewMessage("error",e.getMessage()));
+            LOG.info("Error while preparing response", e);
+            mapper.writeValue(resp.getWriter(), new ViewMessage("error", e.getMessage()));
         }
 
     }
 
-    private String getValue(String value){
+    private String getValue(String value) {
 
-        if(value==null||value.trim().length()==0){
+        if (value == null || value.trim().length() == 0) {
             return "(objectClass=*)";
         }
 

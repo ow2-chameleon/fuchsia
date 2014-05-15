@@ -31,6 +31,8 @@ import org.ow2.chameleon.fuchsia.core.FuchsiaUtils;
 import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 import org.ow2.chameleon.fuchsia.tools.grid.ContentHelper;
 import org.ow2.chameleon.fuchsia.tools.grid.model.ViewMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -38,19 +40,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Dictionary;
 import java.util.Hashtable;
 
 @Component
 @Instantiate
 public class InsertExporter extends HttpServlet {
 
+    private static final Logger LOG = LoggerFactory.getLogger(InsertExporter.class);
+
+    private static final String URL="/insertExporter";
+
     @Requires
     HttpService web;
 
     @Requires
     ContentHelper content;
-
-    final String URL="/insertExporter";
 
     BundleContext context;
 
@@ -63,9 +68,9 @@ public class InsertExporter extends HttpServlet {
         try {
             web.registerServlet(URL,this,null,null);
         } catch (ServletException e) {
-            e.printStackTrace();
+            LOG.error("Error while registering the servlet", e);
         } catch (NamespaceException e) {
-            e.printStackTrace();
+            LOG.error("Error while registering the servlet", e);
         }
     }
 
@@ -89,7 +94,7 @@ public class InsertExporter extends HttpServlet {
 
                 Factory factory=(Factory)context.getService(factorySR);
 
-                Hashtable<String,Object> hs=new Hashtable<String, Object>();
+                Dictionary<String,Object> hs=new Hashtable<String, Object>();
 
                 String filter=getValue(req.getParameter("exporterTarget"));
 
@@ -109,6 +114,7 @@ public class InsertExporter extends HttpServlet {
             }
 
         } catch (Exception e) {
+            LOG.info("Error while preparing response", e);
             mapper.writeValue(resp.getWriter(),new ViewMessage("error",e.getMessage()));
         }
 

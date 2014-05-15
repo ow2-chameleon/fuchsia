@@ -28,6 +28,8 @@ import org.osgi.service.http.NamespaceException;
 import org.ow2.chameleon.fuchsia.core.component.ExporterService;
 import org.ow2.chameleon.fuchsia.tools.grid.ContentHelper;
 import org.ow2.chameleon.fuchsia.tools.grid.model.LinkerNode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -41,51 +43,56 @@ import java.util.List;
 @Instantiate
 public class ContentExporter extends HttpServlet {
 
+    private static final Logger LOG = LoggerFactory.getLogger(ContentExporter.class);
+
+    private static final String URL = "/contentExporter";
+
+    public static final List<String> EXPORTER_SERVICE_INTERFACE = new ArrayList<String>() {{
+        add(ExporterService.class.getName());
+    }};
+
+    public static final List<String> EXPORTER_SERVICE_PROPERTIES = new ArrayList<String>();
+
     @Requires
     HttpService web;
-
-    final String URL="/contentExporter";
 
     @Requires
     ContentHelper content;
 
     BundleContext context;
 
-    public ContentExporter(BundleContext context){
-        this.context=context;
+    public ContentExporter(BundleContext context) {
+        this.context = context;
     }
 
     @Validate
-    public void validate(){
+    public void validate() {
         try {
-            web.registerServlet(URL,this,null,null);
+            web.registerServlet(URL, this, null, null);
         } catch (ServletException e) {
-            e.printStackTrace();
+            LOG.error("Error while registering the servlet", e);
         } catch (NamespaceException e) {
-            e.printStackTrace();
+            LOG.error("Error while registering the servlet", e);
         }
     }
 
     @Invalidate
-    public void invalidate(){
+    public void invalidate() {
         web.unregister(URL);
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        List<LinkerNode> rootList=new ArrayList<LinkerNode>();
+        List<LinkerNode> rootList = new ArrayList<LinkerNode>();
 
-        ObjectMapper mapper=new ObjectMapper();
+        ObjectMapper mapper = new ObjectMapper();
 
-        List<String> ifaces=new ArrayList<String>(){{add(ExporterService.class.getName());}};
-        List<String> props=new ArrayList<String>(){{}};
-
-        for(Factory factory:content.getFuchsiaFactories(ifaces,props)){
+        for (Factory factory : content.getFuchsiaFactories(EXPORTER_SERVICE_INTERFACE, EXPORTER_SERVICE_PROPERTIES)) {
             rootList.add(new LinkerNode(factory.getName()));
         }
 
-        mapper.writeValue(resp.getWriter(),rootList);
+        mapper.writeValue(resp.getWriter(), rootList);
 
     }
 

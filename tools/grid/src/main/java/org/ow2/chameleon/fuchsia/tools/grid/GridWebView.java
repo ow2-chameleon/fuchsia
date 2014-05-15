@@ -38,13 +38,13 @@ import java.io.*;
 @Provides
 public class GridWebView {
 
-    private static final String SERVLET="/grid";
-    private static final String RESOURCES_JS ="/js";
-    private static final String RESOURCES_CSS ="/css";
-    private static final String RESOURCES_IMAGES ="/images";
-    private static final String TEMPLATE_FILE="/index.html";
-    private static final String TEMPLATE_ENCODING="UTF-8";
-    private static final String TEMPLATE_FILE_REPOSITORY="/";
+    private static final String SERVLET = "/grid";
+    private static final String RESOURCES_JS = "/js";
+    private static final String RESOURCES_CSS = "/css";
+    private static final String RESOURCES_IMAGES = "/images";
+    private static final String TEMPLATE_FILE = "/index.html";
+    private static final String TEMPLATE_ENCODING = "UTF-8";
+    private static final String TEMPLATE_FILE_REPOSITORY = "/";
 
     private static final Logger LOG = LoggerFactory.getLogger(GridWebView.class);
 
@@ -56,14 +56,14 @@ public class GridWebView {
     @Requires
     HttpService web;
 
-    public GridWebView(BundleContext context){
-        this.bundleContext=context;
+    public GridWebView(BundleContext context) {
+        this.bundleContext = context;
     }
 
     @Validate
     public void validate() {
         try {
-            web.registerServlet(SERVLET,new MainPage(),null,null);
+            web.registerServlet(SERVLET, new MainPage(), null, null);
         } catch (Exception e) {
             LOG.error("Cannot register servlet", e);
             state = false;
@@ -81,32 +81,32 @@ public class GridWebView {
     }
 
     @Invalidate
-    public void invalidate(){
+    public void invalidate() {
         web.unregister(SERVLET);
         web.unregister(RESOURCES_JS);
         web.unregister(RESOURCES_CSS);
         web.unregister(RESOURCES_IMAGES);
     }
 
-   class MainPage extends HttpServlet {
+    static class MainPage extends HttpServlet {
 
-       @Override
-       protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        @Override
+        protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-           PrintWriter out=resp.getWriter();
+            PrintWriter out = resp.getWriter();
 
-           InputStream is=this.getClass().getResourceAsStream(TEMPLATE_FILE);
+            InputStream is = this.getClass().getResourceAsStream(TEMPLATE_FILE);
 
-           BufferedReader br= new BufferedReader(new InputStreamReader(is));
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
-           String content;
+            String content;
 
-           while((content=br.readLine())!=null){
-               resp.getWriter().write(content + "\n");
-           }
+            while ((content = br.readLine()) != null) {
+                resp.getWriter().write(content + "\n");
+            }
 
-       }
-   }
+        }
+    }
 }
 
 

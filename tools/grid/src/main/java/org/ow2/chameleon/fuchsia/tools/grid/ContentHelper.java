@@ -30,6 +30,8 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.ow2.chameleon.fuchsia.core.component.ExportationLinkerIntrospection;
 import org.ow2.chameleon.fuchsia.core.component.ImportationLinkerIntrospection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,52 +43,52 @@ import java.util.List;
 @Provides
 public class ContentHelper {
 
+    private static final Logger LOG = LoggerFactory.getLogger(ContentHelper.class);
+
     BundleContext context;
 
-    @Requires(optional = true,specification = Factory.class)
+    @Requires(optional = true, specification = Factory.class)
     private List<Factory> factories;
 
-    public ContentHelper(BundleContext context){
-        this.context=context;
+    public ContentHelper(BundleContext context) {
+        this.context = context;
     }
 
-    public List<ImportationLinkerIntrospection> fetchLinkerIntrospectionsImporter(){
+    public List<ImportationLinkerIntrospection> fetchLinkerIntrospectionsImporter() {
 
-        List<ImportationLinkerIntrospection> linkers=null;
+        List<ImportationLinkerIntrospection> linkers = null;
 
         try {
 
-            linkers=new ArrayList<ImportationLinkerIntrospection>();
+            linkers = new ArrayList<ImportationLinkerIntrospection>();
 
-            ServiceReference[] references= new ServiceReference[0];
+            ServiceReference[] references = context.getServiceReferences(ImportationLinkerIntrospection.class.getName(), null);
 
-            references = context.getServiceReferences(ImportationLinkerIntrospection.class.getName(),null);
-
-            if(references!=null) {
-                for(ServiceReference sr:references){
+            if (references != null) {
+                for (ServiceReference sr : references) {
                     linkers.add((ImportationLinkerIntrospection) context.getService(sr));
                 }
             }
 
         } catch (InvalidSyntaxException e) {
-            e.printStackTrace();
+            LOG.error("Problem while fetch the ImportationLinkerIntrospection", e);
         }
 
         return linkers;
 
     }
 
-    public List<ExportationLinkerIntrospection> fetchLinkerIntrospectionsExporter(){
+    public List<ExportationLinkerIntrospection> fetchLinkerIntrospectionsExporter() {
 
-        List<ExportationLinkerIntrospection> linkers=null;
+        List<ExportationLinkerIntrospection> linkers = null;
 
         try {
 
-            linkers=new ArrayList<ExportationLinkerIntrospection>();
+            linkers = new ArrayList<ExportationLinkerIntrospection>();
 
-            ServiceReference[] references=context.getServiceReferences(ExportationLinkerIntrospection.class.getName(),null);
+            ServiceReference[] references = context.getServiceReferences(ExportationLinkerIntrospection.class.getName(), null);
 
-            if(references!=null) {
+            if (references != null) {
                 for (ServiceReference sr : context.getServiceReferences(ExportationLinkerIntrospection.class.getName(), null)) {
 
                     linkers.add((ExportationLinkerIntrospection) context.getService(sr));
@@ -95,67 +97,69 @@ public class ContentHelper {
             }
 
         } catch (InvalidSyntaxException e) {
-            e.printStackTrace();
+            LOG.error("Problem while fetch the ExportationLinkerIntrospection", e);
         }
 
         return linkers;
 
     }
 
-    public List<Factory> getFuchsiaFactories(List<String> interfaces){
+    public List<Factory> getFuchsiaFactories(List<String> interfaces) {
 
-        return getFuchsiaFactories(interfaces,new ArrayList<String>());
-
-    }
-
-    public List<Factory> getFuchsiaFactories(){
-
-        return getFuchsiaFactories(new ArrayList<String>(),new ArrayList<String>());
+        return getFuchsiaFactories(interfaces, new ArrayList<String>());
 
     }
 
-    public <T> List<T> getFuchsiaService(Class<T> interfaces){
+    public List<Factory> getFuchsiaFactories() {
 
-        List<T> fuchsiaService=new ArrayList<T>();
+        return getFuchsiaFactories(new ArrayList<String>(), new ArrayList<String>());
+
+    }
+
+    public <T> List<T> getFuchsiaService(Class<T> interfaces) {
+
+        List<T> fuchsiaService = new ArrayList<T>();
 
         try {
-            Collection<ServiceReference<T>> serviceReferences=context.getServiceReferences(interfaces, null);
+            Collection<ServiceReference<T>> serviceReferences = context.getServiceReferences(interfaces, null);
 
-            for(ServiceReference<? extends T> sr:serviceReferences){
+            for (ServiceReference<? extends T> sr : serviceReferences) {
 
                 fuchsiaService.add(context.getService(sr));
 
             }
 
         } catch (InvalidSyntaxException e) {
-            e.printStackTrace();
+            LOG.error("Problem while getting the FuchsiaService " + interfaces.getName(), e);
         }
 
         return fuchsiaService;
 
     }
 
-    public List<Factory> getFuchsiaFactories(List<String> interfaces,List<String> properties){
+    public List<Factory> getFuchsiaFactories(List<String> interfaces, List<String> properties) {
 
-        List<Factory> fuchsiaFactories=new ArrayList<Factory>();
+        List<Factory> fuchsiaFactories = new ArrayList<Factory>();
 
-        for(Factory factory:factories){
+        for (Factory factory : factories) {
 
-            List<String> servicesProvided=Arrays.asList(factory.getComponentDescription().getprovidedServiceSpecification());
+            List<String> servicesProvided = Arrays.asList(factory.getComponentDescription().getprovidedServiceSpecification());
 
-            List<String> factoryProperties=new ArrayList<String>();
+            List<String> factoryProperties = new ArrayList<String>();
 
-            for(PropertyDescription pd:factory.getComponentDescription().getProperties()){
+            for (PropertyDescription pd : factory.getComponentDescription().getProperties()) {
                 //System.out.println(factory.getName()+" Property ---->"+pd.getName()+"="+pd.getValue());
                 factoryProperties.add(pd.getName());
             }
 
-            for(org.apache.felix.ipojo.metadata.Attribute att:factory.getComponentMetadata().getAttributes()){
-                ///System.out.println(factory.getName()+" Data ---->"+att.getName()+"="+att.getValue());
+            /*
+            for (org.apache.felix.ipojo.metadata.Attribute att : factory.getComponentMetadata().getAttributes()) {
+                System.out.println(factory.getName()+" Data ---->"+att.getName()+"="+att.getValue());
             }
+            */
 
-            if(!servicesProvided.containsAll(interfaces)
-                    ||!factoryProperties.containsAll(properties)){
+            if (!servicesProvided.containsAll(interfaces)
+                    || !factoryProperties.containsAll(properties)) {
                 continue;
             }
 
