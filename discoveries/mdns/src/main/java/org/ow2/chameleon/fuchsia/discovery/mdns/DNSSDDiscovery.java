@@ -111,7 +111,7 @@ public class DNSSDDiscovery extends AbstractDiscoveryComponent implements Networ
 
         Map<String, Object> metadata = new HashMap<String, Object>();
 
-        StringBuffer bufAddress=new StringBuffer();
+        StringBuilder bufAddress=new StringBuilder();
 
         InetAddress[] addresses =  event.getInfo().getInetAddresses();
         if (addresses.length > 0) {
@@ -126,7 +126,7 @@ public class DNSSDDiscovery extends AbstractDiscoveryComponent implements Networ
             bufAddress.append(event.getInfo().getPort());
         }
 
-        StringBuffer bufProperty=new StringBuffer();
+        StringBuilder bufProperty=new StringBuilder();
 
         Enumeration<String> propertiesNameEnum=event.getInfo().getPropertyNames();
 

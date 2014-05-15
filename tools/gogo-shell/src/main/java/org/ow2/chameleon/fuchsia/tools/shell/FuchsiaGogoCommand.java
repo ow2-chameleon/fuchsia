@@ -147,7 +147,7 @@ public class FuchsiaGogoCommand {
         String type = getArgumentValue("-t", parameters);
         Map<ServiceReference, Declaration> declarations = getDeclarations(type);
 
-        StringBuilder sb=displayDeclarations(declarations, filter);
+        StringBuilder sb = displayDeclarations(declarations, filter);
 
         System.out.println(sb);
 
@@ -171,7 +171,7 @@ public class FuchsiaGogoCommand {
 
     private StringBuilder displayDeclarations(Map<ServiceReference, Declaration> declarations, Filter filter) {
 
-        StringBuilder sb=new StringBuilder();
+        StringBuilder sb = new StringBuilder();
 
         if (declarations.isEmpty()) {
             sb.append("No declarations found.");
@@ -180,7 +180,7 @@ public class FuchsiaGogoCommand {
         for (Map.Entry<ServiceReference, Declaration> declaration : declarations.entrySet()) {
             if (filter == null || filter.matches(declaration.getValue().getMetadata())) {
 
-                StringBuilder boxedDeclaration=createASCIIBox("Declaration",displayDeclaration(getIdentifier(declaration.getValue()), declaration.getKey(), declaration.getValue()));
+                StringBuilder boxedDeclaration = createASCIIBox("Declaration", displayDeclaration(getIdentifier(declaration.getValue()), declaration.getKey(), declaration.getValue()));
                 sb.append(boxedDeclaration);
 
             }
@@ -205,16 +205,16 @@ public class FuchsiaGogoCommand {
             sgMetadata.append(String.format("%s = %s\n", entry.getKey(), entry.getValue()));
         }
 
-        completeOutput.append(createASCIIBox("Metadata",sgMetadata));
+        completeOutput.append(createASCIIBox("Metadata", sgMetadata));
 
-        StringBuilder sgExtraMetadata=new StringBuilder();
+        StringBuilder sgExtraMetadata = new StringBuilder();
         for (Map.Entry<String, Object> entry : declaration.getExtraMetadata().entrySet()) {
             sgExtraMetadata.append(String.format("%s = %s\n", entry.getKey(), entry.getValue()));
         }
 
-        completeOutput.append(createASCIIBox("Extra-Metadata",sgExtraMetadata));
+        completeOutput.append(createASCIIBox("Extra-Metadata", sgExtraMetadata));
 
-        StringBuilder sgProperties=new StringBuilder();
+        StringBuilder sgProperties = new StringBuilder();
         for (String propertyKey : reference.getPropertyKeys()) {
             sgProperties.append(String.format("%s = %s\n", propertyKey, reference.getProperty(propertyKey)));
         }
@@ -222,7 +222,7 @@ public class FuchsiaGogoCommand {
             sgProperties.append("EMPTY\n");
         }
 
-        completeOutput.append(createASCIIBox("Service Properties",sgProperties));
+        completeOutput.append(createASCIIBox("Service Properties", sgProperties));
 
 
         return completeOutput;
@@ -236,21 +236,21 @@ public class FuchsiaGogoCommand {
     public void linker(@Descriptor("linker [-(import|export)] [ID name]") String... parameters) {
         List<ServiceReference> exportationLinkerRef = getAllServiceRefs(ExportationLinker.class);
         List<ServiceReference> importationLinkerRef = getAllServiceRefs(ImportationLinker.class);
-        StringBuilder sbFinal=new StringBuilder();
+        StringBuilder sbFinal = new StringBuilder();
         if (exportationLinkerRef.isEmpty() && importationLinkerRef.isEmpty()) {
             sbFinal.append("No linkers available.\n");
         } else {
             if (!exportationLinkerRef.isEmpty()) {
                 for (ServiceReference reference : exportationLinkerRef) {
-                    StringBuilder sb=new StringBuilder();
+                    StringBuilder sb = new StringBuilder();
                     sb.append(displayServiceInfo(reference));
                     sb.append(createASCIIBox("Properties", displayServiceProperties(reference)));
-                    sbFinal.append(createASCIIBox("Exportation Linker",sb));
+                    sbFinal.append(createASCIIBox("Exportation Linker", sb));
                 }
             }
             if (!importationLinkerRef.isEmpty()) {
                 for (ServiceReference reference : importationLinkerRef) {
-                    StringBuilder sb=new StringBuilder();
+                    StringBuilder sb = new StringBuilder();
                     sb.append(displayServiceInfo(reference));
                     sb.append(createASCIIBox("Properties", displayServiceProperties(reference)));
                     sbFinal.append(createASCIIBox("Importation Linker", sb));
@@ -265,16 +265,16 @@ public class FuchsiaGogoCommand {
     @Descriptor("Gets the discovery available in the platform")
     public void discovery(@Descriptor("discovery [discovery name]") String... parameters) {
         List<ServiceReference> discoveryRef = getAllServiceRefs(DiscoveryService.class);
-        StringBuilder sbFinal=new StringBuilder();
+        StringBuilder sbFinal = new StringBuilder();
         if (discoveryRef.isEmpty()) {
             sbFinal.append("No discovery available.\n");
         } else {
             for (ServiceReference reference : discoveryRef) {
-                StringBuilder sb=new StringBuilder();
+                StringBuilder sb = new StringBuilder();
                 sb.append(displayServiceInfo(reference));
-                sb.append(createASCIIBox("Properties",displayServiceProperties(reference)));
+                sb.append(createASCIIBox("Properties", displayServiceProperties(reference)));
 
-                sbFinal.append(createASCIIBox("Discovery",sb));
+                sbFinal.append(createASCIIBox("Discovery", sb));
             }
         }
 
@@ -286,16 +286,16 @@ public class FuchsiaGogoCommand {
     @Descriptor("Gets the importer available in the platform")
     public void importer(@Descriptor("importer [importer name]") String... parameters) {
         Map<ServiceReference, ImporterService> importerRefsAndServices = getAllServiceRefsAndServices(ImporterService.class);
-        StringBuilder sbFinal=new StringBuilder();
+        StringBuilder sbFinal = new StringBuilder();
         if (importerRefsAndServices.isEmpty()) {
             sbFinal.append("No importers available.\n");
         } else {
             for (Map.Entry<ServiceReference, ImporterService> e : importerRefsAndServices.entrySet()) {
-                StringBuilder sb=new StringBuilder();
+                StringBuilder sb = new StringBuilder();
                 sb.append(displayServiceInfo(e.getKey()));
                 sb.append(String.format("importer name = %s\n", e.getValue().getName()));
                 sb.append(createASCIIBox("Properties", displayServiceProperties(e.getKey())));
-                sbFinal.append(createASCIIBox("Importer",sb));
+                sbFinal.append(createASCIIBox("Importer", sb));
             }
         }
         System.out.println(sbFinal.toString());
@@ -306,16 +306,16 @@ public class FuchsiaGogoCommand {
     @Descriptor("Gets the exporter available in the platform")
     public void exporter(@Descriptor("exporter [exporter name]") String... parameters) {
         Map<ServiceReference, ExporterService> exporterRefsAndServices = getAllServiceRefsAndServices(ExporterService.class);
-        StringBuilder sbFinal=new StringBuilder();
+        StringBuilder sbFinal = new StringBuilder();
         if (exporterRefsAndServices.isEmpty()) {
             System.out.println("No exporter available.");
         } else {
             for (Map.Entry<ServiceReference, ExporterService> e : exporterRefsAndServices.entrySet()) {
-                StringBuilder sb=new StringBuilder();
+                StringBuilder sb = new StringBuilder();
                 sb.append(displayServiceInfo(e.getKey()));
                 sb.append(String.format("exporter name = %s\n", e.getValue().getName()));
                 sb.append(createASCIIBox("Properties", displayServiceProperties(e.getKey())));
-                sbFinal.append(createASCIIBox("Exporter",sb));
+                sbFinal.append(createASCIIBox("Exporter", sb));
             }
         }
         System.out.println(sbFinal.toString());
@@ -380,7 +380,7 @@ public class FuchsiaGogoCommand {
 
     private static StringBuilder displayServiceProperties(ServiceReference reference) {
 
-        StringBuilder sb=new StringBuilder();
+        StringBuilder sb = new StringBuilder();
 
         for (String propertyKey : reference.getPropertyKeys()) {
             sb.append(String.format("%s = %s\n", propertyKey, reference.getProperty(propertyKey)));
@@ -393,9 +393,9 @@ public class FuchsiaGogoCommand {
     }
 
     private static StringBuilder displayServiceInfo(ServiceReference reference) {
-        StringBuilder sb=new StringBuilder();
-        sb.append("name:"+reference.getProperty(INSTANCE_NAME_PROPERTY)+"\n");
-        sb.append("bundle:"+reference.getBundle().getSymbolicName()+"["+reference.getBundle().getBundleId()+"]"+"\n");
+        StringBuilder sb = new StringBuilder();
+        sb.append("name:" + reference.getProperty(INSTANCE_NAME_PROPERTY) + "\n");
+        sb.append("bundle:" + reference.getBundle().getSymbolicName() + "[" + reference.getBundle().getBundleId() + "]" + "\n");
 
         return sb;
     }
@@ -429,60 +429,60 @@ public class FuchsiaGogoCommand {
     }
 
 
-    private static String reproduceChar(String ch, Integer amount){
+    private static String reproduceChar(String ch, Integer amount) {
 
-        StringBuffer sb=new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
-        for(int x=0;x<amount;x++){
+        for (int x = 0; x < amount; x++) {
             sb.append(ch);
         }
 
         return sb.toString();
     }
 
-    private static StringBuilder createASCIIBox(String prolog, StringBuilder sb){
-        StringBuilder result=new StringBuilder();
+    private static StringBuilder createASCIIBox(String prolog, StringBuilder sb) {
+        StringBuilder result = new StringBuilder();
 
-        StringReader sr=new StringReader(sb.toString());
+        StringReader sr = new StringReader(sb.toString());
 
-        List<Integer> sizeColums=new ArrayList<Integer>();
+        List<Integer> sizeColums = new ArrayList<Integer>();
 
         String line;
         try {
 
-            BufferedReader br=new BufferedReader(sr);
-            while((line=br.readLine())!=null){
-                sizeColums.add(Integer.valueOf(line.length()));
+            BufferedReader br = new BufferedReader(sr);
+            while ((line = br.readLine()) != null) {
+                sizeColums.add(line.length());
             }
 
             Collections.sort(sizeColums);
             Collections.reverse(sizeColums);
 
-            Integer maxColumn=sizeColums.isEmpty()?0:sizeColums.get(0);
-            if(maxColumn>45) maxColumn=45;
-            Integer prologSize=prolog.length();
+            Integer maxColumn = sizeColums.isEmpty() ? 0 : sizeColums.get(0);
+            if (maxColumn > 45) maxColumn = 45;
+            Integer prologSize = prolog.length();
 
-            result.append(reproduceChar(" ",prologSize)+"."+reproduceChar("_",maxColumn)+"\n");
+            result.append(reproduceChar(" ", prologSize)).append(".").append(reproduceChar("_", maxColumn)).append("\n");
 
-            sr=new StringReader(sb.toString());
-            br=new BufferedReader(sr);
-            int lineIndex=0;
-            while((line=br.readLine())!=null){
+            sr = new StringReader(sb.toString());
+            br = new BufferedReader(sr);
+            int lineIndex = 0;
+            while ((line = br.readLine()) != null) {
 
-                if(lineIndex==((Integer)(sizeColums.size()/2))){
+                if (lineIndex == ((Integer) (sizeColums.size() / 2))) {
                     result.append(prolog);
-                }else {
-                    result.append(reproduceChar(" ",prologSize));
+                } else {
+                    result.append(reproduceChar(" ", prologSize));
                 }
 
                 result.append("|" + line + "\n");
                 lineIndex++;
             }
 
-            result.append(reproduceChar(" ",prologSize)+"|"+reproduceChar("_",maxColumn)+"\n");
+            result.append(reproduceChar(" ", prologSize)).append("|").append(reproduceChar("_", maxColumn)).append("\n");
 
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Problem while creating a box", e);
         }
 
         return result;

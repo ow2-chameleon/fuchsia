@@ -52,7 +52,7 @@ public class PhilipsHueGogoCommand extends PHLightListener{
 
     private String reproduceChar(String ch, int amount){
 
-        StringBuffer sb=new StringBuffer();
+        StringBuilder sb=new StringBuilder();
 
         for(int x=0;x<amount;x++){
             sb.append(ch);
@@ -63,7 +63,7 @@ public class PhilipsHueGogoCommand extends PHLightListener{
 
     @Descriptor  (value = "List all lights available")
     public void phlist(@Descriptor("phlist") String... parameters) {
-        StringBuffer sb=new StringBuffer();
+        StringBuilder sb=new StringBuilder();
         bridge.findNewLights(this);
         for(PHLight light:bridge.getResourceCache().getAllLights()){
             int lightNameLength=light.getName().length();
@@ -150,14 +150,14 @@ public class PhilipsHueGogoCommand extends PHLightListener{
     }
 
     public void onSuccess() {
-
+        // not used
     }
 
     public void onError(int i, String s) {
-
+        // not used
     }
 
     public void onStateUpdate(Hashtable<String, String> stringStringHashtable, List<PHHueError> phHueErrors) {
-
+        // not used
     }
 }

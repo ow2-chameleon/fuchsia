@@ -187,7 +187,7 @@ public class PhilipsHueBridgeDiscovery extends AbstractDiscoveryComponent implem
     }
 
     public void onStateUpdate(Hashtable<String, String> stringStringHashtable, List<PHHueError> phHueErrors) {
-
+        // not used
     }
 
     public void onConnectionResumed(PHBridge phBridge) {
@@ -250,7 +250,7 @@ public class PhilipsHueBridgeDiscovery extends AbstractDiscoveryComponent implem
 
     }
 
-    class BridgeSearchTask extends TimerTask {
+    static class BridgeSearchTask extends TimerTask {
 
         private PhilipsHueBridgeDiscovery phi;
 
