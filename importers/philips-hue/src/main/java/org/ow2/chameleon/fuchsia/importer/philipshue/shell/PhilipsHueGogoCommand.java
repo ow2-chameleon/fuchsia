@@ -50,6 +50,10 @@ public class PhilipsHueGogoCommand extends PHLightListener{
 
     }
 
+    public void print(String message) {
+        System.out.println(message);
+    }
+
     private String reproduceChar(String ch, int amount){
 
         StringBuilder sb=new StringBuilder();
@@ -76,7 +80,7 @@ public class PhilipsHueGogoCommand extends PHLightListener{
             sb.append(reproduceChar(" ", lightNameLength)+"|State:" + (light.getLastKnownLightState().isOn() ? "ON" : "OFF")+"\n");
             sb.append(reproduceChar(" ", lightNameLength)+"|"+ reproduceChar("_",lightTypeLength));
         }
-        System.out.println(sb.toString());
+        print(sb.toString());
     }
 
     @Descriptor  (value = "Change light parameters, for a specific lamp or for all light plugged into the bridge")
@@ -101,12 +105,12 @@ public class PhilipsHueGogoCommand extends PHLightListener{
                 }
 
                 if (ttStr != null) {
-                    System.out.println("transition time:" + ttStr);
+                    print("transition time:" + ttStr);
                     lightState.setTransitionTime(Integer.valueOf(ttStr));
                 }
 
                 if (iStr != null) {
-                    System.out.println("brightness:" + iStr);
+                    print("brightness:" + iStr);
                     lightState.setBrightness(Integer.valueOf(iStr));
                 }
 
@@ -116,7 +120,7 @@ public class PhilipsHueGogoCommand extends PHLightListener{
                     int g = getColorValue(gStr);
                     int b = getColorValue(bStr);
 
-                    System.out.println(String.format("color red:%s green:%s blue:%s", r, g, b));
+                    print(String.format("color red:%s green:%s blue:%s", r, g, b));
 
                     float[] xy = PHUtilities.calculateXYFromRGB(r, g, b, light.getIdentifier());
 

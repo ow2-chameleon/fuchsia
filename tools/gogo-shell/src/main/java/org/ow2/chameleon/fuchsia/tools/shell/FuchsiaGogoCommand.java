@@ -70,6 +70,11 @@ public class FuchsiaGogoCommand {
         this.context = context;
     }
 
+
+    public void print(String message) {
+        System.out.println(message);
+    }
+
     // ---------------- DECLARATION
 
     @Descriptor("Gets info about the declarations available")
@@ -87,7 +92,7 @@ public class FuchsiaGogoCommand {
             }
         } catch (Exception e) {
             LOG.error("failed to execute command", e);
-            System.out.println("failed to execute the command");
+            print("failed to execute the command");
         }
     }
 
@@ -149,7 +154,7 @@ public class FuchsiaGogoCommand {
 
         StringBuilder sb = displayDeclarations(declarations, filter);
 
-        System.out.println(sb);
+        print(sb.toString());
 
     }
 
@@ -257,7 +262,7 @@ public class FuchsiaGogoCommand {
                 }
             }
         }
-        System.out.println(sbFinal);
+        print(sbFinal.toString());
     }
 
     // ---------------- DISCOVERY
@@ -278,7 +283,7 @@ public class FuchsiaGogoCommand {
             }
         }
 
-        System.out.println(sbFinal.toString());
+        print(sbFinal.toString());
     }
 
     // ---------------- IMPORTER
@@ -298,7 +303,7 @@ public class FuchsiaGogoCommand {
                 sbFinal.append(createASCIIBox("Importer", sb));
             }
         }
-        System.out.println(sbFinal.toString());
+        print(sbFinal.toString());
     }
 
     // ---------------- EXPORTER
@@ -308,7 +313,7 @@ public class FuchsiaGogoCommand {
         Map<ServiceReference, ExporterService> exporterRefsAndServices = getAllServiceRefsAndServices(ExporterService.class);
         StringBuilder sbFinal = new StringBuilder();
         if (exporterRefsAndServices.isEmpty()) {
-            System.out.println("No exporter available.");
+            print("No exporter available.");
         } else {
             for (Map.Entry<ServiceReference, ExporterService> e : exporterRefsAndServices.entrySet()) {
                 StringBuilder sb = new StringBuilder();
@@ -318,7 +323,7 @@ public class FuchsiaGogoCommand {
                 sbFinal.append(createASCIIBox("Exporter", sb));
             }
         }
-        System.out.println(sbFinal.toString());
+        print(sbFinal.toString());
     }
 
     // ---------------- SEND MESSAGE
@@ -338,8 +343,8 @@ public class FuchsiaGogoCommand {
             }
         }
         Event eventAdminMessage = new Event(bus, eventAdminPayload);
-        System.out.println(String.format("Sending message to the bus %s with the arguments %s", bus, eventAdminPayload));
-        System.out.println("Event admin message sent");
+        print(String.format("Sending message to the bus %s with the arguments %s", bus, eventAdminPayload));
+        print("Event admin message sent");
         eventAdmin.sendEvent(eventAdminMessage);
     }
 

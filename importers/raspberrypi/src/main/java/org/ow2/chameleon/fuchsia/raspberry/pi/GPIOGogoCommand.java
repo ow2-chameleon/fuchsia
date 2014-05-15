@@ -46,6 +46,10 @@ public class GPIOGogoCommand {
 
     }
 
+    public void print(String message){
+        System.out.println(message);
+    }
+
     @Descriptor(value = "Access raspberry pi gpio")
     public void gpio(@Descriptor("[-w WIRING_PI -v VALUE | -r WIRING_PI]") String... parameters) {
 
@@ -56,7 +60,7 @@ public class GPIOGogoCommand {
 
         if (read != null) {
 
-            System.out.println("reading from Wiring PI " + read);
+            print("reading from Wiring PI " + read);
 
             Pin pin = new PinImpl(RaspiGpioProvider.NAME, Integer.valueOf(read), "GPIO " + read,
                     EnumSet.of(PinMode.DIGITAL_INPUT, PinMode.DIGITAL_OUTPUT),
@@ -64,11 +68,11 @@ public class GPIOGogoCommand {
 
             GpioPinDigitalInput bottom = io.provisionDigitalInputPin(pin, PinPullResistance.PULL_DOWN);
 
-            System.out.println("value:" + bottom.getState().getValue());
+            print("value:" + bottom.getState().getValue());
 
         } else {
 
-            System.out.println("writing in Wiring PI " + write);
+            print("writing in Wiring PI " + write);
 
             Integer value = Integer.valueOf(getArgumentValue("-v", parameters));
 
