@@ -75,8 +75,6 @@ public class SubscriptionImporter extends AbstractImporterComponent implements S
     @Requires
     EventAdmin eventAdmin;
 
-    private ServiceReference serviceReference;
-
     @PostRegistration
     public void registration(ServiceReference serviceReference) {
         super.setServiceReference(serviceReference);

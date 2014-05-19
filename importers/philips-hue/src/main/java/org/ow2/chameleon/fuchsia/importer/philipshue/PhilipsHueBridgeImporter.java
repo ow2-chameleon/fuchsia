@@ -42,13 +42,11 @@ import java.util.*;
 @Provides(specifications = {org.ow2.chameleon.fuchsia.core.component.ImporterService.class})
 public class PhilipsHueBridgeImporter extends AbstractImporterComponent {
 
-    private final Logger LOG = LoggerFactory.getLogger(PhilipsHueBridgeImporter.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PhilipsHueBridgeImporter.class);
 
     private final BundleContext context;
 
     Timer timer;
-
-    private ServiceReference serviceReference;
 
     private Map<String,ServiceRegistration> lamps=new HashMap<String, ServiceRegistration>();
     private Map<String,ServiceRegistration> bridges=new HashMap<String, ServiceRegistration>();
@@ -140,7 +138,7 @@ public class PhilipsHueBridgeImporter extends AbstractImporterComponent {
             ServiceRegistration sr=bridges.remove(pojo.getId());
             if(sr!=null) {
                 sr.unregister();
-            };
+            }
         }catch(IllegalStateException e){
             LOG.error("failed unregistering bridge", e);
         }
@@ -169,8 +167,9 @@ public class PhilipsHueBridgeImporter extends AbstractImporterComponent {
                 if(!light.isReachable()){
 
                     ServiceRegistration sr=lamps.remove(light.getIdentifier());
-                    if(sr!=null)
+                    if(sr!=null) {
                         sr.unregister();
+                    }
 
                 }else if(!lamps.keySet().contains(light.getIdentifier())){
 

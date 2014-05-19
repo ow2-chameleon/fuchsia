@@ -47,10 +47,13 @@ public class ContentImporter extends HttpServlet {
 
     private static final String URL = "/contentImporter";
 
+    public static final List<String> IMPORTER_SERVICE_INTERFACE = new ArrayList<String>();
     public static final List<String> IMPORTER_SERVICE_PROPERTIES = new ArrayList<String>();
-    public static final List<String> IMPORTER_SERVICE_INTERFACE = new ArrayList<String>() {{
-        add(ImporterService.class.getName());
-    }};
+
+    // initialize the static lists
+    static {
+        IMPORTER_SERVICE_INTERFACE.add(ImporterService.class.getName());
+    }
 
     @Requires
     HttpService web;

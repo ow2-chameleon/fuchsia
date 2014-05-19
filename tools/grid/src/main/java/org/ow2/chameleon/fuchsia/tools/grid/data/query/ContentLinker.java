@@ -48,21 +48,22 @@ public class ContentLinker extends HttpServlet {
 
     private static final String URL = "/contentImportationLinker";
 
-    public static final ArrayList<String> IMPORTATION_LINKER_INTERFACE = new ArrayList<String>() {{
-        add(ImportationLinker.class.getName());
-    }};
-    public static final ArrayList<String> IMPORTATION_LINKER_PROPERTIES = new ArrayList<String>() {{
-        add(ImportationLinker.FILTER_IMPORTDECLARATION_PROPERTY);
-        add(ImportationLinker.FILTER_IMPORTERSERVICE_PROPERTY);
-    }};
+    public static final List<String> IMPORTATION_LINKER_INTERFACE = new ArrayList<String>();
+    public static final List<String> IMPORTATION_LINKER_PROPERTIES = new ArrayList<String>();
 
-    public static final ArrayList<String> EXPORTATION_LINKER_INTERFACE = new ArrayList<String>() {{
-        add(ExportationLinker.class.getName());
-    }};
-    public static final ArrayList<String> EXPORTATION_LINKER_PROPERTIES = new ArrayList<String>() {{
-        add(ExportationLinker.FILTER_EXPORTDECLARATION_PROPERTY);
-        add(ExportationLinker.FILTER_EXPORTERSERVICE_PROPERTY);
-    }};
+    public static final List<String> EXPORTATION_LINKER_INTERFACE = new ArrayList<String>();
+    public static final List<String> EXPORTATION_LINKER_PROPERTIES = new ArrayList<String>();
+
+    // initialize the static lists
+    static {
+        IMPORTATION_LINKER_INTERFACE.add(ImportationLinker.class.getName());
+        IMPORTATION_LINKER_PROPERTIES.add(ImportationLinker.FILTER_IMPORTDECLARATION_PROPERTY);
+        IMPORTATION_LINKER_PROPERTIES.add(ImportationLinker.FILTER_IMPORTERSERVICE_PROPERTY);
+
+        EXPORTATION_LINKER_INTERFACE.add(ExportationLinker.class.getName());
+        EXPORTATION_LINKER_PROPERTIES.add(ExportationLinker.FILTER_EXPORTDECLARATION_PROPERTY);
+        EXPORTATION_LINKER_PROPERTIES.add(ExportationLinker.FILTER_EXPORTERSERVICE_PROPERTY);
+    }
 
     @Requires
     HttpService web;

@@ -62,7 +62,7 @@ public class GPIOGogoCommand {
 
             print("reading from Wiring PI " + read);
 
-            Pin pin = new PinImpl(RaspiGpioProvider.NAME, Integer.valueOf(read), "GPIO " + read,
+            Pin pin = new PinImpl(RaspiGpioProvider.NAME, Integer.parseInt(read), "GPIO " + read,
                     EnumSet.of(PinMode.DIGITAL_INPUT, PinMode.DIGITAL_OUTPUT),
                     PinPullResistance.all());
 

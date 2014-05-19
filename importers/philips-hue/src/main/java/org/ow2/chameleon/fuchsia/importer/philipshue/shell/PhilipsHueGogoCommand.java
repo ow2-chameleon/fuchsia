@@ -106,12 +106,12 @@ public class PhilipsHueGogoCommand extends PHLightListener{
 
                 if (ttStr != null) {
                     print("transition time:" + ttStr);
-                    lightState.setTransitionTime(Integer.valueOf(ttStr));
+                    lightState.setTransitionTime(Integer.parseInt(ttStr));
                 }
 
                 if (iStr != null) {
                     print("brightness:" + iStr);
-                    lightState.setBrightness(Integer.valueOf(iStr));
+                    lightState.setBrightness(Integer.parseInt(iStr));
                 }
 
                 if (rStr != null || gStr != null || bStr != null) {
@@ -161,7 +161,7 @@ public class PhilipsHueGogoCommand extends PHLightListener{
         // not used
     }
 
-    public void onStateUpdate(Hashtable<String, String> stringStringHashtable, List<PHHueError> phHueErrors) {
+    public void onStateUpdate(Hashtable<String, String> hashtable, List<PHHueError> phHueErrors) {
         // not used
     }
 }

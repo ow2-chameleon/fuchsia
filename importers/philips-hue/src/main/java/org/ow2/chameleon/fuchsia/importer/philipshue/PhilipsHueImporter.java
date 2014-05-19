@@ -43,8 +43,6 @@ public class PhilipsHueImporter extends AbstractImporterComponent {
 
     private final BundleContext context;
 
-    private ServiceReference serviceReference;
-
     private Map<String,ServiceRegistration> lamps=new HashMap<String, ServiceRegistration>();
     private Map<String,ServiceRegistration> bridges=new HashMap<String, ServiceRegistration>();
 

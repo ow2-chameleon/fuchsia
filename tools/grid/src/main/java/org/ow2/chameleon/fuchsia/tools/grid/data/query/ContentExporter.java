@@ -47,11 +47,13 @@ public class ContentExporter extends HttpServlet {
 
     private static final String URL = "/contentExporter";
 
-    public static final List<String> EXPORTER_SERVICE_INTERFACE = new ArrayList<String>() {{
-        add(ExporterService.class.getName());
-    }};
-
+    public static final List<String> EXPORTER_SERVICE_INTERFACE = new ArrayList<String>();
     public static final List<String> EXPORTER_SERVICE_PROPERTIES = new ArrayList<String>();
+
+    // initialize the static lists
+    static {
+        EXPORTER_SERVICE_INTERFACE.add(ExporterService.class.getName());
+    }
 
     @Requires
     HttpService web;

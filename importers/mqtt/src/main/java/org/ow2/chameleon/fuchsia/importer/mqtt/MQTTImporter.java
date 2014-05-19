@@ -50,8 +50,6 @@ public class MQTTImporter extends AbstractImporterComponent {
 
     Map<String,InstanceManager> managedInstances=new HashMap<String, InstanceManager>();
 
-    private ServiceReference serviceReference;
-
     @PostRegistration
     public void registration(ServiceReference serviceReference) {
         super.setServiceReference(serviceReference);

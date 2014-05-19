@@ -116,7 +116,7 @@ public class FuchsiaGogoCommand {
                 state = "UNBOUND";
             }
             String identifier = getIdentifier(declaration);
-            System.out.printf("[%s]\t%s%n", state, identifier);
+            print(String.format("[%s]\t%s%n", state, identifier));
         }
     }
 
@@ -464,7 +464,9 @@ public class FuchsiaGogoCommand {
             Collections.reverse(sizeColums);
 
             Integer maxColumn = sizeColums.isEmpty() ? 0 : sizeColums.get(0);
-            if (maxColumn > 45) maxColumn = 45;
+            if (maxColumn > 45) {
+                maxColumn = 45;
+            }
             Integer prologSize = prolog.length();
 
             result.append(reproduceChar(" ", prologSize)).append(".").append(reproduceChar("_", maxColumn)).append("\n");

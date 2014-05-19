@@ -24,7 +24,6 @@ import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
 import org.ow2.chameleon.fuchsia.core.component.DiscoveryService;
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
-import org.ow2.chameleon.fuchsia.discovery.filebased.monitor.DirectoryMonitor;
 import org.ow2.chameleon.fuchsia.discovery.filebased.monitor.ExporterDeployer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,8 +53,6 @@ public class FileBasedDiscoveryExport extends AbstractFileBasedDiscovery<ExportD
 
     @ServiceProperty(name = FileBasedDiscoveryConstants.FILEBASED_DISCOVERY_PROPERTY_POLLING_TIME_KEY, value = FileBasedDiscoveryConstants.FILEBASED_DISCOVERY_PROPERTY_POLLING_TIME_VALUE)
     private Long pollingTime;
-
-    private DirectoryMonitor dm;
 
     public FileBasedDiscoveryExport(BundleContext bundleContext) {
         super(bundleContext, ExportDeclaration.class);

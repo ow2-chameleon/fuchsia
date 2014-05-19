@@ -186,7 +186,7 @@ public class PhilipsHueBridgeDiscovery extends AbstractDiscoveryComponent implem
 
     }
 
-    public void onStateUpdate(Hashtable<String, String> stringStringHashtable, List<PHHueError> phHueErrors) {
+    public void onStateUpdate(Hashtable<String, String> hashtable, List<PHHueError> phHueErrors) {
         // not used
     }
 

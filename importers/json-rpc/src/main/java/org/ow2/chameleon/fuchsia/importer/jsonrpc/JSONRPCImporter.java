@@ -74,8 +74,6 @@ public class JSONRPCImporter extends AbstractImporterComponent {
 
     private final BundleContext context;
 
-    private ServiceReference serviceReference;
-
     /**
      * Map which contains the clients and theirs Client.
      */

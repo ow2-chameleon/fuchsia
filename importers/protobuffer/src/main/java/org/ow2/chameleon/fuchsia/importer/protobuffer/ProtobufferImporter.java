@@ -55,8 +55,6 @@ public class ProtobufferImporter extends AbstractImporterComponent {
 
     private final BundleContext context;
 
-    private ServiceReference serviceReference;
-
     private Map<String,ServiceRegistration> registeredImporter=new HashMap<String,ServiceRegistration>();
 
     @ServiceProperty(name = "instance.name")

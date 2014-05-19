@@ -73,8 +73,6 @@ public class JAXWSImporter extends AbstractImporterComponent {
 
     private final BundleContext context;
 
-    private ServiceReference serviceReference;
-
     public JAXWSImporter(BundleContext pContext) {
         context = pContext;
         map = new HashMap<ImportDeclaration, ServiceRegistration>();
