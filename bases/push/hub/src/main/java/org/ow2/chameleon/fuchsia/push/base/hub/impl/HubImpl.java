@@ -66,10 +66,6 @@ public class HubImpl implements Hub {
 
     private Map<String, List<String>> topicCallbackSubscriptionMap = new HashMap<String, List<String>>();
 
-    public HubImpl() {
-
-    }
-
     @Validate
     public void start() {
         try {

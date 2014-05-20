@@ -439,7 +439,7 @@ public class FuchsiaGogoCommand {
 
     private static String reproduceChar(char character, Integer amount) {
 
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder(amount);
 
         for (int x = 0; x < amount; x++) {
             sb.append(character);

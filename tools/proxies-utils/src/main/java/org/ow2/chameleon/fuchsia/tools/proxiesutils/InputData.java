@@ -57,25 +57,25 @@ public class InputData {
 
     public static class DeviceOutputBuilder {
         private String actionName;
-        private Map<String, Object> actionsValues;
+        private Map<String, Object> actionsValuesMap;
 
         public DeviceOutputBuilder(String actionName) {
             this.actionName = actionName;
-            actionsValues = new HashMap<String, Object>();
+            actionsValuesMap = new HashMap<String, Object>();
         }
 
         public DeviceOutputBuilder actionValue(String name, Object value) {
-            actionsValues.put(name, value);
+            actionsValuesMap.put(name, value);
             return this;
         }
 
         public DeviceOutputBuilder actionsValues(Map<String, Object> avs) {
-            this.actionsValues.putAll(avs);
+            this.actionsValuesMap.putAll(avs);
             return this;
         }
 
         public InputData create() {
-            return new InputData(actionName, actionsValues);
+            return new InputData(actionName, actionsValuesMap);
         }
     }
 

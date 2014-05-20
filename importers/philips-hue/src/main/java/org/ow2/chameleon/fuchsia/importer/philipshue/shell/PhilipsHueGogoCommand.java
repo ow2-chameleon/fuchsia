@@ -46,10 +46,6 @@ public class PhilipsHueGogoCommand extends PHLightListener{
     @Requires(optional = true)
     PHBridge bridge;
 
-    public PhilipsHueGogoCommand() {
-
-    }
-
     public void print(String message) {
         System.out.println(message);
     }

@@ -89,7 +89,9 @@ public class JSONRPCImporter extends AbstractImporterComponent {
     @Override
     public void useImportDeclaration(ImportDeclaration importDeclaration) throws BinderException {
         final JsonRpcHttpClient client;
-        final String url, id, klassName;
+        final String url;
+        final String id;
+        final String klassName;
 
         // Get the URL
         url = valueOf(importDeclaration.getMetadata().get(URL));
@@ -115,7 +117,7 @@ public class JSONRPCImporter extends AbstractImporterComponent {
         } else {
             createDefaultProxy(client, props, importDeclaration);
         }
-        LOG.debug("JsonRPC Proxy successfully created and registered in OSGi " + url + "");
+        LOG.debug("JsonRPC Proxy successfully created and registered in OSGi " + url + ".");
     }
 
     private void createProxyFromKlass(String klassName, JsonRpcHttpClient client, Dictionary<String, Object> props, ImportDeclaration importDeclaration) throws BinderException {

@@ -36,10 +36,6 @@ public class Publisher {
     @Requires
     private HttpService http;
 
-    public Publisher() {
-
-    }
-
     @Validate
     public void start() {
         try {
