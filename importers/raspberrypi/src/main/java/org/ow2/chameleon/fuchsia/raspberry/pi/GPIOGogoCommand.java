@@ -76,11 +76,11 @@ public class GPIOGogoCommand {
 
             Integer value = Integer.valueOf(getArgumentValue("-v", parameters));
 
-            Pin pin = new PinImpl(RaspiGpioProvider.NAME, Integer.valueOf(write), "GPIO " + write,
+            Pin pin = new PinImpl(RaspiGpioProvider.NAME, Integer.parseInt(write), "GPIO " + write,
                     EnumSet.of(PinMode.DIGITAL_INPUT, PinMode.DIGITAL_OUTPUT),
                     PinPullResistance.all());
 
-            if (value.equals(0)) {
+            if (value == 0) {
                 io.provisionDigitalOutputPin(pin).low();
             } else {
                 io.provisionDigitalOutputPin(pin).high();

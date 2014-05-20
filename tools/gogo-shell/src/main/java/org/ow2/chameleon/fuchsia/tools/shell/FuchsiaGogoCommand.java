@@ -54,6 +54,7 @@ import static org.ow2.chameleon.fuchsia.core.declaration.Constants.ID;
 public class FuchsiaGogoCommand {
 
     private static final Logger LOG = LoggerFactory.getLogger(FuchsiaGogoCommand.class);
+    public static final int ASCIIBOX_MAX_COLUMNS = 45;
 
     private final BundleContext context;
 
@@ -399,8 +400,10 @@ public class FuchsiaGogoCommand {
 
     private static StringBuilder displayServiceInfo(ServiceReference reference) {
         StringBuilder sb = new StringBuilder();
-        sb.append("name:" + reference.getProperty(INSTANCE_NAME_PROPERTY) + "\n");
-        sb.append("bundle:" + reference.getBundle().getSymbolicName() + "[" + reference.getBundle().getBundleId() + "]" + "\n");
+        sb.append("name:").append(reference.getProperty(INSTANCE_NAME_PROPERTY)).append("\n");
+        sb.append("bundle:").append(reference.getBundle().getSymbolicName()).append("[")
+                .append(reference.getBundle().getBundleId())
+                .append("]").append("\n");
 
         return sb;
     }
@@ -434,12 +437,12 @@ public class FuchsiaGogoCommand {
     }
 
 
-    private static String reproduceChar(String ch, Integer amount) {
+    private static String reproduceChar(char character, Integer amount) {
 
         StringBuilder sb = new StringBuilder();
 
         for (int x = 0; x < amount; x++) {
-            sb.append(ch);
+            sb.append(character);
         }
 
         return sb.toString();
@@ -464,29 +467,29 @@ public class FuchsiaGogoCommand {
             Collections.reverse(sizeColums);
 
             Integer maxColumn = sizeColums.isEmpty() ? 0 : sizeColums.get(0);
-            if (maxColumn > 45) {
-                maxColumn = 45;
+            if (maxColumn > ASCIIBOX_MAX_COLUMNS) {
+                maxColumn = ASCIIBOX_MAX_COLUMNS;
             }
             Integer prologSize = prolog.length();
 
-            result.append(reproduceChar(" ", prologSize)).append(".").append(reproduceChar("_", maxColumn)).append("\n");
+            result.append(reproduceChar(' ', prologSize)).append(".").append(reproduceChar('_', maxColumn)).append("\n");
 
             sr = new StringReader(sb.toString());
             br = new BufferedReader(sr);
             int lineIndex = 0;
             while ((line = br.readLine()) != null) {
 
-                if (lineIndex == ((Integer) (sizeColums.size() / 2))) {
+                if (lineIndex == sizeColums.size() / 2) {
                     result.append(prolog);
                 } else {
-                    result.append(reproduceChar(" ", prologSize));
+                    result.append(reproduceChar(' ', prologSize));
                 }
 
-                result.append("|" + line + "\n");
+                result.append("|").append(line).append("\n");
                 lineIndex++;
             }
 
-            result.append(reproduceChar(" ", prologSize)).append("|").append(reproduceChar("_", maxColumn)).append("\n");
+            result.append(reproduceChar(' ', prologSize)).append("|").append(reproduceChar('_', maxColumn)).append("\n");
 
         } catch (IOException e) {
             LOG.error("Problem while creating a box", e);

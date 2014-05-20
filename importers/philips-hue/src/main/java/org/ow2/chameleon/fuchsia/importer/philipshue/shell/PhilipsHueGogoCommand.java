@@ -54,12 +54,12 @@ public class PhilipsHueGogoCommand extends PHLightListener{
         System.out.println(message);
     }
 
-    private String reproduceChar(String ch, int amount){
+    private String reproduceChar(char character, int amount){
 
         StringBuilder sb=new StringBuilder();
 
         for(int x=0;x<amount;x++){
-            sb.append(ch);
+            sb.append(character);
         }
 
         return sb.toString();
@@ -72,13 +72,13 @@ public class PhilipsHueGogoCommand extends PHLightListener{
         for(PHLight light:bridge.getResourceCache().getAllLights()){
             int lightNameLength=light.getName().length();
             int lightTypeLength=light.getLightType().name().length();
-            sb.append(reproduceChar(" ", lightNameLength)+ reproduceChar("_",lightTypeLength)+"\n");
-            sb.append(reproduceChar(" ", lightNameLength)+"|ID:"+light.getIdentifier()+"\n");
-            sb.append(reproduceChar(" ", lightNameLength)+"|Name:"+light.getName()+"\n");
-            sb.append(light.getName()+"|Model:"+light.getModelNumber()+"\n");
-            sb.append(reproduceChar(" ", lightNameLength)+"|Type:"+light.getLightType()+"\n");
-            sb.append(reproduceChar(" ", lightNameLength)+"|State:" + (light.getLastKnownLightState().isOn() ? "ON" : "OFF")+"\n");
-            sb.append(reproduceChar(" ", lightNameLength)+"|"+ reproduceChar("_",lightTypeLength));
+            sb.append(reproduceChar(' ', lightNameLength)).append(reproduceChar('_', lightTypeLength)).append("\n");
+            sb.append(reproduceChar(' ', lightNameLength)).append("|ID:").append(light.getIdentifier()).append("\n");
+            sb.append(reproduceChar(' ', lightNameLength)).append("|Name:").append(light.getName()).append("\n");
+            sb.append(light.getName()).append("|Model:").append(light.getModelNumber()).append("\n");
+            sb.append(reproduceChar(' ', lightNameLength)).append("|Type:").append(light.getLightType()).append("\n");
+            sb.append(reproduceChar(' ', lightNameLength)).append("|State:").append(light.getLastKnownLightState().isOn() ? "ON" : "OFF").append("\n");
+            sb.append(reproduceChar(' ', lightNameLength)).append("|").append(reproduceChar('_', lightTypeLength));
         }
         print(sb.toString());
     }
@@ -134,7 +134,7 @@ public class PhilipsHueGogoCommand extends PHLightListener{
     }
 
     private int getColorValue(String value) {
-        return value != null ? Integer.valueOf(value) : 0;
+        return (value != null) ? Integer.parseInt(value) : 0;
     }
 
     /**
