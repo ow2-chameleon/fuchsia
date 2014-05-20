@@ -47,7 +47,7 @@ public class DefaultImportationLinkerTest {
 
     }
 
-    public void setProperties(DefaultImportationLinker il, String name, String filterIDec, String filterIServ){
+    public void setProperties(DefaultImportationLinker il, String name, String filterIDec, String filterIServ) {
         field("linkerName").ofType(String.class).in(il).set(name);
         field("importDeclarationFilterProperty").ofType(Object.class).in(il).set(filterIDec);
         field("importerServiceFilterProperty").ofType(Object.class).in(il).set(filterIServ);

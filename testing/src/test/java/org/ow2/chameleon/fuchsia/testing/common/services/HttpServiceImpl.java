@@ -41,7 +41,7 @@ public class HttpServiceImpl implements HttpService {
     Server server;
 
     public HttpServiceImpl(int port) throws Exception {
-        server=new Server(port);
+        server = new Server(port);
     }
 
     public void registerServlet(String context, Servlet servlet, Dictionary dictionary, HttpContext httpContext) throws ServletException, NamespaceException {
@@ -53,7 +53,7 @@ public class HttpServiceImpl implements HttpService {
         ServletHolder servletHolder = new ServletHolder(servlet);
         root.addServlet(servletHolder, context);
 
-        if(!server.getServer().getState().equals(server.STARTED)){
+        if (!server.getServer().getState().equals(server.STARTED)) {
             try {
                 server.start();
             } catch (Exception e) {

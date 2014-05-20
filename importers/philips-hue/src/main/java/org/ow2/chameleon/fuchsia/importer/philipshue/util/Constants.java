@@ -27,7 +27,7 @@ public final class Constants {
     public static final String DISCOVERY_PHILIPS_BRIDGE_TYPE = "discovery.philips.bridge.type";
     public static final String DISCOVERY_PHILIPS_BRIDGE_OBJECT = "discovery.philips.bridge.object";
 
-    private Constants(){
+    private Constants() {
         // private constructor
     }
 }

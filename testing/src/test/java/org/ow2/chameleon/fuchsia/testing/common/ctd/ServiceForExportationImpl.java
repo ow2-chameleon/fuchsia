@@ -28,11 +28,11 @@ public class ServiceForExportationImpl implements ServiceForExportation {
     }
 
     public void ping(String value) {
-        System.out.println("ping string "+value+" received");
+        System.out.println("ping string " + value + " received");
     }
 
     public void ping(Integer value) {
-        System.out.println("ping int "+value+" received");
+        System.out.println("ping int " + value + " received");
     }
 
     public String pongString(String input) {

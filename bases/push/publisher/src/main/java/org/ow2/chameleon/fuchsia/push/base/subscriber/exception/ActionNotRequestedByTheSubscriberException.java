@@ -20,7 +20,7 @@ package org.ow2.chameleon.fuchsia.push.base.subscriber.exception;
  * #L%
  */
 
-public class ActionNotRequestedByTheSubscriberException extends Exception{
+public class ActionNotRequestedByTheSubscriberException extends Exception {
 
     public ActionNotRequestedByTheSubscriberException() {
         super();

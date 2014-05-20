@@ -39,8 +39,8 @@ import org.ow2.chameleon.fuchsia.core.component.AbstractExporterComponent;
 import org.ow2.chameleon.fuchsia.core.component.ExporterService;
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
 import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
-import org.ow2.chameleon.fuchsia.exporter.jaxws.internal.JAXWSExportDeclarationWrapper;
 import org.ow2.chameleon.fuchsia.exporter.jaxws.internal.Constants;
+import org.ow2.chameleon.fuchsia.exporter.jaxws.internal.JAXWSExportDeclarationWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,7 +70,7 @@ public class JAXWSExporter extends AbstractExporterComponent {
     @ServiceProperty(name = "org.osgi.service.http.port", mandatory = true)
     private Integer httpPort;
 
-    @ServiceProperty(name = "target", value="(&(fuchsia.export.cxf.instance=*)(scope=generic))")
+    @ServiceProperty(name = "target", value = "(&(fuchsia.export.cxf.instance=*)(scope=generic))")
     private String filter;
 
     public JAXWSExporter(BundleContext context) {

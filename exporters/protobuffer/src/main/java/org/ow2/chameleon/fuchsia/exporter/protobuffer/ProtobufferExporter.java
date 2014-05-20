@@ -73,7 +73,7 @@ public class ProtobufferExporter extends AbstractExporterComponent {
     @Requires
     private HttpService http;
 
-    @ServiceProperty(name = "target", value="(&(rpc.export.address=*)(scope=generic))")
+    @ServiceProperty(name = "target", value = "(&(rpc.export.address=*)(scope=generic))")
     private String filter;
 
     public ProtobufferExporter(BundleContext context) {

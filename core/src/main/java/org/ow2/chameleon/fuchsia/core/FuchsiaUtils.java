@@ -20,13 +20,7 @@ package org.ow2.chameleon.fuchsia.core;
  * #L%
  */
 
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.Filter;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceReference;
-import org.osgi.framework.Version;
+import org.osgi.framework.*;
 import org.osgi.framework.wiring.BundleCapability;
 import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.service.packageadmin.ExportedPackage;
@@ -38,7 +32,7 @@ import java.util.List;
 
 public class FuchsiaUtils {
 
-    private FuchsiaUtils(){
+    private FuchsiaUtils() {
         // private constructor
     }
 
@@ -129,13 +123,13 @@ public class FuchsiaUtils {
             ExportedPackage pkg = padmin.getExportedPackage(packageName);
             if (pkg == null) {
 
-                try{
+                try {
 
-                    Class loaded=context.getBundle().loadClass(klassName);
+                    Class loaded = context.getBundle().loadClass(klassName);
 
                     return loaded;
 
-                }catch (ClassNotFoundException e){
+                } catch (ClassNotFoundException e) {
                     throw new ClassNotFoundException("No package found with name " + packageName + " while trying to load the class "
                             + klassName + ".", e);
                 }
@@ -152,7 +146,7 @@ public class FuchsiaUtils {
      * Load the Classes of names <code>klassNames</code>.
      * TODO : handle class version
      *
-     * @param context   The BundleContext
+     * @param context    The BundleContext
      * @param klassNames The Classes names
      * @return The Classes of names <code>klassNames</code>
      * @throws ClassNotFoundException if we can't load one Class name of the list <code>klassNames</code>

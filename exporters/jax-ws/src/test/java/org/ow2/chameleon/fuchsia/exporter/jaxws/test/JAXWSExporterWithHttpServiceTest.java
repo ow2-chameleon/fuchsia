@@ -26,7 +26,6 @@ import org.junit.Test;
 import org.mockito.MockitoAnnotations;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.http.NamespaceException;
-import org.ow2.chameleon.fuchsia.core.declaration.Constants;
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclarationBuilder;
 import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
@@ -66,11 +65,11 @@ public class JAXWSExporterWithHttpServiceTest extends JAXExporterAbstractTest {
     @Test
     public void worksInCaseHttpServiceWasInjected() throws BinderException, ServletException, NamespaceException {
 
-        Map<String, Object> metadata=new HashMap<String, Object>();
+        Map<String, Object> metadata = new HashMap<String, Object>();
 
-        metadata.put(ID,"TestJAXWSDeclaration");
-        metadata.put("fuchsia.export.cxf.class.name",ServiceForExportation.class.getName());
-        metadata.put("fuchsia.export.cxf.url.context","/"+ServiceForExportation.class.getSimpleName());
+        metadata.put(ID, "TestJAXWSDeclaration");
+        metadata.put("fuchsia.export.cxf.class.name", ServiceForExportation.class.getName());
+        metadata.put("fuchsia.export.cxf.url.context", "/" + ServiceForExportation.class.getSimpleName());
 
         ExportDeclaration declaration = spy(ExportDeclarationBuilder.fromMetadata(metadata).build());
         declaration.bind(serviceReferenceFromExporter);
@@ -79,7 +78,7 @@ public class JAXWSExporterWithHttpServiceTest extends JAXExporterAbstractTest {
 
         exporter.addDeclaration(declaration);
 
-        verify(httpServiceMock, times(1)).registerServlet(eq(org.ow2.chameleon.fuchsia.exporter.jaxws.internal.Constants.CXF_SERVLET), any(CXFNonSpringServlet.class), any(Dictionary.class),  any(org.osgi.service.http.HttpContext.class));
+        verify(httpServiceMock, times(1)).registerServlet(eq(org.ow2.chameleon.fuchsia.exporter.jaxws.internal.Constants.CXF_SERVLET), any(CXFNonSpringServlet.class), any(Dictionary.class), any(org.osgi.service.http.HttpContext.class));
 
     }
 

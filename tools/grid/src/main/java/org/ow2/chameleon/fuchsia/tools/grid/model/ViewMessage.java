@@ -25,15 +25,15 @@ public class ViewMessage {
     private String field;
     private String message;
 
-    public ViewMessage(String type, String message){
-        this.type=type;
-        this.message=message;
+    public ViewMessage(String type, String message) {
+        this.type = type;
+        this.message = message;
     }
 
-    public ViewMessage(String type, String field, String message){
-        this.type=type;
-        this.message=message;
-        this.field=field;
+    public ViewMessage(String type, String field, String message) {
+        this.type = type;
+        this.message = message;
+        this.field = field;
     }
 
     public String getType() {

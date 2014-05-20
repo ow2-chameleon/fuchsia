@@ -7,28 +7,32 @@ import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.*;
-import java.net.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 
 /**
  * Class to convert zipcodes into Yahoo API WOEIDs using Yahoo Query Language (YQL).
+ *
  * @author jaspervalero
  * @example Here is an example of this class in use:
- *
+ * <p/>
  * <listing version="3.0">
- *
+ * <p/>
  * private function convertZip():void
  * {
- *         _zc = new ZipcodeConverter("95348");
- *         _zc.addEventListener(Event.COMPLETE, conversionComplete);
+ * _zc = new ZipcodeConverter("95348");
+ * _zc.addEventListener(Event.COMPLETE, conversionComplete);
  * }
- *
+ * <p/>
  * private function conversionComplete(e:Event):void
  * {
- *         _woeid = _zc.woeid;
+ * _woeid = _zc.woeid;
  * }
  * </listing>
- *
  */
 public class ZipCodeConverter {
 
@@ -36,6 +40,7 @@ public class ZipCodeConverter {
 
     /**
      * Constructor function which passes in a zipcode to be converted.
+     *
      * @param zipcode The 5-digit zipcode you want converted to a WOEID.
      */
     public ZipCodeConverter(String zipcode) {
@@ -82,7 +87,7 @@ public class ZipCodeConverter {
 
                 if (node.getNodeType() == Node.ELEMENT_NODE) {
                     Element element = (Element) node;
-                    _woeid=getValue("woeid", element);
+                    _woeid = getValue("woeid", element);
                 }
             }
         } catch (Exception ex) {
@@ -99,10 +104,10 @@ public class ZipCodeConverter {
 
     /**
      * This is the WOEID used by the Yahoo API.
+     *
      * @return Returns the WOEID for the queried zipcode.
      */
-    public String getWoeid()
-    {
+    public String getWoeid() {
         return _woeid;
     }
 }

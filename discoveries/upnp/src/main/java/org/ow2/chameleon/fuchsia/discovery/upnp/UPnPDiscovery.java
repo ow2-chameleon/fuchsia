@@ -74,9 +74,8 @@ public class UPnPDiscovery extends AbstractDiscoveryComponent {
         return name;
     }
 
-    @Bind(id="upnp-device", specification = UPnPDevice.class,aggregate = true)
+    @Bind(id = "upnp-device", specification = UPnPDevice.class, aggregate = true)
     public Object addingService(ServiceReference reference) {
-
 
 
         String deviceID = (String) reference.getProperty(UPnPDevice.FRIENDLY_NAME);
@@ -88,12 +87,12 @@ public class UPnPDiscovery extends AbstractDiscoveryComponent {
         return getBundleContext().getService(reference);
     }
 
-    @Unbind(id="upnp-device", specification = UPnPDevice.class,aggregate = true)
+    @Unbind(id = "upnp-device", specification = UPnPDevice.class, aggregate = true)
     public void removedService(ServiceReference reference) {
 
         String deviceID = (String) reference.getProperty(Constants.DEVICE_ID);
 
-        ImportDeclaration importDeclaration=importDeclarations.get(deviceID);
+        ImportDeclaration importDeclaration = importDeclarations.get(deviceID);
 
         unregisterImportDeclaration(importDeclaration);
 

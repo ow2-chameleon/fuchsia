@@ -58,13 +58,13 @@ public class AbstractDiscoveryComponentTest {
     }
 
     @Test
-    public void testInstantiation(){
+    public void testInstantiation() {
         TestedClass testedClass = new TestedClass(bundleContext);
         testedClass.start();
     }
 
     @Test
-    public void testRegisterImportDeclaration(){
+    public void testRegisterImportDeclaration() {
         TestedClass testedClass = new TestedClass(bundleContext);
         testedClass.start();
 
@@ -73,13 +73,13 @@ public class AbstractDiscoveryComponentTest {
         ImportDeclaration id = ImportDeclarationBuilder.fromMetadata(md).build();
 
         testedClass.addIdec(id);
-        verify(bundleContext,times(1)).registerService(any(String[].class), eq(id), any(Dictionary.class));
+        verify(bundleContext, times(1)).registerService(any(String[].class), eq(id), any(Dictionary.class));
 
         assertThat(testedClass.getImportDeclarations()).containsExactly(id);
     }
 
     @Test(expected = IllegalStateException.class)
-    public void testRegisterTwoTimesImportDeclaration(){
+    public void testRegisterTwoTimesImportDeclaration() {
         TestedClass testedClass = new TestedClass(bundleContext);
         testedClass.start();
 
@@ -92,7 +92,7 @@ public class AbstractDiscoveryComponentTest {
     }
 
     @Test
-    public void testUnregisterImportDeclaration(){
+    public void testUnregisterImportDeclaration() {
         TestedClass testedClass = new TestedClass(bundleContext);
         testedClass.start();
 
@@ -109,7 +109,7 @@ public class AbstractDiscoveryComponentTest {
     }
 
     @Test(expected = IllegalStateException.class)
-    public void testUnregisterTwoTimesImportDeclaration(){
+    public void testUnregisterTwoTimesImportDeclaration() {
         TestedClass testedClass = new TestedClass(bundleContext);
         testedClass.start();
 
@@ -123,7 +123,7 @@ public class AbstractDiscoveryComponentTest {
     }
 
     @Test
-    public void testStop(){
+    public void testStop() {
         TestedClass testedClass = new TestedClass(bundleContext);
         testedClass.start();
 
@@ -138,7 +138,7 @@ public class AbstractDiscoveryComponentTest {
     }
 
     @Test
-    public void testToString(){
+    public void testToString() {
         TestedClass testedClass = new TestedClass(bundleContext);
         testedClass.start();
 
@@ -147,8 +147,7 @@ public class AbstractDiscoveryComponentTest {
     }
 
 
-
-    public class TestedClass extends AbstractDiscoveryComponent{
+    public class TestedClass extends AbstractDiscoveryComponent {
 
         protected TestedClass(BundleContext bundleContext) {
             super(bundleContext);
@@ -168,11 +167,11 @@ public class AbstractDiscoveryComponentTest {
             super.stop();
         }
 
-        public void addIdec(ImportDeclaration importDeclaration){
+        public void addIdec(ImportDeclaration importDeclaration) {
             registerImportDeclaration(importDeclaration);
         }
 
-        public void removeIdec(ImportDeclaration importDeclaration){
+        public void removeIdec(ImportDeclaration importDeclaration) {
             unregisterImportDeclaration(importDeclaration);
         }
     }

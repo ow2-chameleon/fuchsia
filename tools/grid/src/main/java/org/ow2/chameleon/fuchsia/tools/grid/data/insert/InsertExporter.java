@@ -49,7 +49,7 @@ public class InsertExporter extends HttpServlet {
 
     private static final Logger LOG = LoggerFactory.getLogger(InsertExporter.class);
 
-    private static final String URL="/insertExporter";
+    private static final String URL = "/insertExporter";
 
     @Requires
     HttpService web;
@@ -59,14 +59,14 @@ public class InsertExporter extends HttpServlet {
 
     BundleContext context;
 
-    public InsertExporter(BundleContext context){
-        this.context=context;
+    public InsertExporter(BundleContext context) {
+        this.context = context;
     }
 
     @Validate
-    public void validate(){
+    public void validate() {
         try {
-            web.registerServlet(URL,this,null,null);
+            web.registerServlet(URL, this, null, null);
         } catch (ServletException e) {
             LOG.error("Error while registering the servlet", e);
         } catch (NamespaceException e) {
@@ -75,54 +75,54 @@ public class InsertExporter extends HttpServlet {
     }
 
     @Invalidate
-    public void invalidate(){
+    public void invalidate() {
         web.unregister(URL);
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        ObjectMapper mapper=new ObjectMapper();
+        ObjectMapper mapper = new ObjectMapper();
 
         try {
 
-            Collection<ServiceReference<Factory>> services=context.getServiceReferences(Factory.class,String.format("(factory.name=%s)",req.getParameter("exporterCombo")));
+            Collection<ServiceReference<Factory>> services = context.getServiceReferences(Factory.class, String.format("(factory.name=%s)", req.getParameter("exporterCombo")));
 
-            if(services.size()==1){
+            if (services.size() == 1) {
 
-                ServiceReference factorySR=(ServiceReference)services.iterator().next();
+                ServiceReference factorySR = (ServiceReference) services.iterator().next();
 
-                Factory factory=(Factory)context.getService(factorySR);
+                Factory factory = (Factory) context.getService(factorySR);
 
-                Dictionary<String,Object> hs=new Hashtable<String, Object>();
+                Dictionary<String, Object> hs = new Hashtable<String, Object>();
 
-                String filter=getValue(req.getParameter("exporterTarget"));
+                String filter = getValue(req.getParameter("exporterTarget"));
 
                 FuchsiaUtils.getFilter(filter);
 
-                hs.put(ImporterService.TARGET_FILTER_PROPERTY,filter);
+                hs.put(ImporterService.TARGET_FILTER_PROPERTY, filter);
 
-                String instanceName=req.getParameter("exporterInstanceName");
-                if(instanceName!=null && instanceName.trim().length()!=0){
-                    hs.put(Factory.INSTANCE_NAME_PROPERTY,instanceName);
+                String instanceName = req.getParameter("exporterInstanceName");
+                if (instanceName != null && instanceName.trim().length() != 0) {
+                    hs.put(Factory.INSTANCE_NAME_PROPERTY, instanceName);
                 }
 
-                ComponentInstance ci=factory.createComponentInstance(hs);
+                ComponentInstance ci = factory.createComponentInstance(hs);
 
-                mapper.writeValue(resp.getWriter(),new ViewMessage("success","Exporter created successfully."));
+                mapper.writeValue(resp.getWriter(), new ViewMessage("success", "Exporter created successfully."));
 
             }
 
         } catch (Exception e) {
             LOG.info("Error while preparing response", e);
-            mapper.writeValue(resp.getWriter(),new ViewMessage("error",e.getMessage()));
+            mapper.writeValue(resp.getWriter(), new ViewMessage("error", e.getMessage()));
         }
 
     }
 
-    private String getValue(String value){
+    private String getValue(String value) {
 
-        if(value==null||value.trim().length()==0){
+        if (value == null || value.trim().length() == 0) {
             return "(objectClass=*)";
         }
 

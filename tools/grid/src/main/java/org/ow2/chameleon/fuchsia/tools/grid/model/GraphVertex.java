@@ -27,10 +27,10 @@ public class GraphVertex {
 
     String type;
 
-    public GraphVertex(String source, String target, String type){
-        this.source=source;
-        this.target=target;
-        this.type=type;
+    public GraphVertex(String source, String target, String type) {
+        this.source = source;
+        this.target = target;
+        this.type = type;
     }
 
     public String getSource() {

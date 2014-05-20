@@ -28,10 +28,10 @@ import org.ow2.chameleon.fuchsia.raspberry.pi.device.GPIOOutputPinFactory;
 
 import static org.fest.reflect.core.Reflection.constructor;
 import static org.fest.reflect.core.Reflection.field;
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.*;
 
 public class GPIOOutputPinFactoryTest {
 
@@ -41,29 +41,29 @@ public class GPIOOutputPinFactoryTest {
     PiController controller;
 
     @Before
-    public void init(){
+    public void init() {
         MockitoAnnotations.initMocks(this);
-        factory=spy(constructor().in(GPIOOutputPinFactory.class).newInstance());
+        factory = spy(constructor().in(GPIOOutputPinFactory.class).newInstance());
         field("controller").ofType(PiController.class).in(factory).set(controller);
 
     }
 
     @Test
-    public void TestInvokeOn(){
+    public void TestInvokeOn() {
         factory.invoke("on");
-        verify(controller,times(1)).writePin(anyInt(),eq(1));
+        verify(controller, times(1)).writePin(anyInt(), eq(1));
     }
 
     @Test
-    public void TestInvokeOff(){
+    public void TestInvokeOff() {
         factory.invoke("off");
-        verify(controller,times(1)).writePin(anyInt(),eq(0));
+        verify(controller, times(1)).writePin(anyInt(), eq(0));
     }
 
     @Test
-    public void TestInvokeTransaction(){
-        factory.invoke("on",1,null);
-        verify(factory,times(1)).invoke(anyString());
+    public void TestInvokeTransaction() {
+        factory.invoke("on", 1, null);
+        verify(factory, times(1)).invoke(anyString());
     }
 
 }

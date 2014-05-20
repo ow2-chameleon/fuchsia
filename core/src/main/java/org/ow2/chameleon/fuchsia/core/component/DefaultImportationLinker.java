@@ -160,9 +160,10 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
                 importersManager.add(serviceReference);
             } catch (InvalidFilterException invalidFilterException) {
                 LOG.error("The ServiceProperty \"" + TARGET_FILTER_PROPERTY + "\" of the ImporterService "
-                        + bundleContext.getService(serviceReference) + " doesn't provides a valid Filter."
-                        + " To be used, it must provides a correct \"" + TARGET_FILTER_PROPERTY + "\" ServiceProperty.",
-                        invalidFilterException);
+                                + bundleContext.getService(serviceReference) + " doesn't provides a valid Filter."
+                                + " To be used, it must provides a correct \"" + TARGET_FILTER_PROPERTY + "\" ServiceProperty.",
+                        invalidFilterException
+                );
                 return;
             }
             if (!importersManager.matched(serviceReference)) {
@@ -187,13 +188,14 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
             importersManager.modified(serviceReference);
         } catch (InvalidFilterException invalidFilterException) {
             LOG.error("The ServiceProperty \"" + TARGET_FILTER_PROPERTY + "\" of the ImporterService "
-                    + bundleContext.getService(serviceReference) + " doesn't provides a valid Filter."
-                    + " To be used, it must provides a correct \"" + TARGET_FILTER_PROPERTY + "\" ServiceProperty.",
-                    invalidFilterException);
+                            + bundleContext.getService(serviceReference) + " doesn't provides a valid Filter."
+                            + " To be used, it must provides a correct \"" + TARGET_FILTER_PROPERTY + "\" ServiceProperty.",
+                    invalidFilterException
+            );
             importersManager.removeLinks(serviceReference);
             return;
         }
-        if(importersManager.matched(serviceReference)){
+        if (importersManager.matched(serviceReference)) {
             importersManager.updateLinks(serviceReference);
         } else {
             importersManager.removeLinks(serviceReference);

@@ -74,7 +74,7 @@ public class BluetoothImporter extends AbstractImporterComponent {
     }
 
     @PostRegistration
-    protected void registration(ServiceReference serviceReference){
+    protected void registration(ServiceReference serviceReference) {
         this.serviceReference = serviceReference;
     }
 
@@ -143,7 +143,7 @@ public class BluetoothImporter extends AbstractImporterComponent {
     protected void denyImportDeclaration(ImportDeclaration importDeclaration) {
         LOG.debug("Bluetooth Importer  destroy a proxy for " + importDeclaration);
         String fn = (String) importDeclaration.getMetadata().get("bluetooth.device.friendlyname");
-        if(unresolvedImportDeclarations.remove(fn) == null){
+        if (unresolvedImportDeclarations.remove(fn) == null) {
             ImportDeclaration idec = resolvedImportDeclarations.remove(fn);
             ComponentInstance proxy = proxyComponentInstances.remove(idec);
 
@@ -157,14 +157,14 @@ public class BluetoothImporter extends AbstractImporterComponent {
     private void bindBluetoothProxyFactories(Factory f, ServiceReference<Factory> sr) {
         LOG.warn("Found one factory : " + f.getName());
         String friendlyName = (String) sr.getProperty("device_name");
-        if(friendlyName == null){
+        if (friendlyName == null) {
             return;
         }
         bluetoothProxiesFactories.put(friendlyName, f);
         Map.Entry<String, ImportDeclaration> unresolvedImportDeclaration;
         ImportDeclaration iDec = null;
         String fn = null;
-        Iterator<Map.Entry<String,ImportDeclaration>> iterator = unresolvedImportDeclarations.entrySet().iterator();
+        Iterator<Map.Entry<String, ImportDeclaration>> iterator = unresolvedImportDeclarations.entrySet().iterator();
         while (iterator.hasNext()) {
             unresolvedImportDeclaration = iterator.next();
             fn = unresolvedImportDeclaration.getKey();

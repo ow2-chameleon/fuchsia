@@ -26,8 +26,8 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.osgi.service.log.LogService;
-import org.ow2.chameleon.fuchsia.core.component.ExportationLinker;
 import org.ow2.chameleon.fuchsia.core.component.AbstractExporterComponent;
+import org.ow2.chameleon.fuchsia.core.component.ExportationLinker;
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
 import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
 

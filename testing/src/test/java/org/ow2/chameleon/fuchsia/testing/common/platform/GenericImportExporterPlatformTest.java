@@ -46,16 +46,17 @@ import static org.mockito.Mockito.*;
 
 /**
  * This class is responsible in filling the main field by to be used by the test, all basic needs from an importer/exporter are filled up with Mockito.
+ *
  * @param <T> The declaration type (ImportDeclaration or ExportDeclaration)
  * @param <S> Importer or an Exporter
  */
-public abstract class GenericImportExporterPlatformTest<T extends Declaration,S extends DeclarationBinder> {
+public abstract class GenericImportExporterPlatformTest<T extends Declaration, S extends DeclarationBinder> {
 
-    public static final Integer HTTP_PORT=8046;
+    public static final Integer HTTP_PORT = 8046;
 
-    protected final Map<ServiceReference,Object> services=new HashMap<ServiceReference,Object>();
+    protected final Map<ServiceReference, Object> services = new HashMap<ServiceReference, Object>();
 
-    protected final Map<String,Class> clazzes=new HashMap<String,Class>();
+    protected final Map<String, Class> clazzes = new HashMap<String, Class>();
 
     @Mock
     protected BundleContext context;
@@ -83,7 +84,7 @@ public abstract class GenericImportExporterPlatformTest<T extends Declaration,S 
             when(context.getBundle()).thenReturn(bundle);
             when(bundle.loadClass(anyString())).thenAnswer(new Answer<Object>() {
                 public Object answer(InvocationOnMock invocation) throws Throwable {
-                    return clazzes.get((String)invocation.getArguments()[0]);
+                    return clazzes.get((String) invocation.getArguments()[0]);
                 }
             });
 
@@ -130,22 +131,23 @@ public abstract class GenericImportExporterPlatformTest<T extends Declaration,S 
         }
     }
 
-    protected void registerService(ServiceReference sr,Object object){
-        services.put(sr,object);
+    protected void registerService(ServiceReference sr, Object object) {
+        services.put(sr, object);
     }
 
     /**
      * This are the classes that should be visible by bundle.loadClass. Only those classes will be allowed to be loaded
+     *
      * @param clazz
      */
-    protected void registerClass(Class clazz){
-        clazzes.put(clazz.getName(),clazz);
+    protected void registerClass(Class clazz) {
+        clazzes.put(clazz.getName(), clazz);
     }
 
-    protected void verifyRemoteInvocation(ServiceForExportation mock, ServiceForExportation proxy){
+    protected void verifyRemoteInvocation(ServiceForExportation mock, ServiceForExportation proxy) {
 
-        final String stringValue="coucou";
-        final Integer intValue=1789;
+        final String stringValue = "coucou";
+        final Integer intValue = 1789;
 
         proxy.ping();
         verify(mock, times(1)).ping();
@@ -156,11 +158,11 @@ public abstract class GenericImportExporterPlatformTest<T extends Declaration,S 
         proxy.ping(stringValue);
         verify(mock, times(1)).ping(stringValue);
 
-        String returnPongString=proxy.pongString(stringValue);
+        String returnPongString = proxy.pongString(stringValue);
         verify(mock, times(1)).pongString(stringValue);
         Assert.assertEquals(returnPongString, stringValue);
 
-        Integer returnPongInteger=proxy.pongInteger(intValue);
+        Integer returnPongInteger = proxy.pongInteger(intValue);
         verify(mock, times(1)).pongInteger(intValue);
         Assert.assertEquals(returnPongInteger, intValue);
 
@@ -168,12 +170,14 @@ public abstract class GenericImportExporterPlatformTest<T extends Declaration,S 
 
     /**
      * Force test class to give some samples of invalid declaration in order to be tested, if the proper exception are thrown.
+     *
      * @return
      */
     public abstract List<T> getInvalidDeclarations();
 
     /**
      * Force test class to give some samples of valid declaration in order to be tested, if the proper exception are thrown.
+     *
      * @return
      */
     public abstract List<T> getValidDeclarations();

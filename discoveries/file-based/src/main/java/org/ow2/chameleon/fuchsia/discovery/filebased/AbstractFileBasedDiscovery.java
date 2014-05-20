@@ -119,7 +119,7 @@ public abstract class AbstractFileBasedDiscovery<D extends Declaration> implemen
                     LOG.warn("Declaration: replacing metadata key {}, that contained the value {} by the new value {}", new Object[]{element.getKey(), replacedObject, element.getValue()});
                 }
             }
-            if(!metadata.containsKey("scope")){
+            if (!metadata.containsKey("scope")) {
                 metadata.put("scope", "generic");
             }
             D declaration = createAndRegisterDeclaration(metadata);
@@ -227,7 +227,7 @@ public abstract class AbstractFileBasedDiscovery<D extends Declaration> implemen
         String deployerKlassName;
         if (klass.equals(ImportDeclaration.class)) {
             deployerKlassName = ImporterDeployer.class.getName();
-        }else if (klass.equals(ExportDeclaration.class)) {
+        } else if (klass.equals(ExportDeclaration.class)) {
             deployerKlassName = ExporterDeployer.class.getName();
         } else {
             throw new IllegalStateException("");

@@ -245,7 +245,7 @@ public final class HttpStatus {
      */
     public static final int SC_INSUFFICIENT_STORAGE = 507;
 
-    private HttpStatus(){
+    private HttpStatus() {
         // private constructor
     }
 }

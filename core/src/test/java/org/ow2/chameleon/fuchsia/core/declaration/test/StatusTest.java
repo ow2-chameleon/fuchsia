@@ -24,7 +24,9 @@ import org.junit.Test;
 import org.osgi.framework.ServiceReference;
 import org.ow2.chameleon.fuchsia.core.declaration.Status;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;

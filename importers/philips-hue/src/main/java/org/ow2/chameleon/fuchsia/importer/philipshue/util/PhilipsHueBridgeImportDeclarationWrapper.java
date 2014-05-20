@@ -29,7 +29,8 @@ import org.ow2.chameleon.fuchsia.core.exceptions.InvalidFilterException;
 import java.util.Map;
 
 import static org.ow2.chameleon.fuchsia.core.declaration.Constants.ID;
-import static org.ow2.chameleon.fuchsia.importer.philipshue.util.Constants.*;
+import static org.ow2.chameleon.fuchsia.importer.philipshue.util.Constants.DISCOVERY_PHILIPS_BRIDGE_OBJECT;
+import static org.ow2.chameleon.fuchsia.importer.philipshue.util.Constants.DISCOVERY_PHILIPS_BRIDGE_TYPE;
 
 public class PhilipsHueBridgeImportDeclarationWrapper {
 
@@ -46,7 +47,7 @@ public class PhilipsHueBridgeImportDeclarationWrapper {
     private static Filter buildFilter() {
         Filter filter;
         String stringFilter = String.format("(&(%s=*)(%s=*)(%s=*))",
-                ID,DISCOVERY_PHILIPS_BRIDGE_TYPE, DISCOVERY_PHILIPS_BRIDGE_OBJECT);
+                ID, DISCOVERY_PHILIPS_BRIDGE_TYPE, DISCOVERY_PHILIPS_BRIDGE_OBJECT);
         try {
             filter = FuchsiaUtils.getFilter(stringFilter);
         } catch (InvalidFilterException e) {

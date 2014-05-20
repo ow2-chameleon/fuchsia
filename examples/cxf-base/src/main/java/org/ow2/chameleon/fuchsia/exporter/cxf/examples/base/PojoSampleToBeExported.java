@@ -30,11 +30,11 @@ import org.apache.felix.ipojo.annotations.Provides;
 @Provides
 public class PojoSampleToBeExported implements PojoSampleToBeExportedIface {
 
-    public void showMessage2(){
+    public void showMessage2() {
         System.out.println("ok");
     }
 
-    public String getMessage2(){
+    public String getMessage2() {
         return "ok";
     }
 

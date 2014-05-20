@@ -45,14 +45,14 @@ public class ExporterDeclarationInstance {
     BundleContext context;
 
 
-    public ExporterDeclarationInstance(BundleContext context){
+    public ExporterDeclarationInstance(BundleContext context) {
 
-        this.context=context;
+        this.context = context;
 
     }
 
     @Validate
-    public void start(){
+    public void start() {
 
         exportDeclaration();
 
@@ -61,12 +61,12 @@ public class ExporterDeclarationInstance {
     }
 
 
-    private void exportDeclaration(){
-        Map<String, Object> metadata=new HashMap<String, Object>();
+    private void exportDeclaration() {
+        Map<String, Object> metadata = new HashMap<String, Object>();
 
-        metadata.put("id","exporter-1");
-        metadata.put("fuchsia.export.jsonrpc.class","org.ow2.chameleon.fuchsia.examples.jsonrpc.exporter.experiment.DummyIface");
-        metadata.put("fuchsia.export.jsonrpc.instance","DummyPojoInstance");
+        metadata.put("id", "exporter-1");
+        metadata.put("fuchsia.export.jsonrpc.class", "org.ow2.chameleon.fuchsia.examples.jsonrpc.exporter.experiment.DummyIface");
+        metadata.put("fuchsia.export.jsonrpc.instance", "DummyPojoInstance");
 
         ExportDeclaration declaration = ExportDeclarationBuilder.fromMetadata(metadata).build();
 
@@ -76,8 +76,8 @@ public class ExporterDeclarationInstance {
         ServiceRegistration registration = context.registerService(clazzes, declaration, props);
     }
 
-    private void importDeclaration(){
-        Map<String, Object> metadata=new HashMap<String, Object>();
+    private void importDeclaration() {
+        Map<String, Object> metadata = new HashMap<String, Object>();
         metadata.put(ID, "endipoint");
         metadata.put(URL, "http://localhost:8080/JSONRPC/DummyPojoInstance");
         metadata.put(SERVICE_CLASS, "org.ow2.chameleon.fuchsia.examples.jsonrpc.exporter.experiment.DummyIface");

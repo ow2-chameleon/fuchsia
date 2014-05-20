@@ -29,7 +29,6 @@ import org.ow2.chameleon.fuchsia.tools.proxiesutils.FuchsiaProxy;
 import org.ow2.chameleon.fuchsia.tools.proxiesutils.ProxyFacetInvokable;
 import org.ow2.chameleon.fuchsia.tools.proxiesutils.ProxyInvokationException;
 
-import java.security.InvalidParameterException;
 import java.util.Map;
 
 

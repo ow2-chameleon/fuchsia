@@ -77,7 +77,7 @@ public class DeclarationRegistrationManager<T extends Declaration> {
         registration.unregister();
     }
 
-    public void unregisterAll(){
+    public void unregisterAll() {
         synchronized (declarationsRegistered) {
             for (ServiceRegistration registration : declarationsRegistered.values()) {
                 if (registration != null) {

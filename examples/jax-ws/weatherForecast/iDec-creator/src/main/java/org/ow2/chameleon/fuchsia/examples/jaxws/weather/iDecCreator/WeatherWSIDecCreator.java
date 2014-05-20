@@ -40,9 +40,9 @@ public class WeatherWSIDecCreator {
         List<String> interfaces = new ArrayList<String>();
         interfaces.add(WeatherForeCastWS.class.getCanonicalName());
 
-        metadata.put("className",WeatherForeCastWS.class.getCanonicalName());
-        metadata.put("jax-ws.importer.interfaces",interfaces);
-        metadata.put("endpoint.url","http://localhost:9090/Weather");
+        metadata.put("className", WeatherForeCastWS.class.getCanonicalName());
+        metadata.put("jax-ws.importer.interfaces", interfaces);
+        metadata.put("endpoint.url", "http://localhost:9090/Weather");
 
         importDeclaration = ImportDeclarationBuilder.fromMetadata(metadata).build();
 

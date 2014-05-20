@@ -30,7 +30,10 @@ import org.ow2.chameleon.fuchsia.discovery.mdns.topology.NetworkTopology;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.jmdns.*;
+import javax.jmdns.JmDNS;
+import javax.jmdns.NetworkTopologyDiscovery;
+import javax.jmdns.ServiceEvent;
+import javax.jmdns.ServiceListener;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.Enumeration;
@@ -46,7 +49,7 @@ public class DNSSDDiscovery extends AbstractDiscoveryComponent implements Networ
 
     private final Map<String, ImportDeclaration> importDeclarations = new HashMap<String, ImportDeclaration>();
 
-    @Property(name = "dnssd.service.type",value = MDNSConstants.DNSSD_SERVICE_TYPE)
+    @Property(name = "dnssd.service.type", value = MDNSConstants.DNSSD_SERVICE_TYPE)
     private String dnssdServiceType;
 
     protected DNSSDDiscovery(BundleContext bundleContext) {
@@ -54,7 +57,7 @@ public class DNSSDDiscovery extends AbstractDiscoveryComponent implements Networ
     }
 
     @Validate
-    public void start(){
+    public void start() {
 
         NetworkTopologyDiscovery.Factory.setClassDelegate(this);
 
@@ -63,12 +66,12 @@ public class DNSSDDiscovery extends AbstractDiscoveryComponent implements Networ
     }
 
     @Invalidate
-    public void stop(){
+    public void stop() {
 
         LOG.info("stopping service of mDNS/DNSsd discovery");
 
-        for(ImportDeclaration declaration:importDeclarations.values()){
-               super.unregisterImportDeclaration(declaration);
+        for (ImportDeclaration declaration : importDeclarations.values()) {
+            super.unregisterImportDeclaration(declaration);
         }
 
     }
@@ -88,11 +91,11 @@ public class DNSSDDiscovery extends AbstractDiscoveryComponent implements Networ
 
         LOG.info("removing declaration for the mDNS/DNSsd service {}", event.getName());
 
-        ImportDeclaration declaration=importDeclarations.remove(event.getName());
-        if(declaration!=null) {
+        ImportDeclaration declaration = importDeclarations.remove(event.getName());
+        if (declaration != null) {
             unregisterImportDeclaration(declaration);
             LOG.info("import declaration removed for the mDNS/DNSsd service {}", event.getName());
-        }else {
+        } else {
             LOG.info("Impossible to remove declaration {}, it was not registered by the discovery", event.getName());
         }
 
@@ -111,9 +114,9 @@ public class DNSSDDiscovery extends AbstractDiscoveryComponent implements Networ
 
         Map<String, Object> metadata = new HashMap<String, Object>();
 
-        StringBuilder bufAddress=new StringBuilder();
+        StringBuilder bufAddress = new StringBuilder();
 
-        InetAddress[] addresses =  event.getInfo().getInetAddresses();
+        InetAddress[] addresses = event.getInfo().getInetAddresses();
         if (addresses.length > 0) {
             for (InetAddress address : addresses) {
                 bufAddress.append(address);
@@ -126,31 +129,31 @@ public class DNSSDDiscovery extends AbstractDiscoveryComponent implements Networ
             bufAddress.append(event.getInfo().getPort());
         }
 
-        StringBuilder bufProperty=new StringBuilder();
+        StringBuilder bufProperty = new StringBuilder();
 
-        Enumeration<String> propertiesNameEnum=event.getInfo().getPropertyNames();
+        Enumeration<String> propertiesNameEnum = event.getInfo().getPropertyNames();
 
-        while(propertiesNameEnum.hasMoreElements()){
-            String name=propertiesNameEnum.nextElement();
-            bufProperty.append(name+"="+event.getInfo().getPropertyString(name)+",");
+        while (propertiesNameEnum.hasMoreElements()) {
+            String name = propertiesNameEnum.nextElement();
+            bufProperty.append(name + "=" + event.getInfo().getPropertyString(name) + ",");
         }
 
         metadata.put("id", event.getName());
         metadata.put("discovery.mdns.device.name", event.getName());
         metadata.put("discovery.mdns.device.addresses", bufAddress.toString());
-        metadata.put("discovery.mdns.device.isPersistent",event.getInfo().isPersistent());
-        metadata.put("discovery.mdns.device.properties",bufProperty.toString());
+        metadata.put("discovery.mdns.device.isPersistent", event.getInfo().isPersistent());
+        metadata.put("discovery.mdns.device.properties", bufProperty.toString());
         metadata.put("scope", "generic");
 
         ImportDeclaration declaration = ImportDeclarationBuilder.fromMetadata(metadata).build();
 
         registerImportDeclaration(declaration);
 
-        importDeclarations.put(event.getName(),declaration);
+        importDeclarations.put(event.getName(), declaration);
 
     }
 
-    private void configureNetworkCardServiceListener(){
+    private void configureNetworkCardServiceListener() {
         //Attach listener service to all network card fetched by the network topology
         for (InetAddress address : NetworkTopologyDiscovery.Factory
                 .getInstance().getInetAddresses()) {

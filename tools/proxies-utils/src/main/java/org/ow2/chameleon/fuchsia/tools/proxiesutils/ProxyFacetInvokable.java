@@ -20,7 +20,7 @@ package org.ow2.chameleon.fuchsia.tools.proxiesutils;
  * #L%
  */
 
-public interface ProxyFacetInvokable extends FuchsiaProxy  {
+public interface ProxyFacetInvokable extends FuchsiaProxy {
 
     /**
      * Sync.

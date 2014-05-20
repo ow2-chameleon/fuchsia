@@ -38,10 +38,8 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.service.http.HttpService;
 import org.osgi.service.packageadmin.ExportedPackage;
 import org.osgi.service.packageadmin.PackageAdmin;
-import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 import org.ow2.chameleon.fuchsia.importer.jaxws.JAXWSImporter;
 import org.ow2.chameleon.fuchsia.importer.jaxws.test.ctd.ServiceForExportation;
 import org.ow2.chameleon.fuchsia.importer.jaxws.test.ctd.ServiceForExportationimpl;
@@ -55,9 +53,9 @@ import static org.mockito.Mockito.*;
 
 public abstract class JAXWSImporterAbstractTest {
 
-    protected static final Integer HTTP_PORT=8043;
+    protected static final Integer HTTP_PORT = 8043;
 
-    protected static final String ENDPOINT_URL="http://localhost:"+HTTP_PORT+"/cxf/" + ServiceForExportation.class.getSimpleName();
+    protected static final String ENDPOINT_URL = "http://localhost:" + HTTP_PORT + "/cxf/" + ServiceForExportation.class.getSimpleName();
 
     protected Server httpServer;
 
@@ -79,9 +77,9 @@ public abstract class JAXWSImporterAbstractTest {
     @Mock
     protected ServiceRegistration proxyServiceRegistration;
 
-    protected ServiceForExportation id= spy(new ServiceForExportationimpl());
+    protected ServiceForExportation id = spy(new ServiceForExportationimpl());
 
-    protected ServiceReference idServiceReference[]=new ServiceReference[]{id};
+    protected ServiceReference idServiceReference[] = new ServiceReference[]{id};
 
     protected ServiceForExportation proxyRegisteredOSGi;
 
@@ -105,7 +103,7 @@ public abstract class JAXWSImporterAbstractTest {
     @After
     public void setupClean() throws Exception {
 
-        if(httpServer!=null){
+        if (httpServer != null) {
             httpServer.stop();
         }
 
@@ -114,7 +112,7 @@ public abstract class JAXWSImporterAbstractTest {
 
     }
 
-    private void registerMockitoMockInterception(){
+    private void registerMockitoMockInterception() {
 
         when(context.getServiceReference(PackageAdmin.class.getName())).thenReturn(importerServiceRegistration);
         when(packageAdminMock.getExportedPackage(ServiceForExportation.class.getName())).thenReturn(importPackageForClass);
@@ -141,9 +139,9 @@ public abstract class JAXWSImporterAbstractTest {
         when(context.registerService(any(Class.class), any(ServiceForExportation.class), any(Dictionary.class))).thenAnswer(new Answer<ServiceRegistration>() {
             public ServiceRegistration answer(InvocationOnMock invocation) throws Throwable {
 
-                ServiceRegistration proxyServiceRegistration=mock(ServiceRegistration.class);
+                ServiceRegistration proxyServiceRegistration = mock(ServiceRegistration.class);
 
-                proxyRegisteredOSGi =(ServiceForExportation)invocation.getArguments()[1];
+                proxyRegisteredOSGi = (ServiceForExportation) invocation.getArguments()[1];
 
                 return proxyServiceRegistration;
             }
@@ -155,7 +153,7 @@ public abstract class JAXWSImporterAbstractTest {
 
     protected void startServer() throws Exception {
 
-        httpServer=new Server(HTTP_PORT);
+        httpServer = new Server(HTTP_PORT);
 
         Bus bus = BusFactory.getDefaultBus(true);
         ContextHandlerCollection contexts = new ContextHandlerCollection();
@@ -178,7 +176,7 @@ public abstract class JAXWSImporterAbstractTest {
 
     }
 
-    protected void publishBean(){
+    protected void publishBean() {
 
         ServerFactoryBean srvFactory = new ServerFactoryBean();
 
@@ -186,7 +184,7 @@ public abstract class JAXWSImporterAbstractTest {
 
         srvFactory.setServiceBean(id);
 
-        srvFactory.setAddress("/"+srvFactory.getServiceClass().getSimpleName());
+        srvFactory.setAddress("/" + srvFactory.getServiceClass().getSimpleName());
 
         org.apache.cxf.endpoint.Server endpoint = srvFactory.create();
 
@@ -194,9 +192,9 @@ public abstract class JAXWSImporterAbstractTest {
 
     }
 
-    protected void initializeImporter(){
+    protected void initializeImporter() {
 
-        importer=new JAXWSImporter(context);
+        importer = new JAXWSImporter(context);
 
         importer.start();
 

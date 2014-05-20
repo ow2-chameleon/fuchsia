@@ -21,8 +21,8 @@ package org.ow2.chameleon.fuchsia.tools.grid.model;
 
 public class LinkerNode {
 
-    public LinkerNode(String factoryName){
-        this.factoryName=factoryName;
+    public LinkerNode(String factoryName) {
+        this.factoryName = factoryName;
     }
 
     private String factoryName;

@@ -36,9 +36,9 @@ import org.apache.felix.ipojo.annotations.Provides;
 @Provides
 public class DummyPojo implements DummyIface {
 
-    public void helloworld(String value){
+    public void helloworld(String value) {
 
-        System.out.println("hello "+value);
+        System.out.println("hello " + value);
 
     }
 

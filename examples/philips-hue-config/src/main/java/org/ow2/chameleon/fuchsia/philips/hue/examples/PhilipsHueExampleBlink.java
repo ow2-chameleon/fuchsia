@@ -24,9 +24,11 @@ import com.philips.lighting.model.PHBridge;
 import com.philips.lighting.model.PHBridgeResourcesCache;
 import com.philips.lighting.model.PHLight;
 import com.philips.lighting.model.PHLightState;
-import org.apache.felix.ipojo.annotations.*;
+import org.apache.felix.ipojo.annotations.Component;
+import org.apache.felix.ipojo.annotations.Invalidate;
+import org.apache.felix.ipojo.annotations.Requires;
+import org.apache.felix.ipojo.annotations.Validate;
 
-import java.util.List;
 import java.util.Set;
 
 @Component
@@ -39,24 +41,24 @@ public class PhilipsHueExampleBlink {
     @Requires
     PHBridge bridge;
 
-    boolean active=false;
+    boolean active = false;
 
     @Validate
-    public void start(){
+    public void start() {
 
-        active=true;
+        active = true;
 
 
-        Thread t1=new Thread(){
+        Thread t1 = new Thread() {
 
-            public void run(){
-                boolean state=false;
-                while(active){
-                    System.out.println("philips client just started, lights :" +lights.size());
+            public void run() {
+                boolean state = false;
+                while (active) {
+                    System.out.println("philips client just started, lights :" + lights.size());
 
                     PHBridgeResourcesCache cache = bridge.getResourceCache();
 
-                    for(PHLight light:lights){
+                    for (PHLight light : lights) {
 
                         PHLightState lightState = new PHLightState();
 
@@ -82,8 +84,8 @@ public class PhilipsHueExampleBlink {
     }
 
     @Invalidate
-    public void stop(){
-        active=false;
+    public void stop() {
+        active = false;
     }
 
 }

@@ -121,7 +121,6 @@ public class JSONRPCImporterTest extends ImporterComponentAbstract {
                 mavenBundle().groupId("javax.portlet").artifactId("portlet-api").versionAsInProject(),
                 mavenBundle().groupId("javax.servlet").artifactId("javax.servlet-api").versionAsInProject(),
                 systemPackages("com.sun.net.httpserver", "sun.misc", "com.sun.net.httpserver.spi")
-
         );
     }
 

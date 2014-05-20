@@ -31,7 +31,7 @@ public class FileBasedDiscoveryExportTest extends FilebasedTestAbstract<FileBase
 
     @Override
     public void init() {
-        discovery =spy(constructor().withParameterTypes(BundleContext.class).in(FileBasedDiscoveryExport.class).newInstance(context));
+        discovery = spy(constructor().withParameterTypes(BundleContext.class).in(FileBasedDiscoveryExport.class).newInstance(context));
         field("monitoredExportDirectory").ofType(String.class).in(discovery).set(tempFolder.getRoot().getAbsolutePath());
     }
 

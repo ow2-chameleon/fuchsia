@@ -1,6 +1,5 @@
 package org.ow2.chameleon.fuchsia.examples.jaxws.helloWS.client;
 
-import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.ServiceReference;
 import org.ow2.chameleon.fuchsia.examples.jaxws.helloWS.HelloWorldWS;
 import org.slf4j.Logger;
@@ -21,7 +20,7 @@ public class HelloWorldWSClient {
 
     private HelloWorldWS m_helloWorldWS;
 
-    @Bind (id="helloWs",optional = true)
+    @Bind(id = "helloWs", optional = true)
     public void bindGreeterService(HelloWorldWS helloWorldWS, ServiceReference ref) {
         logger.debug("Bind helloWS service !!!");
 
@@ -29,7 +28,7 @@ public class HelloWorldWSClient {
         useService(m_helloWorldWS);
     }
 
-    @Unbind(id="helloWs")
+    @Unbind(id = "helloWs")
     public void unbindGreeterService(HelloWorldWS helloWorldWS) {
         logger.debug("Unbind helloWS service !!!");
         m_helloWorldWS = null;

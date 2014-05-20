@@ -1,6 +1,5 @@
 package org.ow2.chameleon.fuchsia.examples.jaxws.helloWS.iDecCreator;
 
-import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
@@ -16,7 +15,7 @@ import java.util.*;
  * Time: 14:01
  * To change this template use File | Settings | File Templates.
  */
-@Component(name="HelloWSIDecCreator-Factory")
+@Component(name = "HelloWSIDecCreator-Factory")
 @Provides(specifications = HelloWSIDecCreator.class)
 @Instantiate
 public class HelloWSIDecCreator {
@@ -38,8 +37,8 @@ public class HelloWSIDecCreator {
         List<String> interfaces = new ArrayList<String>();
         interfaces.add(HelloWorldWS.class.getCanonicalName());
 
-        metadata.put("jax-ws.importer.interfaces",interfaces);
-        metadata.put("endpoint.url","http://localhost:9090/helloWS");
+        metadata.put("jax-ws.importer.interfaces", interfaces);
+        metadata.put("endpoint.url", "http://localhost:9090/helloWS");
 
         importDeclaration = ImportDeclarationBuilder.fromMetadata(metadata).build();
 

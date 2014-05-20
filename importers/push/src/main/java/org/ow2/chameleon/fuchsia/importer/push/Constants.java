@@ -28,7 +28,7 @@ public class Constants {
     public static final String HUB_LEASE_SECONDS = "hub.lease_seconds";
     public static final String HUB_VERIFY_TOKEN = "hub.verify_token";
 
-    private Constants(){
+    private Constants() {
 
     }
 }

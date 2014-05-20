@@ -27,8 +27,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclarationBuilder;
-import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
-import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclarationBuilder;
 import org.ow2.chameleon.fuchsia.exporter.cxf.examples.base.PojoSampleToBeExportedIface;
 
 import java.util.Dictionary;
@@ -42,28 +40,28 @@ public class ExportDeclarationSample {
 
     BundleContext context;
 
-    public ExportDeclarationSample(BundleContext context){
+    public ExportDeclarationSample(BundleContext context) {
 
-        this.context=context;
+        this.context = context;
 
     }
 
     @Validate
-    public void start(){
+    public void start() {
 
         exportDeclaration();
 
     }
 
 
-    private void exportDeclaration(){
-        Map<String, Object>  metadata=new HashMap<String, Object>();
+    private void exportDeclaration() {
+        Map<String, Object> metadata = new HashMap<String, Object>();
 
-        metadata.put("id","a");
-        metadata.put("exporter.id","myservice");
-        metadata.put("fuchsia.export.cxf.class.name",PojoSampleToBeExportedIface.class.getName());
-        metadata.put("fuchsia.export.cxf.instance","PojoSampleToBeExported");
-        metadata.put("fuchsia.export.cxf.url.context","/PojoSampleToBeExported");
+        metadata.put("id", "a");
+        metadata.put("exporter.id", "myservice");
+        metadata.put("fuchsia.export.cxf.class.name", PojoSampleToBeExportedIface.class.getName());
+        metadata.put("fuchsia.export.cxf.instance", "PojoSampleToBeExported");
+        metadata.put("fuchsia.export.cxf.url.context", "/PojoSampleToBeExported");
 
         ExportDeclaration declaration = ExportDeclarationBuilder.fromMetadata(metadata).build();
 

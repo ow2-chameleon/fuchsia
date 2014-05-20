@@ -35,14 +35,7 @@ package org.ow2.chameleon.fuchsia.discovery.bluetooth;
  * #L%
  */
 
-import org.apache.felix.ipojo.annotations.Bind;
-import org.apache.felix.ipojo.annotations.Component;
-import org.apache.felix.ipojo.annotations.Invalidate;
-import org.apache.felix.ipojo.annotations.Provides;
-import org.apache.felix.ipojo.annotations.Requires;
-import org.apache.felix.ipojo.annotations.ServiceProperty;
-import org.apache.felix.ipojo.annotations.Unbind;
-import org.apache.felix.ipojo.annotations.Validate;
+import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
 import org.ow2.chameleon.bluetooth.BluetoothController;
 import org.ow2.chameleon.fuchsia.core.component.AbstractDiscoveryComponent;
@@ -58,9 +51,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.ow2.chameleon.fuchsia.core.declaration.Constants.ID;
+import static org.ow2.chameleon.fuchsia.core.declaration.Constants.PROTOCOL_NAME;
 import static org.ow2.chameleon.fuchsia.discovery.bluetooth.BluetoothConstants.BLUETOOTH_DEVICE_ADDRESS;
 import static org.ow2.chameleon.fuchsia.discovery.bluetooth.BluetoothConstants.BLUETOOTH_DEVICE_FRIENDLYNAME;
-import static org.ow2.chameleon.fuchsia.core.declaration.Constants.PROTOCOL_NAME;
 
 /**
  * @author Morgan Martinet
@@ -102,7 +95,7 @@ public class BluetoothDiscovery extends AbstractDiscoveryComponent {
                     .key(PROTOCOL_NAME).value("bluetooth")
                     .key(BLUETOOTH_DEVICE_ADDRESS).value(ba)
                     .key(BLUETOOTH_DEVICE_FRIENDLYNAME).value(name)
-                    // FIXME scope metadata
+                            // FIXME scope metadata
                     .key("scope").value("generic")
                     .build();
 

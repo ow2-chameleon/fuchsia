@@ -25,7 +25,7 @@ public final class Constants {
     public static final String FUCHSIA_EXPORT_JSONRPC_INSTANCE = "fuchsia.export.jsonrpc.instance";
     public static final String FUCHSIA_EXPORT_JSONRPC_URL_CONTEXT = "fuchsia.export.jsonrpc.url.context";
 
-    private Constants(){
+    private Constants() {
         // private constructor
     }
 }

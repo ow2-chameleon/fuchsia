@@ -42,18 +42,18 @@ import static org.fest.reflect.core.Reflection.method;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public abstract class FilebasedTestAbstract <D extends AbstractFileBasedDiscovery> {
+public abstract class FilebasedTestAbstract<D extends AbstractFileBasedDiscovery> {
 
     protected D discovery;
 
     @Rule
-    public TemporaryFolder tempFolder =new TemporaryFolder();
+    public TemporaryFolder tempFolder = new TemporaryFolder();
 
     @Mock
     protected BundleContext context;
 
     @Before
-    public void before(){
+    public void before() {
 
         MockitoAnnotations.initMocks(this);
 
@@ -65,7 +65,7 @@ public abstract class FilebasedTestAbstract <D extends AbstractFileBasedDiscover
 
     public abstract void init();
 
-    private void initGenericMocks(){
+    private void initGenericMocks() {
 
         field("name").ofType(String.class).in(discovery).set("instance-name");
         field("pollingTime").ofType(Long.class).in(discovery).set(Long.valueOf(FileBasedDiscoveryConstants.FILEBASED_DISCOVERY_PROPERTY_POLLING_TIME_VALUE));
@@ -75,13 +75,13 @@ public abstract class FilebasedTestAbstract <D extends AbstractFileBasedDiscover
 
     protected File getTempFile(String name) throws IOException {
 
-        File file= tempFolder.newFile(name);
+        File file = tempFolder.newFile(name);
 
         Properties props = new Properties();
         props.setProperty("id", "my-id");
 
-        OutputStream out = new FileOutputStream( file );
-        props.store(out,"");
+        OutputStream out = new FileOutputStream(file);
+        props.store(out, "");
         out.close();
 
         return file;
@@ -91,11 +91,11 @@ public abstract class FilebasedTestAbstract <D extends AbstractFileBasedDiscover
     @Test
     public void createFile() throws IOException {
 
-        File file=getTempFile("newfile.txt");
+        File file = getTempFile("newfile.txt");
 
         discovery.onFileCreate(file);
 
-        Map maps=field("declarationsFiles").ofType(Map.class).in(discovery).get();
+        Map maps = field("declarationsFiles").ofType(Map.class).in(discovery).get();
 
         Assert.assertEquals(1, maps.size());
 
@@ -104,45 +104,45 @@ public abstract class FilebasedTestAbstract <D extends AbstractFileBasedDiscover
     @Test
     public void removeFile() throws IOException {
 
-        File file=getTempFile("filetoberemoved.txt");
+        File file = getTempFile("filetoberemoved.txt");
 
         discovery.onFileCreate(file);
 
-        Map maps=field("declarationsFiles").ofType(Map.class).in(discovery).get();
+        Map maps = field("declarationsFiles").ofType(Map.class).in(discovery).get();
 
-        Assert.assertEquals(1,maps.size());
+        Assert.assertEquals(1, maps.size());
 
         discovery.onFileDelete(file);
 
-        Assert.assertEquals(0,maps.size());
+        Assert.assertEquals(0, maps.size());
 
     }
 
     @Test
     public void gracefulStop() throws IOException {
-        File file=getTempFile("filetoberemoved.txt");
+        File file = getTempFile("filetoberemoved.txt");
         discovery.onFileCreate(file);
-        Map maps=field("declarationsFiles").ofType(Map.class).in(discovery).get();
-        Assert.assertEquals(1,maps.size());
+        Map maps = field("declarationsFiles").ofType(Map.class).in(discovery).get();
+        Assert.assertEquals(1, maps.size());
         method("stop").in(discovery).invoke();
-        Assert.assertEquals(0,maps.size());
+        Assert.assertEquals(0, maps.size());
     }
 
     @Test
-    public void shouldNotAcceptHiddenFiled(){
+    public void shouldNotAcceptHiddenFiled() {
 
-        File invalidFile=mock(File.class);
+        File invalidFile = mock(File.class);
         when(invalidFile.exists()).thenReturn(true);
         when(invalidFile.isFile()).thenReturn(true);
         when(invalidFile.isHidden()).thenReturn(true);
 
-        File validFile=mock(File.class);
+        File validFile = mock(File.class);
         when(validFile.exists()).thenReturn(true);
         when(validFile.isFile()).thenReturn(true);
         when(validFile.isHidden()).thenReturn(false);
 
-        Boolean resultValid=discovery.accept(validFile);
-        Boolean resultInvalid=discovery.accept(invalidFile);
+        Boolean resultValid = discovery.accept(validFile);
+        Boolean resultInvalid = discovery.accept(invalidFile);
 
         Assert.assertTrue(resultValid);
         Assert.assertFalse(resultInvalid);

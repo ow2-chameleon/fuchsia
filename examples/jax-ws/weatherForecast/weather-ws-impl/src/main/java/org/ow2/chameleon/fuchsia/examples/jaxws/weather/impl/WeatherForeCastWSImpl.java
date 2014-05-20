@@ -1,6 +1,5 @@
 package org.ow2.chameleon.fuchsia.examples.jaxws.weather.impl;
 
-import org.apache.felix.ipojo.annotations.*;
 import org.ow2.chameleon.everest.client.EverestClient;
 import org.ow2.chameleon.everest.services.EverestService;
 import org.ow2.chameleon.everest.services.IllegalActionOnResourceException;
@@ -25,7 +24,7 @@ import java.util.List;
 @Component
 @Instantiate
 @Provides(specifications = WeatherForeCastWS.class)
-public class WeatherForeCastWSImpl implements WeatherForeCastWS{
+public class WeatherForeCastWSImpl implements WeatherForeCastWS {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -34,16 +33,16 @@ public class WeatherForeCastWSImpl implements WeatherForeCastWS{
 
     private EverestClient m_everestClient;
 
-    @Requires(optional=true,filter="(org.ow2.chameleon.syndication.feed.url=*)")
+    @Requires(optional = true, filter = "(org.ow2.chameleon.syndication.feed.url=*)")
     private FeedReader reader;
 
-    @ServiceProperty(name="service.exported.interfaces", value="*")
+    @ServiceProperty(name = "service.exported.interfaces", value = "*")
     private String exportedInterfaces;
 
-    @ServiceProperty(name="service.exported.configs", value="org.apache.cxf.ws")
+    @ServiceProperty(name = "service.exported.configs", value = "org.apache.cxf.ws")
     private String exportedConfigs;
 
-    @ServiceProperty(name="org.apache.cxf.ws.address", value="http://localhost:9090/Weather?wsdl")
+    @ServiceProperty(name = "org.apache.cxf.ws.address", value = "http://localhost:9090/Weather?wsdl")
     private String wsAddress;
 
     public WeatherForeCastWSImpl() {
@@ -53,11 +52,11 @@ public class WeatherForeCastWSImpl implements WeatherForeCastWS{
     public String getActualWeather(String location) {
 
         logger.info("Invoking: getActualWeather(" + location + ")");
-        location="38000"; //TODO FIX ME overide location
+        location = "38000"; //TODO FIX ME overide location
         String location1 = new ZipCodeConverter(location).getWoeid();
         // Create the instance
         try {
-            m_everestClient.create(Path.from("/ipojo/factory/org.ow2.chameleon.syndication.rome.reader/null").toString()).with("instance.name","rssReader").with("feed.url", "http://weather.yahooapis.com/forecastrss?w=" + location1 + "&u=c").doIt();
+            m_everestClient.create(Path.from("/ipojo/factory/org.ow2.chameleon.syndication.rome.reader/null").toString()).with("instance.name", "rssReader").with("feed.url", "http://weather.yahooapis.com/forecastrss?w=" + location1 + "&u=c").doIt();
         } catch (ResourceNotFoundException e) {
             e.printStackTrace();
         } catch (IllegalActionOnResourceException e) {
@@ -70,7 +69,7 @@ public class WeatherForeCastWSImpl implements WeatherForeCastWS{
 
         //delete the instance
         try {
-            m_everestClient.delete(Path.from("/ipojo/instance/"+"rssReader").toString()).doIt();
+            m_everestClient.delete(Path.from("/ipojo/instance/" + "rssReader").toString()).doIt();
         } catch (ResourceNotFoundException e) {
             e.printStackTrace();
         } catch (IllegalActionOnResourceException e) {
@@ -84,12 +83,12 @@ public class WeatherForeCastWSImpl implements WeatherForeCastWS{
     public String getWeatherPrevisions(String location, XDayPrevision prevision) {
 
         logger.info("Invoking: getWeatherPrevisions(" + location);
-        prevision=XDayPrevision.FOUR_DAY;
-        location="38000";
+        prevision = XDayPrevision.FOUR_DAY;
+        location = "38000";
         String location1 = new ZipCodeConverter(location).getWoeid();
         // Create the instance
         try {
-            m_everestClient.create(Path.from("/ipojo/factory/org.ow2.chameleon.syndication.rome.reader/null").toString()).with("instance.name","rssReader").with("feed.url","http://weather.yahooapis.com/forecastrss?w="+location1+"&u=c").doIt();
+            m_everestClient.create(Path.from("/ipojo/factory/org.ow2.chameleon.syndication.rome.reader/null").toString()).with("instance.name", "rssReader").with("feed.url", "http://weather.yahooapis.com/forecastrss?w=" + location1 + "&u=c").doIt();
         } catch (ResourceNotFoundException e) {
             e.printStackTrace();
         } catch (IllegalActionOnResourceException e) {
@@ -102,7 +101,7 @@ public class WeatherForeCastWSImpl implements WeatherForeCastWS{
 
         //delete the instance
         try {
-            m_everestClient.delete(Path.from("/ipojo/instance/"+"rssReader").toString()).doIt();
+            m_everestClient.delete(Path.from("/ipojo/instance/" + "rssReader").toString()).doIt();
         } catch (ResourceNotFoundException e) {
             e.printStackTrace();
         } catch (IllegalActionOnResourceException e) {
@@ -111,25 +110,26 @@ public class WeatherForeCastWSImpl implements WeatherForeCastWS{
 
         logger.info("ForeCast : " + forecast.toString());
 
-        switch(prevision) {
+        switch (prevision) {
 
-            case ONE_DAY :
+            case ONE_DAY:
                 return forecast.get(0);
             case TWO_DAY:
-                return forecast.get(0)+"\n"+forecast.get(1);
+                return forecast.get(0) + "\n" + forecast.get(1);
             case THREE_DAY:
-                return forecast.get(0)+"\n"+forecast.get(1)+"\n"+forecast.get(2);
+                return forecast.get(0) + "\n" + forecast.get(1) + "\n" + forecast.get(2);
             case FOUR_DAY:
-                return forecast.get(0)+"\n"+forecast.get(1)+"\n"+forecast.get(2)+"\n"+forecast.get(3);
+                return forecast.get(0) + "\n" + forecast.get(1) + "\n" + forecast.get(2) + "\n" + forecast.get(3);
             case FIVE_DAY:
                 return forecast.toString();
-            default :
+            default:
                 return forecast.toString();
         }
     }
 
     /**
      * Parser for actual conditions
+     *
      * @param feed
      * @return
      */
@@ -142,6 +142,7 @@ public class WeatherForeCastWSImpl implements WeatherForeCastWS{
 
     /**
      * Parser for forecast
+     *
      * @param feed
      * @return
      */
@@ -150,11 +151,11 @@ public class WeatherForeCastWSImpl implements WeatherForeCastWS{
         List<String> returnList = new ArrayList<String>();
         String[] result2 = result[2].split("<BR />");
 
-        returnList.add(result2[3]+"\n");
-        returnList.add(result[3]+"\n");
-        returnList.add(result[4]+"\n");
-        returnList.add(result[5]+"\n");
-        returnList.add(result[6]+"\n");
+        returnList.add(result2[3] + "\n");
+        returnList.add(result[3] + "\n");
+        returnList.add(result[4] + "\n");
+        returnList.add(result[5] + "\n");
+        returnList.add(result[6] + "\n");
 
         return returnList;
     }

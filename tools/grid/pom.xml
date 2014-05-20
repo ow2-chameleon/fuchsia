@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-	<groupId>org.ow2.chameleon.fuchsia.tools</groupId>
-	<artifactId>fuchsia-tools</artifactId>
+        <groupId>org.ow2.chameleon.fuchsia.tools</groupId>
+        <artifactId>fuchsia-tools</artifactId>
         <version>0.0.3-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
@@ -78,11 +79,11 @@
                         <Bundle-SymbolicName>
                             ${project.artifactId}
                         </Bundle-SymbolicName>
-                                <!--
+                        <!--
 
-                                org.codehaus.jackson.map,
+                        org.codehaus.jackson.map,
 
-                                -->
+                        -->
                         <Import-Package>
                             org.osgi.service.http,
                             org.apache.felix.ipojo,
@@ -95,7 +96,9 @@
                         </Import-Package>
                         <Export-Package></Export-Package>
 
-                        <Embed-Dependency>*;scope=compile|runtime;inline=true;artifactId=!servlet-api-2.5|org.apache.felix.ipojo|org.ow2.chameleon.fuchsia.core</Embed-Dependency>
+                        <Embed-Dependency>
+                            *;scope=compile|runtime;inline=true;artifactId=!servlet-api-2.5|org.apache.felix.ipojo|org.ow2.chameleon.fuchsia.core
+                        </Embed-Dependency>
 
                     </instructions>
                 </configuration>

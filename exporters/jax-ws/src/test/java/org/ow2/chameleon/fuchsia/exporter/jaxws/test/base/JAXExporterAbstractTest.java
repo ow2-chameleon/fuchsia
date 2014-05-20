@@ -46,7 +46,7 @@ import static org.mockito.Mockito.when;
 
 public abstract class JAXExporterAbstractTest {
 
-    protected static final Integer HTTP_PORT=8043;
+    protected static final Integer HTTP_PORT = 8043;
 
     @Mock
     protected org.osgi.framework.BundleContext context;
@@ -66,9 +66,9 @@ public abstract class JAXExporterAbstractTest {
     @Mock
     protected PackageAdmin packageAdminMock;
 
-    protected ServiceForExportation id= spy(new ServiceForExportationImpl());
+    protected ServiceForExportation id = spy(new ServiceForExportationImpl());
 
-    protected ServiceReference idServiceReference[]=new ServiceReference[]{id};
+    protected ServiceReference idServiceReference[] = new ServiceReference[]{id};
 
     protected JAXWSExporter exporter;
 
@@ -107,13 +107,13 @@ public abstract class JAXExporterAbstractTest {
 
         packageAdminMock = null;
 
-        id=null;
+        id = null;
 
-        idServiceReference=null;
+        idServiceReference = null;
 
     }
 
-    protected void prepareMockInterceptors(){
+    protected void prepareMockInterceptors() {
 
         Dictionary<String, Object> props1 = new Hashtable<String, Object>();
 
@@ -138,12 +138,11 @@ public abstract class JAXExporterAbstractTest {
 
         when(packageAdminMock.getExportedPackage(ServiceForExportation.class.getName())).thenReturn(exportPackageForClass);
 
-        exporter=constructor().withParameterTypes(BundleContext.class).in(JAXWSExporter.class).newInstance(context);
+        exporter = constructor().withParameterTypes(BundleContext.class).in(JAXWSExporter.class).newInstance(context);
 
         field("httpPort").ofType(Integer.class).in(exporter).set(HTTP_PORT);
 
     }
-
 
 
 }

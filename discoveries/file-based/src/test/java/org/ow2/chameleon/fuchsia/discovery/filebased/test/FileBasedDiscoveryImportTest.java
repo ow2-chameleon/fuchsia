@@ -31,7 +31,7 @@ public class FileBasedDiscoveryImportTest extends FilebasedTestAbstract<FileBase
 
     @Override
     public void init() {
-        discovery =spy(constructor().withParameterTypes(BundleContext.class).in(FileBasedDiscoveryImport.class).newInstance(context));
+        discovery = spy(constructor().withParameterTypes(BundleContext.class).in(FileBasedDiscoveryImport.class).newInstance(context));
         field("monitoredImportDirectory").ofType(String.class).in(discovery).set(tempFolder.getRoot().getAbsolutePath());
     }
 

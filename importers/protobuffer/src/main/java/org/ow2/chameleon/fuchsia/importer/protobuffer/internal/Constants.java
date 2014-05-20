@@ -26,7 +26,7 @@ public final class Constants {
     public static final String RPC_PROTO_SERVICE = "rpc.proto.service";
     public static final String RPC_PROTO_MESSAGE = "rpc.proto.message";
 
-    private Constants(){
+    private Constants() {
         // private constructor
     }
 }

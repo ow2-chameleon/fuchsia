@@ -30,9 +30,7 @@ import org.ow2.chameleon.fuchsia.core.exceptions.InvalidFilterException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
-import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
+import static org.assertj.core.api.Assertions.*;
 
 public class FuchsiaUtilsTest {
 

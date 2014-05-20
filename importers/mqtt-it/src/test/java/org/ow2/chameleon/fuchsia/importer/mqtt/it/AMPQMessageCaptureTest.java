@@ -27,7 +27,11 @@ import org.ow2.chameleon.testing.helpers.IPOJOHelper;
 
 import javax.inject.Inject;
 import java.io.IOException;
-import java.util.*;
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Properties;
+
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 import static org.ow2.chameleon.fuchsia.core.component.ImportationLinker.FILTER_IMPORTDECLARATION_PROPERTY;
@@ -54,36 +58,36 @@ public class AMPQMessageCaptureTest extends RabbitMQTestSuite {
     protected IPOJOHelper ipojoHelper;
 
     @Before
-    public void instantiateAMPQPlaform(){
+    public void instantiateAMPQPlaform() {
 
         assertRabbitMQisRunning();
 
-        ipojoHelper=new IPOJOHelper(bundleContext);
+        ipojoHelper = new IPOJOHelper(bundleContext);
 
-        Properties linker=new Properties();
-        linker.put(FILTER_IMPORTDECLARATION_PROPERTY,"(id=*)");
-        linker.put(FILTER_IMPORTERSERVICE_PROPERTY,"(instance.name=MQTTImporter)");
-        linker.put(Factory.INSTANCE_NAME_PROPERTY,"MQTTLinker");
+        Properties linker = new Properties();
+        linker.put(FILTER_IMPORTDECLARATION_PROPERTY, "(id=*)");
+        linker.put(FILTER_IMPORTERSERVICE_PROPERTY, "(instance.name=MQTTImporter)");
+        linker.put(Factory.INSTANCE_NAME_PROPERTY, "MQTTLinker");
 
-        linkerComponentInstance=ipojoHelper.createComponentInstance(FuchsiaConstants.DEFAULT_IMPORTATION_LINKER_FACTORY_NAME,linker);
+        linkerComponentInstance = ipojoHelper.createComponentInstance(FuchsiaConstants.DEFAULT_IMPORTATION_LINKER_FACTORY_NAME, linker);
 
-        Properties importer=new Properties();
-        importer.put(FILTER_IMPORTDECLARATION_PROPERTY,"(id=*)");
-        importer.put("target","(id=*)");
-        importer.put(Factory.INSTANCE_NAME_PROPERTY,"MQTTImporter");
+        Properties importer = new Properties();
+        importer.put(FILTER_IMPORTDECLARATION_PROPERTY, "(id=*)");
+        importer.put("target", "(id=*)");
+        importer.put(Factory.INSTANCE_NAME_PROPERTY, "MQTTImporter");
 
-        importerComponentInstance=ipojoHelper.createComponentInstance("org.ow2.chameleon.fuchsia.importer.mqtt.MQTTImporter",importer);
+        importerComponentInstance = ipojoHelper.createComponentInstance("org.ow2.chameleon.fuchsia.importer.mqtt.MQTTImporter", importer);
 
     }
 
     @After
-    public void uninstantiateAMPQPlatform(){
+    public void uninstantiateAMPQPlatform() {
         linkerComponentInstance.dispose();
         importerComponentInstance.dispose();
     }
 
     @Test
-    public void LinkerImporterCreated()  {
+    public void LinkerImporterCreated() {
 
         ComponentInstance linkerInstance = ipojoHelper.getInstanceByName("MQTTLinker");
 
@@ -94,7 +98,7 @@ public class AMPQMessageCaptureTest extends RabbitMQTestSuite {
     }
 
     @Test
-    public void ImporterCreated()  {
+    public void ImporterCreated() {
 
         ComponentInstance importerInstance = ipojoHelper.getInstanceByName("MQTTImporter");
 
@@ -106,81 +110,81 @@ public class AMPQMessageCaptureTest extends RabbitMQTestSuite {
     @Test
     public void ConsumeSingleMessageEventAdmin() throws IOException {
 
-        final String queue="public";
+        final String queue = "public";
 
         Dictionary handlerProperties = new Hashtable();
         handlerProperties.put(EventConstants.EVENT_TOPIC, queue);
 
-        MessageHandler ht=new MessageHandler();
+        MessageHandler ht = new MessageHandler();
 
-        MessageHandler htmock=spy(ht);
+        MessageHandler htmock = spy(ht);
 
-        bundleContext.registerService(EventHandler.class.getName(),htmock,handlerProperties);
+        bundleContext.registerService(EventHandler.class.getName(), htmock, handlerProperties);
 
         HashMap<String, Object> metadata = new HashMap<String, Object>();
         metadata.put(Constants.DEVICE_ID, "00000000-54b3-e7c7-0000-000046bffd97");
-        metadata.put("mqtt.queue",queue);
+        metadata.put("mqtt.queue", queue);
 
-        ImportDeclaration declaration=createImportationDeclaration("importDeclaration",metadata);
+        ImportDeclaration declaration = createImportationDeclaration("importDeclaration", metadata);
         assertThat(declaration).isNotNull();
 
         sendSampleAMPQMessage();
 
-        verify(htmock,times(1)).handleEvent(any(Event.class));
+        verify(htmock, times(1)).handleEvent(any(Event.class));
 
     }
 
     @Test
     public void ConsumeMultipleMessageEventAdmin() throws IOException {
 
-        final String queue="public";
+        final String queue = "public";
 
         Dictionary handlerProperties = new Hashtable();
         handlerProperties.put(EventConstants.EVENT_TOPIC, queue);
 
-        MessageHandler ht=new MessageHandler();
+        MessageHandler ht = new MessageHandler();
 
-        MessageHandler htmock=spy(ht);
+        MessageHandler htmock = spy(ht);
 
-        bundleContext.registerService(EventHandler.class.getName(),htmock,handlerProperties);
+        bundleContext.registerService(EventHandler.class.getName(), htmock, handlerProperties);
 
         HashMap<String, Object> metadata = new HashMap<String, Object>();
         metadata.put(Constants.DEVICE_ID, "00000000-54b3-e7c7-0000-000046bffd97");
-        metadata.put("mqtt.queue",queue);
+        metadata.put("mqtt.queue", queue);
 
-        ImportDeclaration declaration=createImportationDeclaration("importDeclaration",metadata);
+        ImportDeclaration declaration = createImportationDeclaration("importDeclaration", metadata);
 
         assertThat(declaration).isNotNull();
 
-        final int TOTAL=10;
+        final int TOTAL = 10;
 
-        for(int counter=0;counter<TOTAL;counter++){
+        for (int counter = 0; counter < TOTAL; counter++) {
             sendSampleAMPQMessage();
         }
 
-        verify(htmock,times(TOTAL)).handleEvent(any(Event.class));
+        verify(htmock, times(TOTAL)).handleEvent(any(Event.class));
 
     }
 
     @Test
     public void MessageSentWithRightArgument() throws IOException {
 
-        final String queue="public";
+        final String queue = "public";
 
         Dictionary handlerProperties = new Hashtable();
-        handlerProperties.put(EventConstants.EVENT_TOPIC,queue);
+        handlerProperties.put(EventConstants.EVENT_TOPIC, queue);
 
-        MessageHandler ht=new MessageHandler();
+        MessageHandler ht = new MessageHandler();
 
-        MessageHandler htmock=spy(ht);
+        MessageHandler htmock = spy(ht);
 
-        bundleContext.registerService(EventHandler.class.getName(),htmock,handlerProperties);
+        bundleContext.registerService(EventHandler.class.getName(), htmock, handlerProperties);
 
         HashMap<String, Object> metadata = new HashMap<String, Object>();
         metadata.put(Constants.DEVICE_ID, "00000000-54b3-e7c7-0000-000046bffd99");
-        metadata.put("mqtt.queue",queue);
+        metadata.put("mqtt.queue", queue);
 
-        ImportDeclaration declaration=createImportationDeclaration("importDeclaration",metadata);
+        ImportDeclaration declaration = createImportationDeclaration("importDeclaration", metadata);
 
         assertThat(declaration).isNotNull();
 
@@ -188,7 +192,7 @@ public class AMPQMessageCaptureTest extends RabbitMQTestSuite {
 
         ArgumentCaptor<Event> argument = ArgumentCaptor.forClass(Event.class);
 
-        verify(htmock,times(1)).handleEvent(argument.capture());
+        verify(htmock, times(1)).handleEvent(argument.capture());
 
         assertThat(argument.getValue().getTopic()).isEqualTo(queue);
 
@@ -200,12 +204,12 @@ public class AMPQMessageCaptureTest extends RabbitMQTestSuite {
         Connection connection = factory.newConnection();
         Channel channel = connection.createChannel();
 
-        final String topic="public";
+        final String topic = "public";
         final String quote = "The force of mind is only as great as its expression; its depth only as deep as its power to expand and lose itself";
 
         LOG.info("<eventadmin type='outbound'>");
-        LOG.info("\tTOPIC: {}",topic);
-        LOG.info("\tQuote: {}",quote);
+        LOG.info("\tTOPIC: {}", topic);
+        LOG.info("\tQuote: {}", quote);
         LOG.info("</eventadmin>\n");
 
         channel.basicPublish("", topic, null, quote.getBytes());

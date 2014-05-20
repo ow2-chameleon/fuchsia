@@ -35,13 +35,13 @@ import java.util.List;
 @Component(immediate = true)
 @Instantiate
 @Provides
-public class PhilipsHueGogoCommand extends PHLightListener{
+public class PhilipsHueGogoCommand extends PHLightListener {
 
     @ServiceProperty(name = "osgi.command.scope", value = "philips")
     private String scope;
 
     @ServiceProperty(name = "osgi.command.function", value = "{}")
-    private String[] function = new String[]{"phlist","phset"};
+    private String[] function = new String[]{"phlist", "phset"};
 
     @Requires(optional = true)
     PHBridge bridge;
@@ -50,24 +50,24 @@ public class PhilipsHueGogoCommand extends PHLightListener{
         System.out.println(message);
     }
 
-    private String reproduceChar(char character, int amount){
+    private String reproduceChar(char character, int amount) {
 
-        StringBuilder sb=new StringBuilder();
+        StringBuilder sb = new StringBuilder();
 
-        for(int x=0;x<amount;x++){
+        for (int x = 0; x < amount; x++) {
             sb.append(character);
         }
 
         return sb.toString();
     }
 
-    @Descriptor  (value = "List all lights available")
+    @Descriptor(value = "List all lights available")
     public void phlist(@Descriptor("phlist") String... parameters) {
-        StringBuilder sb=new StringBuilder();
+        StringBuilder sb = new StringBuilder();
         bridge.findNewLights(this);
-        for(PHLight light:bridge.getResourceCache().getAllLights()){
-            int lightNameLength=light.getName().length();
-            int lightTypeLength=light.getLightType().name().length();
+        for (PHLight light : bridge.getResourceCache().getAllLights()) {
+            int lightNameLength = light.getName().length();
+            int lightTypeLength = light.getLightType().name().length();
             sb.append(reproduceChar(' ', lightNameLength)).append(reproduceChar('_', lightTypeLength)).append("\n");
             sb.append(reproduceChar(' ', lightNameLength)).append("|ID:").append(light.getIdentifier()).append("\n");
             sb.append(reproduceChar(' ', lightNameLength)).append("|Name:").append(light.getName()).append("\n");
@@ -79,7 +79,7 @@ public class PhilipsHueGogoCommand extends PHLightListener{
         print(sb.toString());
     }
 
-    @Descriptor  (value = "Change light parameters, for a specific lamp or for all light plugged into the bridge")
+    @Descriptor(value = "Change light parameters, for a specific lamp or for all light plugged into the bridge")
     public void phset(@Descriptor("[-name NAME] [-on true|false] [-i 0<=INTENSITY<=255] [-tt TRANSITION_TIME_IN_DECISECONDS] [-r 0<=RED<=255] [-g 0<=GREEN<=255] [-b 0<=BLUE<=255]") String... parameters) {
 
         String valueStr = getArgumentValue("-on", parameters);
@@ -135,6 +135,7 @@ public class PhilipsHueGogoCommand extends PHLightListener{
 
     /**
      * Look up for the value of a parameter in a sequence of string.
+     *
      * @param option the option that we are looking for. e.g. '-k'
      * @param params the list of parameters
      * @return the value associated with the parameter or Null in case it is not present

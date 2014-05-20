@@ -39,30 +39,30 @@ public class ImportDeclarationSample {
 
     BundleContext context;
 
-    public ImportDeclarationSample(BundleContext context){
+    public ImportDeclarationSample(BundleContext context) {
 
-        this.context=context;
+        this.context = context;
 
     }
 
     @Validate
-    public void start(){
+    public void start() {
         importDeclaration();
 
     }
 
-    private void importDeclaration(){
-        Map<String, Object>  metadata=new HashMap<String, Object>();
+    private void importDeclaration() {
+        Map<String, Object> metadata = new HashMap<String, Object>();
 
-        metadata.put("id","b");
-        metadata.put("className","org.ow2.chameleon.fuchsia.exporter.cxf.examples.base.PojoSampleToBeExportedIface");
-        metadata.put("jax-ws.importer.interfaces","[org.ow2.chameleon.fuchsia.exporter.cxf.examples.base.PojoSampleToBeExportedIface]");
-        metadata.put("endpoint.url","http://localhost:8080/cxf/PojoSampleToBeExported");
+        metadata.put("id", "b");
+        metadata.put("className", "org.ow2.chameleon.fuchsia.exporter.cxf.examples.base.PojoSampleToBeExportedIface");
+        metadata.put("jax-ws.importer.interfaces", "[org.ow2.chameleon.fuchsia.exporter.cxf.examples.base.PojoSampleToBeExportedIface]");
+        metadata.put("endpoint.url", "http://localhost:8080/cxf/PojoSampleToBeExported");
 
         ImportDeclaration declaration = ImportDeclarationBuilder.fromMetadata(metadata).build();
 
         Dictionary<String, Object> props = new Hashtable<String, Object>();
-        props.put("endpoint.url","http://localhost:8080/cxf/PojoSampleToBeExported");
+        props.put("endpoint.url", "http://localhost:8080/cxf/PojoSampleToBeExported");
         String clazzes[] = new String[]{ImportDeclaration.class.getName()};
         ServiceRegistration registration = context.registerService(clazzes, declaration, props);
     }

@@ -40,9 +40,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Collection;
 import java.util.HashSet;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
-import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.ow2.chameleon.fuchsia.core.component.manager.DeclarationBinder.TARGET_FILTER_PROPERTY;
 
@@ -110,7 +108,7 @@ public class LinkerManagementTest {
         } catch (InvalidFilterException e) {
             fail("", e);
         }
-        if(lm.getBindersManager().matched(bSRef)){
+        if (lm.getBindersManager().matched(bSRef)) {
             fail("");
         }
         lm.getBindersManager().removeLinks(bSRef);
@@ -126,7 +124,7 @@ public class LinkerManagementTest {
         try {
             assertThat(lm.unlink(dec, bSRef)).isFalse();
             failBecauseExceptionWasNotThrown(IllegalStateException.class);
-        }catch (IllegalStateException e){
+        } catch (IllegalStateException e) {
             assertThat(e).hasNoCause();
         }
 

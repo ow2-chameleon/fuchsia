@@ -125,7 +125,7 @@ public class DeclarationTest {
     }
 
     @Test
-    public void testDecoratorCalls(){
+    public void testDecoratorCalls() {
         Map<String, Object> md = new HashMap<String, Object>();
         md.put("md", "value");
         ImportDeclaration id = ImportDeclarationBuilder.fromMetadata(md).build();
@@ -187,7 +187,7 @@ public class DeclarationTest {
     }
 
     @Test
-    public void testToString(){
+    public void testToString() {
         Map<String, Object> md = new HashMap<String, Object>();
         md.put("md", "value");
         ImportDeclaration id = ImportDeclarationBuilder.fromMetadata(md).build();

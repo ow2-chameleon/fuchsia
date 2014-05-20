@@ -22,7 +22,10 @@ package org.ow2.chameleon.fuchsia.core.declaration.test;
 
 
 import org.junit.Test;
-import org.ow2.chameleon.fuchsia.core.declaration.*;
+import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
+import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclarationBuilder;
+import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
+import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclarationBuilder;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -137,7 +140,7 @@ public class DeclarationBuilderTest {
     }
 
     @Test(expected = IllegalStateException.class)
-    public void testWrongBuild1(){
+    public void testWrongBuild1() {
         Map<String, Object> md = new HashMap<String, Object>();
         md.put("md", "value");
         ImportDeclaration id = ImportDeclarationBuilder.fromMetadata(md).build();
@@ -146,21 +149,21 @@ public class DeclarationBuilderTest {
     }
 
     @Test(expected = IllegalStateException.class)
-    public void testWrongBuild2(){
+    public void testWrongBuild2() {
         Map<String, Object> md = new HashMap<String, Object>();
         md.put("md", "value");
         ImportDeclaration id = ImportDeclarationBuilder.fromMetadata(md).extraKey("must").value("fail").build();
     }
 
     @Test(expected = IllegalStateException.class)
-    public void testWrongBuild3(){
+    public void testWrongBuild3() {
         Map<String, Object> md = new HashMap<String, Object>();
         md.put("md", "value");
         ImportDeclaration id = ImportDeclarationBuilder.fromMetadata(md).withExtraMetadata(md).build();
     }
 
     @Test(expected = IllegalStateException.class)
-    public void testWrongBuild4(){
+    public void testWrongBuild4() {
         ImportDeclaration id = ImportDeclarationBuilder.empty().build();
     }
 }

@@ -198,6 +198,7 @@ public class LinkerBinderManager<D extends Declaration, S extends DeclarationBin
      * <li>Remove all the links of the ones which are no more matching the DeclarationBinderFilter.</li>
      * <li>Create the links of the ones which are now matching the DeclarationBinderFilter.</li>
      * </ul>
+     *
      * @param binderServiceFilter
      */
     public void applyFilterChanges(Filter binderServiceFilter) {

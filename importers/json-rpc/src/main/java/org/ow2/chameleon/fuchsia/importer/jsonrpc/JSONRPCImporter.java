@@ -129,7 +129,8 @@ public class JSONRPCImporter extends AbstractImporterComponent {
         } catch (ClassNotFoundException e) {
             throw new BinderException(
                     "Cannot create a proxy for the ImportDeclaration : " + importDeclaration
-                            + " unable to find a bundle which export the service class.", e);
+                            + " unable to find a bundle which export the service class.", e
+            );
         }
 
         // create the proxy !
@@ -222,16 +223,16 @@ public class JSONRPCImporter extends AbstractImporterComponent {
 
         super.stop();
 
-        for(Map.Entry<String, JsonRpcHttpClient> entry:clients.entrySet()){
+        for (Map.Entry<String, JsonRpcHttpClient> entry : clients.entrySet()) {
             clients.remove(entry.getKey());
         }
 
-        for(Map.Entry<String, ServiceRegistration> entry:registrations.entrySet()){
+        for (Map.Entry<String, ServiceRegistration> entry : registrations.entrySet()) {
             registrations.remove(entry.getKey());
             entry.getValue().unregister();
         }
 
-        for(Map.Entry<String, ComponentInstance> entry:componentInstances.entrySet()){
+        for (Map.Entry<String, ComponentInstance> entry : componentInstances.entrySet()) {
             componentInstances.remove(entry.getKey());
             entry.getValue().stop();
         }

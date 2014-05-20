@@ -18,7 +18,6 @@
  */
 package org.ow2.chameleon.fuchsia.examples.jaxws.helloWS.impl;
 
-import org.apache.felix.ipojo.annotations.*;
 import org.ow2.chameleon.fuchsia.examples.jaxws.helloWS.HelloWorldWS;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,21 +29,22 @@ public class HelloWorldWSImpl implements HelloWorldWS {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @ServiceProperty(name="service.exported.interfaces", value="*")
+    @ServiceProperty(name = "service.exported.interfaces", value = "*")
     private String exportedInterfaces;
 
-    @ServiceProperty(name="service.exported.configs", value="org.apache.cxf.ws")
+    @ServiceProperty(name = "service.exported.configs", value = "org.apache.cxf.ws")
     private String exportedConfigs;
 
-    @ServiceProperty(name="org.apache.cxf.ws.address", value="http://localhost:9090/helloWS?wsdl")
+    @ServiceProperty(name = "org.apache.cxf.ws.address", value = "http://localhost:9090/helloWS?wsdl")
     private String wsAddress;
 
     public String sayHello(String name) {
         logger.debug("Invoking: sayHello(" + name + ")");
-        return "Hello "+name+" !";
+        return "Hello " + name + " !";
     }
 
     public String sayGoodBye(String name) {
         logger.debug("Invoking: sayGoodBye(" + name + ")");
-        return "Hello "+name+" !";    }
+        return "Hello " + name + " !";
+    }
 }

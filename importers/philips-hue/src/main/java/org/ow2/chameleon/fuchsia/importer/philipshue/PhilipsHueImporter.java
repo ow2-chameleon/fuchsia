@@ -33,7 +33,10 @@ import org.ow2.chameleon.fuchsia.importer.philipshue.util.PhilipsHueImportDeclar
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Map;
 
 @Component
 @Provides(specifications = {org.ow2.chameleon.fuchsia.core.component.ImporterService.class})
@@ -43,8 +46,8 @@ public class PhilipsHueImporter extends AbstractImporterComponent {
 
     private final BundleContext context;
 
-    private Map<String,ServiceRegistration> lamps=new HashMap<String, ServiceRegistration>();
-    private Map<String,ServiceRegistration> bridges=new HashMap<String, ServiceRegistration>();
+    private Map<String, ServiceRegistration> lamps = new HashMap<String, ServiceRegistration>();
+    private Map<String, ServiceRegistration> bridges = new HashMap<String, ServiceRegistration>();
 
     @ServiceProperty(name = "target", value = "(&(discovery.philips.device.name=*)(scope=generic))")
     private String filter;
@@ -75,13 +78,13 @@ public class PhilipsHueImporter extends AbstractImporterComponent {
 
     }
 
-    private void cleanup(){
+    private void cleanup() {
 
-        for(Map.Entry<String,ServiceRegistration> lampEntry:lamps.entrySet()){
+        for (Map.Entry<String, ServiceRegistration> lampEntry : lamps.entrySet()) {
             lamps.remove(lampEntry.getKey()).unregister();
         }
 
-        for(Map.Entry<String,ServiceRegistration> bridgeEntry:bridges.entrySet()){
+        for (Map.Entry<String, ServiceRegistration> bridgeEntry : bridges.entrySet()) {
             bridges.remove(bridgeEntry.getKey()).unregister();
         }
 
@@ -92,19 +95,19 @@ public class PhilipsHueImporter extends AbstractImporterComponent {
 
         LOG.info("philips hue importer triggered");
 
-        PhilipsHueImportDeclarationWrapper pojo= PhilipsHueImportDeclarationWrapper.create(importDeclaration);
+        PhilipsHueImportDeclarationWrapper pojo = PhilipsHueImportDeclarationWrapper.create(importDeclaration);
 
         try {
 
-            FuchsiaUtils.loadClass(context,pojo.getType());
+            FuchsiaUtils.loadClass(context, pojo.getType());
 
             Dictionary<String, Object> props = new Hashtable<String, Object>();
 
-            ServiceRegistration lampService=context.registerService(pojo.getType(),pojo.getObject(),props);
+            ServiceRegistration lampService = context.registerService(pojo.getType(), pojo.getObject(), props);
 
             super.handleImportDeclaration(importDeclaration);
 
-            lamps.put(pojo.getId(),lampService);
+            lamps.put(pojo.getId(), lampService);
 
         } catch (ClassNotFoundException e) {
             LOG.error("Failed to load type {}, importing process aborted.", pojo.getType(), e);
@@ -116,11 +119,11 @@ public class PhilipsHueImporter extends AbstractImporterComponent {
     @Override
     protected void denyImportDeclaration(ImportDeclaration importDeclaration) throws BinderException {
 
-        PhilipsHueImportDeclarationWrapper pojo= PhilipsHueImportDeclarationWrapper.create(importDeclaration);
+        PhilipsHueImportDeclarationWrapper pojo = PhilipsHueImportDeclarationWrapper.create(importDeclaration);
 
         try {
             lamps.remove(pojo.getId()).unregister();
-        }catch(IllegalStateException e){
+        } catch (IllegalStateException e) {
             LOG.error("failed unregistering lamp", e);
         }
 

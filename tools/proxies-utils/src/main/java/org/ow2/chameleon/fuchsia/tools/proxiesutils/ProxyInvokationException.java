@@ -20,7 +20,7 @@ package org.ow2.chameleon.fuchsia.tools.proxiesutils;
  * #L%
  */
 
-public class ProxyInvokationException extends Exception{
+public class ProxyInvokationException extends Exception {
 
     public ProxyInvokationException() {
         super();

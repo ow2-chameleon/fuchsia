@@ -58,13 +58,13 @@ public class AbstractExportManagerComponentTest {
     }
 
     @Test
-    public void testInstantiation(){
+    public void testInstantiation() {
         TestedClass testedClass = new TestedClass(bundleContext);
         testedClass.start();
     }
 
     @Test
-    public void testRegisterExportDeclaration(){
+    public void testRegisterExportDeclaration() {
         TestedClass testedClass = new TestedClass(bundleContext);
         testedClass.start();
 
@@ -73,13 +73,13 @@ public class AbstractExportManagerComponentTest {
         ExportDeclaration id = ExportDeclarationBuilder.fromMetadata(md).build();
 
         testedClass.addIdec(id);
-        verify(bundleContext,times(1)).registerService(any(String[].class), eq(id), any(Dictionary.class));
+        verify(bundleContext, times(1)).registerService(any(String[].class), eq(id), any(Dictionary.class));
 
         assertThat(testedClass.getExportDeclarations()).containsExactly(id);
     }
 
     @Test(expected = IllegalStateException.class)
-    public void testRegisterTwoTimesExportDeclaration(){
+    public void testRegisterTwoTimesExportDeclaration() {
         TestedClass testedClass = new TestedClass(bundleContext);
         testedClass.start();
 
@@ -92,7 +92,7 @@ public class AbstractExportManagerComponentTest {
     }
 
     @Test
-    public void testUnregisterExportDeclaration(){
+    public void testUnregisterExportDeclaration() {
         TestedClass testedClass = new TestedClass(bundleContext);
         testedClass.start();
 
@@ -109,7 +109,7 @@ public class AbstractExportManagerComponentTest {
     }
 
     @Test(expected = IllegalStateException.class)
-    public void testUnregisterTwoTimesExportDeclaration(){
+    public void testUnregisterTwoTimesExportDeclaration() {
         TestedClass testedClass = new TestedClass(bundleContext);
         testedClass.start();
 
@@ -123,7 +123,7 @@ public class AbstractExportManagerComponentTest {
     }
 
     @Test
-    public void testStop(){
+    public void testStop() {
         TestedClass testedClass = new TestedClass(bundleContext);
         testedClass.start();
 
@@ -138,7 +138,7 @@ public class AbstractExportManagerComponentTest {
     }
 
     @Test
-    public void testToString(){
+    public void testToString() {
         TestedClass testedClass = new TestedClass(bundleContext);
         testedClass.start();
 
@@ -147,8 +147,7 @@ public class AbstractExportManagerComponentTest {
     }
 
 
-
-    public class TestedClass extends AbstractExportManagerComponent{
+    public class TestedClass extends AbstractExportManagerComponent {
 
         protected TestedClass(BundleContext bundleContext) {
             super(bundleContext);
@@ -168,11 +167,11 @@ public class AbstractExportManagerComponentTest {
             super.stop();
         }
 
-        public void addIdec(ExportDeclaration exportDeclaration){
+        public void addIdec(ExportDeclaration exportDeclaration) {
             registerExportDeclaration(exportDeclaration);
         }
 
-        public void removeIdec(ExportDeclaration exportDeclaration){
+        public void removeIdec(ExportDeclaration exportDeclaration) {
             unregisterExportDeclaration(exportDeclaration);
         }
     }

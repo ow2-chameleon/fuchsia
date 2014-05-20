@@ -38,12 +38,12 @@ import java.util.Map;
 import static org.fest.reflect.core.Reflection.field;
 import static org.mockito.Mockito.*;
 
-public class PhilipsHueImporterTest extends PhilipsHueImporterAbstractTest{
+public class PhilipsHueImporterTest extends PhilipsHueImporterAbstractTest {
 
-    private HashMap<String, Object> generateValidMetadata(String id){
+    private HashMap<String, Object> generateValidMetadata(String id) {
 
         HashMap<String, Object> metadata = new HashMap<String, Object>();
-        metadata.put("id",id);
+        metadata.put("id", id);
         metadata.put("discovery.philips.device.name", "L1");
         metadata.put("discovery.philips.device.type", PHLight.class.getName());
         metadata.put("discovery.philips.device.object", light);
@@ -56,7 +56,7 @@ public class PhilipsHueImporterTest extends PhilipsHueImporterAbstractTest{
     @Test
     public void checkDeclarationTurnsHandledAfterCall() throws BinderException {
 
-        String philipsId="L1-ID";
+        String philipsId = "L1-ID";
 
         ImportDeclaration declaration = spy(ImportDeclarationBuilder.fromMetadata(generateValidMetadata(philipsId)).build());
         importer.registration(serviceReference);
@@ -64,14 +64,14 @@ public class PhilipsHueImporterTest extends PhilipsHueImporterAbstractTest{
 
         importer.useDeclaration(declaration);
 
-        verify(declaration,times(1)).handle(serviceReference);
+        verify(declaration, times(1)).handle(serviceReference);
 
     }
 
     @Test
     public void checkPoolOfLampBridgewereFilled() throws BinderException {
 
-        String philipsId="L1-ID";
+        String philipsId = "L1-ID";
 
         ImportDeclaration declaration = spy(ImportDeclarationBuilder.fromMetadata(generateValidMetadata(philipsId)).build());
         importer.registration(serviceReference);
@@ -79,10 +79,12 @@ public class PhilipsHueImporterTest extends PhilipsHueImporterAbstractTest{
 
         importer.useDeclaration(declaration);
 
-        Map<String,ServiceRegistration> lamps=field("lamps").ofType(new TypeRef<Map<String,ServiceRegistration>>() {}).in(importer).get();
-        Map<String,ServiceRegistration> bridges=field("bridges").ofType(new TypeRef<Map<String,ServiceRegistration>>() {}).in(importer).get();
+        Map<String, ServiceRegistration> lamps = field("lamps").ofType(new TypeRef<Map<String, ServiceRegistration>>() {
+        }).in(importer).get();
+        Map<String, ServiceRegistration> bridges = field("bridges").ofType(new TypeRef<Map<String, ServiceRegistration>>() {
+        }).in(importer).get();
 
-        Assert.assertEquals(1,lamps.size());
+        Assert.assertEquals(1, lamps.size());
         Assert.assertEquals(lamps.get(philipsId), lightServiceRegistration);
 
         //Assert.assertEquals(1,bridges.size());
@@ -93,7 +95,7 @@ public class PhilipsHueImporterTest extends PhilipsHueImporterAbstractTest{
     @Test
     public void checkDenyImport() throws BinderException {
 
-        String philipsId="L1-ID";
+        String philipsId = "L1-ID";
 
         ImportDeclaration declaration = spy(ImportDeclarationBuilder.fromMetadata(generateValidMetadata(philipsId)).build());
         importer.registration(serviceReference);
@@ -101,25 +103,27 @@ public class PhilipsHueImporterTest extends PhilipsHueImporterAbstractTest{
 
         importer.useDeclaration(declaration);
 
-        Map<String,ServiceRegistration> lamps=field("lamps").ofType(new TypeRef<Map<String,ServiceRegistration>>() {}).in(importer).get();
-        Map<String,ServiceRegistration> bridges=field("bridges").ofType(new TypeRef<Map<String,ServiceRegistration>>() {}).in(importer).get();
+        Map<String, ServiceRegistration> lamps = field("lamps").ofType(new TypeRef<Map<String, ServiceRegistration>>() {
+        }).in(importer).get();
+        Map<String, ServiceRegistration> bridges = field("bridges").ofType(new TypeRef<Map<String, ServiceRegistration>>() {
+        }).in(importer).get();
 
-        Assert.assertEquals(1,lamps.size());
+        Assert.assertEquals(1, lamps.size());
         //Assert.assertEquals(1,bridges.size());
 
         importer.denyDeclaration(declaration);
 
-        Assert.assertEquals(0,lamps.size());
+        Assert.assertEquals(0, lamps.size());
         //Assert.assertEquals(0,bridges.size());
 
-        verify(declaration,times(1)).unhandle(serviceReference);
+        verify(declaration, times(1)).unhandle(serviceReference);
 
     }
 
     @Test
     public void checkGracefulStop() throws BinderException {
 
-        String philipsId="L1-ID";
+        String philipsId = "L1-ID";
 
         ImportDeclaration declaration = spy(ImportDeclarationBuilder.fromMetadata(generateValidMetadata(philipsId)).build());
         importer.registration(serviceReference);
@@ -128,26 +132,27 @@ public class PhilipsHueImporterTest extends PhilipsHueImporterAbstractTest{
         importer.useDeclaration(declaration);
 
 
+        Map<String, ServiceRegistration> lamps = field("lamps").ofType(new TypeRef<Map<String, ServiceRegistration>>() {
+        }).in(importer).get();
+        Map<String, ServiceRegistration> bridges = field("bridges").ofType(new TypeRef<Map<String, ServiceRegistration>>() {
+        }).in(importer).get();
 
-        Map<String,ServiceRegistration> lamps=field("lamps").ofType(new TypeRef<Map<String,ServiceRegistration>>() {}).in(importer).get();
-        Map<String,ServiceRegistration> bridges=field("bridges").ofType(new TypeRef<Map<String,ServiceRegistration>>() {}).in(importer).get();
-
-        Assert.assertEquals(1,lamps.size());
+        Assert.assertEquals(1, lamps.size());
         //Assert.assertEquals(1,bridges.size());
 
         importer.invalidate();
 
-        Assert.assertEquals(0,lamps.size());
+        Assert.assertEquals(0, lamps.size());
         //Assert.assertEquals(0,bridges.size());
 
     }
 
     @Test
     public void rightExceptionHasBeenThrownInAbsenceOfProperty() {
-        PhilipsHueImporter importer=spy(new PhilipsHueImporter(context));
-        ServiceReference serviceReference=mock(ServiceReference.class);
-        PHLight light=mock(PHLight.class);
-        PHBridge bridge=mock(PHBridge.class);
+        PhilipsHueImporter importer = spy(new PhilipsHueImporter(context));
+        ServiceReference serviceReference = mock(ServiceReference.class);
+        PHLight light = mock(PHLight.class);
+        PHBridge bridge = mock(PHBridge.class);
         HashMap<String, Object> metadata = new HashMap<String, Object>();
         metadata.put("id", light.getIdentifier());
         ImportDeclaration declaration = ImportDeclarationBuilder.fromMetadata(metadata).build();
@@ -155,8 +160,8 @@ public class PhilipsHueImporterTest extends PhilipsHueImporterAbstractTest{
 
         try {
             importer.useDeclaration(declaration);
-            Assert.fail("An exception "+BinderException.class.getSimpleName()+" should have been thrown.");
-        }catch (BinderException be){
+            Assert.fail("An exception " + BinderException.class.getSimpleName() + " should have been thrown.");
+        } catch (BinderException be) {
             //If this exception was reached, everything is OK
         }
 

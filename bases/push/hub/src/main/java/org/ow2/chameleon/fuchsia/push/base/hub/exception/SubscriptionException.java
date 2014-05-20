@@ -21,7 +21,7 @@ package org.ow2.chameleon.fuchsia.push.base.hub.exception;
  */
 
 
-public class SubscriptionException extends Exception{
+public class SubscriptionException extends Exception {
 
     public SubscriptionException() {
         super();

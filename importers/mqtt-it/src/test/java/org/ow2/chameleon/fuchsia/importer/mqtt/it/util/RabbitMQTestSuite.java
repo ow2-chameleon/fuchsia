@@ -54,6 +54,7 @@ public class RabbitMQTestSuite extends BaseTest {
 
     /**
      * This pack enable the access to the console while debugging in Eclipse (doesnt work in IntelliJ).
+     *
      * @return
      */
     protected CompositeOption packConsole() {
@@ -71,7 +72,7 @@ public class RabbitMQTestSuite extends BaseTest {
         return logConfig;
     }
 
-    protected CompositeOption packMockito(){
+    protected CompositeOption packMockito() {
 
         return new DefaultCompositeOption(
                 mavenBundle("org.mockito", "mockito-core").versionAsInProject(),
@@ -82,7 +83,7 @@ public class RabbitMQTestSuite extends BaseTest {
 
     }
 
-    protected CompositeOption packLog(){
+    protected CompositeOption packLog() {
 
         return new DefaultCompositeOption(
                 mavenBundle("org.apache.felix", "org.apache.felix.eventadmin").versionAsInProject(),
@@ -97,7 +98,7 @@ public class RabbitMQTestSuite extends BaseTest {
 
     }
 
-    protected CompositeOption packMQTTClient(){
+    protected CompositeOption packMQTTClient() {
 
         return new DefaultCompositeOption(
                 wrappedBundle(mavenBundle("org.fusesource.mqtt-client", "mqtt-client").versionAsInProject()),
@@ -110,6 +111,7 @@ public class RabbitMQTestSuite extends BaseTest {
 
     /**
      * Verify is Rabbit MQ service is available in the current platform.
+     *
      * @return the availability of the rabbitmq daemon, true in case its available, or false otherwise
      */
     protected final void assertRabbitMQisRunning() throws AssumptionViolatedException {
@@ -122,7 +124,7 @@ public class RabbitMQTestSuite extends BaseTest {
 
         } catch (IOException e) {
 
-            final String message="RabbitMQ service not available, ignoring test";
+            final String message = "RabbitMQ service not available, ignoring test";
 
             LOG.warn(message);
 
@@ -131,12 +133,12 @@ public class RabbitMQTestSuite extends BaseTest {
 
     }
 
-    protected ImportDeclaration createImportationDeclaration(String instanceName,HashMap<String, Object> metadata){
+    protected ImportDeclaration createImportationDeclaration(String instanceName, HashMap<String, Object> metadata) {
 
         ImportDeclaration declaration = ImportDeclarationBuilder.fromMetadata(metadata).build();
 
         Dictionary<String, Object> props = new Hashtable<String, Object>();
-        props.put(Factory.INSTANCE_NAME_PROPERTY,instanceName);
+        props.put(Factory.INSTANCE_NAME_PROPERTY, instanceName);
 
         bundleContext.registerService(new String[]{ImportDeclaration.class.getName()}, declaration, props);
 

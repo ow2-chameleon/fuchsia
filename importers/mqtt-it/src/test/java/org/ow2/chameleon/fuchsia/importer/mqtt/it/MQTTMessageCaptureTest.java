@@ -57,28 +57,28 @@ public class MQTTMessageCaptureTest extends RabbitMQTestSuite {
 
 
     @Before
-    public void instantiateAMPQPlaform(){
+    public void instantiateAMPQPlaform() {
 
-        ipojoHelper=new IPOJOHelper(bundleContext);
+        ipojoHelper = new IPOJOHelper(bundleContext);
 
-        Properties linker=new Properties();
-        linker.put(FILTER_IMPORTDECLARATION_PROPERTY,"(id=*)");
-        linker.put(FILTER_IMPORTERSERVICE_PROPERTY,"(instance.name=MQTTImporter)");
-        linker.put(Factory.INSTANCE_NAME_PROPERTY,"MQTTLinker");
+        Properties linker = new Properties();
+        linker.put(FILTER_IMPORTDECLARATION_PROPERTY, "(id=*)");
+        linker.put(FILTER_IMPORTERSERVICE_PROPERTY, "(instance.name=MQTTImporter)");
+        linker.put(Factory.INSTANCE_NAME_PROPERTY, "MQTTLinker");
 
-        linkerComponentInstance=ipojoHelper.createComponentInstance(FuchsiaConstants.DEFAULT_IMPORTATION_LINKER_FACTORY_NAME,linker);
+        linkerComponentInstance = ipojoHelper.createComponentInstance(FuchsiaConstants.DEFAULT_IMPORTATION_LINKER_FACTORY_NAME, linker);
 
-        Properties importer=new Properties();
-        importer.put(FILTER_IMPORTDECLARATION_PROPERTY,"(id=*)");
-        importer.put("target","(id=*)");
-        importer.put(Factory.INSTANCE_NAME_PROPERTY,"MQTTImporter");
+        Properties importer = new Properties();
+        importer.put(FILTER_IMPORTDECLARATION_PROPERTY, "(id=*)");
+        importer.put("target", "(id=*)");
+        importer.put(Factory.INSTANCE_NAME_PROPERTY, "MQTTImporter");
 
-        importerComponentInstance=ipojoHelper.createComponentInstance("org.ow2.chameleon.fuchsia.importer.mqtt.MQTTImporter",importer);
+        importerComponentInstance = ipojoHelper.createComponentInstance("org.ow2.chameleon.fuchsia.importer.mqtt.MQTTImporter", importer);
 
     }
 
     @After
-    public void uninstantiateAMPQPlatform(){
+    public void uninstantiateAMPQPlatform() {
         linkerComponentInstance.dispose();
         importerComponentInstance.dispose();
 
@@ -89,37 +89,38 @@ public class MQTTMessageCaptureTest extends RabbitMQTestSuite {
 
         assertRabbitMQisRunning();
 
-        final String queue="public";
+        final String queue = "public";
 
         Dictionary handlerProperties = new Hashtable();
         handlerProperties.put(EventConstants.EVENT_TOPIC, queue);
 
-        MessageHandler ht=new MessageHandler();
+        MessageHandler ht = new MessageHandler();
 
-        MessageHandler htmock=spy(ht);
+        MessageHandler htmock = spy(ht);
 
-        bundleContext.registerService(EventHandler.class.getName(),htmock,handlerProperties);
+        bundleContext.registerService(EventHandler.class.getName(), htmock, handlerProperties);
 
         HashMap<String, Object> metadata = new HashMap<String, Object>();
         metadata.put(Constants.DEVICE_ID, "00000000-54b3-e7c7-0000-000046bffd98");
-        metadata.put("mqtt.queue",queue);
+        metadata.put("mqtt.queue", queue);
 
-        ImportDeclaration declaration=createImportationDeclaration("importDeclaration", metadata);
+        ImportDeclaration declaration = createImportationDeclaration("importDeclaration", metadata);
 
         assertThat(declaration).isNotNull();
 
         sendSampleMQTTMessage();
 
-        verify(htmock,times(1)).handleEvent(any(Event.class));
+        verify(htmock, times(1)).handleEvent(any(Event.class));
     }
 
     /**
      * Seinding message ot type MQTT do not work properly with version 3.1.5 of RabbitMQ, See https://github.com/rabbitmq/rabbitmq-mqtt/issues/5
+     *
      * @throws Exception
      */
     private void sendSampleMQTTMessage() throws Exception {
 
-        final String topic="public";
+        final String topic = "public";
         final String quote = "The force of mind is only as great as its expression; its depth only as deep as its power to expand and lose itself";
 
         // MQTT Client
@@ -136,8 +137,8 @@ public class MQTTMessageCaptureTest extends RabbitMQTestSuite {
         assertThat(connection.isConnected()).isTrue();
 
         LOG.info("<eventadmin type='outbound'>");
-        LOG.info("\tTOPIC: {}",topic);
-        LOG.info("\tQuote: {}",quote);
+        LOG.info("\tTOPIC: {}", topic);
+        LOG.info("\tQuote: {}", quote);
         LOG.info("</eventadmin>\n");
 
         connection.publish(topic, quote.getBytes(), QoS.AT_MOST_ONCE, false);

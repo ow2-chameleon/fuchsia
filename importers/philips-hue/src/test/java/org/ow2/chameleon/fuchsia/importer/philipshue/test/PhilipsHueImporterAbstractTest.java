@@ -33,7 +33,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.packageadmin.PackageAdmin;
-import org.ow2.chameleon.fuchsia.importer.philipshue.PhilipsHueBridgeImporter;
 import org.ow2.chameleon.fuchsia.importer.philipshue.PhilipsHueImporter;
 
 import java.util.ArrayList;
@@ -41,10 +40,7 @@ import java.util.Dictionary;
 import java.util.List;
 
 import static org.fest.reflect.core.Reflection.method;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
@@ -71,20 +67,20 @@ public abstract class PhilipsHueImporterAbstractTest {
 
     PhilipsHueImporter importer;
 
-    List<PHLight> lightList=new ArrayList<PHLight>();
+    List<PHLight> lightList = new ArrayList<PHLight>();
 
     @Mock
     PHBridgeResourcesCache bridgeResourcesCache;
 
     @Before
-    public void validate(){
+    public void validate() {
         MockitoAnnotations.initMocks(this);
-        importer=spy(Reflection.constructor().withParameterTypes(BundleContext.class).in(PhilipsHueImporter.class).newInstance(context));
+        importer = spy(Reflection.constructor().withParameterTypes(BundleContext.class).in(PhilipsHueImporter.class).newInstance(context));
         setupInterceptors();
         method("validate").in(importer).invoke();
     }
 
-    protected void setupInterceptors(){
+    protected void setupInterceptors() {
 
         when(context.getServiceReference(PackageAdmin.class.getName())).thenReturn(packageAdminServiceReference);
         when(context.getService(packageAdminServiceReference)).thenReturn(packageAdmin);

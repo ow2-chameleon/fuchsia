@@ -354,7 +354,7 @@ public class DefaultImportationLinkerTest extends Common {
         assertThat(importationLinkerIntrospection.getLinkedImporters()).isEmpty();
     }
 
-   @Test
+    @Test
     public void testReconfigureIDecFilter() {
         // begin with the filter  :  "(" + Constants.PROTOCOL_NAME + "=test)"
 

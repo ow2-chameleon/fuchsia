@@ -21,11 +21,11 @@ package org.ow2.chameleon.fuchsia.core.it.util;
  */
 
 import org.junit.Test;
-import org.ow2.chameleon.fuchsia.core.component.DefaultImportationLinker;
 import org.ow2.chameleon.fuchsia.core.FuchsiaUtils;
+import org.ow2.chameleon.fuchsia.core.component.DefaultImportationLinker;
 import org.ow2.chameleon.fuchsia.testing.Common;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class FuchsiaUtilsTest extends Common {
 

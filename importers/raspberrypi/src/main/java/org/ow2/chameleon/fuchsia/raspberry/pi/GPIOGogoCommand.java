@@ -41,7 +41,7 @@ public class GPIOGogoCommand {
     @ServiceProperty(name = "osgi.command.function", value = "{}")
     String[] function = new String[]{"gpio"};
 
-    public void print(String message){
+    public void print(String message) {
         System.out.println(message);
     }
 

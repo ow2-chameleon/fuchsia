@@ -29,18 +29,19 @@ import org.ow2.chameleon.fuchsia.testing.common.platform.GenericImportExporterPl
 
 /**
  * Basic Tests that can be done with DeclarationBinder.
+ *
  * @param <T>
  * @param <S>
  */
-public abstract class GenericTest<T extends Declaration,S extends DeclarationBinder> extends GenericImportExporterPlatformTest<T,S> {
+public abstract class GenericTest<T extends Declaration, S extends DeclarationBinder> extends GenericImportExporterPlatformTest<T, S> {
 
     @Test
     public void testValidDeclarations() throws Exception {
         try {
-            for(T declaration:getValidDeclarations()){
+            for (T declaration : getValidDeclarations()) {
                 fuchsiaDeclarationBinder.useDeclaration(declaration);
             }
-        }catch(BinderException be){
+        } catch (BinderException be) {
             Assert.fail("A BinderException should NOT have been thrown since not all information were provided");
         }
     }
@@ -48,11 +49,11 @@ public abstract class GenericTest<T extends Declaration,S extends DeclarationBin
     @Test
     public void testInvalidDeclaration() throws Exception {
         try {
-            for(T declaration:getInvalidDeclarations()){
+            for (T declaration : getInvalidDeclarations()) {
                 fuchsiaDeclarationBinder.useDeclaration(declaration);
             }
             Assert.fail("A BinderException should have been thrown since not all information required were provided");
-        }catch(BinderException be){
+        } catch (BinderException be) {
             //An exception for this case is normal, since not all information were provided
         }
     }

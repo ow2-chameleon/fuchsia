@@ -37,7 +37,10 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.osgi.framework.*;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ExportDeclarationBuilder;
@@ -54,11 +57,10 @@ import java.util.*;
 import static org.fest.reflect.core.Reflection.constructor;
 import static org.fest.reflect.core.Reflection.field;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
-public class ProtobufferExporterTest extends ProtobufferTestAbstract<ExportDeclaration,ProtobufferExporter> {
+public class ProtobufferExporterTest extends ProtobufferTestAbstract<ExportDeclaration, ProtobufferExporter> {
 
     @Mock
     protected ServiceRegistration registrationFromClassToBeExported;
@@ -90,14 +92,18 @@ public class ProtobufferExporterTest extends ProtobufferTestAbstract<ExportDecla
         when(context.getServiceReferences(any(Class.class), any(String.class))).thenAnswer(new Answer<Object>() {
             public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
 
-                Class load=(Class)invocationOnMock.getArguments()[0];
+                Class load = (Class) invocationOnMock.getArguments()[0];
 
-                Collection<ServiceReference> references=null;
+                Collection<ServiceReference> references = null;
 
-                if(load.toString().contains("AddressBookProtos$AddressBookService") ){
-                    references=new HashSet<ServiceReference>(){{add(protobufferRemoteService);}};
-                }else {
-                    references=new HashSet<ServiceReference>(){{add(serviceReference);}};
+                if (load.toString().contains("AddressBookProtos$AddressBookService")) {
+                    references = new HashSet<ServiceReference>() {{
+                        add(protobufferRemoteService);
+                    }};
+                } else {
+                    references = new HashSet<ServiceReference>() {{
+                        add(serviceReference);
+                    }};
                 }
                 return references;
             }
@@ -105,7 +111,7 @@ public class ProtobufferExporterTest extends ProtobufferTestAbstract<ExportDecla
         when(context.getService(serviceReference)).thenReturn(protobufferRemoteService);
         when(context.getService(protobufferRemoteService)).thenReturn(protobufferRemoteService);
 
-        fuchsiaDeclarationBinder =spy(constructor().withParameterTypes(BundleContext.class).in(ProtobufferExporter.class).newInstance(context));
+        fuchsiaDeclarationBinder = spy(constructor().withParameterTypes(BundleContext.class).in(ProtobufferExporter.class).newInstance(context));
 
         //Inject HTTP_PORT, that usually is done by OSGi
         field("httpPort").ofType(Integer.class).in(fuchsiaDeclarationBinder).set(HTTP_PORT);
@@ -118,24 +124,24 @@ public class ProtobufferExporterTest extends ProtobufferTestAbstract<ExportDecla
     public void endpointStartupAndCleanup() throws BinderException, InvalidSyntaxException, ClassNotFoundException, InterruptedException, InvocationTargetException, EndpointException, IllegalAccessException, NoSuchMethodException {
         ExportDeclaration declaration = getValidDeclarations().get(0);
         fuchsiaDeclarationBinder.useDeclaration(declaration);
-        Map<String,Server> serverPublished = field("serverPublished").ofType(Map.class).in(fuchsiaDeclarationBinder).get();
-        Assert.assertEquals(1,serverPublished.size());
+        Map<String, Server> serverPublished = field("serverPublished").ofType(Map.class).in(fuchsiaDeclarationBinder).get();
+        Assert.assertEquals(1, serverPublished.size());
         fuchsiaDeclarationBinder.stop();
-        Assert.assertEquals(0,serverPublished.size());
+        Assert.assertEquals(0, serverPublished.size());
     }
 
     @Test
     public void testDenyDeclaration() throws BinderException, InvalidSyntaxException, ClassNotFoundException, InterruptedException, InvocationTargetException, EndpointException, IllegalAccessException, NoSuchMethodException {
         ExportDeclaration declaration = getValidDeclarations().get(0);
         fuchsiaDeclarationBinder.useDeclaration(declaration);
-        Map<String,Server> serverPublished = field("serverPublished").ofType(Map.class).in(fuchsiaDeclarationBinder).get();
-        Assert.assertEquals(1,serverPublished.size());
+        Map<String, Server> serverPublished = field("serverPublished").ofType(Map.class).in(fuchsiaDeclarationBinder).get();
+        Assert.assertEquals(1, serverPublished.size());
         fuchsiaDeclarationBinder.denyDeclaration(declaration);
-        Assert.assertEquals(0,serverPublished.size());
+        Assert.assertEquals(0, serverPublished.size());
     }
 
     @Test
-    public void testNameWasProvided(){
+    public void testNameWasProvided() {
         org.junit.Assert.assertNotNull(fuchsiaDeclarationBinder.getName());
     }
 
@@ -144,11 +150,11 @@ public class ProtobufferExporterTest extends ProtobufferTestAbstract<ExportDecla
 
         ExportDeclaration declaration = getValidDeclarations().get(0);
         fuchsiaDeclarationBinder.useDeclaration(declaration);
-        Map<String,Server> serverPublished = field("serverPublished").ofType(Map.class).in(fuchsiaDeclarationBinder).get();
+        Map<String, Server> serverPublished = field("serverPublished").ofType(Map.class).in(fuchsiaDeclarationBinder).get();
 
-        Assert.assertEquals(1,serverPublished.size());
+        Assert.assertEquals(1, serverPublished.size());
 
-        AddressBookProtos.AddressBookService addressBook=connectExportedProtobufAddress(declaration);
+        AddressBookProtos.AddressBookService addressBook = connectExportedProtobufAddress(declaration);
 
         SimpleRpcController controller = new SimpleRpcController();
 
@@ -195,7 +201,7 @@ public class ProtobufferExporterTest extends ProtobufferTestAbstract<ExportDecla
 
 
     private AddressBookProtos.AddressBookService connectExportedProtobufAddress(ExportDeclaration declaration) throws EndpointException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, BinderException {
-        ProtobufferExportDeclarationWrapper pojo= ProtobufferExportDeclarationWrapper.create(declaration);
+        ProtobufferExportDeclarationWrapper pojo = ProtobufferExportDeclarationWrapper.create(declaration);
         Bus cxfbus = BusFactory.getThreadDefaultBus();
         BindingFactoryManager mgr = cxfbus.getExtension(BindingFactoryManager.class);
         mgr.registerBindingFactory(ProtobufBindingFactory.PROTOBUF_BINDING_ID, new ProtobufBindingFactory(cxfbus));
@@ -205,37 +211,41 @@ public class ProtobufferExporterTest extends ProtobufferTestAbstract<ExportDecla
         RpcChannel channel = new SimpleRpcChannel(pojo.getAddress(), generic);
         Method method = bufferService.getMethod("newStub", RpcChannel.class);
         Object service = method.invoke(bufferService, channel);
-        AddressBookProtos.AddressBookService addressBook= (AddressBookProtos.AddressBookService)service;
-        return  addressBook;
+        AddressBookProtos.AddressBookService addressBook = (AddressBookProtos.AddressBookService) service;
+        return addressBook;
     }
 
     @Override
     public List<ExportDeclaration> getInvalidDeclarations() {
-        Map<String, Object> metadata=new HashMap<String, Object>();
+        Map<String, Object> metadata = new HashMap<String, Object>();
 
-        metadata.put("id","protobuffer-exporter");
+        metadata.put("id", "protobuffer-exporter");
         //metadata.put("rpc.export.address","http://localhost:8085/cxf/AddressBookService");
-        metadata.put("rpc.export.class",AddressBookProtos.class.getName());
-        metadata.put("rpc.export.message","AddressBookServiceMessage");
-        metadata.put("rpc.export.service","AddressBookService");
+        metadata.put("rpc.export.class", AddressBookProtos.class.getName());
+        metadata.put("rpc.export.message", "AddressBookServiceMessage");
+        metadata.put("rpc.export.service", "AddressBookService");
 
         final ExportDeclaration declaration = ExportDeclarationBuilder.fromMetadata(metadata).build();
-        return new ArrayList<ExportDeclaration>(){{add(declaration);}};
+        return new ArrayList<ExportDeclaration>() {{
+            add(declaration);
+        }};
     }
 
     @Override
     public List<ExportDeclaration> getValidDeclarations() {
 
-        Map<String, Object> metadata=new HashMap<String, Object>();
+        Map<String, Object> metadata = new HashMap<String, Object>();
 
-        metadata.put("id","protobuffer-exporter");
-        metadata.put("rpc.export.address","http://localhost:8085/cxf/AddressBookService");//"http://localhost:8085/cxf/AddressBookService"
+        metadata.put("id", "protobuffer-exporter");
+        metadata.put("rpc.export.address", "http://localhost:8085/cxf/AddressBookService");//"http://localhost:8085/cxf/AddressBookService"
         metadata.put("rpc.export.class", AddressBookProtos.class.getName());
-        metadata.put("rpc.export.message","AddressBookServiceMessage");
-        metadata.put("rpc.export.service","AddressBookService");
+        metadata.put("rpc.export.message", "AddressBookServiceMessage");
+        metadata.put("rpc.export.service", "AddressBookService");
 
         final ExportDeclaration declaration = ExportDeclarationBuilder.fromMetadata(metadata).build();
 
-        return new ArrayList<ExportDeclaration>(){{add(declaration);}};
+        return new ArrayList<ExportDeclaration>() {{
+            add(declaration);
+        }};
     }
 }

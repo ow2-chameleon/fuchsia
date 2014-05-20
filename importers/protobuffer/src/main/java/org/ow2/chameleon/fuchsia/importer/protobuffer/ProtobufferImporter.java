@@ -55,7 +55,7 @@ public class ProtobufferImporter extends AbstractImporterComponent {
 
     private final BundleContext context;
 
-    private Map<String,ServiceRegistration> registeredImporter=new HashMap<String,ServiceRegistration>();
+    private Map<String, ServiceRegistration> registeredImporter = new HashMap<String, ServiceRegistration>();
 
     @ServiceProperty(name = "instance.name")
     private String name;
@@ -82,7 +82,7 @@ public class ProtobufferImporter extends AbstractImporterComponent {
     public void stop() {
         super.stop();
 
-        for(Map.Entry<String,ServiceRegistration> item:registeredImporter.entrySet()){
+        for (Map.Entry<String, ServiceRegistration> item : registeredImporter.entrySet()) {
             item.getValue().unregister();
             registeredImporter.remove(item.getKey());
         }
@@ -93,7 +93,7 @@ public class ProtobufferImporter extends AbstractImporterComponent {
     @Override
     protected void useImportDeclaration(ImportDeclaration importDeclaration) throws BinderException {
 
-        ProtobufferImportDeclarationWrapper pojo= ProtobufferImportDeclarationWrapper.create(importDeclaration);
+        ProtobufferImportDeclarationWrapper pojo = ProtobufferImportDeclarationWrapper.create(importDeclaration);
 
         LOG.info("Importing declaration with ID {}", pojo.getId());
 
@@ -118,9 +118,9 @@ public class ProtobufferImporter extends AbstractImporterComponent {
             Dictionary<String, Object> serviceProperties = new Hashtable<String, Object>();
             serviceProperties.put("fuchsia.importer.id", pojo.getId());
 
-            ServiceRegistration sr=context.registerService(bufferService.getName(), service, serviceProperties);
+            ServiceRegistration sr = context.registerService(bufferService.getName(), service, serviceProperties);
 
-            registeredImporter.put(pojo.getId(),sr);
+            registeredImporter.put(pojo.getId(), sr);
 
             super.handleImportDeclaration(importDeclaration);
 
@@ -143,14 +143,14 @@ public class ProtobufferImporter extends AbstractImporterComponent {
 
         unhandleImportDeclaration(importDeclaration);
 
-        ProtobufferImportDeclarationWrapper pojo= ProtobufferImportDeclarationWrapper.create(importDeclaration);
+        ProtobufferImportDeclarationWrapper pojo = ProtobufferImportDeclarationWrapper.create(importDeclaration);
 
-        ServiceRegistration sr=registeredImporter.remove(pojo.getId());
+        ServiceRegistration sr = registeredImporter.remove(pojo.getId());
 
-        if(sr!=null){
+        if (sr != null) {
             LOG.info("unregistering service with id:" + pojo.getId());
             sr.unregister();
-        }else {
+        } else {
             LOG.warn("no service found to be unregistered with id:" + pojo.getId());
         }
 

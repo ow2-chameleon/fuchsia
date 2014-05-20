@@ -50,14 +50,11 @@ import java.util.*;
 
 import static org.fest.reflect.core.Reflection.constructor;
 import static org.fest.reflect.core.Reflection.field;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
-public class ProtobufferImporterTest extends ProtobufferTestAbstract<ImportDeclaration,ProtobufferImporter> {
+public class ProtobufferImporterTest extends ProtobufferTestAbstract<ImportDeclaration, ProtobufferImporter> {
 
     protected Server server;
 
@@ -65,7 +62,7 @@ public class ProtobufferImporterTest extends ProtobufferTestAbstract<ImportDecla
 
     private ImportDeclaration declaration;
 
-    protected void startStandaloneServer(ProtobufferImportDeclarationWrapper pojo){
+    protected void startStandaloneServer(ProtobufferImportDeclarationWrapper pojo) {
 
         Bus cxfbus = BusFactory.getDefaultBus(true);
         BindingFactoryManager mgr = cxfbus.getExtension(BindingFactoryManager.class);
@@ -76,11 +73,11 @@ public class ProtobufferImporterTest extends ProtobufferTestAbstract<ImportDecla
         serverFactoryBean.setServiceBean(protobufferRemoteService);
         serverFactoryBean.setMessageClass(AddressBookProtos.AddressBookServiceMessage.class);
         Thread.currentThread().setContextClassLoader(Container.class.getClassLoader());
-        server=serverFactoryBean.create();
+        server = serverFactoryBean.create();
 
     }
 
-    protected void stopStandaloneServer(){
+    protected void stopStandaloneServer() {
         server.stop();
     }
 
@@ -91,17 +88,17 @@ public class ProtobufferImporterTest extends ProtobufferTestAbstract<ImportDecla
         when(context.registerService(anyString(), anyObject(), any(Dictionary.class))).thenAnswer(new Answer<ServiceRegistration>() {
             public ServiceRegistration answer(InvocationOnMock invocationOnMock) throws Throwable {
 
-                if(invocationOnMock.getArguments()[1]==null) {
+                if (invocationOnMock.getArguments()[1] == null) {
                     throw new NullPointerException("object to be registered is null");
                 }
 
-                protobufferRemoteServiceProxy =(AddressBookProtos.AddressBookService)invocationOnMock.getArguments()[1];
+                protobufferRemoteServiceProxy = (AddressBookProtos.AddressBookService) invocationOnMock.getArguments()[1];
                 return proxyServiceRegistration;
             }
         });
 
-        fuchsiaDeclarationBinder=spy(constructor().withParameterTypes(BundleContext.class).in(ProtobufferImporter.class).newInstance(context));
-        declaration=getValidDeclarations().get(0);
+        fuchsiaDeclarationBinder = spy(constructor().withParameterTypes(BundleContext.class).in(ProtobufferImporter.class).newInstance(context));
+        declaration = getValidDeclarations().get(0);
         declaration.bind(fuchsiaDeclarationBinderServiceReference);
         fuchsiaDeclarationBinder.registration(fuchsiaDeclarationBinderServiceReference);
         fuchsiaDeclarationBinder.start();
@@ -110,7 +107,7 @@ public class ProtobufferImporterTest extends ProtobufferTestAbstract<ImportDecla
     @Test
     public void testImportProxyInvocation() throws Exception {
 
-        ProtobufferImportDeclarationWrapper pojo= ProtobufferImportDeclarationWrapper.create(declaration);
+        ProtobufferImportDeclarationWrapper pojo = ProtobufferImportDeclarationWrapper.create(declaration);
 
         startStandaloneServer(pojo);
 
@@ -145,17 +142,17 @@ public class ProtobufferImporterTest extends ProtobufferTestAbstract<ImportDecla
 
     @Test
     public void testCleanupAfterStop() throws Exception {
-        ProtobufferImportDeclarationWrapper pojo= ProtobufferImportDeclarationWrapper.create(declaration);
+        ProtobufferImportDeclarationWrapper pojo = ProtobufferImportDeclarationWrapper.create(declaration);
         startStandaloneServer(pojo);
         //Add declaration
         fuchsiaDeclarationBinder.useDeclaration(declaration);
-        Map<String,ServiceRegistration> registeredImporters=field("registeredImporter").ofType(Map.class).in(fuchsiaDeclarationBinder).get();
+        Map<String, ServiceRegistration> registeredImporters = field("registeredImporter").ofType(Map.class).in(fuchsiaDeclarationBinder).get();
         //Check if the number of registered importers is one
-        Assert.assertEquals(1,registeredImporters.size());
+        Assert.assertEquals(1, registeredImporters.size());
         //Stop the service
         fuchsiaDeclarationBinder.stop();
         //Check if the number of registered importers is zero
-        Assert.assertEquals(0,registeredImporters.size());
+        Assert.assertEquals(0, registeredImporters.size());
 
         stopStandaloneServer();
     }
@@ -164,47 +161,51 @@ public class ProtobufferImporterTest extends ProtobufferTestAbstract<ImportDecla
     public void testDenyDeclaration() throws BinderException, InvalidSyntaxException, ClassNotFoundException, InterruptedException, InvocationTargetException, EndpointException, IllegalAccessException, NoSuchMethodException {
         ImportDeclaration declaration = getValidDeclarations().get(0);
         fuchsiaDeclarationBinder.useDeclaration(declaration);
-        Map<String,Server> serverPublished = field("registeredImporter").ofType(Map.class).in(fuchsiaDeclarationBinder).get();
-        Assert.assertEquals(1,serverPublished.size());
+        Map<String, Server> serverPublished = field("registeredImporter").ofType(Map.class).in(fuchsiaDeclarationBinder).get();
+        Assert.assertEquals(1, serverPublished.size());
         fuchsiaDeclarationBinder.denyDeclaration(declaration);
-        Assert.assertEquals(0,serverPublished.size());
+        Assert.assertEquals(0, serverPublished.size());
     }
 
     @Test
-    public void testNameWasProvided(){
+    public void testNameWasProvided() {
         org.junit.Assert.assertNotNull(fuchsiaDeclarationBinder.getName());
     }
 
     @Override
     public List<ImportDeclaration> getInvalidDeclarations() {
-        final Map<String, Object> metadata=new Hashtable<String, Object>();
+        final Map<String, Object> metadata = new Hashtable<String, Object>();
         //metadata.put("id","protobuffer-importer");
-        metadata.put("rpc.server.address",ENDPOINT_URL);
-        metadata.put("rpc.proto.class",AddressBookProtos.class.getName());
-        metadata.put("rpc.proto.message","AddressBookServiceMessage");
-        metadata.put("rpc.proto.service","AddressBookService");
+        metadata.put("rpc.server.address", ENDPOINT_URL);
+        metadata.put("rpc.proto.class", AddressBookProtos.class.getName());
+        metadata.put("rpc.proto.message", "AddressBookServiceMessage");
+        metadata.put("rpc.proto.service", "AddressBookService");
 
-        final ImportDeclaration declarationInvalid=ImportDeclarationBuilder.fromMetadata(metadata).build();
+        final ImportDeclaration declarationInvalid = ImportDeclarationBuilder.fromMetadata(metadata).build();
         //Its mandatory to be binded in order that the importer is able to process it
         //declarationInvalid.bind(fuchsiaDeclarationBinderServiceReference);
 
-        return new ArrayList<ImportDeclaration>(){{add(declarationInvalid);}};
+        return new ArrayList<ImportDeclaration>() {{
+            add(declarationInvalid);
+        }};
     }
 
     @Override
     public List<ImportDeclaration> getValidDeclarations() {
-        final Map<String, Object> metadata=new Hashtable<String, Object>();
-        metadata.put("id","protobuffer-importer-valid-declaration");
-        metadata.put("rpc.server.address",ENDPOINT_URL);
-        metadata.put("rpc.proto.class",AddressBookProtos.class.getName());
-        metadata.put("rpc.proto.message","AddressBookServiceMessage");
-        metadata.put("rpc.proto.service","AddressBookService");
+        final Map<String, Object> metadata = new Hashtable<String, Object>();
+        metadata.put("id", "protobuffer-importer-valid-declaration");
+        metadata.put("rpc.server.address", ENDPOINT_URL);
+        metadata.put("rpc.proto.class", AddressBookProtos.class.getName());
+        metadata.put("rpc.proto.message", "AddressBookServiceMessage");
+        metadata.put("rpc.proto.service", "AddressBookService");
 
-        final ImportDeclaration declarationValid=ImportDeclarationBuilder.fromMetadata(metadata).build();
+        final ImportDeclaration declarationValid = ImportDeclarationBuilder.fromMetadata(metadata).build();
         //Its mandatory to be binded in order that the importer is able to process it
         declarationValid.bind(fuchsiaDeclarationBinderServiceReference);
 
-        return new ArrayList<ImportDeclaration>(){{add(declarationValid);}};
+        return new ArrayList<ImportDeclaration>() {{
+            add(declarationValid);
+        }};
     }
 
 

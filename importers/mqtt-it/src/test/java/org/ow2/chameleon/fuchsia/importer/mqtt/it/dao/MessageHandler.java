@@ -7,15 +7,15 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 
-public  class MessageHandler implements EventHandler {
+public class MessageHandler implements EventHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(MessageHandler.class);
 
     public void handleEvent(Event event) {
 
-        if(event!=null){
+        if (event != null) {
             LOG.info("<eventadmin type='inbound'>");
-            LOG.info("\tTOPIC: {}",event.getTopic());
+            LOG.info("\tTOPIC: {}", event.getTopic());
             LOG.info("\tProperty names: {}", Arrays.asList(event.getPropertyNames()));
             LOG.info("</eventadmin>\n");
         }

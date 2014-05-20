@@ -31,7 +31,9 @@ import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
 @Component
 @Provides
@@ -48,7 +50,7 @@ public class MQTTImporter extends AbstractImporterComponent {
     @Requires(filter = "(factory.name=org.ow2.chameleon.fuchsia.importer.mqtt.MQTTOutputRouter)")
     Factory jointFactory;
 
-    Map<String,InstanceManager> managedInstances=new HashMap<String, InstanceManager>();
+    Map<String, InstanceManager> managedInstances = new HashMap<String, InstanceManager>();
 
     @PostRegistration
     public void registration(ServiceReference serviceReference) {
@@ -60,15 +62,15 @@ public class MQTTImporter extends AbstractImporterComponent {
 
         try {
 
-            Properties instanceProperties=new Properties();
+            Properties instanceProperties = new Properties();
 
-            for(Map.Entry<String,Object> element:importDeclaration.getMetadata().entrySet()){
+            for (Map.Entry<String, Object> element : importDeclaration.getMetadata().entrySet()) {
                 instanceProperties.put(element.getKey(), element.getValue());
             }
 
-            InstanceManager im=(InstanceManager)jointFactory.createComponentInstance(instanceProperties);
+            InstanceManager im = (InstanceManager) jointFactory.createComponentInstance(instanceProperties);
 
-            String id=(String)importDeclaration.getMetadata().get(Constants.ID);
+            String id = (String) importDeclaration.getMetadata().get(Constants.ID);
 
             super.handleImportDeclaration(importDeclaration);
 
@@ -81,22 +83,22 @@ public class MQTTImporter extends AbstractImporterComponent {
     }
 
     @Invalidate
-    public void stop(){
+    public void stop() {
         super.stop();
     }
 
     @Override
     protected void denyImportDeclaration(ImportDeclaration importDeclaration) throws BinderException {
 
-        String id=(String)importDeclaration.getMetadata().get(Constants.ID);
+        String id = (String) importDeclaration.getMetadata().get(Constants.ID);
 
-        InstanceManager instance=managedInstances.get(id);
+        InstanceManager instance = managedInstances.get(id);
 
-        if(instance!=null){
+        if (instance != null) {
             instance.dispose();
             unhandleImportDeclaration(importDeclaration);
-        }else {
-            LOG.warn("Failed to destroy managed instance {}, such instance was not registered by this importer",id);
+        } else {
+            LOG.warn("Failed to destroy managed instance {}, such instance was not registered by this importer", id);
         }
 
     }

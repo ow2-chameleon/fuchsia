@@ -47,7 +47,7 @@ public class DefaultExportationLinkerTest {
 
     }
 
-    public void setProperties(DefaultExportationLinker il, String name, String filterIDec, String filterIServ){
+    public void setProperties(DefaultExportationLinker il, String name, String filterIDec, String filterIServ) {
         field("linkerName").ofType(String.class).in(il).set(name);
         field("exportDeclarationFilterProperty").ofType(Object.class).in(il).set(filterIDec);
         field("exporterServiceFilterProperty").ofType(Object.class).in(il).set(filterIServ);

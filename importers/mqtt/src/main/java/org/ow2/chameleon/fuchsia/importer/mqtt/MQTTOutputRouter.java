@@ -51,10 +51,10 @@ public class MQTTOutputRouter implements Runnable {
 
     private Thread eventArrivalMonitor;
 
-    @Property(name = "mqtt.server.host",value = ConnectionFactory.DEFAULT_HOST)
+    @Property(name = "mqtt.server.host", value = ConnectionFactory.DEFAULT_HOST)
     private String serverHost;
 
-    @Property(name = "mqtt.server.port",value = ConnectionFactory.DEFAULT_AMQP_PORT+"")
+    @Property(name = "mqtt.server.port", value = ConnectionFactory.DEFAULT_AMQP_PORT + "")
     private int serverPort;
 
     @Property(name = "mqtt.queue")
@@ -64,23 +64,23 @@ public class MQTTOutputRouter implements Runnable {
     public void start() throws IOException {
 
         ConnectionFactory factory = new ConnectionFactory();
-        connection = factory.newConnection(new Address[]{new Address(serverHost,serverPort)});
+        connection = factory.newConnection(new Address[]{new Address(serverHost, serverPort)});
         channel = connection.createChannel();
         channel.queueDeclare(queue, false, false, false, null);
 
         eventArrivalMonitor = new Thread(this);
         eventArrivalMonitor.start();
 
-        isMonitoringArrivals =true;
+        isMonitoringArrivals = true;
 
     }
 
     @Invalidate
-    public void stop(){
-        isMonitoringArrivals =false;
+    public void stop() {
+        isMonitoringArrivals = false;
     }
 
-    public void run(){
+    public void run() {
 
         try {
 
@@ -94,26 +94,26 @@ public class MQTTOutputRouter implements Runnable {
 
                 QueueingConsumer.Delivery delivery = consumer.nextDelivery();
 
-                Charset messageCharset=Charset.forName(delivery.getProperties().getContentEncoding());
+                Charset messageCharset = Charset.forName(delivery.getProperties().getContentEncoding());
 
-                String message = new String(delivery.getBody(),messageCharset);
+                String message = new String(delivery.getBody(), messageCharset);
 
                 LOG.info("AMQP: message '{}' received,", message);
 
                 LOG.info("Forwarding ..");
 
-                Dictionary metatable=new Hashtable();
+                Dictionary metatable = new Hashtable();
                 metatable.put("content", message);
 
                 eventAdmin.sendEvent(getEventAdminMessage(metatable));
 
-                LOG.info("EventAdmin: message '{}' queue '{}' sent", message,queue);
+                LOG.info("EventAdmin: message '{}' queue '{}' sent", message, queue);
 
             }
 
         } catch (Exception e) {
 
-            LOG.error("Failed to monitor AMPQ Queue named '{}'", queue,e);
+            LOG.error("Failed to monitor AMPQ Queue named '{}'", queue, e);
 
         }
 

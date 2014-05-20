@@ -34,5 +34,4 @@ public interface ServiceForExportation extends ServiceReference {
     public Integer pongInteger(Integer input);
 
 
-
 }

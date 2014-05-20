@@ -58,7 +58,7 @@ public class AbstractImporterComponentTest extends Common {
     public void setUp() {
         testedCI = ipojoHelper.createComponentInstance("SimpleImporterFactory", "SimpleImporterInstance");
         assertThat(testedCI).isNotNull();
-        simpleImporter = (SimpleImporter) ipojoHelper.getServiceObjectByName(ImporterService.class ,"SimpleImporterInstance");
+        simpleImporter = (SimpleImporter) ipojoHelper.getServiceObjectByName(ImporterService.class, "SimpleImporterInstance");
         assertThat(simpleImporter).isNotNull();
         assertThat(simpleImporter.getName()).isEqualTo("simpleImporter");
         assertThat(simpleImporter).isInstanceOf(SimpleImporter.class);
