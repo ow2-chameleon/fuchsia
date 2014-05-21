@@ -208,21 +208,21 @@ public class FuchsiaGogoCommand {
 
         StringBuilder sgMetadata = new StringBuilder();
         for (Map.Entry<String, Object> entry : declaration.getMetadata().entrySet()) {
-            sgMetadata.append(String.format("%s = %s\n", entry.getKey(), entry.getValue()));
+            sgMetadata.append(String.format("%s = %s%n", entry.getKey(), entry.getValue()));
         }
 
         completeOutput.append(createASCIIBox("Metadata", sgMetadata));
 
         StringBuilder sgExtraMetadata = new StringBuilder();
         for (Map.Entry<String, Object> entry : declaration.getExtraMetadata().entrySet()) {
-            sgExtraMetadata.append(String.format("%s = %s\n", entry.getKey(), entry.getValue()));
+            sgExtraMetadata.append(String.format("%s = %s%n", entry.getKey(), entry.getValue()));
         }
 
         completeOutput.append(createASCIIBox("Extra-Metadata", sgExtraMetadata));
 
         StringBuilder sgProperties = new StringBuilder();
         for (String propertyKey : reference.getPropertyKeys()) {
-            sgProperties.append(String.format("%s = %s\n", propertyKey, reference.getProperty(propertyKey)));
+            sgProperties.append(String.format("%s = %s%n", propertyKey, reference.getProperty(propertyKey)));
         }
         if (reference.getPropertyKeys().length == 0) {
             sgProperties.append("EMPTY\n");
@@ -299,7 +299,7 @@ public class FuchsiaGogoCommand {
             for (Map.Entry<ServiceReference, ImporterService> e : importerRefsAndServices.entrySet()) {
                 StringBuilder sb = new StringBuilder();
                 sb.append(displayServiceInfo(e.getKey()));
-                sb.append(String.format("importer name = %s\n", e.getValue().getName()));
+                sb.append(String.format("importer name = %s%n", e.getValue().getName()));
                 sb.append(createASCIIBox("Properties", displayServiceProperties(e.getKey())));
                 sbFinal.append(createASCIIBox("Importer", sb));
             }
@@ -319,7 +319,7 @@ public class FuchsiaGogoCommand {
             for (Map.Entry<ServiceReference, ExporterService> e : exporterRefsAndServices.entrySet()) {
                 StringBuilder sb = new StringBuilder();
                 sb.append(displayServiceInfo(e.getKey()));
-                sb.append(String.format("exporter name = %s\n", e.getValue().getName()));
+                sb.append(String.format("exporter name = %s%n", e.getValue().getName()));
                 sb.append(createASCIIBox("Properties", displayServiceProperties(e.getKey())));
                 sbFinal.append(createASCIIBox("Exporter", sb));
             }
@@ -389,7 +389,7 @@ public class FuchsiaGogoCommand {
         StringBuilder sb = new StringBuilder();
 
         for (String propertyKey : reference.getPropertyKeys()) {
-            sb.append(String.format("%s = %s\n", propertyKey, reference.getProperty(propertyKey)));
+            sb.append(String.format("%s = %s%n", propertyKey, reference.getProperty(propertyKey)));
         }
         if (reference.getPropertyKeys().length == 0) {
             sb.append("EMPTY");
@@ -400,10 +400,10 @@ public class FuchsiaGogoCommand {
 
     private static StringBuilder displayServiceInfo(ServiceReference reference) {
         StringBuilder sb = new StringBuilder();
-        sb.append("name:").append(reference.getProperty(INSTANCE_NAME_PROPERTY)).append("\n");
-        sb.append("bundle:").append(reference.getBundle().getSymbolicName()).append("[")
+        sb.append("name:").append(reference.getProperty(INSTANCE_NAME_PROPERTY)).append('\n');
+        sb.append("bundle:").append(reference.getBundle().getSymbolicName()).append('[')
                 .append(reference.getBundle().getBundleId())
-                .append("]").append("\n");
+                .append(']').append('\n');
 
         return sb;
     }
@@ -472,7 +472,7 @@ public class FuchsiaGogoCommand {
             }
             Integer prologSize = prolog.length();
 
-            result.append(reproduceChar(' ', prologSize)).append(".").append(reproduceChar('_', maxColumn)).append("\n");
+            result.append(reproduceChar(' ', prologSize)).append('.').append(reproduceChar('_', maxColumn)).append('\n');
 
             sr = new StringReader(sb.toString());
             br = new BufferedReader(sr);
@@ -485,11 +485,11 @@ public class FuchsiaGogoCommand {
                     result.append(reproduceChar(' ', prologSize));
                 }
 
-                result.append("|").append(line).append("\n");
+                result.append('|').append(line).append('\n');
                 lineIndex++;
             }
 
-            result.append(reproduceChar(' ', prologSize)).append("|").append(reproduceChar('_', maxColumn)).append("\n");
+            result.append(reproduceChar(' ', prologSize)).append('|').append(reproduceChar('_', maxColumn)).append('\n');
 
         } catch (IOException e) {
             LOG.error("Problem while creating a box", e);

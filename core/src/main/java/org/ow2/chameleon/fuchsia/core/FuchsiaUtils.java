@@ -122,19 +122,12 @@ public class FuchsiaUtils {
             String packageName = klassName.substring(0, klassName.lastIndexOf('.'));
             ExportedPackage pkg = padmin.getExportedPackage(packageName);
             if (pkg == null) {
-
                 try {
-
-                    Class loaded = context.getBundle().loadClass(klassName);
-
-                    return loaded;
-
+                    return context.getBundle().loadClass(klassName);
                 } catch (ClassNotFoundException e) {
                     throw new ClassNotFoundException("No package found with name " + packageName + " while trying to load the class "
                             + klassName + ".", e);
                 }
-
-
             }
             return pkg.getExportingBundle().loadClass(klassName);
         } finally {
@@ -157,7 +150,7 @@ public class FuchsiaUtils {
 
         if (sref == null) {
             // no package admin !
-            return new ArrayList<Class<?>>();
+            return klass;
         }
         try {
             PackageAdmin padmin = (PackageAdmin) context.getService(sref);

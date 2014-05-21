@@ -94,8 +94,6 @@ public class JAXWSExporter extends AbstractExporterComponent {
 
             srvFactory.setBus(cxfbus);
 
-            Object instance = null;
-
             ServiceReference[] jaxWsReferences = context.getAllServiceReferences(pojo.getClazz(), pojo.getFilter());
 
             if (jaxWsReferences == null) {

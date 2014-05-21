@@ -81,9 +81,7 @@ public class MQTTOutputRouter implements Runnable {
     }
 
     public void run() {
-
         try {
-
             LOG.info("Monitoring AMPQ Queue named '{}'", queue);
 
             QueueingConsumer consumer = new QueueingConsumer(channel);
@@ -108,23 +106,14 @@ public class MQTTOutputRouter implements Runnable {
                 eventAdmin.sendEvent(getEventAdminMessage(metatable));
 
                 LOG.info("EventAdmin: message '{}' queue '{}' sent", message, queue);
-
             }
-
         } catch (Exception e) {
-
             LOG.error("Failed to monitor AMPQ Queue named '{}'", queue, e);
-
         }
-
     }
 
     private Event getEventAdminMessage(Dictionary properties) {
-
-        Event eventAdminMessage = new Event(queue, properties);
-
-        return eventAdminMessage;
-
+        return new Event(queue, properties);
     }
 
     public boolean validate(ImportDeclaration declaration) {

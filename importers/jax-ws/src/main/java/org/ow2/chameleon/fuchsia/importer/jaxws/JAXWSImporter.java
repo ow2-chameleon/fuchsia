@@ -114,9 +114,6 @@ public class JAXWSImporter extends AbstractImporterComponent {
     @Override
     protected void useImportDeclaration(ImportDeclaration importDeclaration) throws BinderException {
         LOG.debug("Create proxy" + importDeclaration.getMetadata());
-        ClientProxyFactoryBean factory;
-
-        Object objectProxy;
 
         JAXWSImportDeclarationWrapper pojo = JAXWSImportDeclarationWrapper.create(importDeclaration);
 
@@ -131,6 +128,9 @@ public class JAXWSImporter extends AbstractImporterComponent {
 
         final ClassLoader origin = Thread.currentThread().getContextClassLoader();
         try {
+            ClientProxyFactoryBean factory;
+            Object objectProxy;
+
             Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader());
             LOG.debug(String.valueOf(klass));
             //use annotations if present

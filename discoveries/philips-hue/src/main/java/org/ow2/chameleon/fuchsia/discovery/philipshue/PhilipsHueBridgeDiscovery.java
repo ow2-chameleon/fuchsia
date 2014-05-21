@@ -179,7 +179,7 @@ public class PhilipsHueBridgeDiscovery extends AbstractDiscoveryComponent implem
 
         Dictionary metatable = new Hashtable();
         metatable.put("message", s);
-        metatable.put("code", Integer.valueOf(code));
+        metatable.put("code", code);
 
         Event eventAdminMessage = new Event("philips/hue/bridge/error", metatable);
 
@@ -218,18 +218,13 @@ public class PhilipsHueBridgeDiscovery extends AbstractDiscoveryComponent implem
     }
 
     private ImportDeclaration generateImportDeclaration(PHBridge bridge) {
-
         Map<String, Object> metadata = new HashMap<String, Object>();
-
         metadata.put("id", bridge.toString());
         metadata.put("discovery.philips.bridge.type", PHBridge.class.getName());
         metadata.put("discovery.philips.bridge.object", bridge);
         metadata.put("scope", "generic");
 
-        ImportDeclaration declaration = ImportDeclarationBuilder.fromMetadata(metadata).build();
-
-        return declaration;
-
+        return ImportDeclarationBuilder.fromMetadata(metadata).build();
     }
 
     private void connect(PHAccessPoint ap) {

@@ -142,7 +142,8 @@ public class ProtobufferExporter extends AbstractExporterComponent {
         LOG.info("initiating exportation...");
 
         ProtobufferExportDeclarationWrapper pojo = ProtobufferExportDeclarationWrapper.create(exportDeclaration);
-        Class inter, messageClass;
+        Class inter;
+        Class messageClass;
         try {
             inter = FuchsiaUtils.loadClass(context, String.format("%s$%s", pojo.getClazz(), pojo.getService()));
             messageClass = FuchsiaUtils.loadClass(context, String.format("%s$%s", pojo.getClazz(), pojo.getMessage()));

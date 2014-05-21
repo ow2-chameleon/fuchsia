@@ -68,13 +68,13 @@ public class PhilipsHueGogoCommand extends PHLightListener {
         for (PHLight light : bridge.getResourceCache().getAllLights()) {
             int lightNameLength = light.getName().length();
             int lightTypeLength = light.getLightType().name().length();
-            sb.append(reproduceChar(' ', lightNameLength)).append(reproduceChar('_', lightTypeLength)).append("\n");
-            sb.append(reproduceChar(' ', lightNameLength)).append("|ID:").append(light.getIdentifier()).append("\n");
-            sb.append(reproduceChar(' ', lightNameLength)).append("|Name:").append(light.getName()).append("\n");
-            sb.append(light.getName()).append("|Model:").append(light.getModelNumber()).append("\n");
-            sb.append(reproduceChar(' ', lightNameLength)).append("|Type:").append(light.getLightType()).append("\n");
-            sb.append(reproduceChar(' ', lightNameLength)).append("|State:").append(light.getLastKnownLightState().isOn() ? "ON" : "OFF").append("\n");
-            sb.append(reproduceChar(' ', lightNameLength)).append("|").append(reproduceChar('_', lightTypeLength));
+            sb.append(reproduceChar(' ', lightNameLength)).append(reproduceChar('_', lightTypeLength)).append('\n');
+            sb.append(reproduceChar(' ', lightNameLength)).append("|ID:").append(light.getIdentifier()).append('\n');
+            sb.append(reproduceChar(' ', lightNameLength)).append("|Name:").append(light.getName()).append('\n');
+            sb.append(light.getName()).append("|Model:").append(light.getModelNumber()).append('\n');
+            sb.append(reproduceChar(' ', lightNameLength)).append("|Type:").append(light.getLightType()).append('\n');
+            sb.append(reproduceChar(' ', lightNameLength)).append("|State:").append(light.getLastKnownLightState().isOn() ? "ON" : "OFF").append('\n');
+            sb.append(reproduceChar(' ', lightNameLength)).append('|').append(reproduceChar('_', lightTypeLength));
         }
         print(sb.toString());
     }

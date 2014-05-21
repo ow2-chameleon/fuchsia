@@ -125,7 +125,8 @@ public class CallbackServlet extends HttpServlet implements SubscriberInput {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String hubtopic = null, hubchallenge = null;
+        String hubtopic = null;
+        String hubchallenge = null;
         MessageStatus stsMessage = MessageStatus.ERROR;
 
         ClassLoader cl = Thread.currentThread().getContextClassLoader();

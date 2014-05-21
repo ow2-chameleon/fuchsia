@@ -43,26 +43,16 @@ public class ContentNotification {
     }
 
     public static ContentNotification from(HttpServletRequest request) throws InvalidContentNotification {
-
         validateRequest(request);
-
-        ContentNotification cn = new ContentNotification(
-                request.getParameter(HUB_MODE),
-                request.getParameter(HUB_URL)
-        );
-
-
-        return cn;
+        return new ContentNotification(request.getParameter(HUB_MODE), request.getParameter(HUB_URL));
     }
 
     public List<NameValuePair> toRequesParameters() {
-
         List<NameValuePair> nvps = new ArrayList<NameValuePair>();
         nvps.add(new BasicNameValuePair(HUB_MODE, getMode()));
         nvps.add(new BasicNameValuePair(HUB_URL, getUrl()));
 
         return nvps;
-
     }
 
     public String getMode() {

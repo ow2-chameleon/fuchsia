@@ -272,7 +272,7 @@ public class HubImpl implements Hub {
         StringBuilder sb = new StringBuilder();
         String line = reader.readLine();
         while (line != null) {
-            sb.append(line).append("\n");
+            sb.append(line).append('\n');
             line = reader.readLine();
         }
         in.close();

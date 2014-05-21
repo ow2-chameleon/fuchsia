@@ -91,7 +91,6 @@ public class JSONRPCImporter extends AbstractImporterComponent {
         final JsonRpcHttpClient client;
         final String url;
         final String id;
-        final String klassName;
 
         // Get the URL
         url = valueOf(importDeclaration.getMetadata().get(URL));
@@ -111,7 +110,7 @@ public class JSONRPCImporter extends AbstractImporterComponent {
         props.put("metadata", importDeclaration.getMetadata());
 
         //Try to load the class
-        klassName = (String) importDeclaration.getMetadata().get(SERVICE_CLASS);
+        final String klassName = (String) importDeclaration.getMetadata().get(SERVICE_CLASS);
         if (klassName != null) {
             createProxyFromKlass(klassName, client, props, importDeclaration);
         } else {
@@ -121,7 +120,6 @@ public class JSONRPCImporter extends AbstractImporterComponent {
     }
 
     private void createProxyFromKlass(String klassName, JsonRpcHttpClient client, Dictionary<String, Object> props, ImportDeclaration importDeclaration) throws BinderException {
-        final Object proxy;
         final Class<?> klass;
         // Use given klass
         try {
@@ -134,7 +132,7 @@ public class JSONRPCImporter extends AbstractImporterComponent {
         }
 
         // create the proxy !
-        proxy = ProxyUtil.createClientProxy(klass.getClassLoader(), klass, client);
+        final Object proxy = ProxyUtil.createClientProxy(klass.getClassLoader(), klass, client);
         ServiceRegistration sReg = context.registerService(klassName, proxy, props);
 
         handleImportDeclaration(importDeclaration);

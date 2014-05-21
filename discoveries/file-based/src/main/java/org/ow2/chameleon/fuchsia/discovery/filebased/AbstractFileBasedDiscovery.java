@@ -180,7 +180,7 @@ public abstract class AbstractFileBasedDiscovery<D extends Declaration> implemen
     }
 
     /**
-     * Create and register the declaration of class D with the given metadata
+     * Create and register the declaration of class D with the given metadata.
      *
      * @param metadata the metadata to create the declaration
      * @return the created declaration of class D

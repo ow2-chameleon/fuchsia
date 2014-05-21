@@ -168,7 +168,7 @@ public class JSONRPCExporter extends AbstractExporterComponent {
 
     }
 
-    class RPCServlet extends HttpServlet {
+    static class RPCServlet extends HttpServlet {
 
         private final JsonRpcServer jsonRpcServer;
 

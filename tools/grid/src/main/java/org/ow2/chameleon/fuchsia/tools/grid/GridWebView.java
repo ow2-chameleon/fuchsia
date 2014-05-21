@@ -43,7 +43,7 @@ public class GridWebView {
     private static final String RESOURCES_CSS = "/css";
     private static final String RESOURCES_IMAGES = "/images";
     private static final String TEMPLATE_FILE = "/index.html";
-    private static final String TEMPLATE_ENCODING = "UTF-8";
+    private static final String ENCODING = "UTF-8";
     private static final String TEMPLATE_FILE_REPOSITORY = "/";
 
     private static final Logger LOG = LoggerFactory.getLogger(GridWebView.class);
@@ -96,15 +96,20 @@ public class GridWebView {
             PrintWriter out = resp.getWriter();
 
             InputStream is = this.getClass().getResourceAsStream(TEMPLATE_FILE);
+            BufferedReader br = null;
+            try {
+                br = new BufferedReader(new InputStreamReader(is, ENCODING));
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                String content;
 
-            String content;
-
-            while ((content = br.readLine()) != null) {
-                resp.getWriter().write(content + "\n");
+                while ((content = br.readLine()) != null) {
+                    resp.getWriter().write(content + "\n");
+                }
+            } finally {
+                if (br != null) {
+                    br.close();
+                }
             }
-
         }
     }
 }

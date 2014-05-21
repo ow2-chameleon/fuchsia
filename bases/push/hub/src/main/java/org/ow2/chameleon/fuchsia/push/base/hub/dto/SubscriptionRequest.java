@@ -50,14 +50,12 @@ public class SubscriptionRequest {
 
         validateRequest(request);
 
-        SubscriptionRequest sr = new SubscriptionRequest(
+        return new SubscriptionRequest(
                 request.getParameter(HUB_CALLBACK),
                 request.getParameter(HUB_MODE),
                 request.getParameter(HUB_TOPIC),
                 request.getParameter(HUB_VERIFY)
         );
-
-        return sr;
 
     }
 
