@@ -32,7 +32,7 @@ import static org.ow2.chameleon.fuchsia.core.declaration.Constants.ID;
 import static org.ow2.chameleon.fuchsia.exporter.jaxws.internal.Constants.CXF_EXPORT_TYPE;
 import static org.ow2.chameleon.fuchsia.exporter.jaxws.internal.Constants.CXF_EXPORT_WEB_CONTEXT;
 
-public class JAXWSExportDeclarationWrapper {
+public final class JAXWSExportDeclarationWrapper {
 
     private static Filter declarationFilter = buildFilter();
 

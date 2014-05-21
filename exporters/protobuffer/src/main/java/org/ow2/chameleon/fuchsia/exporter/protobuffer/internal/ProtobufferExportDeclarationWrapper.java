@@ -31,7 +31,7 @@ import java.util.Map;
 import static org.ow2.chameleon.fuchsia.core.declaration.Constants.ID;
 import static org.ow2.chameleon.fuchsia.exporter.protobuffer.internal.Constants.*;
 
-public class ProtobufferExportDeclarationWrapper {
+public final class ProtobufferExportDeclarationWrapper {
 
     private static Filter declarationFilter = buildFilter();
 

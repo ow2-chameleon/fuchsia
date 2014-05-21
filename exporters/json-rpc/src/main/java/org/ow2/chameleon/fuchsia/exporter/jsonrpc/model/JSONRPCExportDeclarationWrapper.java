@@ -31,7 +31,7 @@ import java.util.Map;
 import static org.ow2.chameleon.fuchsia.core.declaration.Constants.ID;
 import static org.ow2.chameleon.fuchsia.exporter.jsonrpc.model.Constants.*;
 
-public class JSONRPCExportDeclarationWrapper {
+public final class JSONRPCExportDeclarationWrapper {
 
     private static Filter declarationFilter = buildFilter();
 

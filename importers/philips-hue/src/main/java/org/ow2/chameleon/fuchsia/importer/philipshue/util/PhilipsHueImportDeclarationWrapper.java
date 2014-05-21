@@ -31,7 +31,7 @@ import java.util.Map;
 import static org.ow2.chameleon.fuchsia.core.declaration.Constants.ID;
 import static org.ow2.chameleon.fuchsia.importer.philipshue.util.Constants.*;
 
-public class PhilipsHueImportDeclarationWrapper {
+public final class PhilipsHueImportDeclarationWrapper {
 
     private static Filter declarationFilter = buildFilter();
 

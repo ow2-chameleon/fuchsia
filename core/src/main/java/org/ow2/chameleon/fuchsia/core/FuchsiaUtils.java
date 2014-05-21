@@ -30,7 +30,7 @@ import org.ow2.chameleon.fuchsia.core.exceptions.InvalidFilterException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FuchsiaUtils {
+public final class FuchsiaUtils {
 
     private FuchsiaUtils() {
         // private constructor

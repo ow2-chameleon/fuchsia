@@ -32,7 +32,7 @@ import java.util.Map;
 
 import static org.ow2.chameleon.fuchsia.core.declaration.Constants.ID;
 
-public class JAXWSImportDeclarationWrapper {
+public final class JAXWSImportDeclarationWrapper {
 
     private static Filter declarationFilter = buildFilter();
 

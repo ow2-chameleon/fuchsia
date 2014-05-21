@@ -20,7 +20,7 @@ package org.ow2.chameleon.fuchsia.importer.push;
  * #L%
  */
 
-public class Constants {
+public final class Constants {
     public static final String HUB_CALLBACK = "hub.callback";
     public static final String HUB_MODE = "hub.mode";
     public static final String HUB_TOPIC = "hub.topic";

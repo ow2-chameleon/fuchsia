@@ -35,7 +35,7 @@ import java.util.Set;
  *
  * @author Morgan Martinet
  */
-public class Status {
+public final class Status {
 
     /**
      * The list of ServiceReference which are bound to the declaration.

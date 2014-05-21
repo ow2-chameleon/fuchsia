@@ -32,7 +32,7 @@ import static org.ow2.chameleon.fuchsia.core.declaration.Constants.ID;
 import static org.ow2.chameleon.fuchsia.importer.philipshue.util.Constants.DISCOVERY_PHILIPS_BRIDGE_OBJECT;
 import static org.ow2.chameleon.fuchsia.importer.philipshue.util.Constants.DISCOVERY_PHILIPS_BRIDGE_TYPE;
 
-public class PhilipsHueBridgeImportDeclarationWrapper {
+public final class PhilipsHueBridgeImportDeclarationWrapper {
 
     private static Filter declarationFilter = buildFilter();
 

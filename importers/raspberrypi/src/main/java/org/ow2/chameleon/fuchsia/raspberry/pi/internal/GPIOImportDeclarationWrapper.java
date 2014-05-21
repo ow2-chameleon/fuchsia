@@ -36,7 +36,7 @@ import static org.ow2.chameleon.fuchsia.raspberry.pi.internal.Constants.IMPORTER
 /**
  * Makes easier to access the Declaration metadata.
  */
-public class GPIOImportDeclarationWrapper {
+public final class GPIOImportDeclarationWrapper {
 
     private static Filter declarationFilter = buildFilter();
 
