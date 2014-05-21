@@ -36,6 +36,13 @@
                 <module>protobuffer</module>
             </modules>
         </profile>
+
+        <profile>
+            <id>experimental</id>
+            <modules>
+                
+            </modules>
+        </profile>
     </profiles>
 
 </project>

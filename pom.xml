@@ -159,6 +159,18 @@
                 <module>examples</module>
             </modules>
         </profile>
+
+        <profile>
+            <id>experimental</id>
+            <modules>
+                <module>core</module>
+                <module>bases</module>
+                <module>importers</module>
+                <module>exporters</module>
+                <module>discoveries</module>
+                <module>testing</module>
+            </modules>
+        </profile>
     </profiles>
 
     <!-- === -->
