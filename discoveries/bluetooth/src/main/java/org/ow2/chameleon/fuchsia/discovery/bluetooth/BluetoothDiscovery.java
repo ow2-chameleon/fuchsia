@@ -84,27 +84,26 @@ public class BluetoothDiscovery extends AbstractDiscoveryComponent {
     public void bindRemoteNamedDevice(RemoteDevice device) {
         ImportDeclaration iDec = null;
         String ba = null;
-        String name = null;
+        String deviceName = null;
         try {
             ba = device.getBluetoothAddress();
-            name = device.getFriendlyName(false);
+            deviceName = device.getFriendlyName(false);
             LOG.debug("Building declaration for device " + ba);
 
             iDec = ImportDeclarationBuilder.empty()
                     .key(ID).value(ba)
                     .key(PROTOCOL_NAME).value("bluetooth")
                     .key(BLUETOOTH_DEVICE_ADDRESS).value(ba)
-                    .key(BLUETOOTH_DEVICE_FRIENDLYNAME).value(name)
-                            // FIXME scope metadata
+                    .key(BLUETOOTH_DEVICE_FRIENDLYNAME).value(deviceName)
                     .key("scope").value("generic")
                     .build();
 
         } catch (IOException e) {
-            LOG.error("Can't get description from the device, maybe is already gone.");
+            LOG.error("Can't get description from the device, maybe is already gone.", e);
             return;
         }
 
-        LOG.debug("Add declaration for the device " + ba + "(" + name + ")");
+        LOG.debug("Add declaration for the device " + ba + "(" + deviceName + ")");
 
         registerImportDeclaration(iDec);
         bluetoothDevices.put(ba, iDec);
@@ -126,7 +125,7 @@ public class BluetoothDiscovery extends AbstractDiscoveryComponent {
     public void start() {
         LOG.debug("Starting Bluetooth Discovery...");
 
-        if (bluetoothDevices.size() > 0) {
+        if (!bluetoothDevices.isEmpty()) {
             // FIXME : complete message
             throw new IllegalStateException();
         }

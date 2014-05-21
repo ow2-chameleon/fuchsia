@@ -35,7 +35,7 @@ package org.ow2.chameleon.fuchsia.discovery.bluetooth;
  * #L%
  */
 
-public class BluetoothConstants {
+public final class BluetoothConstants {
     public static final String BLUETOOTH_DEVICE_ADDRESS = "bluetooth.device.address";
 
     public static final String BLUETOOTH_DEVICE_FRIENDLYNAME = "bluetooth.device.friendlyname";
@@ -45,4 +45,8 @@ public class BluetoothConstants {
     public static final String BLUETOOTH_CLASS_MINORDEVICE = "bluetooth.class.minordevice";
 
     public static final String BLUETOOTH_CLASS_SERVICE = "bluetooth.class.service";
+
+    private BluetoothConstants() {
+        // private constructor
+    }
 }

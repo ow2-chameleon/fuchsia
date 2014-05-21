@@ -43,14 +43,13 @@ public class BluetoothImporter extends AbstractImporterComponent {
      */
     private static final Logger LOG = LoggerFactory.getLogger(BluetoothImporter.class);
 
-    // FIXME scope metadata
     @ServiceProperty(name = TARGET_FILTER_PROPERTY, value = "(&(" + PROTOCOL_NAME + "=bluetooth)(scope=generic))")
     private String filter;
 
     @ServiceProperty(name = INSTANCE_NAME_PROPERTY)
     private String name;
 
-    private final BundleContext m_bundleContext;
+    private final BundleContext bundleContext;
 
     private ServiceReference serviceReference;
 
@@ -66,7 +65,7 @@ public class BluetoothImporter extends AbstractImporterComponent {
      * @param bundleContext
      */
     public BluetoothImporter(BundleContext bundleContext) {
-        m_bundleContext = bundleContext;
+        this.bundleContext = bundleContext;
         bluetoothProxiesFactories = new HashMap<String, Factory>();
         unresolvedImportDeclarations = new HashMap<String, ImportDeclaration>();
         resolvedImportDeclarations = new HashMap<String, ImportDeclaration>();
@@ -154,7 +153,7 @@ public class BluetoothImporter extends AbstractImporterComponent {
 
 
     @Bind(aggregate = true, optional = true, filter = "(protocol=bluetooth)")
-    private void bindBluetoothProxyFactories(Factory f, ServiceReference<Factory> sr) {
+    public void bindBluetoothProxyFactories(Factory f, ServiceReference<Factory> sr) {
         LOG.warn("Found one factory : " + f.getName());
         String friendlyName = (String) sr.getProperty("device_name");
         if (friendlyName == null) {
@@ -180,16 +179,16 @@ public class BluetoothImporter extends AbstractImporterComponent {
     }
 
     @Unbind
-    private void unbindBluetoothProxyFactories(Factory f, ServiceReference<Factory> sr) {
-        String name = (String) sr.getProperty("device_name");
-        bluetoothProxiesFactories.remove(name);
-        ImportDeclaration idec = resolvedImportDeclarations.remove(name);
+    public void unbindBluetoothProxyFactories(Factory f, ServiceReference<Factory> sr) {
+        String deviceName = (String) sr.getProperty("device_name");
+        bluetoothProxiesFactories.remove(deviceName);
+        ImportDeclaration idec = resolvedImportDeclarations.remove(deviceName);
         ComponentInstance proxy = proxyComponentInstances.remove(idec);
 
         idec.unhandle(serviceReference);
         proxy.dispose();
 
-        unresolvedImportDeclarations.put(name, idec);
+        unresolvedImportDeclarations.put(deviceName, idec);
     }
 
     public String getName() {
