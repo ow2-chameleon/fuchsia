@@ -64,9 +64,7 @@ public class UPnPDiscovery extends AbstractDiscoveryComponent {
     @Invalidate
     public void stop() {
         super.stop();
-
         importDeclarations.clear();
-
         LOG.debug("UPnP discovery: stopped.");
     }
 
@@ -75,27 +73,18 @@ public class UPnPDiscovery extends AbstractDiscoveryComponent {
     }
 
     @Bind(id = "upnp-device", specification = UPnPDevice.class, aggregate = true)
-    public Object addingService(ServiceReference reference) {
-
-
+    public void addingService(ServiceReference reference) {
         String deviceID = (String) reference.getProperty(UPnPDevice.FRIENDLY_NAME);
         String deviceType = (String) reference.getProperty(UPnPDevice.TYPE);
         String udn = (String) reference.getProperty(UPnPDevice.ID);
-
-        createImportationDeclaration(deviceID, deviceType, udn, reference);
-
-        return getBundleContext().getService(reference);
+        createImportationDeclaration(deviceID, deviceType, udn);
     }
 
     @Unbind(id = "upnp-device", specification = UPnPDevice.class, aggregate = true)
     public void removedService(ServiceReference reference) {
-
         String deviceID = (String) reference.getProperty(Constants.DEVICE_ID);
-
         ImportDeclaration importDeclaration = importDeclarations.get(deviceID);
-
         unregisterImportDeclaration(importDeclaration);
-
     }
 
     public Set<ImportDeclaration> getImportDeclarations() {
@@ -105,14 +94,12 @@ public class UPnPDiscovery extends AbstractDiscoveryComponent {
     /**
      * Create an import declaration and delegates its registration for an upper class.
      */
-    public synchronized void createImportationDeclaration(String deviceId, String deviceType, String deviceSubType, ServiceReference reference) {
-
+    public synchronized void createImportationDeclaration(String deviceId, String deviceType, String deviceSubType) {
         Map<String, Object> metadata = new HashMap<String, Object>();
         metadata.put(Constants.DEVICE_ID, deviceId);
         metadata.put(Constants.DEVICE_TYPE, deviceType);
         metadata.put(Constants.DEVICE_TYPE_SUB, deviceSubType);
         metadata.put("scope", "generic");
-
         ImportDeclaration declaration = ImportDeclarationBuilder.fromMetadata(metadata).build();
 
         importDeclarations.put(deviceId, declaration);
