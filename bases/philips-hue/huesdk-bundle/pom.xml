@@ -19,11 +19,13 @@
             <artifactId>hue-sdk-core</artifactId>
             <groupId>philips</groupId>
             <version>${project.version}</version>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <artifactId>hue-sdk-resources</artifactId>
             <groupId>philips</groupId>
             <version>${project.version}</version>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 
