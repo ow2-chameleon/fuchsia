@@ -29,6 +29,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
+import org.ow2.chameleon.fuchsia.core.component.ImporterIntrospection;
+import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclarationBuilder;
 import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
@@ -39,7 +41,7 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 
 @Component
-@Provides(specifications = {org.ow2.chameleon.fuchsia.core.component.ImporterService.class})
+@Provides(specifications = {ImporterService.class,ImporterIntrospection.class})
 public class PhilipsHueBridgeImporter extends AbstractImporterComponent {
 
     private static final Logger LOG = LoggerFactory.getLogger(PhilipsHueBridgeImporter.class);
@@ -175,7 +177,7 @@ public class PhilipsHueBridgeImporter extends AbstractImporterComponent {
 
                     Map<String, Object> metadata = new HashMap<String, Object>();
 
-                    metadata.put("id", light.getIdentifier());
+                    metadata.put("id", "light-"+light.getIdentifier());
                     metadata.put("discovery.philips.device.name", light.getModelNumber());
                     metadata.put("discovery.philips.device.type", light.getClass().getName());
                     metadata.put("discovery.philips.device.object", light);
