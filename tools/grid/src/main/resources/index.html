@@ -237,7 +237,6 @@
         fromServletToCombo("/contentExporter", "#exporterCombo");
     }
 
-
     </script>
 </head>
 <body onload="initForm();loadGraph();setupFormSubmission();">
@@ -258,7 +257,7 @@
             <div id="content">
                 <h2>Connection graph</h2>
                 <span class="byline">Runtime</span>
-                <svg id="graphplaceholder" width="640px" heigth="480px"/>
+                <svg id="graphplaceholder" width="640px" height="480px"/>
             </div>
             <div id="sidebar">
                 <div>
@@ -266,9 +265,7 @@
                     <ul class="style1">
                         <li class="first">
                             <p>
-
-                            <form id="importationLinkerForm" name="importationLinkerForm" action="insertLinker"
-                                  method="GET">
+                            <form id="importationLinkerForm" name="importationLinkerForm" action="insertLinker" method="GET">
 
                                 <table border="0">
                                     <tr>
@@ -308,13 +305,12 @@
                             </form>
                         </li>
                     </ul>
-                </div>
+                    </div>
                 <div>
                     <h2>Importer</h2>
                     <ul class="style1">
                         <li class="first">
                             <p>
-
                             <form id="importerForm" action="insertImporter" method="GET">
 
                                 <table border="0">
@@ -353,7 +349,6 @@
                     <ul class="style1">
                         <li class="first">
                             <p>
-
                             <form id="exporterForm" action="insertExporter" method="GET">
 
                                 <table border="0">
