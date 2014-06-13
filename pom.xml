@@ -73,7 +73,7 @@
         <tinybundles.version>1.0.0</tinybundles.version>
         <ops4j.version>1.4.0</ops4j.version>
         <tinybundles-ipojo.version>0.3.0</tinybundles-ipojo.version>
-        <TEST.slf4j-api.version>1.7.5</TEST.slf4j-api.version>
+        <TEST.slf4j-api.version>1.5.6</TEST.slf4j-api.version>
         <TEST.logback-classic.version>0.9.6</TEST.logback-classic.version>
 
         <!-- Encoding -->
