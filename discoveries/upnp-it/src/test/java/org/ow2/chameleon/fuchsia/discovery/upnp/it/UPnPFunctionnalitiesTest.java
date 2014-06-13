@@ -60,7 +60,7 @@ public class UPnPFunctionnalitiesTest extends BaseTest {
                 // fuchsia bundles to test
                 wrappedBundle(mavenBundle("org.apache.felix", "org.apache.felix.upnp.basedriver").versionAsInProject()),
                 wrappedBundle(mavenBundle("org.apache.felix", "org.apache.felix.upnp.extra").versionAsInProject()),
-                wrappedBundle(mavenBundle("org.osgi", "org.osgi.compendium").versionAsInProject()),
+                //wrappedBundle(mavenBundle("org.osgi", "org.osgi.compendium").versionAsInProject()),
                 wrappedBundle(mavenBundle("org.ow2.chameleon.fuchsia", "org.ow2.chameleon.fuchsia.core").versionAsInProject()),
                 wrappedBundle(mavenBundle("org.ow2.chameleon.fuchsia.discovery", "org.ow2.chameleon.fuchsia.discovery.upnp").versionAsInProject()),
 
