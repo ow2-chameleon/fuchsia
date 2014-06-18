@@ -85,15 +85,17 @@ public class PhilipsHueBridgeImporter extends AbstractImporterComponent {
 
     private void cleanup() {
 
-        timer.cancel();
-
-        for (Map.Entry<String, ServiceRegistration> bridgeEntry : bridges.entrySet()) {
+        for(Map.Entry<String,ServiceRegistration> bridgeEntry:bridges.entrySet()){
             bridges.remove(bridgeEntry.getKey()).unregister();
         }
 
         for (Map.Entry<String, ServiceRegistration> bridgeEntry : lamps.entrySet()) {
             lamps.remove(bridgeEntry.getKey()).unregister();
         }
+
+        timer.cancel();
+
+        timer.purge();
 
     }
 
