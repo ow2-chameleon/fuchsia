@@ -108,7 +108,9 @@ public class PhilipsHueBridgeImporter extends AbstractImporterComponent {
 
         Dictionary<String, Object> props = new Hashtable<String, Object>();
 
-        ServiceRegistration bridgeService = context.registerService(new String[]{PHBridge.class.getName(), PHBridgeImpl.class.getName()}, pojo.getBridgeObject(), props);
+        props.put("bridge.id",pojo.getId());
+
+        ServiceRegistration bridgeService=context.registerService(new String[]{PHBridge.class.getName(),PHBridgeImpl.class.getName()},pojo.getBridgeObject(),props);
 
         timer.schedule(new FetchBridgeLampsTask((PHBridgeImpl) pojo.getBridgeObject()), 0, 5000);
 
