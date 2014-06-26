@@ -93,30 +93,36 @@ public class ContentGraph extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        List<GraphVertex> rootList = new ArrayList<GraphVertex>();
-        List<ImporterService> ignoredImporterService = content.getFuchsiaService(ImporterService.class);
-        List<ExporterService> ignoredExporterService = content.getFuchsiaService(ExporterService.class);
+        final String NODE_FUCHSIA="Fuchsia";
+        final String NODE_IMPORTER="Importer";
+        final String NODE_EXPORTER="Exporter";
+        final String NODE_TYPE_IMPORTER="importer";
+        final String NODE_TYPE_EXPORTER="exporter";
+        final String NODE_TYPE_DECLARATION="declaration";
+        final String NODE_TYPE_NATIVE="native";
+        final String NODE_TYPE_LINKER="linker";
 
-        List<ImportDeclaration> ignoredImporterDeclaration = content.getFuchsiaService(ImportDeclaration.class);
-        List<ExportDeclaration> ignoredExporterDeclaration = content.getFuchsiaService(ExportDeclaration.class);
-        ObjectMapper mapper = new ObjectMapper();
-        rootList.add(new GraphVertex(NODE_FUCHSIA, NODE_IMPORTER, NODE_TYPE_NATIVE));
-        for (ImportationLinkerIntrospection linker : content.fetchLinkerIntrospectionsImporter()) {
-            rootList.add(new GraphVertex(NODE_IMPORTER, linker.getName(), NODE_TYPE_LINKER));
-            for (ImporterService importer : linker.getLinkedImporters()) {
+        List<GraphVertex> rootList=new ArrayList<GraphVertex>();
+        List<ImporterService> ignoredImporterService=content.getFuchsiaService(ImporterService.class);
+        List<ExporterService> ignoredExporterService=content.getFuchsiaService(ExporterService.class);
+
+        List<ImportDeclaration> ignoredImporterDeclaration=content.getFuchsiaService(ImportDeclaration.class);
+        List<ExportDeclaration> ignoredExporterDeclaration=content.getFuchsiaService(ExportDeclaration.class);
+        ObjectMapper mapper=new ObjectMapper();
+        rootList.add(new GraphVertex(NODE_FUCHSIA,NODE_IMPORTER,NODE_TYPE_NATIVE));
+        for(ImportationLinkerIntrospection linker:content.fetchLinkerIntrospectionsImporter()){
+            rootList.add(new GraphVertex(NODE_IMPORTER,linker.getName(),NODE_TYPE_LINKER));
+            for(ImporterService importer:linker.getLinkedImporters()){
                 ignoredImporterService.remove(importer);
                 GraphVertex linkerNode = new GraphVertex(linker.getName(), importer.getName(), NODE_TYPE_IMPORTER);
                 rootList.add(linkerNode);
-                if (ImportationLinkerIntrospection.class.isInstance(importer)) {
-                    ImportationLinkerIntrospection ili = (ImportationLinkerIntrospection) importer;
-                    for (ImportDeclaration id : ili.getImportDeclarations()) {
+                    for(ImportDeclaration id:linker.getImportDeclarations()){
                         //This should be handled differently, since the ID can become optional in the future
                         String declarationId = id.getMetadata().get(Constants.ID).toString();
                         ignoredImporterDeclaration.remove(id);
                         GraphVertex declarationNode = new GraphVertex(importer.getName(), declarationId, NODE_TYPE_DECLARATION);
                         rootList.add(declarationNode);
                     }
-                }
             }
         }
 
@@ -127,16 +133,13 @@ public class ContentGraph extends HttpServlet {
                 ignoredExporterService.remove(exporter);
                 GraphVertex linkerNode = new GraphVertex(linker.getName(), exporter.getName(), NODE_TYPE_EXPORTER);
                 rootList.add(linkerNode);
-                if (ExportationLinkerIntrospection.class.isInstance(exporter)) {
-                    ExportationLinkerIntrospection ili = (ExportationLinkerIntrospection) exporter;
-                    for (ExportDeclaration id : ili.getExportDeclarations()) {
+                    for(ExportDeclaration id:linker.getExportDeclarations()){
                         //This should be handled differently, since the ID can become optional in the future
                         String declarationId = id.getMetadata().get(Constants.ID).toString();
                         ignoredExporterDeclaration.remove(id);
                         GraphVertex declarationNode = new GraphVertex(exporter.getName(), declarationId, NODE_TYPE_DECLARATION);
                         rootList.add(declarationNode);
                     }
-                }
             }
         }
 
