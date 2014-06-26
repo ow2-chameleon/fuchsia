@@ -118,15 +118,19 @@ public abstract class AbstractImporterComponent implements ImporterService, Impo
         synchronized (waitingImportDeclarationsToHandle) {
             if (this.serviceReference == null) {
                 waitingImportDeclarationsToHandle.add(importDeclaration);
+                return;
             }
         }
+
         importDeclaration.handle(serviceReference);
+
     }
 
     public void unhandleImportDeclaration(ImportDeclaration importDeclaration) {
         synchronized (waitingImportDeclarationsToHandle) {
             if (this.serviceReference == null) {
                 waitingImportDeclarationsToHandle.remove(importDeclaration);
+                return;
             }
         }
         importDeclaration.unhandle(serviceReference);
