@@ -112,7 +112,7 @@ public class PhilipsHueBridgeImporter extends AbstractImporterComponent {
 
         ServiceRegistration bridgeService=context.registerService(new String[]{PHBridge.class.getName(),PHBridgeImpl.class.getName()},pojo.getBridgeObject(),props);
 
-        timer.schedule(new FetchBridgeLampsTask((PHBridgeImpl) pojo.getBridgeObject()), 0, 5000);
+        timer.schedule(new FetchBridgeLampsTask((PHBridgeImpl) pojo.getBridgeObject(),lamps,context),0,5000);
 
         super.handleImportDeclaration(importDeclaration);
 
@@ -157,51 +157,5 @@ public class PhilipsHueBridgeImporter extends AbstractImporterComponent {
         return name;
     }
 
-    class FetchBridgeLampsTask extends TimerTask {
-
-        private PHBridge bridge;
-
-        public FetchBridgeLampsTask(PHBridge bridge) {
-            this.bridge = bridge;
-        }
-
-        @Override
-        public void run() {
-
-            for (PHLight light : bridge.getResourceCache().getAllLights()) {
-
-                if (!light.isReachable()) {
-
-                    ServiceRegistration sr = lamps.remove(light.getIdentifier());
-                    if (sr != null) {
-                        sr.unregister();
-                    }
-
-                } else if (!lamps.keySet().contains(light.getIdentifier())) {
-
-                    Map<String, Object> metadata = new HashMap<String, Object>();
-
-                    metadata.put("id", "light-"+light.getIdentifier());
-                    metadata.put("discovery.philips.device.name", light.getModelNumber());
-                    metadata.put("discovery.philips.device.type", light.getClass().getName());
-                    metadata.put("discovery.philips.device.object", light);
-                    metadata.put("scope", "generic");
-
-                    Dictionary metatableService = new Hashtable(metadata);
-
-                    ImportDeclaration declaration = ImportDeclarationBuilder.fromMetadata(metadata).build();
-
-                    ServiceRegistration sr = context.registerService(ImportDeclaration.class, declaration, metatableService);
-
-                    if (PhilipsHueBridgeImporter.this.lamps.containsKey(light.getIdentifier())) {
-                        LOG.warn("Lamp with identifier {} alreadu exists", light.getIdentifier());
-                    }
-
-                    PhilipsHueBridgeImporter.this.lamps.put(light.getIdentifier(), sr);
-
-                }
-            }
-        }
-    }
 }
 
