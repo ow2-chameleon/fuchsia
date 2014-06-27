@@ -246,18 +246,4 @@ public class PhilipsHueBridgeDiscovery extends AbstractDiscoveryComponent implem
 
     }
 
-    static class BridgeSearchTask extends TimerTask {
-
-        private PhilipsHueBridgeDiscovery phi;
-
-        public BridgeSearchTask(PhilipsHueBridgeDiscovery phi) {
-            this.phi = phi;
-        }
-
-        @Override
-        public void run() {
-            phi.searchForBridges();
-        }
-    }
-
 }
