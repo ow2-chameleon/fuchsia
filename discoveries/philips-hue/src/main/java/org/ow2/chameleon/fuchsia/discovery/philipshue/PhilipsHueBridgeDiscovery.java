@@ -56,7 +56,7 @@ public class PhilipsHueBridgeDiscovery extends AbstractDiscoveryComponent implem
     @ServiceProperty(name = "philips.hue.discovery.pooling", value = "10000")
     private Long pollingTime;
 
-    private Preferences preferences = Preferences.userRoot().node(this.getClass().getName());
+    private Preferences preferences = PhilipsPreference.getInstance();//Preferences.userRoot().node(this.getClass().getName());
 
     private Map<String, ImportDeclaration> ipImportDeclarationMap = new HashMap<String, ImportDeclaration>();
 
