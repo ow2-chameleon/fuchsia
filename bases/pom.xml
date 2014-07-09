@@ -14,44 +14,15 @@
     <groupId>org.ow2.chameleon.fuchsia.base</groupId>
     <packaging>pom</packaging>
 
-
-    <profiles>
-        <profile>
-            <id>default</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-
-            <modules>
-                <module>protobuffer</module>
-                <module>bluetooth</module>
-                <module>json-rpc</module>
-                <module>mqtt</module>
-                <module>push</module>
-                <module>jax-ws</module>
-                <module>philips-hue</module>
-            </modules>
-        </profile>
-        <profile>
-            <!-- Continuous integration profile, must be the same than the default profile without the integrations tests -->
-            <id>ci</id>
-            <modules>
-                <module>protobuffer</module>
-                <module>bluetooth</module>
-                <module>json-rpc</module>
-                <module>mqtt</module>
-                <module>push</module>
-                <module>jax-ws</module>
-                <module>philips-hue</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>experimental</id>
-            <modules>
-                <module>bluetooth</module>
-            </modules>
-        </profile>
-    </profiles>
-
+    <modules>
+        <module>protobuffer</module>
+        <module>bluetooth</module>
+        <module>json-rpc</module>
+        <module>mqtt</module>
+        <module>knx</module>
+        <module>push</module>
+        <module>jax-ws</module>
+        <module>philips-hue</module>
+    </modules>
 
 </project>

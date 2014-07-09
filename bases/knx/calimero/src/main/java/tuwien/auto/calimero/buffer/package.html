@@ -1,0 +1,35 @@
+<!--
+  #%L
+  OW2 Chameleon - Fuchsia Framework
+  %%
+  Copyright (C) 2009 - 2014 OW2 Chameleon
+  %%
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  
+       http://www.apache.org/licenses/LICENSE-2.0
+  
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  #L%
+  -->
+<html>
+	<body>
+	Support for temporary storage of KNX network messages.<br>
+	This is done by using a network buffer with one or more configurations added to it.
+	This allows to build up and maintain a local process image to answer user queries.
+	Benefits might be a decreased network load and smaller response time.<br>
+	Using a network buffer allows polled mode of communication, since handling of 
+	incoming messages can be delayed to some later point in time.
+	<br>
+	A configuration determines what messages to keep and what messages to 
+	ignore by the use of filters. These filters might be user defined implementations 
+	set for that particular configuration. 
+	Two predefined filters are available to allow state based and command based 
+	network buffering.
+	</body>
+</html>
