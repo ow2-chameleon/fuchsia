@@ -32,13 +32,12 @@ import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.StringReader;
 import java.util.*;
 
 import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
 import static org.ow2.chameleon.fuchsia.core.declaration.Constants.ID;
+import static org.ow2.chameleon.fuchsia.tools.shell.util.FuchsiaGogoUtil.createASCIIBox;
+import static org.ow2.chameleon.fuchsia.tools.shell.util.FuchsiaGogoUtil.getArgumentValue;
 
 
 @Component(immediate = true)
@@ -406,97 +405,6 @@ public class FuchsiaGogoCommand {
                 .append(']').append('\n');
 
         return sb;
-    }
-
-    // ---------------- UTILS GOGO ARGUMENTS
-
-    private static String getArgumentValue(String option, String... params) {
-        boolean found = false;
-        String value = null;
-
-        for (int i = 0; i < params.length; i++) {
-
-            /**
-             * In case of a Null option, returns the last parameter.
-             */
-            if (option == null) {
-                return params[params.length - 1];
-            }
-
-            if (i < (params.length - 1) && params[i].equals(option)) {
-                found = true;
-                value = params[i + 1];
-                break;
-            }
-        }
-
-        if (found) {
-            return value;
-        }
-        return null;
-    }
-
-
-    private static String reproduceChar(char character, Integer amount) {
-
-        StringBuilder sb = new StringBuilder(amount);
-
-        for (int x = 0; x < amount; x++) {
-            sb.append(character);
-        }
-
-        return sb.toString();
-    }
-
-    private static StringBuilder createASCIIBox(String prolog, StringBuilder sb) {
-        StringBuilder result = new StringBuilder();
-
-        StringReader sr = new StringReader(sb.toString());
-
-        List<Integer> sizeColums = new ArrayList<Integer>();
-
-        String line;
-        try {
-
-            BufferedReader br = new BufferedReader(sr);
-            while ((line = br.readLine()) != null) {
-                sizeColums.add(line.length());
-            }
-
-            Collections.sort(sizeColums);
-            Collections.reverse(sizeColums);
-
-            Integer maxColumn = sizeColums.isEmpty() ? 0 : sizeColums.get(0);
-            if (maxColumn > ASCIIBOX_MAX_COLUMNS) {
-                maxColumn = ASCIIBOX_MAX_COLUMNS;
-            }
-            Integer prologSize = prolog.length();
-
-            result.append(reproduceChar(' ', prologSize)).append('.').append(reproduceChar('_', maxColumn)).append('\n');
-
-            sr = new StringReader(sb.toString());
-            br = new BufferedReader(sr);
-            int lineIndex = 0;
-            while ((line = br.readLine()) != null) {
-
-                if (lineIndex == sizeColums.size() / 2) {
-                    result.append(prolog);
-                } else {
-                    result.append(reproduceChar(' ', prologSize));
-                }
-
-                result.append('|').append(line).append('\n');
-                lineIndex++;
-            }
-
-            result.append(reproduceChar(' ', prologSize)).append('|').append(reproduceChar('_', maxColumn)).append('\n');
-
-        } catch (IOException e) {
-            LOG.error("Problem while creating a box", e);
-        }
-
-        return result;
-
     }
 
 }
