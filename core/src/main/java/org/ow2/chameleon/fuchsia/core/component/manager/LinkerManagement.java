@@ -70,7 +70,7 @@ public class LinkerManagement<D extends Declaration, S extends DeclarationBinder
         declaration.bind(declarationBinderRef);
         try {
             declarationBinder.addDeclaration(declaration);
-        } catch (BinderException e) {
+        } catch (Exception e) {
             declaration.unbind(declarationBinderRef);
             LOG.debug(declarationBinder + " throw an exception when giving to it the Declaration "
                     + declaration, e);
