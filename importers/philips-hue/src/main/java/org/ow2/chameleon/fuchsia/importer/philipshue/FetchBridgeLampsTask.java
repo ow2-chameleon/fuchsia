@@ -73,7 +73,7 @@ public class FetchBridgeLampsTask extends TimerTask {
                 ServiceRegistration sr=context.registerService(ImportDeclaration.class,declaration,metatableService);
 
                 if(lamps.containsKey(light.getIdentifier())){
-                    LOG.warn("Lamp with identifier {} alreadu exists",light.getIdentifier());
+                    LOG.warn("Lamp with identifier {} already exists",light.getIdentifier());
                 }
 
                 lamps.put(light.getIdentifier(),sr);

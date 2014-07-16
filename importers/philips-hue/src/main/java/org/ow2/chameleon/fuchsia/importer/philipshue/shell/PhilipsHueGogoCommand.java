@@ -32,6 +32,8 @@ import org.apache.felix.service.command.Descriptor;
 import java.util.Hashtable;
 import java.util.List;
 
+import static org.ow2.chameleon.fuchsia.tools.shell.util.FuchsiaGogoUtil.getArgumentValue;
+
 @Component(immediate = true)
 @Instantiate
 @Provides
@@ -131,23 +133,6 @@ public class PhilipsHueGogoCommand extends PHLightListener {
 
     private int getColorValue(String value) {
         return (value != null) ? Integer.parseInt(value) : 0;
-    }
-
-    /**
-     * Look up for the value of a parameter in a sequence of string.
-     *
-     * @param option the option that we are looking for. e.g. '-k'
-     * @param params the list of parameters
-     * @return the value associated with the parameter or Null in case it is not present
-     */
-    private String getArgumentValue(String option, String... params) {
-        for (int i = 0; i < params.length; i++) {
-            if (i < (params.length - 1) && params[i].equals(option)) {
-                return params[i + 1];
-            }
-        }
-
-        return null;
     }
 
     public void onSuccess() {
