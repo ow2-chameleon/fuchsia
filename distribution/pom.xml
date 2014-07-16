@@ -24,6 +24,10 @@
             </activation>
             <dependencies>
                 <dependency>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>org.apache.felix.ipojo</artifactId>
+                </dependency>
+                <dependency>
                     <groupId>${project.parent.groupId}</groupId>
                     <artifactId>org.ow2.chameleon.fuchsia.core</artifactId>
                     <version>${project.parent.version}</version>
@@ -37,17 +41,6 @@
                     <groupId>org.apache.felix</groupId>
                     <artifactId>org.apache.felix.http.whiteboard</artifactId>
                     <version>2.2.0</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.apache.felix</groupId>
-                    <artifactId>org.apache.felix.ipojo.webconsole</artifactId>
-                    <version>1.7.0</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.apache.felix</groupId>
-                    <artifactId>org.apache.felix.webconsole</artifactId>
-                    <version>4.2.0</version>
-                    <classifier>all</classifier>
                 </dependency>
                 <dependency>
                     <groupId>${project.parent.groupId}.tools</groupId>
@@ -155,6 +148,38 @@
                     <groupId>commons-io</groupId>
                     <artifactId>commons-io</artifactId>
                 </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>discovery-knx</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.ow2.chameleon.fuchsia.discovery</groupId>
+                    <artifactId>org.ow2.chameleon.fuchsia.discovery.knx</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+		<dependency>
+		    <artifactId>org.ow2.chameleon.fuchsia.base.knx.calimero</artifactId>
+		    <groupId>org.ow2.chameleon.fuchsia.base.knx</groupId>
+		    <version>${project.version}</version>
+		</dependency>
+            </dependencies>
+        </profile>
+
+	<profile>
+            <id>importer-knx</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.ow2.chameleon.fuchsia.importer</groupId>
+                    <artifactId>org.ow2.chameleon.fuchsia.importer.knx</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+		<dependency>
+		    <artifactId>org.ow2.chameleon.fuchsia.base.knx.calimero</artifactId>
+		    <groupId>org.ow2.chameleon.fuchsia.base.knx</groupId>
+		    <version>${project.version}</version>
+		</dependency>
             </dependencies>
         </profile>
 

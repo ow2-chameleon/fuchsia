@@ -28,6 +28,7 @@
                 <module>protobuffer</module>
                 <module>philips-hue</module>
                 <module>jax-ws</module>
+                <module>knx</module>
                 <module>json-rpc</module>
                 <module>json-rpc-it</module>
                 <module>raspberrypi</module>

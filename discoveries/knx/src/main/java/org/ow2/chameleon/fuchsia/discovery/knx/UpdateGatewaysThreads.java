@@ -33,7 +33,7 @@ public class UpdateGatewaysThreads extends Thread {
 
     private Logger logger= LoggerFactory.getLogger(UpdateGatewaysThreads.class);
 
-    private Set response;
+    private Set<SearchResponse> response;
     private Discoverer disc;
     private boolean active=true;
     private KNXGatewaySearchListener listener;
@@ -60,7 +60,7 @@ public class UpdateGatewaysThreads extends Thread {
 
                 logger.info("Calimero: scanning for gateway..");
 
-                disc.startSearch(2000,true);
+                disc.startSearch(5,true);
 
                 logger.info("Calimero: scanning finished");
 
@@ -68,14 +68,18 @@ public class UpdateGatewaysThreads extends Thread {
 
                 for (SearchResponse sr : disc.getSearchResponses()) {
 
-                    logger.info("Found gateway on {} in port {}", sr.getControlEndpoint().getAddress().toString(), sr.getControlEndpoint().getPort());
+                    if(!isPresent(sr)){//!response.contains(sr)
 
-                    if(!response.contains(sr) && listener!=null){
-                        logger.info("new gateway found {}",sr.getDevice().getSerialNumberString());
-                        listener.gatewayFound(sr);
+                        logger.info("Found gateway on {} in port {}", sr.getControlEndpoint().getAddress().toString(), sr.getControlEndpoint().getPort());
+
+                        response.add(sr);
+
+                        if(listener!=null){
+                            listener.gatewayFound(sr);
+                        }
+
                     }
 
-                    response.add(sr);
                 }
 
 
@@ -92,6 +96,18 @@ public class UpdateGatewaysThreads extends Thread {
 
 
         }while(active);
+
+    }
+
+    private boolean isPresent(SearchResponse sr){
+
+        for(SearchResponse entry:response){
+            if(entry.getDevice().getSerialNumberString().equals(sr.getDevice().getSerialNumberString())){
+                return true;
+            }
+        }
+
+        return false;
 
     }
 
