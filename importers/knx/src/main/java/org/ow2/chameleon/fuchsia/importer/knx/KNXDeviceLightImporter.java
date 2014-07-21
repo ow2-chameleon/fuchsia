@@ -55,7 +55,10 @@ public class KNXDeviceLightImporter extends AbstractImporterComponent {
     }
 
     @Requires(filter = "(factory.name=org.ow2.chameleon.fuchsia.importer.knx.device.impl.SwitchImpl)", optional = false)
-    Factory factory;
+    Factory factorySwitch;
+
+    @Requires(filter = "(factory.name=org.ow2.chameleon.fuchsia.importer.knx.device.impl.StepImpl)", optional = false)
+    Factory factoryStep;
 
     private Map<String,ComponentInstance> instances=new HashMap<String,ComponentInstance>();
 
@@ -117,7 +120,15 @@ public class KNXDeviceLightImporter extends AbstractImporterComponent {
         }
 
         try{
-            ComponentInstance ci = factory.createComponentInstance(hs);
+            ComponentInstance ci = null;
+
+            if(knxInput.getDpt().equals("switch")){
+                ci=factorySwitch.createComponentInstance(hs);
+            }else if(knxInput.getDpt().equals("step")){
+                ci=factoryStep.createComponentInstance(hs);
+            }
+
+
             instances.put(knxInput.getId(),ci);
         }catch (UnacceptableConfiguration unacceptableConfiguration) {
             unacceptableConfiguration.printStackTrace();

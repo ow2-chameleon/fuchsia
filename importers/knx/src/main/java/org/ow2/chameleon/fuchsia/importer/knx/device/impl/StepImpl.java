@@ -29,7 +29,7 @@ import tuwien.auto.calimero.exception.KNXException;
 import tuwien.auto.calimero.process.ProcessCommunicator;
 
 @Component
-@Provides(specifications = {Switch.class,KNXDevice.class})
+@Provides(specifications = {Step.class,KNXDevice.class})
 public class StepImpl extends KNXDeviceAbstract implements Step {
 
     @Property(mandatory = false)
