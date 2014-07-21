@@ -32,9 +32,8 @@ import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
 import org.ow2.chameleon.fuchsia.core.component.ImporterIntrospection;
 import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
-import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclarationBuilder;
 import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
-import org.ow2.chameleon.fuchsia.importer.philipshue.util.PhilipsHueBridgeImportDeclarationWrapper;
+import org.ow2.chameleon.fuchsia.importer.philipshue.util.PhilipsHueBridgeDeclarationWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -104,7 +103,7 @@ public class PhilipsHueBridgeImporter extends AbstractImporterComponent {
 
         LOG.info("philips hue bridge importer triggered");
 
-        PhilipsHueBridgeImportDeclarationWrapper pojo = PhilipsHueBridgeImportDeclarationWrapper.create(importDeclaration);
+        PhilipsHueBridgeDeclarationWrapper pojo= PhilipsHueBridgeDeclarationWrapper.create(importDeclaration);
 
         Dictionary<String, Object> props = new Hashtable<String, Object>();
 
@@ -125,7 +124,7 @@ public class PhilipsHueBridgeImporter extends AbstractImporterComponent {
 
         LOG.info("philips hue bridge importer removal triggered");
 
-        PhilipsHueBridgeImportDeclarationWrapper pojo = PhilipsHueBridgeImportDeclarationWrapper.create(importDeclaration);
+        PhilipsHueBridgeDeclarationWrapper pojo= PhilipsHueBridgeDeclarationWrapper.create(importDeclaration);
 
         try {
 

@@ -25,6 +25,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclarationBuilder;
+import org.ow2.chameleon.fuchsia.importer.philipshue.util.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,10 +62,11 @@ public class FetchBridgeLampsTask extends TimerTask {
 
                 Map<String, Object> metadata = new HashMap<String, Object>();
 
-                metadata.put("id", "light-"+light.getIdentifier());
-                metadata.put("discovery.philips.device.name", light.getModelNumber());
-                metadata.put("discovery.philips.device.type", light.getClass().getName());
-                metadata.put("discovery.philips.device.object", light);
+                metadata.put(org.ow2.chameleon.fuchsia.core.declaration.Constants.ID, light.getIdentifier());
+                metadata.put(Constants.DISCOVERY_PHILIPS_DEVICE_NAME, light.getModelNumber());
+                metadata.put(Constants.DISCOVERY_PHILIPS_DEVICE_TYPE, light.getClass().getName());
+                metadata.put(Constants.DISCOVERY_PHILIPS_DEVICE_OBJECT, light);
+                metadata.put(Constants.DISCOVERY_PHILIPS_DEVICE_BRIDGE, bridge);
 
                 Dictionary metatableService=new Hashtable(metadata);
 

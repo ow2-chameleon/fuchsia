@@ -48,7 +48,7 @@ public class PhilipsHueBridgeDiscovery extends AbstractDiscoveryComponent implem
 
     private static final Logger LOG = LoggerFactory.getLogger(PhilipsHueBridgeDiscovery.class);
 
-    private static final String EVENT_CACHE_UPDATED = "philips/hue/bridge/cache_updated";
+    private static final String EVENT_CACHE_UPDATED="philips/hue/bridge/cache_updated";
 
     @ServiceProperty(name = INSTANCE_NAME_PROPERTY)
     private String name;

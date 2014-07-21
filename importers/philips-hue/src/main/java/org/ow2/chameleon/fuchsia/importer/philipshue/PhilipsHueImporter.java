@@ -31,7 +31,7 @@ import org.ow2.chameleon.fuchsia.core.component.ImporterIntrospection;
 import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
-import org.ow2.chameleon.fuchsia.importer.philipshue.util.PhilipsHueImportDeclarationWrapper;
+import org.ow2.chameleon.fuchsia.importer.philipshue.util.PhilipsHueLightDeclarationWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -97,7 +97,7 @@ public class PhilipsHueImporter extends AbstractImporterComponent {
 
         LOG.info("philips hue importer triggered");
 
-        PhilipsHueImportDeclarationWrapper pojo = PhilipsHueImportDeclarationWrapper.create(importDeclaration);
+        PhilipsHueLightDeclarationWrapper pojo= PhilipsHueLightDeclarationWrapper.create(importDeclaration);
 
         try {
 
@@ -105,7 +105,7 @@ public class PhilipsHueImporter extends AbstractImporterComponent {
 
             Dictionary<String, Object> props = new Hashtable<String, Object>();
 
-            ServiceRegistration lampService = context.registerService(pojo.getType(), pojo.getObject(), props);
+            ServiceRegistration lampService=context.registerService(pojo.getType(),pojo.getLight(),props);
 
             super.handleImportDeclaration(importDeclaration);
 
@@ -121,7 +121,7 @@ public class PhilipsHueImporter extends AbstractImporterComponent {
     @Override
     protected void denyImportDeclaration(ImportDeclaration importDeclaration) throws BinderException {
 
-        PhilipsHueImportDeclarationWrapper pojo = PhilipsHueImportDeclarationWrapper.create(importDeclaration);
+        PhilipsHueLightDeclarationWrapper pojo= PhilipsHueLightDeclarationWrapper.create(importDeclaration);
 
         try {
             lamps.remove(pojo.getId()).unregister();

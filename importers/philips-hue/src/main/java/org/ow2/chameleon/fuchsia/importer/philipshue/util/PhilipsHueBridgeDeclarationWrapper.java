@@ -32,7 +32,7 @@ import static org.ow2.chameleon.fuchsia.core.declaration.Constants.ID;
 import static org.ow2.chameleon.fuchsia.importer.philipshue.util.Constants.DISCOVERY_PHILIPS_BRIDGE_OBJECT;
 import static org.ow2.chameleon.fuchsia.importer.philipshue.util.Constants.DISCOVERY_PHILIPS_BRIDGE_TYPE;
 
-public final class PhilipsHueBridgeImportDeclarationWrapper {
+public class PhilipsHueBridgeDeclarationWrapper {
 
     private static Filter declarationFilter = buildFilter();
 
@@ -40,7 +40,7 @@ public final class PhilipsHueBridgeImportDeclarationWrapper {
     private String bridgeType;
     private Object bridgeObject;
 
-    private PhilipsHueBridgeImportDeclarationWrapper() {
+    private PhilipsHueBridgeDeclarationWrapper() {
 
     }
 
@@ -56,13 +56,13 @@ public final class PhilipsHueBridgeImportDeclarationWrapper {
         return filter;
     }
 
-    public static PhilipsHueBridgeImportDeclarationWrapper create(ImportDeclaration importDeclaration) throws BinderException {
+    public static PhilipsHueBridgeDeclarationWrapper create(ImportDeclaration importDeclaration) throws BinderException {
         Map<String, Object> metadata = importDeclaration.getMetadata();
 
         if (!declarationFilter.matches(metadata)) {
             throw new BinderException("Not enough information in the metadata to be used by the phillips hue importer");
         }
-        PhilipsHueBridgeImportDeclarationWrapper wrapper = new PhilipsHueBridgeImportDeclarationWrapper();
+        PhilipsHueBridgeDeclarationWrapper wrapper = new PhilipsHueBridgeDeclarationWrapper();
 
         wrapper.id = (String) metadata.get(ID);
         wrapper.bridgeType = (String) metadata.get(DISCOVERY_PHILIPS_BRIDGE_TYPE);

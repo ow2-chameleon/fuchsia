@@ -25,22 +25,25 @@ import org.ow2.chameleon.fuchsia.core.FuchsiaUtils;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
 import org.ow2.chameleon.fuchsia.core.exceptions.InvalidFilterException;
+import com.philips.lighting.model.PHBridge;
+import com.philips.lighting.model.PHLight;
 
 import java.util.Map;
 
 import static org.ow2.chameleon.fuchsia.core.declaration.Constants.ID;
 import static org.ow2.chameleon.fuchsia.importer.philipshue.util.Constants.*;
 
-public final class PhilipsHueImportDeclarationWrapper {
+public class PhilipsHueLightDeclarationWrapper {
 
     private static Filter declarationFilter = buildFilter();
 
     private String id;
     private String name;
     private String type;
-    private Object object;
+    private PHLight light;
+    private PHBridge bridge;
 
-    private PhilipsHueImportDeclarationWrapper() {
+    private PhilipsHueLightDeclarationWrapper() {
 
     }
 
@@ -57,18 +60,19 @@ public final class PhilipsHueImportDeclarationWrapper {
         return filter;
     }
 
-    public static PhilipsHueImportDeclarationWrapper create(ImportDeclaration importDeclaration) throws BinderException {
+    public static PhilipsHueLightDeclarationWrapper create(ImportDeclaration importDeclaration) throws BinderException {
         Map<String, Object> metadata = importDeclaration.getMetadata();
 
         if (!declarationFilter.matches(metadata)) {
             throw new BinderException("Not enough information in the metadata to be used by the phillips hue importer");
         }
-        PhilipsHueImportDeclarationWrapper wrapper = new PhilipsHueImportDeclarationWrapper();
+        PhilipsHueLightDeclarationWrapper wrapper = new PhilipsHueLightDeclarationWrapper();
 
         wrapper.id = (String) metadata.get(ID);
         wrapper.name = (String) metadata.get(DISCOVERY_PHILIPS_DEVICE_NAME);
         wrapper.type = (String) metadata.get(DISCOVERY_PHILIPS_DEVICE_TYPE);
-        wrapper.object = metadata.get(DISCOVERY_PHILIPS_DEVICE_OBJECT);
+        wrapper.light = (PHLight) metadata.get(DISCOVERY_PHILIPS_DEVICE_OBJECT);
+        wrapper.bridge = (PHBridge) metadata.get(DISCOVERY_PHILIPS_DEVICE_BRIDGE);
 
         return wrapper;
     }
@@ -85,7 +89,11 @@ public final class PhilipsHueImportDeclarationWrapper {
         return type;
     }
 
-    public Object getObject() {
-        return object;
+    public PHLight getLight() {
+        return light;
+    }
+
+    public PHBridge getBridge() {
+        return bridge;
     }
 }
