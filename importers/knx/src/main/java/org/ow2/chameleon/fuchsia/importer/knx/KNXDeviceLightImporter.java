@@ -65,22 +65,6 @@ public class KNXDeviceLightImporter extends AbstractImporterComponent {
     @Requires
     private KNXLinkManager linkManager;
 
-    private String getDPT(String dpt) {
-        if (dpt.equals("switch"))
-            return "1.001";
-        if (dpt.equals("bool"))
-            return "1.002";
-        if (dpt.equals("string"))
-            return "16.001";
-        if (dpt.equals("float"))
-            return "9.002";
-        if (dpt.equals("ucount"))
-            return "5.010";
-        if (dpt.equals("angle"))
-            return "5.003";
-        return dpt;
-    }
-
     @Override
     protected void useImportDeclaration(ImportDeclaration importDeclaration) throws BinderException {
 
@@ -92,8 +76,6 @@ public class KNXDeviceLightImporter extends AbstractImporterComponent {
             hs.put("groupaddr", knxInput.getKnxAddress());
             hs.put(Factory.INSTANCE_NAME_PROPERTY, knxInput.getId());
 
-            //final KNXNetworkLink lnk = createLink(knxInput.getLocalhost(),knxInput.getGateway());
-
             LOG.info("Connecting from terminal {} to gateway {}",knxInput.getLocalhost(),knxInput.getGateway());
 
             KNXNetworkLink lnk = linkManager.getLink(knxInput.getLocalhost(), knxInput.getGateway());
@@ -101,19 +83,6 @@ public class KNXDeviceLightImporter extends AbstractImporterComponent {
             ProcessCommunicator pc = new ProcessCommunicatorImpl(lnk);
 
             hs.put("pc", pc);
-
-            //GroupAddress main = new GroupAddress(knxInput.getKnxAddress());
-
-            //Datapoint dp = new StateDP(main, knxInput.getId(), 0, getDPT(knxInput.getDpt()));
-
-            //Switch mySwitch=new SwitchImpl(pc,dp);
-
-            /**
-             System.out.println("write successful");
-             pc.write(dp, "on");
-             Thread.sleep(2000);
-             pc.write(dp, "off");
-             **/
 
         } catch (Exception e) {
             LOG.error("Failed to connect to the KNX Bus, ignoring connection and creating object",e);
@@ -127,7 +96,6 @@ public class KNXDeviceLightImporter extends AbstractImporterComponent {
             }else if(knxInput.getDpt().equals("step")){
                 ci=factoryStep.createComponentInstance(hs);
             }
-
 
             instances.put(knxInput.getId(),ci);
         }catch (UnacceptableConfiguration unacceptableConfiguration) {
