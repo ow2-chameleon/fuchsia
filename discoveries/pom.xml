@@ -22,6 +22,7 @@
             </activation>
             <modules>
                 <module>file-based</module>
+                <module>knx</module>
                 <module>mdns</module>
                 <module>upnp</module>
                 <module>knx</module>
