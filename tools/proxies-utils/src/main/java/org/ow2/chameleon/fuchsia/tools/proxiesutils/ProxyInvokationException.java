@@ -38,7 +38,5 @@ public class ProxyInvokationException extends Exception {
         super(cause);
     }
 
-    protected ProxyInvokationException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-    }
+
 }
