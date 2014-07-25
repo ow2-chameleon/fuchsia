@@ -23,5 +23,7 @@ public interface Switch extends KNXDevice {
 
     public void on();
     public void off();
+    public boolean isOn();
+    public boolean isOff();
 
 }

@@ -69,6 +69,27 @@ public class SwitchImpl extends KNXDeviceAbstract implements Switch {
         }
     }
 
+    public boolean isOn() {
+
+        String stateReturned;
+
+        try {
+            System.out.println("checking switch state");
+            stateReturned=getPc().read(getDataPoint());
+            System.out.println("returned "+stateReturned);
+            return stateReturned.equals("on")?true:false;
+        } catch (KNXException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+
+    }
+
+    public boolean isOff() {
+        return !isOn();
+    }
+
     public String getId() {
         return name;
     }
