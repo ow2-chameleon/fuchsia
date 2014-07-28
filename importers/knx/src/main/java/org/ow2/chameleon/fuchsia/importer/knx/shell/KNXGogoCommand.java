@@ -100,19 +100,22 @@ public class KNXGogoCommand {
                 }
                 found=true;
 
-                System.out.println(String.format("invoking method %s from device %s", command, device.getId()));
+                System.out.println(String.format("Invoking method %s from device %s", command, device.getId()));
 
                 try{
 
                     if(device instanceof Switch){
                         Switch swi=(Switch)device;
-                        invokeMethod(Switch.class,swi,command);
+                        Object retval=invokeMethod(Switch.class,swi,command);
+                        if(retval!=null){
+                            System.out.println(String.format("Returned value: %s",retval.toString()));
+                        }
                     }else if(device instanceof Step){
                         Step step=(Step)device;
                         invokeMethod(Step.class,step,command);
                     }
 
-                    System.out.println("Invokation finished.");
+                    System.out.println("Invocation finished.");
 
                 }catch (Exception e){
 
@@ -135,14 +138,19 @@ public class KNXGogoCommand {
 
     }
 
-    private void invokeMethod(Class c,Object instance,String command){
+    private Object invokeMethod(Class c,Object instance,String command){
 
         try {
             Method method = c.getMethod(command);
-            method.invoke(instance);
+            Object returnedValue=method.invoke(instance);
+
+            return returnedValue;
+
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(String.format("Failed invoking command %s, with the message %s", command, e.getMessage()));
         }
+
+        return null;
     }
 
 }

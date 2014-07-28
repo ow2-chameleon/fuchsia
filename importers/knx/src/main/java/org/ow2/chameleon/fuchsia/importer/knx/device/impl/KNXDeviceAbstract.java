@@ -20,6 +20,8 @@
 package org.ow2.chameleon.fuchsia.importer.knx.device.impl;
 
 import org.ow2.chameleon.fuchsia.importer.knx.device.iface.KNXDevice;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tuwien.auto.calimero.GroupAddress;
 import tuwien.auto.calimero.datapoint.Datapoint;
 import tuwien.auto.calimero.datapoint.StateDP;
@@ -30,6 +32,8 @@ import tuwien.auto.calimero.process.ProcessCommunicator;
  * Created by adele on 11/07/14.
  */
 public abstract class KNXDeviceAbstract implements KNXDevice {
+
+    protected final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
     private Datapoint dp;
     private ProcessCommunicator pc;

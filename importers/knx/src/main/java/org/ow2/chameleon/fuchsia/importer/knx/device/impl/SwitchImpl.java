@@ -31,10 +31,10 @@ import tuwien.auto.calimero.process.ProcessCommunicator;
 @Provides(specifications = {Switch.class,KNXDevice.class})
 public class SwitchImpl extends KNXDeviceAbstract implements Switch {
 
-    @Property //(name = "pc",mandatory = false)
+    @Property
     private ProcessCommunicator pc;
 
-    @Property //(name = "groupaddr",mandatory = false)
+    @Property
     private String groupaddr;
 
     @ServiceProperty(name = Factory.INSTANCE_NAME_PROPERTY)
@@ -53,7 +53,7 @@ public class SwitchImpl extends KNXDeviceAbstract implements Switch {
 
     public void on() {
         try {
-            System.out.println("invoking switch on");
+            LOG.debug("Invoking Switch On");
             getPc().write(getDataPoint(), "on");
         } catch (KNXException e) {
             e.printStackTrace();
@@ -62,7 +62,7 @@ public class SwitchImpl extends KNXDeviceAbstract implements Switch {
 
     public void off() {
         try {
-            System.out.println("invoking switch off");
+            LOG.debug("Invoking Switch Off");
             getPc().write(getDataPoint(), "off");
         } catch (KNXException e) {
             e.printStackTrace();
@@ -74,10 +74,10 @@ public class SwitchImpl extends KNXDeviceAbstract implements Switch {
         String stateReturned;
 
         try {
-            System.out.println("checking switch state");
+            LOG.debug("Checking state .. ");
             stateReturned=getPc().read(getDataPoint());
-            System.out.println("returned "+stateReturned);
-            return stateReturned.equals("on")?true:false;
+            LOG.debug("State returned {}",stateReturned);
+            return Boolean.parseBoolean(stateReturned);
         } catch (KNXException e) {
             e.printStackTrace();
         }

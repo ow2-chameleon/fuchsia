@@ -49,6 +49,7 @@ public class StepImpl extends KNXDeviceAbstract implements Step {
 
     public void increase() {
         try {
+            LOG.debug("Invoking Step increase");
             getPc().write(getDataPoint(),"increase");
         } catch (KNXException e) {
             e.printStackTrace();
@@ -57,6 +58,7 @@ public class StepImpl extends KNXDeviceAbstract implements Step {
 
     public void decrease() {
         try {
+            LOG.debug("Invoking Step decrease");
             getPc().write(getDataPoint(),"decrease");
         } catch (KNXException e) {
             e.printStackTrace();
