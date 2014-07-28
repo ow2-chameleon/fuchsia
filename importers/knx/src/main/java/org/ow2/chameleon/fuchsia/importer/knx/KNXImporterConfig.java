@@ -26,7 +26,7 @@ import org.ow2.chameleon.fuchsia.core.component.ImportationLinker;
 
 import static org.apache.felix.ipojo.configuration.Instance.instance;
 
-@Configuration
+//@Configuration
 public class KNXImporterConfig {
 
     Instance fileBasedDiscoveryImport = instance()
