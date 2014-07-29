@@ -21,9 +21,12 @@ package org.ow2.chameleon.fuchsia.importer.knx;
 
 import org.apache.felix.ipojo.*;
 import org.apache.felix.ipojo.annotations.*;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
+import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclarationBuilder;
 import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
 import org.ow2.chameleon.fuchsia.importer.knx.dao.KNXDeclaration;
 import org.ow2.chameleon.fuchsia.importer.knx.util.KNXLinkManager;
@@ -33,9 +36,8 @@ import tuwien.auto.calimero.link.KNXNetworkLink;
 import tuwien.auto.calimero.process.ProcessCommunicator;
 import tuwien.auto.calimero.process.ProcessCommunicatorImpl;
 
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
+import javax.xml.parsers.FactoryConfigurationError;
+import java.util.*;
 
 @Component
 @Provides
@@ -60,7 +62,13 @@ public class KNXDeviceLightImporter extends AbstractImporterComponent {
     @Requires(filter = "(factory.name=org.ow2.chameleon.fuchsia.importer.knx.device.impl.StepImpl)", optional = false)
     Factory factoryStep;
 
+    private BundleContext context;
+
     private Map<String,ComponentInstance> instances=new HashMap<String,ComponentInstance>();
+
+    public KNXDeviceLightImporter(BundleContext context){
+        this.context=context;
+    }
 
     @Requires
     private KNXLinkManager linkManager;
@@ -91,18 +99,62 @@ public class KNXDeviceLightImporter extends AbstractImporterComponent {
         try{
             ComponentInstance ci = null;
 
-            if(knxInput.getDpt().equals("switch")){
-                ci=factorySwitch.createComponentInstance(hs);
-            }else if(knxInput.getDpt().equals("step")){
-                ci=factoryStep.createComponentInstance(hs);
+            String filter=String.format("(&(protocol=knx)(type=%s))", knxInput.getDpt());
+
+            LOG.info("Looking for factories that match the filter '{}'",filter);
+
+            Collection<ServiceReference<Factory>> srs=context.getServiceReferences(Factory.class,filter);
+
+            if(srs!=null && srs.size()>0){
+
+                if(srs.size()>1){
+                    LOG.warn("More than one provider was found ({} to be exact), one will be picked up randomly",srs.size());
+                }
+
+                /*
+                if(knxInput.getDpt().equals("switch")){
+                    ci = factorySwitch.createComponentInstance(hs);
+                }else if(knxInput.getDpt().equals("step")) {
+                    ci = factoryStep.createComponentInstance(hs);
+                }
+                */
+
+                LOG.debug("{} services found as factory",srs.size());
+                ServiceReference<Factory> sr=srs.iterator().next();
+
+                Factory fact=context.getService(sr);
+
+                ci=fact.createComponentInstance(hs);
+
+                Map<String, Object> metadata = new HashMap<String, Object>();
+
+                metadata.putAll(importDeclaration.getMetadata());
+                metadata.put("id", knxInput.getId());
+                metadata.put("discovery.knx.device.dpt", knxInput.getDpt());
+                metadata.put("discovery.knx.device.object", ((InstanceManager)ci).getPojoObject());
+
+                ImportDeclaration declaration = ImportDeclarationBuilder.fromMetadata(metadata).build();
+
+                Dictionary<String, Object> props = new Hashtable<String, Object>();
+
+                context.registerService(ImportDeclaration.class,declaration,props);
+
+                instances.put(knxInput.getId(),ci);
+
+                super.handleImportDeclaration(importDeclaration);
+
+
+            }else {
+                LOG.debug("No services found as factory the device ID", knxInput.getId());
             }
 
-            instances.put(knxInput.getId(),ci);
-        }catch (UnacceptableConfiguration unacceptableConfiguration) {
+        } catch (UnacceptableConfiguration unacceptableConfiguration) {
             unacceptableConfiguration.printStackTrace();
         } catch (MissingHandlerException e) {
             e.printStackTrace();
         } catch (ConfigurationException e) {
+            e.printStackTrace();
+        } catch (InvalidSyntaxException e) {
             e.printStackTrace();
         }
 

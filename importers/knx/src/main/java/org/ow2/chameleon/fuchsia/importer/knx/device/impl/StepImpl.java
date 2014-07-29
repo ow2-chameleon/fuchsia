@@ -29,7 +29,9 @@ import tuwien.auto.calimero.exception.KNXException;
 import tuwien.auto.calimero.process.ProcessCommunicator;
 
 @Component
-@Provides(specifications = {Step.class,KNXDevice.class})
+@Provides(specifications = {Step.class,KNXDevice.class},
+        properties = { @StaticServiceProperty(name = "type", type="java.lang.String", value = "step",immutable = true),
+                @StaticServiceProperty(name = "protocol", type="java.lang.String", value = "knx", immutable = true)})
 public class StepImpl extends KNXDeviceAbstract implements Step {
 
     @Property(mandatory = false)

@@ -28,7 +28,9 @@ import tuwien.auto.calimero.exception.KNXException;
 import tuwien.auto.calimero.process.ProcessCommunicator;
 
 @Component
-@Provides(specifications = {Switch.class,KNXDevice.class})
+@Provides(specifications = {Switch.class,KNXDevice.class},
+        properties = { @StaticServiceProperty(name = "type", type="java.lang.String", value = "switch", immutable = true),
+                @StaticServiceProperty(name = "protocol", type="java.lang.String", value = "knx", immutable = true)})
 public class SwitchImpl extends KNXDeviceAbstract implements Switch {
 
     @Property
