@@ -24,6 +24,7 @@ import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
 import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclarationBuilder;
@@ -56,15 +57,10 @@ public class KNXDeviceLightImporter extends AbstractImporterComponent {
         setServiceReference(serviceReference);
     }
 
-    @Requires(filter = "(factory.name=org.ow2.chameleon.fuchsia.importer.knx.device.impl.SwitchImpl)", optional = false)
-    Factory factorySwitch;
-
-    @Requires(filter = "(factory.name=org.ow2.chameleon.fuchsia.importer.knx.device.impl.StepImpl)", optional = false)
-    Factory factoryStep;
-
     private BundleContext context;
 
     private Map<String,ComponentInstance> instances=new HashMap<String,ComponentInstance>();
+    private Map<String,ServiceRegistration> instancesRegistration=new HashMap<String,ServiceRegistration>();
 
     public KNXDeviceLightImporter(BundleContext context){
         this.context=context;
@@ -90,7 +86,7 @@ public class KNXDeviceLightImporter extends AbstractImporterComponent {
 
             ProcessCommunicator pc = new ProcessCommunicatorImpl(lnk);
 
-            hs.put("pc", pc);
+            hs.put("pc",pc);
 
         } catch (Exception e) {
             LOG.error("Failed to connect to the KNX Bus, ignoring connection and creating object",e);
@@ -111,14 +107,6 @@ public class KNXDeviceLightImporter extends AbstractImporterComponent {
                     LOG.warn("More than one provider was found ({} to be exact), one will be picked up randomly",srs.size());
                 }
 
-                /*
-                if(knxInput.getDpt().equals("switch")){
-                    ci = factorySwitch.createComponentInstance(hs);
-                }else if(knxInput.getDpt().equals("step")) {
-                    ci = factoryStep.createComponentInstance(hs);
-                }
-                */
-
                 LOG.debug("{} services found as factory",srs.size());
                 ServiceReference<Factory> sr=srs.iterator().next();
 
@@ -129,7 +117,8 @@ public class KNXDeviceLightImporter extends AbstractImporterComponent {
                 Map<String, Object> metadata = new HashMap<String, Object>();
 
                 metadata.putAll(importDeclaration.getMetadata());
-                metadata.put("id", knxInput.getId());
+                metadata.put("id", "proxy"+knxInput.getId());
+                metadata.put("discovery.knx.device.instance.name", knxInput.getId());
                 metadata.put("discovery.knx.device.dpt", knxInput.getDpt());
                 metadata.put("discovery.knx.device.object", ((InstanceManager)ci).getPojoObject());
 
@@ -137,9 +126,10 @@ public class KNXDeviceLightImporter extends AbstractImporterComponent {
 
                 Dictionary<String, Object> props = new Hashtable<String, Object>();
 
-                context.registerService(ImportDeclaration.class,declaration,props);
+                ServiceRegistration regis=context.registerService(ImportDeclaration.class, declaration, props);
 
                 instances.put(knxInput.getId(),ci);
+                instancesRegistration.put(knxInput.getId(),regis);
 
                 super.handleImportDeclaration(importDeclaration);
 
@@ -156,6 +146,8 @@ public class KNXDeviceLightImporter extends AbstractImporterComponent {
             e.printStackTrace();
         } catch (InvalidSyntaxException e) {
             e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
     }
@@ -163,20 +155,33 @@ public class KNXDeviceLightImporter extends AbstractImporterComponent {
     @Override
     protected void denyImportDeclaration(ImportDeclaration importDeclaration) throws BinderException {
 
-        KNXDeclaration knxInput = KNXDeclaration.create(importDeclaration);
+        try {
 
-        ComponentInstance ci=instances.get(knxInput.getId());
+            super.unhandleImportDeclaration(importDeclaration);
 
-        if(ci!=null){
-            LOG.info("Removing instance related to {}",knxInput.getId());
-            ci.dispose();
-        }
+            KNXDeclaration knxInput = KNXDeclaration.create(importDeclaration);
 
-        if(instances.size()==0){
-            linkManager.disconnect();
+            ComponentInstance ci=instances.get(knxInput.getId());
+
+            ServiceRegistration sr=instancesRegistration.get(knxInput.getId());
+
+            if(sr!=null){
+                LOG.info("Removing proxy import declaration related to {}",knxInput.getId());
+                sr.unregister();
+            }
+
+            if(ci!=null){
+                LOG.info("Removing proxy instance related to {}",knxInput.getId());
+                ci.dispose();
+            }
+
+        }catch(Exception e){
+            LOG.error("Failed removing declaration with the message {}",e.getMessage(),e);
         }
 
     }
+
+
 
     public String getName() {
         return name;
