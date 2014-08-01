@@ -24,6 +24,8 @@ import org.osgi.framework.ServiceReference;
 import org.ow2.chameleon.fuchsia.core.component.manager.DeclarationBindManager;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -36,6 +38,7 @@ import java.util.Set;
  * @author Morgan Martinet
  */
 public abstract class AbstractImporterComponent implements ImporterService, ImporterIntrospection {
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractImporterComponent.class);
     private final DeclarationBindManager<ImportDeclaration> declarationBindManager;
     private final Set<ImportDeclaration> waitingImportDeclarationsToHandle;
     private ServiceReference<ImporterService> serviceReference;
@@ -129,6 +132,7 @@ public abstract class AbstractImporterComponent implements ImporterService, Impo
     public void unhandleImportDeclaration(ImportDeclaration importDeclaration) {
         synchronized (waitingImportDeclarationsToHandle) {
             if (this.serviceReference == null) {
+                LOG.warn("Service reference is null and cannot be unhandled for {}.",importDeclaration.toString());
                 waitingImportDeclarationsToHandle.remove(importDeclaration);
                 return;
             }
