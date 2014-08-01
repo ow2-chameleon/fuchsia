@@ -60,13 +60,13 @@ public class ContentHelper {
 
         try {
 
-            linkers = new ArrayList<ImportationLinkerIntrospection>();
+            linkers=new ArrayList<ImportationLinkerIntrospection>();
 
-            ServiceReference[] references = context.getServiceReferences(ImportationLinkerIntrospection.class.getName(), null);
+            Collection<ServiceReference<ImportationLinkerIntrospection>> references=context.getServiceReferences(ImportationLinkerIntrospection.class,null);
 
-            if (references != null) {
-                for (ServiceReference sr : references) {
-                    linkers.add((ImportationLinkerIntrospection) context.getService(sr));
+            if(references!=null) {
+                for(ServiceReference<ImportationLinkerIntrospection> sr:references){
+                    linkers.add(context.getService(sr));
                 }
             }
 
