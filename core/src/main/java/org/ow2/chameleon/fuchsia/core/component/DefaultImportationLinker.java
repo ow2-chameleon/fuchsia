@@ -207,6 +207,7 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
      */
     @Unbind(id = "importerServices")
     void unbindImporterService(ServiceReference<ImporterService> serviceReference) {
+
         LOG.debug(linkerName + " : Unbind the ImporterService " + importersManager.getDeclarationBinder(serviceReference));
         synchronized (lock) {
             importersManager.removeLinks(serviceReference);
@@ -223,13 +224,19 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
     @Bind(id = "importDeclarations", specification = ImportDeclaration.class, aggregate = true, optional = true)
     void bindImportDeclaration(ServiceReference<ImportDeclaration> importDeclarationSRef) {
         synchronized (lock) {
+
             declarationsManager.add(importDeclarationSRef);
+
+            if (!declarationsManager.matched(importDeclarationSRef)) {
+
+                LOG.debug("No service matching was found, ignoring service reference.");
+
+                return;
+            }
+
             LOG.debug(linkerName + " : Bind the ImportDeclaration "
                     + declarationsManager.getDeclaration(importDeclarationSRef));
 
-            if (!declarationsManager.matched(importDeclarationSRef)) {
-                return;
-            }
             declarationsManager.createLinks(importDeclarationSRef);
         }
     }
@@ -258,13 +265,24 @@ public class DefaultImportationLinker implements ImportationLinker, ImportationL
      */
     @Unbind(id = "importDeclarations")
     void unbindImportDeclaration(ServiceReference<ImportDeclaration> importDeclarationSRef) {
-        LOG.debug(linkerName + " : Unbind the ImportDeclaration "
-                + declarationsManager.getDeclaration(importDeclarationSRef));
 
-        synchronized (lock) {
-            declarationsManager.removeLinks(importDeclarationSRef);
-            declarationsManager.remove(importDeclarationSRef);
+        try {
+            if (!declarationsManager.matched(importDeclarationSRef)) {
+                LOG.debug("Declaration {} do not match service, skipping",declarationsManager.getDeclaration(importDeclarationSRef));
+                return;
+            }
+
+            LOG.debug(linkerName + " : Unbind the ImportDeclaration "
+                    + declarationsManager.getDeclaration(importDeclarationSRef));
+
+            synchronized (lock) {
+                declarationsManager.removeLinks(importDeclarationSRef);
+                declarationsManager.remove(importDeclarationSRef);
+            }
+        } catch(Exception e){
+            LOG.error("Failed to unbind declaration",e);
         }
+
     }
 
     public String getName() {

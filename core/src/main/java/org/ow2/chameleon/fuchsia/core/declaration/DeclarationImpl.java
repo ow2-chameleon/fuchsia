@@ -22,6 +22,8 @@ package org.ow2.chameleon.fuchsia.core.declaration;
 
 import org.apache.felix.ipojo.Factory;
 import org.osgi.framework.ServiceReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -35,6 +37,8 @@ import java.util.Map;
  * @author Morgan Martinet
  */
 class DeclarationImpl implements Declaration, ImportDeclaration, ExportDeclaration {
+
+    private static final Logger LOG = LoggerFactory.getLogger(DeclarationImpl.class);
 
     // the lock used to synchronized serviceReferencesBound and serviceReferencesHandled
     private final Object lock;
@@ -91,8 +95,15 @@ class DeclarationImpl implements Declaration, ImportDeclaration, ExportDeclarati
             if (!serviceReferencesHandled.containsKey(fetchServiceId(serviceReference))) {
                 serviceReferencesBound.remove(fetchServiceId(serviceReference));
             } else {
+
+                /**
+                 * Pay attention to this line, this may produce undesired behaviour
+                 */
+
                 String name = (String) serviceReference.getProperty(Factory.INSTANCE_NAME_PROPERTY);
+                LOG.warn(name + " want to unbound a declaration that it is still handling.");
                 throw new IllegalStateException(name + " want to unbound a declaration that it is still handling.");
+
             }
         }
     }
