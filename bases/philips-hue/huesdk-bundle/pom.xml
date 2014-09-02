@@ -17,14 +17,16 @@
         <dependency>
             <artifactId>hue-sdk-core</artifactId>
             <groupId>philips</groupId>
-            <version>0.0.3</version>
-            <optional>true</optional>
+            <version>${project.version}</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/src/main/resources/huelocalsdk.jar</systemPath>
         </dependency>
         <dependency>
             <artifactId>hue-sdk-resources</artifactId>
             <groupId>philips</groupId>
-            <version>0.0.3</version>
-            <optional>true</optional>
+            <version>${project.version}</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/src/main/resources/sdkresources.jar</systemPath>
         </dependency>
     </dependencies>
 
@@ -42,7 +44,7 @@
                             ${project.artifactId}
                         </Bundle-SymbolicName>
                         <Export-Package>!org.json,*</Export-Package>
-                        <Embed-Dependency>*;scope=compile|runtime;inline=true</Embed-Dependency>
+                        <Embed-Dependency>*;scope=system;inline=true</Embed-Dependency>
                         <Privage-Package>org.json</Privage-Package>
                     </instructions>
                 </configuration>
