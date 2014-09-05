@@ -56,6 +56,11 @@ circle.native {
 }
 
 circle.importer {
+    fill: blue;
+}
+
+circle.declaration {
+    fill: yellow;
 }
 
 circle.exporter {
