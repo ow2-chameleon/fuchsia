@@ -51,6 +51,7 @@ public class PhilipsHueBridgeImporter extends AbstractImporterComponent {
 
     private Map<String, ServiceRegistration> lamps = new HashMap<String, ServiceRegistration>();
     private Map<String, ServiceRegistration> bridges = new HashMap<String, ServiceRegistration>();
+    private Map<String, FetchBridgeLampsTask> lampsSearchTask = new HashMap<String, FetchBridgeLampsTask>();
 
     @ServiceProperty(name = "target", value = "(&(discovery.philips.bridge.type=*)(scope=generic))")
     private String filter;
@@ -111,11 +112,14 @@ public class PhilipsHueBridgeImporter extends AbstractImporterComponent {
 
         ServiceRegistration bridgeService=context.registerService(new String[]{PHBridge.class.getName(),PHBridgeImpl.class.getName()},pojo.getBridgeObject(),props);
 
-        timer.schedule(new FetchBridgeLampsTask((PHBridgeImpl) pojo.getBridgeObject(),lamps,context),0,5000);
+        FetchBridgeLampsTask task=new FetchBridgeLampsTask((PHBridgeImpl) pojo.getBridgeObject(),lamps,context);
+
+        timer.schedule(task,0,5000);
 
         super.handleImportDeclaration(importDeclaration);
 
         bridges.put(pojo.getId(), bridgeService);
+        lampsSearchTask.put(pojo.getId(),task);
 
     }
 
@@ -126,18 +130,9 @@ public class PhilipsHueBridgeImporter extends AbstractImporterComponent {
 
         PhilipsHueBridgeDeclarationWrapper pojo= PhilipsHueBridgeDeclarationWrapper.create(importDeclaration);
 
-        try {
+        lampsSearchTask.remove(pojo.getId()).cancel();
 
-            for (Map.Entry<String, ServiceRegistration> entry : lamps.entrySet()) {
-                ServiceRegistration sr = lamps.remove(entry.getKey());
-                if (sr != null) {
-                    sr.unregister();
-                }
-            }
-
-        } catch (IllegalStateException e) {
-            LOG.error("failed unregistering lamp", e);
-        }
+        unhandleImportDeclaration(importDeclaration);
 
         try {
             ServiceRegistration sr = bridges.remove(pojo.getId());
@@ -148,7 +143,16 @@ public class PhilipsHueBridgeImporter extends AbstractImporterComponent {
             LOG.error("failed unregistering bridge", e);
         }
 
-        unhandleImportDeclaration(importDeclaration);
+        try {
+            for (Map.Entry<String, ServiceRegistration> entry : lamps.entrySet()) {
+                ServiceRegistration sr = lamps.remove(entry.getKey());
+                if (sr != null) {
+                    sr.unregister();
+                }
+            }
+        } catch (IllegalStateException e) {
+            LOG.error("failed unregistering lamp", e);
+        }
     }
 
 
