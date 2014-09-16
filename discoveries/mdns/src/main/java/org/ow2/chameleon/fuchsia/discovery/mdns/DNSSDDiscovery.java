@@ -142,21 +142,26 @@ public class DNSSDDiscovery extends AbstractDiscoveryComponent implements Networ
         metadata.put("discovery.mdns.device.name", event.getName());
 
         ServiceInfo serviceInfo=event.getDNS().getServiceInfo(dnssdServiceType, dnssdServiceName);
-        String hosts[]=serviceInfo.getHostAddresses();
 
-        if(hosts!=null && hosts.length>0)
-            metadata.put("discovery.mdns.device.host", hosts[0]);
+        if(serviceInfo!=null) {
 
-        metadata.put("discovery.mdns.device.port", serviceInfo.getPort());
+            String hosts[]=serviceInfo.getHostAddresses();
 
-        metadata.put("discovery.mdns.device.properties", bufProperty.toString());
-        metadata.put("scope", "generic");
+            if (hosts != null && hosts.length > 0)
+                metadata.put("discovery.mdns.device.host", hosts[0]);
 
-        ImportDeclaration declaration = ImportDeclarationBuilder.fromMetadata(metadata).build();
+            metadata.put("discovery.mdns.device.port", serviceInfo.getPort());
 
-        registerImportDeclaration(declaration);
+            metadata.put("discovery.mdns.device.properties", bufProperty.toString());
+            metadata.put("scope", "generic");
 
-        importDeclarations.put(event.getName(), declaration);
+            ImportDeclaration declaration = ImportDeclarationBuilder.fromMetadata(metadata).build();
+
+            registerImportDeclaration(declaration);
+
+            importDeclarations.put(event.getName(), declaration);
+
+        }
 
     }
 
