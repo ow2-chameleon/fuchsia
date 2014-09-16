@@ -30,10 +30,7 @@ import org.ow2.chameleon.fuchsia.discovery.mdns.topology.NetworkTopology;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.jmdns.JmDNS;
-import javax.jmdns.NetworkTopologyDiscovery;
-import javax.jmdns.ServiceEvent;
-import javax.jmdns.ServiceListener;
+import javax.jmdns.*;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.Enumeration;
@@ -51,6 +48,9 @@ public class DNSSDDiscovery extends AbstractDiscoveryComponent implements Networ
 
     @Property(name = "dnssd.service.type", value = MDNSConstants.DNSSD_SERVICE_TYPE)
     private String dnssdServiceType;
+
+    @Property(name = "dnssd.service.name")
+    private String dnssdServiceName;
 
     protected DNSSDDiscovery(BundleContext bundleContext) {
         super(bundleContext);
@@ -116,9 +116,9 @@ public class DNSSDDiscovery extends AbstractDiscoveryComponent implements Networ
 
         StringBuilder bufAddress = new StringBuilder();
 
-        InetAddress[] addresses = event.getInfo().getInetAddresses();
+        String[] addresses = event.getInfo().getHostAddresses();
         if (addresses.length > 0) {
-            for (InetAddress address : addresses) {
+            for (String address : addresses) {
                 bufAddress.append(address);
                 bufAddress.append(':');
                 bufAddress.append(event.getInfo().getPort());
@@ -140,8 +140,15 @@ public class DNSSDDiscovery extends AbstractDiscoveryComponent implements Networ
 
         metadata.put("id", event.getName());
         metadata.put("discovery.mdns.device.name", event.getName());
-        metadata.put("discovery.mdns.device.addresses", bufAddress.toString());
-        metadata.put("discovery.mdns.device.isPersistent", event.getInfo().isPersistent());
+
+        ServiceInfo serviceInfo=event.getDNS().getServiceInfo(dnssdServiceType, dnssdServiceName);
+        String hosts[]=serviceInfo.getHostAddresses();
+
+        if(hosts!=null && hosts.length>0)
+            metadata.put("discovery.mdns.device.host", hosts[0]);
+
+        metadata.put("discovery.mdns.device.port", serviceInfo.getPort());
+
         metadata.put("discovery.mdns.device.properties", bufProperty.toString());
         metadata.put("scope", "generic");
 
