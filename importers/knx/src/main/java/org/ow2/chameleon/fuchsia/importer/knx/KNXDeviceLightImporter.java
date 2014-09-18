@@ -21,6 +21,7 @@ package org.ow2.chameleon.fuchsia.importer.knx;
 
 import org.apache.felix.ipojo.*;
 import org.apache.felix.ipojo.annotations.*;
+import org.apache.felix.ipojo.architecture.PropertyDescription;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
@@ -111,6 +112,26 @@ public class KNXDeviceLightImporter extends AbstractImporterComponent {
                 ServiceReference<Factory> sr=srs.iterator().next();
 
                 Factory fact=context.getService(sr);
+
+                Map<String, Object> componentPropertiesToTest = new HashMap<String, Object>();
+                componentPropertiesToTest.putAll(importDeclaration.getMetadata());
+                componentPropertiesToTest.put("id", "proxy"+knxInput.getId());
+                componentPropertiesToTest.put("discovery.knx.device.instance.name", knxInput.getId());
+                componentPropertiesToTest.put("discovery.knx.device.dpt", knxInput.getDpt());
+
+                PropertyDescription properties[]= fact.getComponentDescription().getProperties().clone();
+                Map<String, Object> componentPropertiesToAdd = new HashMap<String, Object>();
+                for(String property : componentPropertiesToTest.keySet()){
+                    for(PropertyDescription propertyDescription : properties){
+                        if(propertyDescription.getName().equals(property)){
+
+                        }else{
+                            componentPropertiesToAdd.put(property,componentPropertiesToTest.get(property));
+                        }
+                    }
+                }
+
+                hs.putAll(componentPropertiesToAdd);
 
                 ci=fact.createComponentInstance(hs);
 
