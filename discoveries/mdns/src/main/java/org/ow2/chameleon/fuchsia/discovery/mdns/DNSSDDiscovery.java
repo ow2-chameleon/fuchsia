@@ -82,9 +82,7 @@ public class DNSSDDiscovery extends AbstractDiscoveryComponent implements Networ
 
     public void serviceAdded(ServiceEvent event) {
         LOG.info("adding declaration for the mDNS/DNSsd service {}", event.getName());
-
         createImportationDeclaration(event);
-
     }
 
     public void serviceRemoved(ServiceEvent event) {
@@ -103,7 +101,12 @@ public class DNSSDDiscovery extends AbstractDiscoveryComponent implements Networ
 
     public void serviceResolved(ServiceEvent event) {
         LOG.info("resolving declaration for the mDNS/DNSsd service {}", event.getName());
-        LOG.warn("no action implemented for this kind of event");
+
+        if(!importDeclarations.containsKey(event.getName())){
+            createImportationDeclaration(event);
+        }else {
+            LOG.warn("no action implemented for this kind of event");
+        }
     }
 
     public String getName() {
