@@ -53,7 +53,7 @@ public class DNSSDDiscovery extends AbstractDiscoveryComponent implements Networ
     @Property(name = "dnssd.service.name")
     private String dnssdServiceName;
 
-    @Property(name = "dnssd.service.marker")
+    @Property(name = "dnssd.service.marker",value = "")
     private String dnssdServiceMarker;
 
     protected DNSSDDiscovery(BundleContext bundleContext) {
