@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.jmdns.*;
 import java.io.IOException;
+import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -51,6 +52,9 @@ public class DNSSDDiscovery extends AbstractDiscoveryComponent implements Networ
 
     @Property(name = "dnssd.service.name")
     private String dnssdServiceName;
+
+    @Property(name = "dnssd.service.marker")
+    private String dnssdServiceMarker;
 
     protected DNSSDDiscovery(BundleContext bundleContext) {
         super(bundleContext);
@@ -82,12 +86,17 @@ public class DNSSDDiscovery extends AbstractDiscoveryComponent implements Networ
 
     public void serviceAdded(ServiceEvent event) {
         LOG.info("adding declaration for the mDNS/DNSsd service {}", event.getName());
-        createImportationDeclaration(event);
+
+        if(!importDeclarations.containsKey(event.getName())){
+            createImportationDeclaration(event);
+        }else {
+            LOG.warn("Service already registered under the name of {}, skipping declaration registration",event.getName());
+        }
     }
 
     public void serviceRemoved(ServiceEvent event) {
 
-        LOG.info("removing declaration for the mDNS/DNSsd service {}", event.getName());
+        LOG.info("removing declaration for the mDNS/DNSsd service named {}", event.getName());
 
         ImportDeclaration declaration = importDeclarations.remove(event.getName());
         if (declaration != null) {
@@ -105,7 +114,7 @@ public class DNSSDDiscovery extends AbstractDiscoveryComponent implements Networ
         if(!importDeclarations.containsKey(event.getName())){
             createImportationDeclaration(event);
         }else {
-            LOG.warn("no action implemented for this kind of event");
+            LOG.warn("Service already registered under the name of {}, skipping declaration registration",event.getName());
         }
     }
 
@@ -115,54 +124,45 @@ public class DNSSDDiscovery extends AbstractDiscoveryComponent implements Networ
 
     private synchronized void createImportationDeclaration(ServiceEvent event) {
 
-        Map<String, Object> metadata = new HashMap<String, Object>();
+        ServiceInfo serviceInfo=event.getInfo();
 
-        StringBuilder bufAddress = new StringBuilder();
+        String instanceName=serviceInfo.getQualifiedNameMap().get(ServiceInfo.Fields.Instance);
 
-        String[] addresses = event.getInfo().getHostAddresses();
-        if (addresses.length > 0) {
-            for (String address : addresses) {
-                bufAddress.append(address);
-                bufAddress.append(':');
-                bufAddress.append(event.getInfo().getPort());
-                bufAddress.append(' ');
-            }
-        } else {
-            bufAddress.append("(null):");
-            bufAddress.append(event.getInfo().getPort());
-        }
+        if(serviceInfo!=null && instanceName!=null && instanceName.equals(dnssdServiceName)){
 
-        StringBuilder bufProperty = new StringBuilder();
+            ServiceInfo serviceDetail=event.getDNS().getServiceInfo(dnssdServiceType, dnssdServiceName);
 
-        Enumeration<String> propertiesNameEnum = event.getInfo().getPropertyNames();
+            Map<String, Object> metadata = new HashMap<String, Object>();
 
-        while (propertiesNameEnum.hasMoreElements()) {
-            String name = propertiesNameEnum.nextElement();
-            bufProperty.append(name + "=" + event.getInfo().getPropertyString(name) + ",");
-        }
-
-        metadata.put("id", event.getName());
-        metadata.put("discovery.mdns.device.name", event.getName());
-
-        ServiceInfo serviceInfo=event.getDNS().getServiceInfo(dnssdServiceType, dnssdServiceName);
-
-        if(serviceInfo!=null) {
-
-            String hosts[]=serviceInfo.getHostAddresses();
-
-            if (hosts != null && hosts.length > 0)
-                metadata.put("discovery.mdns.device.host", hosts[0]);
-
-            metadata.put("discovery.mdns.device.port", serviceInfo.getPort());
-
-            metadata.put("discovery.mdns.device.properties", bufProperty.toString());
+            metadata.put("id", event.getName());
+            metadata.put("discovery.mdns.device.name", event.getName());
+            metadata.put("discovery.mdns.device.port", serviceDetail.getPort());
+            metadata.put("discovery.mdns.device.marker",dnssdServiceMarker);
             metadata.put("scope", "generic");
 
-            ImportDeclaration declaration = ImportDeclarationBuilder.fromMetadata(metadata).build();
+            String[] hosts=serviceDetail.getHostAddresses();
 
-            registerImportDeclaration(declaration);
+            final String suffixModel="discovery.mdns.device.host%s";
 
-            importDeclarations.put(event.getName(), declaration);
+            for(int x=0;x<hosts.length;x++){
+                String suffix=x==0?"":"."+String.valueOf(x);
+                metadata.put(String.format(suffixModel,suffix),hosts[x]);
+            }
+
+            String txData=new String(serviceInfo.getTextBytes());
+
+            if(txData.trim().length()!=0)
+                metadata.put("discovery.mdns.device.txdata",txData);
+
+            synchronized (importDeclarations){
+
+                ImportDeclaration declaration = ImportDeclarationBuilder.fromMetadata(metadata).build();
+
+                registerImportDeclaration(declaration);
+
+                importDeclarations.put(event.getName(), declaration);
+
+            }
 
         }
 
@@ -174,10 +174,13 @@ public class DNSSDDiscovery extends AbstractDiscoveryComponent implements Networ
                 .getInstance().getInetAddresses()) {
 
             try {
-                JmDNS current = JmDNS.create(address);
 
-                current.addServiceListener(dnssdServiceType, this);
+                if(address instanceof Inet4Address){
 
+                    JmDNS current = JmDNS.create((Inet4Address)address);
+                    current.addServiceListener(dnssdServiceType, this);
+
+                }
             } catch (IOException e) {
                 LOG.error("Failed to publish in mDNS", e);
             }
