@@ -37,14 +37,13 @@ import tuwien.auto.calimero.link.KNXNetworkLink;
 import tuwien.auto.calimero.process.ProcessCommunicator;
 import tuwien.auto.calimero.process.ProcessCommunicatorImpl;
 
-import javax.xml.parsers.FactoryConfigurationError;
 import java.util.*;
 
 @Component
 @Provides
-public class KNXDeviceLightImporter extends AbstractImporterComponent {
+public class KNXDeviceImporter extends AbstractImporterComponent {
 
-    private static final Logger LOG = LoggerFactory.getLogger(KNXDeviceLightImporter.class);
+    private static final Logger LOG = LoggerFactory.getLogger(KNXDeviceImporter.class);
 
     @ServiceProperty(name = "target", value = "(discovery.knx.device.addr=*)")
     private String filter;
@@ -62,7 +61,7 @@ public class KNXDeviceLightImporter extends AbstractImporterComponent {
     private Map<String,ComponentInstance> instances=new HashMap<String,ComponentInstance>();
     private Map<String,ServiceRegistration> instancesRegistration=new HashMap<String,ServiceRegistration>();
 
-    public KNXDeviceLightImporter(BundleContext context){
+    public KNXDeviceImporter(BundleContext context){
         this.context=context;
     }
 
