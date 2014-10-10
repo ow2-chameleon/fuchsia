@@ -30,6 +30,8 @@ import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclarationBuilder;
 import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
 import org.ow2.chameleon.fuchsia.importer.knx.dao.KNXDeclaration;
+import org.ow2.chameleon.fuchsia.importer.knx.device.DPT;
+import org.ow2.chameleon.fuchsia.importer.knx.device.exception.InvalidDPTException;
 import org.ow2.chameleon.fuchsia.importer.knx.util.KNXLinkManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +41,10 @@ import tuwien.auto.calimero.process.ProcessCommunicatorImpl;
 
 import java.util.*;
 
+/**
+ * Creates a proxy to access the KNX device based on the DPT declared in the Fuchsia importer declaration
+ * @author Jander Nascimento
+ */
 @Component
 @Provides
 public class KNXDeviceImporter extends AbstractImporterComponent {
@@ -91,10 +97,12 @@ public class KNXDeviceImporter extends AbstractImporterComponent {
             LOG.error("Failed to connect to the KNX Bus, ignoring connection and creating object",e);
         }
 
+        String filter="";
+
         try{
             ComponentInstance ci = null;
 
-            String filter=String.format("(&(protocol=knx)(type=%s))", knxInput.getDpt());
+            filter=String.format("(&(protocol=knx)(type=%s))", DPT.getDPT(knxInput.getDpt()).getDPTName());
 
             LOG.info("Looking for factories that match the filter '{}'",filter);
 
@@ -106,7 +114,7 @@ public class KNXDeviceImporter extends AbstractImporterComponent {
                     LOG.warn("More than one provider was found ({} to be exact), one will be picked up randomly",srs.size());
                 }
 
-                LOG.debug("{} services found as factory",srs.size());
+                LOG.debug("{} service(s) found as factory for the DPT {}",srs.size(),DPT.getDPT(knxInput.getDpt()));
                 ServiceReference<Factory> sr=srs.iterator().next();
 
                 Factory fact=context.getService(sr);
@@ -118,7 +126,7 @@ public class KNXDeviceImporter extends AbstractImporterComponent {
                 metadata.putAll(importDeclaration.getMetadata());
                 metadata.put("id", "proxy"+knxInput.getId());
                 metadata.put("discovery.knx.device.instance.name", knxInput.getId());
-                metadata.put("discovery.knx.device.dpt", knxInput.getDpt());
+                metadata.put("discovery.knx.device.dpt", DPT.getDPT(knxInput.getDpt()).getDPTName());
                 metadata.put("discovery.knx.device.object", ((InstanceManager)ci).getPojoObject());
 
                 ImportDeclaration declaration = ImportDeclarationBuilder.fromMetadata(metadata).build();
@@ -137,16 +145,12 @@ public class KNXDeviceImporter extends AbstractImporterComponent {
                 LOG.debug("No services found as factory the device ID", knxInput.getId());
             }
 
-        } catch (UnacceptableConfiguration unacceptableConfiguration) {
-            unacceptableConfiguration.printStackTrace();
-        } catch (MissingHandlerException e) {
-            e.printStackTrace();
-        } catch (ConfigurationException e) {
-            e.printStackTrace();
         } catch (InvalidSyntaxException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Fuchsia internal error. Invalid service filter", filter,e);
+        } catch (InvalidDPTException e){
+            LOG.error("There is not factory in Fuchsia that supports the DPT {}.",knxInput.getDpt());
+        }catch (Exception e) {
+            LOG.error("Fuchsia internal error.",e);
         }
 
     }

@@ -21,15 +21,41 @@ package org.ow2.chameleon.fuchsia.importer.knx.device.iface;
 
 import org.ow2.chameleon.fuchsia.importer.knx.device.DPT;
 import tuwien.auto.calimero.process.ProcessCommunicator;
+import tuwien.auto.calimero.process.ProcessEvent;
 
+/**
+ * Interface implemented by all KNX devices supported by Fuchsia
+ */
 public interface KNXDevice {
 
+    /**
+     * KNX device identifier
+     * @return
+     */
     public String getId();
 
+    /**
+     * Data Point Type supported by the device
+     * @return
+     */
     public DPT getDPT();
 
+    /**
+     * ProcessCommunicator a network link that allows to send and receive message from/to the bus
+     * @return
+     */
     public ProcessCommunicator getPc();
 
+    /**
+     * Return a String that represets the KNX Group Address of the device
+     * @return
+     */
     public String getGroupaddr();
+
+    /**
+     * This method is invoked when a new message targets the GroupAddress of this device
+     * @param e Contains the source, destination and the payload of the message
+     */
+    public void messageReceived(ProcessEvent e);
 
 }

@@ -24,7 +24,6 @@ import org.apache.felix.ipojo.annotations.*;
 import org.ow2.chameleon.fuchsia.importer.knx.device.DPT;
 import org.ow2.chameleon.fuchsia.importer.knx.device.iface.KNXDevice;
 import org.ow2.chameleon.fuchsia.importer.knx.device.iface.Step;
-import org.ow2.chameleon.fuchsia.importer.knx.device.iface.Switch;
 import tuwien.auto.calimero.exception.KNXException;
 import tuwien.auto.calimero.process.ProcessCommunicator;
 
@@ -44,9 +43,10 @@ public class StepImpl extends KNXDeviceAbstract implements Step {
     private String name;
 
     @Validate
-    public void validate(){
+    public void validate() throws Exception {
         setPc(pc);
         setGroupaddr(groupaddr);
+        started();
     }
 
     public void increase() {
@@ -54,7 +54,7 @@ public class StepImpl extends KNXDeviceAbstract implements Step {
             LOG.debug("Invoking Step increase");
             getPc().write(getDataPoint(),"increase");
         } catch (KNXException e) {
-            e.printStackTrace();
+            LOG.warn("Failed invoking Step increase", e);
         }
     }
 
@@ -63,7 +63,7 @@ public class StepImpl extends KNXDeviceAbstract implements Step {
             LOG.debug("Invoking Step decrease");
             getPc().write(getDataPoint(),"decrease");
         } catch (KNXException e) {
-            e.printStackTrace();
+            LOG.warn("Failed invoking Step decrease", e);
         }
     }
 

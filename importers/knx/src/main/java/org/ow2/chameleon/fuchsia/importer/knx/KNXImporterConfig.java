@@ -19,7 +19,6 @@
  */
 package org.ow2.chameleon.fuchsia.importer.knx;
 
-import org.apache.felix.ipojo.configuration.Configuration;
 import org.apache.felix.ipojo.configuration.Instance;
 import org.ow2.chameleon.fuchsia.core.FuchsiaConstants;
 import org.ow2.chameleon.fuchsia.core.component.ImportationLinker;
@@ -34,7 +33,7 @@ public class KNXImporterConfig {
             .named("FileBasedDiscoveryImport");
 
     Instance knxImporter = instance()
-            .of(KNXDeviceLightImporter.class.getName())
+            .of(KNXDeviceImporter.class.getName())
             .with("target").setto("(discovery.knx.device.addr=*)");
 
 

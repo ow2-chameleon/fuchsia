@@ -22,16 +22,19 @@ package org.ow2.chameleon.fuchsia.importer.knx.device.impl;
 import org.ow2.chameleon.fuchsia.importer.knx.device.iface.KNXDevice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tuwien.auto.calimero.DetachEvent;
 import tuwien.auto.calimero.GroupAddress;
 import tuwien.auto.calimero.datapoint.Datapoint;
 import tuwien.auto.calimero.datapoint.StateDP;
 import tuwien.auto.calimero.exception.KNXFormatException;
 import tuwien.auto.calimero.process.ProcessCommunicator;
+import tuwien.auto.calimero.process.ProcessEvent;
+import tuwien.auto.calimero.process.ProcessListener;
 
 /**
  * Created by adele on 11/07/14.
  */
-public abstract class KNXDeviceAbstract implements KNXDevice {
+public abstract class KNXDeviceAbstract implements KNXDevice,ProcessListener {
 
     protected final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
@@ -51,32 +54,46 @@ public abstract class KNXDeviceAbstract implements KNXDevice {
         return pc;
     }
 
-    public final void setPc(ProcessCommunicator pc) {
+    public void setPc(ProcessCommunicator pc) {
         this.pc = pc;
     }
 
-    private final void createDataPoint(){
+    private final void createDataPoint() throws KNXFormatException {
 
-        if(getDataPoint()==null) {
-
-            try {
-                GroupAddress main = new GroupAddress(getGroupaddr());
-                Datapoint dp = new StateDP(main, "", 0, getDPT().getDPTID());
-                setDataPoint(dp);
-            } catch (KNXFormatException e) {
-                e.printStackTrace();
-            }
-
-        }
+        GroupAddress main = new GroupAddress(getGroupaddr());
+        Datapoint dp = new StateDP(main, "", 0, getDPT().getDPTID());
+        setDataPoint(dp);
 
     }
 
-    public final void setGroupaddr(String groupaddr) {
-        this.groupaddr = groupaddr;
+    protected final void started() throws Exception{
         createDataPoint();
+        getPc().addProcessListener(this);
+    }
+
+    public void setGroupaddr(String groupaddr) {
+        this.groupaddr = groupaddr;
     }
 
     public final String getGroupaddr() {
         return groupaddr;
+    }
+
+    public final void groupWrite(ProcessEvent e) {
+        try {
+            if(e.getDestination().equals(new GroupAddress(getGroupaddr()))){
+                messageReceived(e);
+            }
+        } catch (KNXFormatException e1) {
+            LOG.warn("Invalid group address {}",getGroupaddr(),e1);
+        }
+    }
+
+    public void detached(DetachEvent e) {
+        //To be implemented
+    }
+
+    public void messageReceived(ProcessEvent e) {
+        LOG.info("Device {} received message from {}",e.getDestination(),e.getSourceAddr());
     }
 }

@@ -19,11 +19,32 @@
  */
 package org.ow2.chameleon.fuchsia.importer.knx.device.iface;
 
+/**
+ * Corresponds to the DPT 1.001
+ * @author Jander Nascimento
+ */
 public interface Switch extends KNXDevice {
 
+    /**
+     * Switch ON the device
+     */
     public void on();
+
+    /**
+     * Switch OFF the device
+     */
     public void off();
+
+    /**
+     * Query if the device is ON
+     * @return true case the device is ON, false otherwise
+     */
     public boolean isOn();
+
+    /**
+     * Query if the device is OFF
+     * @return true case the device is OFF, false otherwise
+     */
     public boolean isOff();
 
 }

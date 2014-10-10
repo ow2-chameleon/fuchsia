@@ -22,15 +22,16 @@ package org.ow2.chameleon.fuchsia.importer.knx.shell;
 import org.apache.felix.ipojo.annotations.*;
 import org.apache.felix.service.command.Descriptor;
 import org.osgi.framework.BundleContext;
-import org.ow2.chameleon.fuchsia.importer.knx.device.iface.KNXDevice;
-import org.ow2.chameleon.fuchsia.importer.knx.device.iface.Step;
-import org.ow2.chameleon.fuchsia.importer.knx.device.iface.Switch;
+import org.ow2.chameleon.fuchsia.importer.knx.device.iface.*;
 import org.ow2.chameleon.fuchsia.tools.shell.util.FuchsiaGogoUtil;
 import org.ow2.chameleon.fuchsia.tools.shell.util.exception.MandatoryArgumentException;
 
 import java.lang.reflect.Method;
 import java.util.Set;
 
+/**
+ * @author Jander Nascimento
+ */
 @Component(immediate = true)
 @Instantiate
 @Provides
@@ -45,7 +46,7 @@ public class KNXGogoCommand {
     private String scope;
 
     @ServiceProperty(name = "osgi.command.function", value = "{}")
-    private String[] function = new String[]{"write","list"};
+    private String[] function = new String[]{"invoke","list"};
 
     public KNXGogoCommand(BundleContext context) {
         this.context = context;
@@ -78,15 +79,16 @@ public class KNXGogoCommand {
 
     }
 
-    @Descriptor  (value = "Writes commands in a KNX group address")
-    public void write(@Descriptor("-id DEVICE_ID -method KNX_METHOD") String... parameters) {
+    @Descriptor  (value = "Invoke KNX command KNX into a group address")
+    public void invoke(@Descriptor("-id DEVICE_ID -method KNX_METHOD [-value VALUE]") String... parameters) {
 
         boolean found=false;
 
         try {
 
+            String id=FuchsiaGogoUtil.getArgumentValue("-id",Boolean.TRUE,parameters);
             String command=FuchsiaGogoUtil.getArgumentValue("-method",Boolean.TRUE,parameters);
-            String id=FuchsiaGogoUtil.getArgumentValue("-id",true,parameters);
+            String value=FuchsiaGogoUtil.getArgumentValue("-value",Boolean.FALSE,parameters);
 
             if(devices==null || devices.isEmpty()){
                 System.out.println("No devices available to command");
@@ -104,22 +106,31 @@ public class KNXGogoCommand {
 
                 try{
 
+                    Object retval=null;
+
                     if(device instanceof Switch){
                         Switch swi=(Switch)device;
-                        Object retval=invokeMethod(Switch.class,swi,command);
-                        if(retval!=null){
-                            System.out.println(String.format("Returned value: %s",retval.toString()));
-                        }
+                        retval=invokeMethod(Switch.class,swi,command);
                     }else if(device instanceof Step){
                         Step step=(Step)device;
                         invokeMethod(Step.class,step,command);
+                    }else if(device instanceof UCount){
+                        UCount ucount=(UCount)device;
+                        retval=invokeMethod(UCount.class,ucount,command,value);
+                    }else if(device instanceof Percent){
+                        Percent percent=(Percent)device;
+                        retval=invokeMethod(Percent.class,percent,command,value);
+                    }
+
+                    if(retval!=null){
+                        System.out.println(String.format("Returned value: %s",retval.toString()));
                     }
 
                     System.out.println("Invocation finished.");
 
                 }catch (Exception e){
 
-                    System.out.println(String.format("Invokation failed, reason %s",e.getMessage()));
+                    System.out.println(String.format("Invocation failed, reason %s",e.getMessage()));
 
                 }
 
@@ -138,11 +149,17 @@ public class KNXGogoCommand {
 
     }
 
-    private Object invokeMethod(Class c,Object instance,String command){
+    private Object invokeMethod(Class c,Object instance,String command,Object ... args){
 
         try {
             Method method = c.getMethod(command);
-            Object returnedValue=method.invoke(instance);
+            Object returnedValue=null;
+
+            if(args.length>0){
+                returnedValue=method.invoke(instance,args);
+            }else {
+                returnedValue=method.invoke(instance);
+            }
 
             return returnedValue;
 

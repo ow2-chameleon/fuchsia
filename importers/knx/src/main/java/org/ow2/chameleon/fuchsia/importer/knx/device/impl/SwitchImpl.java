@@ -43,14 +43,10 @@ public class SwitchImpl extends KNXDeviceAbstract implements Switch {
     private String name;
 
     @Validate
-    public void validate(){
+    public void validate() throws Exception {
         setPc(pc);
         setGroupaddr(groupaddr);
-    }
-
-    public SwitchImpl(ProcessCommunicator pc, String groupaddr){
-        setPc(pc);
-        setGroupaddr(groupaddr);
+        started();
     }
 
     public void on() {
@@ -58,7 +54,7 @@ public class SwitchImpl extends KNXDeviceAbstract implements Switch {
             LOG.debug("Invoking Switch On");
             getPc().write(getDataPoint(), "on");
         } catch (KNXException e) {
-            e.printStackTrace();
+            LOG.warn("Failed invoking Switch On", e);
         }
     }
 
@@ -67,7 +63,7 @@ public class SwitchImpl extends KNXDeviceAbstract implements Switch {
             LOG.debug("Invoking Switch Off");
             getPc().write(getDataPoint(), "off");
         } catch (KNXException e) {
-            e.printStackTrace();
+            LOG.warn("Failed invoking Switch Off", e);
         }
     }
 
@@ -81,7 +77,7 @@ public class SwitchImpl extends KNXDeviceAbstract implements Switch {
             LOG.debug("State returned {}",stateReturned);
             return Boolean.parseBoolean(stateReturned);
         } catch (KNXException e) {
-            e.printStackTrace();
+            LOG.warn("Failed in checking state of the device {}",getGroupaddr(),e);
         }
 
         return false;

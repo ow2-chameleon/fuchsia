@@ -19,9 +19,20 @@
  */
 package org.ow2.chameleon.fuchsia.importer.knx.device.iface;
 
+/**
+ * Corresponds to DPT 1.007
+ * @author Jander Nascimento
+ */
 public interface Step extends KNXDevice {
 
+    /**
+     * Send increase for the device (check KNX specification for more details)
+     */
     public void increase();
+
+    /**
+     * Send decrease for the device (check KNX specification for more details)
+     */
     public void decrease();
 
 }
