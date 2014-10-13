@@ -62,11 +62,9 @@ public class PhilipsHueBridgeDiscovery extends AbstractDiscoveryComponent implem
 
     private Set<String> ipAuthenticationInProgress = new HashSet<String>();
 
-    BridgeSearchTask bridgeSearchTask = new BridgeSearchTask(this);
-
     private PHHueSDK philipsSDK;
 
-    private Timer timer;
+    private BridgeSearchScheduler bridgeSearchScheduler;
 
     @Requires
     EventAdmin eventAdmin;
@@ -79,15 +77,16 @@ public class PhilipsHueBridgeDiscovery extends AbstractDiscoveryComponent implem
     public void start() {
         LOG.info("Philips Hue discovery is up and running.");
         philipsSDK = PHHueSDK.getInstance();
-        timer = new Timer(true);
         philipsSDK.getNotificationManager().registerSDKListener(this);
-        timer.schedule(bridgeSearchTask, 0, pollingTime);
+        bridgeSearchScheduler=new BridgeSearchScheduler(this.pollingTime);
+        philipsSDK.getNotificationManager().registerSDKListener(bridgeSearchScheduler);
+        bridgeSearchScheduler.activate();
     }
 
     @Invalidate
     public void stop() {
         philipsSDK.destroySDK();
-        timer.cancel();
+        bridgeSearchScheduler.desactivate();
     }
 
     public String getName() {
@@ -212,9 +211,10 @@ public class PhilipsHueBridgeDiscovery extends AbstractDiscoveryComponent implem
     }
 
     public void searchForBridges() {
+
         PHBridgeSearchManager sm = (PHBridgeSearchManager) philipsSDK.getSDKService(PHHueSDK.SEARCH_BRIDGE);
-        //Search UPnP but skips the portal
-        sm.search(true, false);
+        //Search UPnP but skips the portal and ip address
+        sm.search(true, false, false);
     }
 
     private ImportDeclaration generateImportDeclaration(PHBridge bridge) {
