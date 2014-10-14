@@ -58,4 +58,10 @@ public interface KNXDevice {
      */
     public void messageReceived(ProcessEvent e);
 
+    /**
+     * This method is invoked when a new message is sent by the GroupAddress of this device
+     * @param e Contains the source, destination and the payload of the message
+     */
+    public void messageSent(ProcessEvent e);
+
 }

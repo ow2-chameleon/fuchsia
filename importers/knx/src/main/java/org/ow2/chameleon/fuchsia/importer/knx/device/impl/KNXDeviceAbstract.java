@@ -32,7 +32,7 @@ import tuwien.auto.calimero.process.ProcessEvent;
 import tuwien.auto.calimero.process.ProcessListener;
 
 /**
- * Created by adele on 11/07/14.
+ * Reponsible to setup KNX Device generic characteristics
  */
 public abstract class KNXDeviceAbstract implements KNXDevice,ProcessListener {
 
@@ -81,9 +81,17 @@ public abstract class KNXDeviceAbstract implements KNXDevice,ProcessListener {
 
     public final void groupWrite(ProcessEvent e) {
         try {
-            if(e.getDestination().equals(new GroupAddress(getGroupaddr()))){
+
+            GroupAddress source=new GroupAddress(e.getSourceAddr().toString());
+            GroupAddress destination=e.getDestination();
+            GroupAddress currentDevice=new GroupAddress(getGroupaddr());
+
+            if(destination.equals(currentDevice)){
                 messageReceived(e);
+            }else if(source.equals(currentDevice)){
+                messageSent(e);
             }
+
         } catch (KNXFormatException e1) {
             LOG.warn("Invalid group address {}",getGroupaddr(),e1);
         }
@@ -95,5 +103,9 @@ public abstract class KNXDeviceAbstract implements KNXDevice,ProcessListener {
 
     public void messageReceived(ProcessEvent e) {
         LOG.info("Device {} received message from {}",e.getDestination(),e.getSourceAddr());
+    }
+
+    public void messageSent(ProcessEvent e){
+        LOG.info("Device {} sent message to {}",e.getSourceAddr(),e.getDestination());
     }
 }
