@@ -75,7 +75,7 @@ public class SwitchImpl extends KNXDeviceAbstract implements Switch {
             LOG.debug("Checking state .. ");
             stateReturned=getPc().read(getDataPoint());
             LOG.debug("State returned {}",stateReturned);
-            return Boolean.parseBoolean(stateReturned);
+            return stateReturned.equals("on");
         } catch (KNXException e) {
             LOG.warn("Failed in checking state of the device {}",getGroupaddr(),e);
         }
