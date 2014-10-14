@@ -38,22 +38,25 @@ public class UCountImpl extends KNXDeviceAbstract implements UCount{
     @ServiceProperty(name = Factory.INSTANCE_NAME_PROPERTY)
     private String name;
 
+    @Property
+    private ProcessCommunicator pc;
+
+    @Property
+    private String groupaddr;
+
     public String getId() {
         return name;
     }
 
     public DPT getDPT() {
-        return DPT.PERCENT;
+        return DPT.UCOUNT;
     }
 
-    @Property
-    public void setPc(ProcessCommunicator pc) {
-        super.setPc(pc);
-    }
-
-    @Property
-    public void setGroupaddr(String groupaddr) {
-        super.setGroupaddr(groupaddr);
+    @Validate
+    public void validate() throws Exception {
+        setPc(pc);
+        setGroupaddr(groupaddr);
+        super.started();
     }
 
     public void set(Integer value) throws ValueOutOfTheRangeException{
@@ -61,8 +64,11 @@ public class UCountImpl extends KNXDeviceAbstract implements UCount{
             throw new ValueOutOfTheRangeException(String.format("For the datatype %s, the range is [0,255]",getDPT()));
         }
         try {
+            LOG.debug("Sending to {} of the type {} value {} ...",new Object[]{getGroupaddr(),getDataPoint(),value.toString()});
             getPc().write(getDataPoint(),value.toString());
+            LOG.debug("Sent to {} of the type {} value {}",new Object[]{getGroupaddr(),getDataPoint(),value.toString()});
         } catch (KNXException e) {
+            e.printStackTrace();
             LOG.warn("Failed to send value {} to the device {}",value,getGroupaddr());
         }
     }
@@ -73,6 +79,7 @@ public class UCountImpl extends KNXDeviceAbstract implements UCount{
             String stateReturned=getPc().read(getDataPoint());
             return Integer.valueOf(stateReturned);
         } catch (KNXException e) {
+            e.printStackTrace();
             LOG.warn("Failed to get value from the device {}", getGroupaddr());
             throw new RequestFailedException(e);
         }

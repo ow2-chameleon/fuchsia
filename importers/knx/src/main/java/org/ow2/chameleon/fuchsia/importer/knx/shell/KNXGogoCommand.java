@@ -116,10 +116,10 @@ public class KNXGogoCommand {
                         invokeMethod(Step.class,step,command);
                     }else if(device instanceof UCount){
                         UCount ucount=(UCount)device;
-                        retval=invokeMethod(UCount.class,ucount,command,value);
+                        retval=invokeMethod(UCount.class,ucount,command,Integer.valueOf(value));
                     }else if(device instanceof Percent){
                         Percent percent=(Percent)device;
-                        retval=invokeMethod(Percent.class,percent,command,value);
+                        retval=invokeMethod(Percent.class,percent,command,Integer.valueOf(value));
                     }
 
                     if(retval!=null){
@@ -133,7 +133,6 @@ public class KNXGogoCommand {
                     System.out.println(String.format("Invocation failed, reason %s",e.getMessage()));
 
                 }
-
 
             }
 
@@ -152,12 +151,17 @@ public class KNXGogoCommand {
     private Object invokeMethod(Class c,Object instance,String command,Object ... args){
 
         try {
-            Method method = c.getMethod(command);
+
             Object returnedValue=null;
 
-            if(args.length>0){
-                returnedValue=method.invoke(instance,args);
+            if(args.length==1){
+                Method method = c.getMethod(command,Integer.class);
+                if(method==null){
+                    System.out.println(String.format("No method %s found with the argument Integer.",command));
+                }
+                returnedValue=method.invoke(instance,args[0]);
             }else {
+                Method method = c.getMethod(command);
                 returnedValue=method.invoke(instance);
             }
 
