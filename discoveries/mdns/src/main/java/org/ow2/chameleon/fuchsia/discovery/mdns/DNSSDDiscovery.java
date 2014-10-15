@@ -34,7 +34,7 @@ import javax.jmdns.*;
 import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.InetAddress;
-import java.util.Enumeration;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,6 +56,11 @@ public class DNSSDDiscovery extends AbstractDiscoveryComponent implements Networ
     @Property(name = "dnssd.service.marker",value = "")
     private String dnssdServiceMarker;
 
+    @Property
+    private String[] options;
+
+    private JmDNS jmDNS =null;
+
     protected DNSSDDiscovery(BundleContext bundleContext) {
         super(bundleContext);
     }
@@ -65,7 +70,31 @@ public class DNSSDDiscovery extends AbstractDiscoveryComponent implements Networ
 
         NetworkTopologyDiscovery.Factory.setClassDelegate(this);
 
-        configureNetworkCardServiceListener();
+        if(containsOption("localhostonly")){
+            try {
+                jmDNS = JmDNS.create();
+                LOG.warn("mDNS: Only local interface used");
+            } catch (IOException e) {
+                LOG.error("Failed to publish in mDNS", e);
+            }
+        }else {
+            for (InetAddress address : NetworkTopologyDiscovery.Factory
+                    .getInstance().getInetAddresses()) {
+                try {
+                    if (address instanceof Inet4Address) {
+                        jmDNS = JmDNS.create((Inet4Address) address);
+                        LOG.warn("mDNS: all local interfaces used");
+                    }
+                } catch (IOException e) {
+                    LOG.error("Failed to publish in mDNS", e);
+                }
+
+            }
+        }
+
+        //Registering listener
+        if(jmDNS !=null)
+            jmDNS.addServiceListener(dnssdServiceType, this);
 
     }
 
@@ -168,24 +197,13 @@ public class DNSSDDiscovery extends AbstractDiscoveryComponent implements Networ
 
     }
 
-    private void configureNetworkCardServiceListener() {
-        //Attach listener service to all network card fetched by the network topology
-        for (InetAddress address : NetworkTopologyDiscovery.Factory
-                .getInstance().getInetAddresses()) {
-
-            try {
-
-                if(address instanceof Inet4Address){
-
-                    JmDNS current = JmDNS.create((Inet4Address)address);
-                    current.addServiceListener(dnssdServiceType, this);
-
-                }
-            } catch (IOException e) {
-                LOG.error("Failed to publish in mDNS", e);
-            }
+    private boolean containsOption(String option){
+        if(options.length>0){
+            return Arrays.asList(options).contains(option);
 
         }
+        return false;
     }
+
 
 }
