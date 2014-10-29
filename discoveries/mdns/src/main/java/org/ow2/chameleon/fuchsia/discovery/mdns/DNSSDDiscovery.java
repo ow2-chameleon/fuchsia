@@ -37,6 +37,7 @@ import java.net.InetAddress;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 
 @Component
@@ -56,6 +57,8 @@ public class DNSSDDiscovery extends AbstractDiscoveryComponent implements Networ
     @Property(name = "dnssd.service.marker",value = "")
     private String dnssdServiceMarker;
 
+    private static final Pattern IPPattern = Pattern.compile("\\d{1,3}\\.\\d{1,3}.\\d{1,3}.\\d{1,3}");
+
     @Property
     private String[] options;
 
@@ -72,6 +75,7 @@ public class DNSSDDiscovery extends AbstractDiscoveryComponent implements Networ
 
         if(containsOption("localhostonly")){
             try {
+                //System.setProperty("net.mdns.interface","localhost");
                 jmDNS = JmDNS.create();
                 LOG.warn("mDNS: Only local interface used");
             } catch (IOException e) {
@@ -114,7 +118,7 @@ public class DNSSDDiscovery extends AbstractDiscoveryComponent implements Networ
     }
 
     public void serviceAdded(ServiceEvent event) {
-        LOG.info("adding declaration for the mDNS/DNSsd service {}", event.getName());
+        LOG.info("adding declaration for the mDNS/DNSsd service {} ({})", event.getName(),importDeclarations);
 
         if(!importDeclarations.containsKey(event.getName())){
             createImportationDeclaration(event);
@@ -176,6 +180,11 @@ public class DNSSDDiscovery extends AbstractDiscoveryComponent implements Networ
             for(int x=0;x<hosts.length;x++){
                 String suffix=x==0?"":"."+String.valueOf(x);
                 metadata.put(String.format(suffixModel,suffix),hosts[x]);
+            }
+
+            //If this is not IPv4 return
+            if(metadata.get(suffixModel) != null && !IPPattern.matcher(metadata.get(suffixModel).toString()).matches()){
+                return;
             }
 
             String txData=new String(serviceInfo.getTextBytes());
