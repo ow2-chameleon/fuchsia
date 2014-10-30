@@ -159,7 +159,11 @@ public class DNSSDDiscovery extends AbstractDiscoveryComponent implements Networ
 
         ServiceInfo serviceInfo=event.getInfo();
 
+        LOG.warn("mDNS service info found {}",serviceInfo);
+
         String instanceName=serviceInfo.getQualifiedNameMap().get(ServiceInfo.Fields.Instance);
+
+        LOG.warn("mDNS instance name {} expecing {}",instanceName,dnssdServiceName);
 
         if(serviceInfo!=null && instanceName!=null && instanceName.equals(dnssdServiceName)){
 
@@ -183,7 +187,8 @@ public class DNSSDDiscovery extends AbstractDiscoveryComponent implements Networ
             }
 
             //If this is not IPv4 return
-            if(metadata.get(suffixModel) != null && !IPPattern.matcher(metadata.get(suffixModel).toString()).matches()){
+            if(metadata.get(String.format(suffixModel,"")) != null && !IPPattern.matcher(metadata.get(String.format(suffixModel,"")).toString()).matches()){
+                LOG.warn("IP {} is not IPv4, ignoring it",String.format(suffixModel,""));
                 return;
             }
 
