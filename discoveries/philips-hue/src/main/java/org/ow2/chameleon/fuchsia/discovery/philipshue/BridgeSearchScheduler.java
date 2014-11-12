@@ -113,6 +113,11 @@ public class BridgeSearchScheduler extends TimerTask implements PHSDKListener {
     @Override
     public void run() {
         LOG.debug("Searching for Hue..");
-        sm.search(true, false, false);
+        Boolean scanLocalNetwork=Boolean.getBoolean("philips.discovery.scanNetwork");
+
+        if(scanLocalNetwork)
+            LOG.debug("Network scan activated!");
+
+        sm.search(true, false, scanLocalNetwork);
     }
 }
