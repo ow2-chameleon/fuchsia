@@ -39,8 +39,16 @@ public class PhilipsPreference extends Preferences {
         if(instance==null){
             try {
                 LOG.info("Trying to save on the disk username adopted for the Philips AP");
-                instance=Preferences.userRoot().node(PhilipsPreference.class.getName());
-                tryRightPreferenceOnDisk(instance);
+
+                if(Boolean.getBoolean("philips.java.preferences.disable")){
+                    LOG.info("Java preferences disabled, storing file philips.properties on the disk");
+                    instance=new PhilipsPreference();
+                }else {
+                    LOG.info("Using Java preferences to store authentication");
+                    instance=Preferences.userRoot().node(PhilipsPreference.class.getName());
+                    tryWritePreferenceOnDisk(instance);
+                }
+
             } catch (BackingStoreException e) {
                 LOG.warn("Failed using default java preferences to save username, using fallback mechanism(property files)");
                 instance=new PhilipsPreference();
@@ -58,7 +66,7 @@ public class PhilipsPreference extends Preferences {
      * @param preference
      * @throws BackingStoreException
      */
-    private static void tryRightPreferenceOnDisk(Preferences preference) throws BackingStoreException {
+    private static void tryWritePreferenceOnDisk(Preferences preference) throws BackingStoreException {
         final String DUMMY_PROP="dummywrite";
         instance.put(DUMMY_PROP,"test");
         instance.flush();

@@ -42,9 +42,9 @@ import java.util.prefs.Preferences;
 import static org.apache.felix.ipojo.Factory.INSTANCE_NAME_PROPERTY;
 
 @Component
-@Provides(specifications = {DiscoveryService.class})
+@Provides(specifications = {PhilipsDiscoveryService.class,DiscoveryService.class})
 @Instantiate
-public class PhilipsHueBridgeDiscovery extends AbstractDiscoveryComponent implements PHSDKListener {
+public class PhilipsHueBridgeDiscovery extends AbstractDiscoveryComponent implements PHSDKListener,PhilipsDiscoveryService {
 
     private static final Logger LOG = LoggerFactory.getLogger(PhilipsHueBridgeDiscovery.class);
 
@@ -140,7 +140,7 @@ public class PhilipsHueBridgeDiscovery extends AbstractDiscoveryComponent implem
     public void onAccessPointsFound(List<PHAccessPoint> phAccessPoints) {
         for (PHAccessPoint foundAP : phAccessPoints) {
             if (!philipsSDK.isAccessPointConnected(foundAP)) {
-                LOG.info("AP not connected.");
+                LOG.trace("AP not connected.");
 
                 LOG.info("Auth in progress for " + foundAP.getIpAddress());
                 for (String value : ipAuthenticationInProgress) {
@@ -149,48 +149,50 @@ public class PhilipsHueBridgeDiscovery extends AbstractDiscoveryComponent implem
                 LOG.info("/Auth in progress:");
 
                 if (!ipAuthenticationInProgress.contains(foundAP.getIpAddress())) {
-                    LOG.info("Requesting connection for " + foundAP.getIpAddress());
+                    LOG.trace("Requesting connection for " + foundAP.getIpAddress());
                     ipAuthenticationInProgress.add(foundAP.getIpAddress());
                     connect(foundAP);
                 } else {
-                    LOG.info("not requesting connection for {}, it was already in progress", foundAP.getIpAddress());
+                    LOG.trace("not requesting connection for {}, it was already in progress", foundAP.getIpAddress());
                 }
-
-
             } else {
-                //LOG.info("access point already connected");
+                LOG.trace("access point already connected {}",foundAP.getIpAddress());
             }
         }
     }
 
     public void onSuccess() {
 
-        LOG.info("Connected with success");
+        LOG.trace("Connected with success");
 
     }
 
     public void onError(int code, String s) {
-        //LOG.warn("Bridge failed with the code {} and message {}",i,s);
+        LOG.trace("Bridge failed with the code {} and message {}",code,s);
 
-        if (code == PHMessageType.PUSHLINK_BUTTON_NOT_PRESSED) {
+        if (code == PHHueError.BRIDGE_NOT_RESPONDING) {
+        }else if (code == PHMessageType.PUSHLINK_BUTTON_NOT_PRESSED) {
+        }else if (code == PHMessageType.PUSHLINK_AUTHENTICATION_FAILED) {
+            LOG.trace("Button not pressed, code {}",code);
             ipAuthenticationInProgress.clear();
+            Dictionary metatable = new Hashtable();
+            metatable.put("message", s);
+            metatable.put("code", code);
+            Event eventAdminMessage = new Event("philips/hue/bridge/error", metatable);
+            eventAdmin.sendEvent(eventAdminMessage);
+        }else if (code == PHMessageType.BRIDGE_NOT_FOUND) {
         }
-
-        Dictionary metatable = new Hashtable();
-        metatable.put("message", s);
-        metatable.put("code", code);
-
-        Event eventAdminMessage = new Event("philips/hue/bridge/error", metatable);
-
-        eventAdmin.sendEvent(eventAdminMessage);
 
     }
 
     public void onStateUpdate(Hashtable<String, String> hashtable, List<PHHueError> phHueErrors) {
         // not used
+        LOG.trace("State updated {} and errors {}",hashtable,phHueErrors);
     }
 
     public void onConnectionResumed(PHBridge phBridge) {
+
+        LOG.trace("Connection resumed with the bridge {}",phBridge);
 
         //LOG.info("Connection resumed with bridge {}",phBridge.getResourceCache().getBridgeConfiguration().getIpAddress());
 
@@ -198,7 +200,7 @@ public class PhilipsHueBridgeDiscovery extends AbstractDiscoveryComponent implem
 
     public void onConnectionLost(PHAccessPoint phAccessPoint) {
 
-        LOG.info("Fetching IP {} for disconnection", phAccessPoint.getIpAddress());
+        LOG.trace("Fetching IP {} for disconnection", phAccessPoint.getIpAddress());
 
         ImportDeclaration declaration = ipImportDeclarationMap.get(phAccessPoint.getIpAddress());
 
@@ -211,6 +213,8 @@ public class PhilipsHueBridgeDiscovery extends AbstractDiscoveryComponent implem
     }
 
     public void searchForBridges() {
+
+        LOG.trace("Searching for bridges..");
 
         PHBridgeSearchManager sm = (PHBridgeSearchManager) philipsSDK.getSDKService(PHHueSDK.SEARCH_BRIDGE);
         //Search UPnP but skips the portal and ip address
@@ -228,6 +232,8 @@ public class PhilipsHueBridgeDiscovery extends AbstractDiscoveryComponent implem
     }
 
     private void connect(PHAccessPoint ap) {
+
+        LOG.trace("Asking connection for the AP {}", ap);
 
         final String bridgeUsernameKey = "username";
         String username = preferences.get(bridgeUsernameKey, null);

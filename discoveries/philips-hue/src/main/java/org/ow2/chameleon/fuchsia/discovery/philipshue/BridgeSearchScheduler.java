@@ -19,11 +19,9 @@
  */
 package org.ow2.chameleon.fuchsia.discovery.philipshue;
 
-import com.philips.lighting.hue.sdk.PHAccessPoint;
-import com.philips.lighting.hue.sdk.PHBridgeSearchManager;
-import com.philips.lighting.hue.sdk.PHHueSDK;
-import com.philips.lighting.hue.sdk.PHSDKListener;
+import com.philips.lighting.hue.sdk.*;
 import com.philips.lighting.model.PHBridge;
+import com.philips.lighting.model.PHHueError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,42 +51,58 @@ public class BridgeSearchScheduler extends TimerTask implements PHSDKListener {
     }
 
     public void desactivate(){
-        LOG.debug("Stopping philips bridge search.");
+        LOG.trace("Stopping philips bridge search.");
         timer.cancel();
     }
 
     public synchronized void searchFinished() {
-        LOG.debug("Search finished. New search scheduled to run in {} ms.",poolingTime);
+        LOG.trace("Search finished. New search scheduled to run in {} ms.", poolingTime);
         timer.schedule(new BridgeSearchScheduler(this.poolingTime),poolingTime);
 
     }
 
     public void onCacheUpdated(int i, PHBridge phBridge) {
         //searchFinished();
+        LOG.trace("PhilipsDiscovery: onCacheUpdated");
     }
 
     public void onBridgeConnected(PHBridge phBridge) {
         //searchFinished();
+        LOG.trace("PhilipsDiscovery: onBridgeConnected");
     }
 
     public void onAuthenticationRequired(PHAccessPoint phAccessPoint) {
         //searchFinished();
+        LOG.trace("PhilipsDiscovery: onAuthenticationRequired");
     }
 
     public void onAccessPointsFound(List<PHAccessPoint> phAccessPoints) {
+        LOG.trace("PhilipsDiscovery: onAccessPointsFound");
         searchFinished();
     }
 
-    public void onError(int i, String s) {
+    public void onError(int code, String s) {
 
-        /**
-         * 1157 is the code when no notification will be done and a new search should be scheduled, but we are dispatching a new search for anycase
-         */
-        searchFinished();
+        LOG.trace("PhilipsDiscovery: onError code {} message {}",code,s);
+
+        if (code == PHHueError.BRIDGE_NOT_RESPONDING) {
+            searchFinished();
+        }
+        else if (code == PHMessageType.PUSHLINK_BUTTON_NOT_PRESSED) {
+            //This is fired every single second after the bridge detection (and which he is not authenticated)
+        }
+        else if (code == PHMessageType.PUSHLINK_AUTHENTICATION_FAILED) {
+            searchFinished();
+        }
+        else if (code == PHMessageType.BRIDGE_NOT_FOUND) {
+            searchFinished();
+        }
 
     }
 
     public void onConnectionResumed(PHBridge phBridge) {
+
+        LOG.trace("PhilipsDiscovery: onConnectionResumed {}",phBridge);
         //searchFinished();
     }
 
