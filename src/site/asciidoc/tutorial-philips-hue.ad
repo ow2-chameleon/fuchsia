@@ -143,3 +143,8 @@ In case you wanna change its color (in fact change the color of all lamps) you c
 user@shelbie$ phset -on true -r 255
 ----
 
+Java Options
+^^^^^^^^^^^^
+
+* **philips.discovery.scanNetwork** Looks for the PhilipsHue bridge on the network by scanning the IP's present on the same network
+* **philips.java.preferences.disable** Disables java preferences usage to store the authentication of the bridge, this enforces the creation of a file containing the credentials for the Bridge
