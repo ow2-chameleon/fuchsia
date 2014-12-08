@@ -35,15 +35,23 @@ import java.util.TimerTask;
 public class BridgeSearchScheduler extends TimerTask implements PHSDKListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(BridgeSearchScheduler.class);
-    private Timer timer=new Timer("bridge-search-thread",true);
+    private Timer timer;
     private final Long poolingTime;
     private PHHueSDK philipsSDK;
     private PHBridgeSearchManager sm;
 
     public BridgeSearchScheduler(Long poolingTime){
         this.poolingTime=poolingTime;
+        this.timer =new Timer("bridge-search-thread",true);
         this.philipsSDK=PHHueSDK.getInstance();
         this.sm=(PHBridgeSearchManager) philipsSDK.getSDKService(PHHueSDK.SEARCH_BRIDGE);
+    }
+
+    private BridgeSearchScheduler(BridgeSearchScheduler original){
+        this.poolingTime=original.poolingTime;
+        this.timer =original.timer;
+        this.philipsSDK=original.philipsSDK;
+        this.sm=original.sm;
     }
 
     public void activate(){
@@ -57,7 +65,7 @@ public class BridgeSearchScheduler extends TimerTask implements PHSDKListener {
 
     public synchronized void searchFinished() {
         LOG.trace("Search finished. New search scheduled to run in {} ms.", poolingTime);
-        timer.schedule(new BridgeSearchScheduler(this.poolingTime),poolingTime);
+        timer.schedule(new BridgeSearchScheduler(this),poolingTime);
 
     }
 
