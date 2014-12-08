@@ -32,6 +32,8 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.service.http.HttpService;
 import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
+import org.ow2.chameleon.fuchsia.core.component.ImporterIntrospection;
+import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 import org.ow2.chameleon.fuchsia.core.constant.HttpHeaders;
 import org.ow2.chameleon.fuchsia.core.constant.HttpStatus;
 import org.ow2.chameleon.fuchsia.core.constant.MediaType;
@@ -54,7 +56,7 @@ import java.util.Vector;
 import static org.ow2.chameleon.fuchsia.importer.push.Constants.*;
 
 @Component
-@Provides
+@Provides(specifications = {ImporterService.class, ImporterIntrospection.class, SubscriberOutput.class})
 public class SubscriptionImporter extends AbstractImporterComponent implements SubscriberOutput {
 
     private static final Logger LOG = LoggerFactory.getLogger(SubscriptionImporter.class);

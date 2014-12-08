@@ -25,6 +25,8 @@ import org.apache.felix.ipojo.InstanceManager;
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.ServiceReference;
 import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
+import org.ow2.chameleon.fuchsia.core.component.ImporterIntrospection;
+import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 import org.ow2.chameleon.fuchsia.core.declaration.Constants;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
@@ -36,7 +38,7 @@ import java.util.Map;
 import java.util.Properties;
 
 @Component
-@Provides
+@Provides(specifications = {ImporterService.class, ImporterIntrospection.class})
 public class MQTTImporter extends AbstractImporterComponent {
 
     private static final Logger LOG = LoggerFactory.getLogger(MQTTImporter.class);

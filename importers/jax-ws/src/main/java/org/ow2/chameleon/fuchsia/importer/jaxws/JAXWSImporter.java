@@ -29,6 +29,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
+import org.ow2.chameleon.fuchsia.core.component.ImporterIntrospection;
+import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
 import org.ow2.chameleon.fuchsia.importer.jaxws.internal.JAXWSImportDeclarationWrapper;
@@ -51,7 +53,7 @@ import static org.ow2.chameleon.fuchsia.core.FuchsiaUtils.loadClass;
  * @Edited Jander Nascimento <botelho@imag.fr>
  */
 @Component
-@Provides(specifications = {org.ow2.chameleon.fuchsia.core.component.ImporterService.class})
+@Provides(specifications = {ImporterService.class, ImporterIntrospection.class})
 public class JAXWSImporter extends AbstractImporterComponent {
 
     public static final String ENDPOINT_URL = "endpoint.url";

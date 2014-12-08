@@ -25,6 +25,8 @@ import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
+import org.ow2.chameleon.fuchsia.core.component.ImporterIntrospection;
+import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
 import org.ow2.chameleon.fuchsia.raspberry.pi.internal.GPIOImportDeclarationWrapper;
@@ -37,7 +39,7 @@ import java.util.Hashtable;
 import java.util.Map;
 
 @Component(name = "GpIOImporter")
-@Provides(specifications = {org.ow2.chameleon.fuchsia.core.component.ImporterService.class})
+@Provides(specifications = {ImporterService.class, ImporterIntrospection.class})
 public class GpIOImporter extends AbstractImporterComponent {
 
     private static final Logger LOG = LoggerFactory.getLogger(GpIOImporter.class);

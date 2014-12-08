@@ -26,6 +26,8 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.ow2.chameleon.fuchsia.core.component.AbstractImporterComponent;
+import org.ow2.chameleon.fuchsia.core.component.ImporterIntrospection;
+import org.ow2.chameleon.fuchsia.core.component.ImporterService;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclarationBuilder;
 import org.ow2.chameleon.fuchsia.core.exceptions.BinderException;
@@ -46,7 +48,7 @@ import java.util.*;
  * @author Jander Nascimento
  */
 @Component
-@Provides
+@Provides(specifications = {ImporterService.class, ImporterIntrospection.class})
 public class KNXDeviceImporter extends AbstractImporterComponent {
 
     private static final Logger LOG = LoggerFactory.getLogger(KNXDeviceImporter.class);
