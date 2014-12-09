@@ -20,20 +20,22 @@ package org.ow2.chameleon.fuchsia.discovery.philipshue;
  * #L%
  */
 
-import com.philips.lighting.hue.sdk.*;
 import com.philips.lighting.hue.sdk.connection.impl.PHBridgeInternal;
+import com.philips.lighting.hue.sdk.utilities.impl.PHLog;
 import com.philips.lighting.model.PHBridge;
 import com.philips.lighting.model.PHHueError;
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
+import org.osgi.service.upnp.UPnPDevice;
 import org.ow2.chameleon.fuchsia.core.component.AbstractDiscoveryComponent;
 import org.ow2.chameleon.fuchsia.core.component.DiscoveryService;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclarationBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.philips.lighting.hue.sdk.*;
 
 import java.util.*;
 import java.util.prefs.BackingStoreException;
@@ -55,8 +57,11 @@ public class PhilipsHueBridgeDiscovery extends AbstractDiscoveryComponent implem
 
     @ServiceProperty(name = "philips.hue.discovery.pooling", value = "10000")
     private Long pollingTime;
+    private PHLog philipsLog;
+    private Boolean pollingDisabled;
+    private Boolean scanLocalNetwork;
 
-    private Preferences preferences = PhilipsPreference.getInstance();//Preferences.userRoot().node(this.getClass().getName());
+    private static Preferences preferences = PhilipsPreference.getInstance();
 
     private Map<String, ImportDeclaration> ipImportDeclarationMap = new HashMap<String, ImportDeclaration>();
 
@@ -66,27 +71,58 @@ public class PhilipsHueBridgeDiscovery extends AbstractDiscoveryComponent implem
 
     private BridgeSearchScheduler bridgeSearchScheduler;
 
+    private static PHBridgeSearchManager philipsSearchManager;
+
     @Requires
     EventAdmin eventAdmin;
 
     public PhilipsHueBridgeDiscovery(BundleContext bundleContext) {
         super(bundleContext);
+        philipsSDK = PHHueSDK.getInstance();
+        philipsSDK.getNotificationManager().registerSDKListener(this);
+        pollingDisabled=Boolean.getBoolean("philips.discovery.pooling.disable");
+        scanLocalNetwork=Boolean.getBoolean("philips.discovery.scanNetwork");
+        philipsLog =(PHLog) philipsSDK.getSDKService(PHHueSDK.LOG);
+        philipsLog.setSdkLogLevel(PHLog.DEBUG);
+        philipsSearchManager =(PHBridgeSearchManager) philipsSDK.getSDKService(PHHueSDK.SEARCH_BRIDGE);
     }
 
     @Validate
     public void start() {
         LOG.info("Philips Hue discovery is up and running.");
-        philipsSDK = PHHueSDK.getInstance();
-        philipsSDK.getNotificationManager().registerSDKListener(this);
-        bridgeSearchScheduler=new BridgeSearchScheduler(this.pollingTime);
-        philipsSDK.getNotificationManager().registerSDKListener(bridgeSearchScheduler);
-        bridgeSearchScheduler.activate();
+
+        if(pollingDisabled){
+            LOG.warn("Polling Disabled, API will use UPnP to detect the PhilipsHue bridge");
+            //philipsSearchManager.search(true, false, scanLocalNetwork);
+        }else {
+            LOG.info("Polling Enabled");
+            bridgeSearchScheduler=new BridgeSearchScheduler(this.pollingTime, philipsSearchManager,scanLocalNetwork);
+            philipsSDK.getNotificationManager().registerSDKListener(bridgeSearchScheduler);
+            bridgeSearchScheduler.activate();
+        }
+
+    }
+
+    @Bind(id="philipsBind",filter = "(&(UPnP.device.modelName=Philips*))",aggregate = true,optional = true,specification = UPnPDevice.class)
+    public void bindPhilipsBridge(){
+        if(pollingDisabled){
+            searchForBridges();
+        }
+    }
+
+    @Unbind(id="philipsBind")
+    public void unbindPhilipsBridge(){
+        if(pollingDisabled){
+            searchForBridges();
+        }
     }
 
     @Invalidate
     public void stop() {
         philipsSDK.destroySDK();
-        bridgeSearchScheduler.desactivate();
+        if(!pollingDisabled) {
+            bridgeSearchScheduler.desactivate();
+        }
     }
 
     public String getName() {
@@ -192,9 +228,8 @@ public class PhilipsHueBridgeDiscovery extends AbstractDiscoveryComponent implem
 
     public void onConnectionResumed(PHBridge phBridge) {
 
-        LOG.trace("Connection resumed with the bridge {}",phBridge);
-
-        //LOG.info("Connection resumed with bridge {}",phBridge.getResourceCache().getBridgeConfiguration().getIpAddress());
+        //This is called every 1'40" which is too verbose (in long term)
+        //LOG.trace("Connection resumed with the bridge {}",phBridge);
 
     }
 
@@ -216,9 +251,7 @@ public class PhilipsHueBridgeDiscovery extends AbstractDiscoveryComponent implem
 
         LOG.trace("Searching for bridges..");
 
-        PHBridgeSearchManager sm = (PHBridgeSearchManager) philipsSDK.getSDKService(PHHueSDK.SEARCH_BRIDGE);
-        //Search UPnP but skips the portal and ip address
-        sm.search(true, false, false);
+        philipsSearchManager.search(true, false, scanLocalNetwork);
     }
 
     private ImportDeclaration generateImportDeclaration(PHBridge bridge) {

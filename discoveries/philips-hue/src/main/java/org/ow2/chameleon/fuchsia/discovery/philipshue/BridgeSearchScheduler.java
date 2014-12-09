@@ -37,14 +37,16 @@ public class BridgeSearchScheduler extends TimerTask implements PHSDKListener {
     private static final Logger LOG = LoggerFactory.getLogger(BridgeSearchScheduler.class);
     private Timer timer;
     private final Long poolingTime;
-    private PHHueSDK philipsSDK;
-    private PHBridgeSearchManager sm;
+    private final PHHueSDK philipsSDK;
+    private final PHBridgeSearchManager sm;
+    private final Boolean scanLocalNetwork;
 
-    public BridgeSearchScheduler(Long poolingTime){
+    public BridgeSearchScheduler(final Long poolingTime,final PHBridgeSearchManager sm,final Boolean scanLocalNetwork){
         this.poolingTime=poolingTime;
         this.timer =new Timer("bridge-search-thread",true);
         this.philipsSDK=PHHueSDK.getInstance();
-        this.sm=(PHBridgeSearchManager) philipsSDK.getSDKService(PHHueSDK.SEARCH_BRIDGE);
+        this.sm=sm;
+        this.scanLocalNetwork=scanLocalNetwork;
     }
 
     private BridgeSearchScheduler(BridgeSearchScheduler original){
@@ -52,6 +54,7 @@ public class BridgeSearchScheduler extends TimerTask implements PHSDKListener {
         this.timer =original.timer;
         this.philipsSDK=original.philipsSDK;
         this.sm=original.sm;
+        this.scanLocalNetwork=original.scanLocalNetwork;
     }
 
     public void activate(){
@@ -121,7 +124,6 @@ public class BridgeSearchScheduler extends TimerTask implements PHSDKListener {
     @Override
     public void run() {
         LOG.debug("Searching for Hue..");
-        Boolean scanLocalNetwork=Boolean.getBoolean("philips.discovery.scanNetwork");
 
         if(scanLocalNetwork)
             LOG.debug("Network scan activated!");

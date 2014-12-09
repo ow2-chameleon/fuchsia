@@ -103,9 +103,13 @@ public class FuchsiaGogoUtil {
                 return params[params.length - 1];
             }
 
-            if (i < (params.length - 1) && params[i].equals(option)) {
+            if (i <= (params.length - 1) && params[i].equals(option)) {
                 found = true;
-                value = params[i + 1];
+                try {
+                    value = params[i + 1];
+                }catch (ArrayIndexOutOfBoundsException e){
+                    value = "";
+                }
                 break;
             }
         }

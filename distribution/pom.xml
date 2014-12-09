@@ -22,10 +22,12 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <dependencies>
+                <!-- Chameleon already comes it iPojo
                 <dependency>
                     <groupId>org.apache.felix</groupId>
                     <artifactId>org.apache.felix.ipojo</artifactId>
                 </dependency>
+                -->
                 <dependency>
                     <groupId>${project.parent.groupId}</groupId>
                     <artifactId>org.ow2.chameleon.fuchsia.core</artifactId>
@@ -537,6 +539,11 @@
                     <artifactId>org.ow2.chameleon.fuchsia.discovery.philips-hue</artifactId>
                     <groupId>org.ow2.chameleon.fuchsia.discovery</groupId>
                     <version>${project.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.osgi</groupId>
+                    <artifactId>org.osgi.compendium</artifactId>
+                    <version>${osgi.version}</version>
                 </dependency>
             </dependencies>
         </profile>

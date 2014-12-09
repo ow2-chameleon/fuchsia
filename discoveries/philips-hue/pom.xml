@@ -39,9 +39,29 @@
             <artifactId>org.ow2.chameleon.fuchsia.base.philips-hue.huedsk-bundle</artifactId>
             <groupId>org.ow2.chameleon.fuchsia.base.philips-hue</groupId>
             <version>${project.version}</version>
-            <optional>false</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.ow2.chameleon.fuchsia.tools</groupId>
+            <artifactId>fuchsia-gogo-shell</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.compendium</artifactId>
+            <version>${osgi.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.gogo.runtime</artifactId>
+            <version>0.10.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.eclipse.osgi</groupId>
+                    <artifactId>org.eclipse.osgi</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
     </dependencies>
 
     <!-- Build configuration -->
