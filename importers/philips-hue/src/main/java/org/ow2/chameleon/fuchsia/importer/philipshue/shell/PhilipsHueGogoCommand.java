@@ -28,6 +28,7 @@ import com.philips.lighting.model.PHLight;
 import com.philips.lighting.model.PHLightState;
 import org.apache.felix.ipojo.annotations.*;
 import org.apache.felix.service.command.Descriptor;
+import org.ow2.chameleon.fuchsia.tools.shell.util.FuchsiaGogoUtil;
 
 import java.util.Hashtable;
 import java.util.List;
@@ -43,7 +44,7 @@ public class PhilipsHueGogoCommand extends PHLightListener {
     private String scope;
 
     @ServiceProperty(name = "osgi.command.function", value = "{}")
-    private String[] function = new String[]{"phlist", "phset"};
+    private String[] function = new String[]{"lamp"};
 
     @Requires(optional = true)
     PHBridge bridge;
@@ -63,26 +64,49 @@ public class PhilipsHueGogoCommand extends PHLightListener {
         return sb.toString();
     }
 
-    @Descriptor(value = "List all lights available")
-    public void phlist(@Descriptor("phlist") String... parameters) {
-        StringBuilder sb = new StringBuilder();
+    @Descriptor(value = "List all lights available, or change its state")
+    public void lamp(@Descriptor("set [-name NAME] [-on true|false] [-i 0<=INTENSITY<=255] [-tt TRANSITION_TIME_IN_DECISECONDS] [-r 0<=RED<=255] [-g 0<=GREEN<=255] [-b 0<=BLUE<=255]") String... parameters) {
+
+        String setValue = getArgumentValue("set", parameters);
+
+        if(bridge==null||bridge.getResourceCache()==null){
+            StringBuilder deviceStr=new StringBuilder();
+            deviceStr.append("No bridge present.");
+            print(FuchsiaGogoUtil.createASCIIBox("", deviceStr).toString());
+            return;
+        }
+
+        try{
+            if(setValue!=null){
+                setLampState(parameters);
+            }else {
+                listLamps(parameters);
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    private void listLamps(String... parameters){
+        StringBuilder sb=new StringBuilder();
         bridge.findNewLights(this);
         for (PHLight light : bridge.getResourceCache().getAllLights()) {
-            int lightNameLength = light.getName().length();
-            int lightTypeLength = light.getLightType().name().length();
-            sb.append(reproduceChar(' ', lightNameLength)).append(reproduceChar('_', lightTypeLength)).append('\n');
-            sb.append(reproduceChar(' ', lightNameLength)).append("|ID:").append(light.getIdentifier()).append('\n');
-            sb.append(reproduceChar(' ', lightNameLength)).append("|Name:").append(light.getName()).append('\n');
-            sb.append(light.getName()).append("|Model:").append(light.getModelNumber()).append('\n');
-            sb.append(reproduceChar(' ', lightNameLength)).append("|Type:").append(light.getLightType()).append('\n');
-            sb.append(reproduceChar(' ', lightNameLength)).append("|State:").append(light.getLastKnownLightState().isOn() ? "ON" : "OFF").append('\n');
-            sb.append(reproduceChar(' ', lightNameLength)).append('|').append(reproduceChar('_', lightTypeLength));
+
+            StringBuilder deviceStr=new StringBuilder();
+            deviceStr.append(String.format("id = %s\n",light.getIdentifier()));
+            deviceStr.append(String.format("name = %s\n",light.getName()));
+            deviceStr.append(String.format("model = %s\n",light.getModelNumber()));
+            deviceStr.append(String.format("type = %s\n",light.getLightType()));
+            deviceStr.append(String.format("state = %s",light.getLastKnownLightState().isOn() ? "ON" : "OFF"));
+
+            sb.append(FuchsiaGogoUtil.createASCIIBox(light.getIdentifier(), deviceStr));
+
         }
         print(sb.toString());
     }
 
-    @Descriptor(value = "Change light parameters, for a specific lamp or for all light plugged into the bridge")
-    public void phset(@Descriptor("[-name NAME] [-on true|false] [-i 0<=INTENSITY<=255] [-tt TRANSITION_TIME_IN_DECISECONDS] [-r 0<=RED<=255] [-g 0<=GREEN<=255] [-b 0<=BLUE<=255]") String... parameters) {
+    private void setLampState(String... parameters) {
 
         String valueStr = getArgumentValue("-on", parameters);
         String nameStr = getArgumentValue("-name", parameters);
