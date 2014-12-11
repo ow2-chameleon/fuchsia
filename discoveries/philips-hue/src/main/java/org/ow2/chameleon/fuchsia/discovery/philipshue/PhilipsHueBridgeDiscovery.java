@@ -105,13 +105,19 @@ public class PhilipsHueBridgeDiscovery extends AbstractDiscoveryComponent implem
 
     @Bind(id="philipsBind",filter = "(&(UPnP.device.modelName=Philips*))",aggregate = true,optional = true,specification = UPnPDevice.class)
     public void bindPhilipsBridge(){
+        LOG.trace("Binding new UPnP device");
         if(pollingDisabled){
+            LOG.trace("Firing lamp detection..");
             searchForBridges();
+        }else {
+            LOG.trace("Not firing lamp detection, polling is enabled.");
         }
+
     }
 
     @Unbind(id="philipsBind")
     public void unbindPhilipsBridge(){
+        LOG.trace("Unbinding UPnP device");
         if(pollingDisabled){
             searchForBridges();
         }
