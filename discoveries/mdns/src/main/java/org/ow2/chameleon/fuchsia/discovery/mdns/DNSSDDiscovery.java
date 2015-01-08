@@ -163,11 +163,19 @@ public class DNSSDDiscovery extends AbstractDiscoveryComponent implements Networ
 
         String instanceName=serviceInfo.getQualifiedNameMap().get(ServiceInfo.Fields.Instance);
 
-        LOG.warn("mDNS instance name {} expecing {}",instanceName,dnssdServiceName);
+        LOG.trace("Instance name found in DNSSD {}",instanceName);
 
-        if(serviceInfo!=null && instanceName!=null && instanceName.equals(dnssdServiceName)){
+        LOG.warn("mDNS instance name {} expecting {}",instanceName,dnssdServiceName);
 
-            ServiceInfo serviceDetail=event.getDNS().getServiceInfo(dnssdServiceType, dnssdServiceName);
+        Pattern namePattern=Pattern.compile(dnssdServiceName);
+
+        if(serviceInfo!=null && instanceName!=null && namePattern.matcher(instanceName).matches()){
+
+            LOG.trace("Creating declaration for the service {}", instanceName);
+
+            ServiceInfo serviceDetail=event.getDNS().getServiceInfo(dnssdServiceType, instanceName);
+
+            LOG.trace("Service info {}",serviceDetail);
 
             Map<String, Object> metadata = new HashMap<String, Object>();
 
@@ -179,17 +187,21 @@ public class DNSSDDiscovery extends AbstractDiscoveryComponent implements Networ
 
             String[] hosts=serviceDetail.getHostAddresses();
 
+            LOG.trace("Hosts {}",hosts);
+
             final String suffixModel="discovery.mdns.device.host%s";
 
-            for(int x=0;x<hosts.length;x++){
-                String suffix=x==0?"":"."+String.valueOf(x);
-                metadata.put(String.format(suffixModel,suffix),hosts[x]);
-            }
+            try {
 
-            //If this is not IPv4 return
-            if(metadata.get(String.format(suffixModel,"")) != null && !IPPattern.matcher(metadata.get(String.format(suffixModel,"")).toString()).matches()){
-                LOG.warn("IP {} is not IPv4, ignoring it",String.format(suffixModel,""));
-                return;
+                int hostIndex=0;
+                for(int x=0;x<hosts.length;x++){
+                    Boolean ipv4=IPPattern.matcher(hosts[x]).matches();
+                    String suffix=ipv4?"": "."+String.valueOf(hostIndex++);
+                    metadata.put(String.format(suffixModel,suffix),hosts[x]);
+                }
+
+            }catch (Exception e){
+                LOG.trace("Failed in recovering server addr",e);
             }
 
             String txData=new String(serviceInfo.getTextBytes());
