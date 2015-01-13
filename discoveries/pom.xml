@@ -24,7 +24,6 @@
                 <module>knx</module>
                 <module>mdns</module>
                 <module>upnp</module>
-                <module>upnp-it</module>
                 <module>philips-hue</module>
             </modules>
         </profile>
