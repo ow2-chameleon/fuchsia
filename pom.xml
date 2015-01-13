@@ -155,7 +155,6 @@
                 <module>tools</module>
                 <module>testing</module>
                 <module>distribution</module>
-                <module>examples</module>
             </modules>
         </profile>
 
