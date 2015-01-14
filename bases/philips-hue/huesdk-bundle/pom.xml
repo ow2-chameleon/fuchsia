@@ -4,7 +4,7 @@
     <parent>
         <artifactId>org.ow2.chameleon.fuchsia.base.philips-hue</artifactId>
         <groupId>org.ow2.chameleon.fuchsia.base</groupId>
-        <version>0.0.4-SNAPSHOT</version>
+        <version>0.0.5-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -17,14 +17,14 @@
         <dependency>
             <artifactId>hue-sdk-core</artifactId>
             <groupId>philips</groupId>
-            <version>${project.version}</version>
+            <version>0.0.4</version>
             <scope>system</scope>
             <systemPath>${basedir}/src/main/resources/huelocalsdk.jar</systemPath>
         </dependency>
         <dependency>
             <artifactId>hue-sdk-resources</artifactId>
             <groupId>philips</groupId>
-            <version>${project.version}</version>
+            <version>0.0.4</version>
             <scope>system</scope>
             <systemPath>${basedir}/src/main/resources/sdkresources.jar</systemPath>
         </dependency>

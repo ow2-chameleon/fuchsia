@@ -3,7 +3,7 @@
     <parent>
         <artifactId>org.ow2.chameleon.fuchsia.base.protobuffer</artifactId>
         <groupId>org.ow2.chameleon.fuchsia.base</groupId>
-        <version>0.0.4-SNAPSHOT</version>
+        <version>0.0.5-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
