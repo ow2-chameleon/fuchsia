@@ -29,6 +29,9 @@ import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import java.util.Collection;
 import java.util.HashSet;
 
+/**
+ * Importer mock
+ */
 @Component(name = "SimpleImporterFactory")
 @Provides(specifications = {ImporterService.class, SimpleImporter.class})
 public class SimpleImporter extends AbstractImporterComponent {
@@ -45,10 +48,18 @@ public class SimpleImporter extends AbstractImporterComponent {
         decs.remove(importDeclaration);
     }
 
+    /**
+     * Show number of proxies generated
+     * @return
+     */
     public int nbProxies() {
         return decs.size();
     }
 
+    /**
+     * Name of the importer instantiated
+     * @return
+     */
     public String getName() {
         return "simpleImporter";
     }

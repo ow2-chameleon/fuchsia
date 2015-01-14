@@ -30,6 +30,9 @@ import org.ow2.chameleon.fuchsia.core.component.DiscoveryService;
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 import org.ow2.chameleon.fuchsia.core.it.services.SimulateBindingInterface;
 
+/**
+ * Discovery mock
+ */
 @Component(name = "SimpleDiscoveryFactory")
 @Provides(specifications = {SimulateBindingInterface.class, DiscoveryService.class})
 public class SimpleDiscovery extends AbstractDiscoveryComponent implements SimulateBindingInterface {
@@ -58,6 +61,10 @@ public class SimpleDiscovery extends AbstractDiscoveryComponent implements Simul
         super.stop();
     }
 
+    /**
+     * Name of the discovery
+     * @return
+     */
     public String getName() {
         return "name";
     }

@@ -30,6 +30,7 @@
                 <module>knx</module>
                 <module>json-rpc</module>
                 <module>raspberrypi</module>
+		<module>json-rpc-it</module>
             </modules>
         </profile>
         <profile>

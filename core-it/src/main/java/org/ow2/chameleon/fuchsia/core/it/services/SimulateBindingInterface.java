@@ -22,10 +22,21 @@ package org.ow2.chameleon.fuchsia.core.it.services;
 
 import org.ow2.chameleon.fuchsia.core.declaration.ImportDeclaration;
 
+/**
+ * Interface mock to be tested
+ */
 public interface SimulateBindingInterface {
 
+    /**
+     * Bind
+     * @param id
+     */
     public void bind(ImportDeclaration id);
 
+    /**
+     * Unbind
+     * @param id
+     */
     public void unbind(ImportDeclaration id);
 
 }

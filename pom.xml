@@ -148,6 +148,7 @@
             <id>release</id>
             <modules>
                 <module>core</module>
+                <module>core-it</module>
                 <module>bases</module>
                 <module>importers</module>
                 <module>exporters</module>
@@ -463,6 +464,11 @@
                     <artifactId>license-maven-plugin</artifactId>
                     <version>${license.plugin.version}</version>
                 </plugin>
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-javadoc-plugin</artifactId>
+			<version>${javadoc.plugin.version}</version>
+		</plugin>
             </plugins>
         </pluginManagement>
 
@@ -592,6 +598,18 @@
                     </execution>
                 </executions>
             </plugin>
+	<plugin>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-javadoc-plugin</artifactId>
+		<executions>
+			<execution>
+			  <id>attach-javadocs</id>
+			  <goals>
+			    <goal>jar</goal>
+			  </goals>
+			</execution>
+		</executions>
+	</plugin>
         </plugins>
 
 
