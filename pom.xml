@@ -31,8 +31,8 @@
     <!-- ========== -->
     <properties>
         <!-- Dependencies version -->
-        <ipojo.version>1.11.2</ipojo.version>
-        <ipojo.plugin.version>1.11.2</ipojo.plugin.version>
+        <ipojo.version>1.12.1</ipojo.version>
+        <ipojo.plugin.version>1.12.1</ipojo.plugin.version>
         <osgi-core.version>5.0.0</osgi-core.version>
         <osgi.version>4.2.0</osgi.version>
         <felix.framework.version>4.2.1</felix.framework.version>
