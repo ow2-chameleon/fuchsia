@@ -34,7 +34,7 @@
         <ipojo.version>1.12.1</ipojo.version>
         <ipojo.plugin.version>1.12.1</ipojo.plugin.version>
         <osgi-core.version>5.0.0</osgi-core.version>
-        <osgi.version>4.2.0</osgi.version>
+        <osgi.compendium.version>4.2.0</osgi.compendium.version>
         <felix.framework.version>4.2.1</felix.framework.version>
         <felix.configadmin.version>1.6.0</felix.configadmin.version>
         <felix.eventadmin.version>1.3.2</felix.eventadmin.version>
@@ -274,7 +274,7 @@
             <dependency>
                 <groupId>org.osgi</groupId>
                 <artifactId>org.osgi.compendium</artifactId>
-                <version>${osgi.version}</version>
+                <version>${osgi.compendium.version}</version>
             </dependency>
 
             <!-- Felix -->
