@@ -73,6 +73,8 @@ public class PhilipsHueBridgeDiscovery extends AbstractDiscoveryComponent implem
 
     private static PHBridgeSearchManager philipsSearchManager;
 
+    private final String bridgeUsernameKey = "username";
+
     @Requires
     EventAdmin eventAdmin;
 
@@ -222,7 +224,14 @@ public class PhilipsHueBridgeDiscovery extends AbstractDiscoveryComponent implem
             metatable.put("code", code);
             Event eventAdminMessage = new Event("philips/hue/bridge/error", metatable);
             eventAdmin.sendEvent(eventAdminMessage);
-        }else if (code == PHMessageType.BRIDGE_NOT_FOUND) {
+        }else if (code == PHHueError.AUTHENTICATION_FAILED){
+            preferences.remove(bridgeUsernameKey);
+            LOG.warn("removing invalid user registered in the preferences");
+            try {
+                preferences.flush();
+            } catch (BackingStoreException e) {
+                LOG.error("failed removing invalid user registered in the preferences, you might have problems using hue lamp");
+            }
         }
 
     }
@@ -274,7 +283,6 @@ public class PhilipsHueBridgeDiscovery extends AbstractDiscoveryComponent implem
 
         LOG.trace("Asking connection for the AP {}", ap);
 
-        final String bridgeUsernameKey = "username";
         String username = preferences.get(bridgeUsernameKey, null);
         if (username == null) {
             username = PHBridgeInternal.generateUniqueKey();
