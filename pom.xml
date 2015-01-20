@@ -34,14 +34,14 @@
         <ipojo.version>1.12.1</ipojo.version>
         <ipojo.plugin.version>1.12.1</ipojo.plugin.version>
         <osgi-core.version>5.0.0</osgi-core.version>
-        <osgi.compendium.version>4.2.0</osgi.compendium.version>
+        <osgi.compendium.version>4.3.0</osgi.compendium.version>
         <felix.framework.version>4.2.1</felix.framework.version>
         <felix.configadmin.version>1.6.0</felix.configadmin.version>
         <felix.eventadmin.version>1.3.2</felix.eventadmin.version>
         <commons-io>2.4</commons-io>
         <felix.log.version>1.0.1</felix.log.version>
         <slf4j.version>1.6.6</slf4j.version>
-        <chameleon.version>1.0.7</chameleon.version>
+        <chameleon.version>1.10.3</chameleon.version>
         <apacheCXF.version>1.3</apacheCXF.version>
         <com.rabbitmq>3.1.4</com.rabbitmq>
 
