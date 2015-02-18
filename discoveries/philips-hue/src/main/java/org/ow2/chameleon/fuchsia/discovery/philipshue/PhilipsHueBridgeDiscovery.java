@@ -283,7 +283,9 @@ public class PhilipsHueBridgeDiscovery extends AbstractDiscoveryComponent implem
 
         LOG.trace("Asking connection for the AP {}", ap);
 
+
         String username = preferences.get(bridgeUsernameKey, null);
+
         if (username == null) {
             username = PHBridgeInternal.generateUniqueKey();
             preferences.put(bridgeUsernameKey, username);

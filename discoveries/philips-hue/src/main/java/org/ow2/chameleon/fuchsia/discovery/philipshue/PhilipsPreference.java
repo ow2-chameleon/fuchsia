@@ -45,7 +45,7 @@ public class PhilipsPreference extends Preferences {
                     instance=new PhilipsPreference();
                 }else {
                     LOG.info("Using Java preferences to store authentication");
-                    instance=Preferences.userRoot().node(PhilipsPreference.class.getName());
+                    instance=Preferences.userNodeForPackage(PhilipsPreference.class);
                     tryWritePreferenceOnDisk(instance);
                 }
 
@@ -128,7 +128,8 @@ public class PhilipsPreference extends Preferences {
 
     @Override
     public void clear() throws BackingStoreException {
-        throw new UnsupportedOperationException();
+        propertiesLocalStore.clear();
+        safePropertiesOnDisk();
     }
 
     @Override
@@ -193,6 +194,7 @@ public class PhilipsPreference extends Preferences {
 
     @Override
     public String[] keys() throws BackingStoreException {
+
         throw new UnsupportedOperationException();
     }
 
