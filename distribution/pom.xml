@@ -606,6 +606,33 @@
         </profile>
 
         <profile>
+            <id>importer-zwave</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.ow2.chameleon.fuchsia.importer</groupId>
+                    <artifactId>org.ow2.chameleon.fuchsia.importer.zwave</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.rxtx</groupId>
+                    <artifactId>org.ow2.chameleon.commons.rxtx</artifactId>
+                    <version>2.1.7-0003-SNAPSHOT</version>
+                </dependency>
+                <dependency>
+                    <groupId>commons-io</groupId>
+                    <artifactId>commons-io</artifactId>
+                    <version>2.4</version>
+                </dependency>
+                <dependency>
+                    <groupId>commons-lang</groupId>
+                    <artifactId>org.ow2.chameleon.commons.lang</artifactId>
+                    <version>2.4.0-0002</version>
+                </dependency>
+            </dependencies>
+        </profile>
+
+
+        <profile>
             <id>importer-jsonrpc</id>
             <dependencies>
                 <dependency>
