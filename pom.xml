@@ -170,6 +170,16 @@
                 <module>testing</module>
             </modules>
         </profile>
+        <profile>
+            <!-- JDK 8 is a bit picky on the javadoc, this profile disable the linter -->
+            <id>jdk8</id>
+            <activation>
+                <jdk>1.8</jdk>
+            </activation>
+            <properties>
+                <disableLint>-Xdoclint:none</disableLint>
+            </properties>
+        </profile>
     </profiles>
 
     <!-- === -->
@@ -598,18 +608,22 @@
                     </execution>
                 </executions>
             </plugin>
-	<plugin>
-		<groupId>org.apache.maven.plugins</groupId>
-		<artifactId>maven-javadoc-plugin</artifactId>
-		<executions>
-			<execution>
-			  <id>attach-javadocs</id>
-			  <goals>
-			    <goal>jar</goal>
-			  </goals>
-			</execution>
-		</executions>
-	</plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <additionalparam>${disableLint}</additionalparam>
+                        </configuration>
+
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
 
 
