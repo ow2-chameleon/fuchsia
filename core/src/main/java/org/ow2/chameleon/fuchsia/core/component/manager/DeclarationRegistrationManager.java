@@ -51,7 +51,10 @@ public class DeclarationRegistrationManager<T extends Declaration> {
             }
 
             Dictionary<String, Object> props = new Hashtable<String, Object>();
-            props.put("importer.id",declaration.getMetadata().get("id").toString());
+            if(declaration.getMetadata().get("id") != null){
+                props.put("importer.id",declaration.getMetadata().get("id").toString());
+
+            }
             String[] clazzes = new String[]{klass.getName()};
             ServiceRegistration registration;
             registration = bundleContext.registerService(clazzes, declaration, props);
