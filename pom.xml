@@ -176,6 +176,17 @@
             <activation>
                 <jdk>1.8</jdk>
             </activation>
+            <modules>
+                <module>core</module>
+                <module>core-it</module>
+                <module>bases</module>
+                <module>importers</module>
+                <module>exporters</module>
+                <module>discoveries</module>
+                <module>tools</module>
+                <module>testing</module>
+                <module>distribution</module>
+            </modules>
             <properties>
                 <disableLint>-Xdoclint:none</disableLint>
             </properties>
@@ -474,11 +485,11 @@
                     <artifactId>license-maven-plugin</artifactId>
                     <version>${license.plugin.version}</version>
                 </plugin>
-		<plugin>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-javadoc-plugin</artifactId>
-			<version>${javadoc.plugin.version}</version>
-		</plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>${javadoc.plugin.version}</version>
+                </plugin>
             </plugins>
         </pluginManagement>
 
