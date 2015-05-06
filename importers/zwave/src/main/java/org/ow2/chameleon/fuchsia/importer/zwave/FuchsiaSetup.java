@@ -36,7 +36,7 @@ public class FuchsiaSetup {
             .of("org.ow2.chameleon.fuchsia.discovery.filebased.FileBasedDiscoveryImport");
 
     Instance zwaveImporter = instance()
-            .of("org.openhab.binding.zwave.ZWaveImporter");
+            .of("org.ow2.chameleon.fuchsia.importer.zwave.ZWaveImporter");
 
     Instance zwaveImporterLinker = instance()
             .of(FuchsiaConstants.DEFAULT_IMPORTATION_LINKER_FACTORY_NAME)
