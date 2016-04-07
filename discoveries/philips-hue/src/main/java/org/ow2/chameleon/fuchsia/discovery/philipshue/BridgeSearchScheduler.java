@@ -22,6 +22,7 @@ package org.ow2.chameleon.fuchsia.discovery.philipshue;
 import com.philips.lighting.hue.sdk.*;
 import com.philips.lighting.model.PHBridge;
 import com.philips.lighting.model.PHHueError;
+import com.philips.lighting.model.PHHueParsingError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,12 +73,12 @@ public class BridgeSearchScheduler extends TimerTask implements PHSDKListener {
 
     }
 
-    public void onCacheUpdated(int i, PHBridge phBridge) {
+    public void onCacheUpdated(List<Integer> list, PHBridge phBridge) {
         //searchFinished();
         LOG.trace("PhilipsDiscovery: onCacheUpdated");
     }
 
-    public void onBridgeConnected(PHBridge phBridge) {
+    public void onBridgeConnected(PHBridge phBridge, String s) {
         //searchFinished();
         LOG.trace("PhilipsDiscovery: onBridgeConnected");
     }
@@ -119,6 +120,10 @@ public class BridgeSearchScheduler extends TimerTask implements PHSDKListener {
 
     public void onConnectionLost(PHAccessPoint phAccessPoint) {
         //searchFinished();
+    }
+
+    public void onParsingErrors(List<PHHueParsingError> list) {
+
     }
 
     @Override

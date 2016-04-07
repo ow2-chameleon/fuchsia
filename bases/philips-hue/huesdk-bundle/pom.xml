@@ -26,7 +26,7 @@
             <groupId>philips</groupId>
             <version>0.0.5-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${basedir}/src/main/resources/sdkresources.jar</systemPath>
+            <systemPath>${basedir}/src/main/resources/huesdkresources.jar</systemPath>
         </dependency>
     </dependencies>
 

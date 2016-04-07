@@ -24,6 +24,7 @@ import com.philips.lighting.hue.sdk.connection.impl.PHBridgeInternal;
 import com.philips.lighting.hue.sdk.utilities.impl.PHLog;
 import com.philips.lighting.model.PHBridge;
 import com.philips.lighting.model.PHHueError;
+import com.philips.lighting.model.PHHueParsingError;
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.event.Event;
@@ -85,7 +86,7 @@ public class PhilipsHueBridgeDiscovery extends AbstractDiscoveryComponent implem
         pollingDisabled=Boolean.getBoolean("philips.discovery.pooling.disable");
         scanLocalNetwork=Boolean.getBoolean("philips.discovery.scanNetwork");
         philipsLog =(PHLog) philipsSDK.getSDKService(PHHueSDK.LOG);
-        philipsLog.setSdkLogLevel(PHLog.DEBUG);
+   //     philipsLog.setSdkLogLevel(PHLog.DEBUG);
         philipsSearchManager =(PHBridgeSearchManager) philipsSDK.getSDKService(PHHueSDK.SEARCH_BRIDGE);
     }
 
@@ -137,14 +138,23 @@ public class PhilipsHueBridgeDiscovery extends AbstractDiscoveryComponent implem
         return name;
     }
 
-    public void onCacheUpdated(int i, PHBridge phBridge) {
+    public void onCacheUpdated(List<Integer> list, PHBridge phBridge) {
         Dictionary metatable = new Hashtable();
         metatable.put("bridge", phBridge);
         Event eventAdminMessage = new Event(EVENT_CACHE_UPDATED, metatable);
         eventAdmin.sendEvent(eventAdminMessage);
     }
 
-    public void onBridgeConnected(PHBridge phBridge) {
+    public void onBridgeConnected(PHBridge phBridge, String s) {
+
+        if (s != null) {
+            preferences.put(bridgeUsernameKey, s);
+            try {
+                preferences.flush();
+            } catch (BackingStoreException e) {
+                LOG.error("failed to store username in java preferences, this will force you to push the bridge button everytime to authenticate", e);
+            }
+        }
 
         String bridgeIP = phBridge.getResourceCache().getBridgeConfiguration().getIpAddress();
 
@@ -262,6 +272,10 @@ public class PhilipsHueBridgeDiscovery extends AbstractDiscoveryComponent implem
 
     }
 
+    public void onParsingErrors(List<PHHueParsingError> list) {
+
+    }
+
     public void searchForBridges() {
 
         LOG.trace("Searching for bridges..");
@@ -286,17 +300,10 @@ public class PhilipsHueBridgeDiscovery extends AbstractDiscoveryComponent implem
 
         String username = preferences.get(bridgeUsernameKey, null);
 
-        if (username == null) {
-            username = PHBridgeInternal.generateUniqueKey();
-            preferences.put(bridgeUsernameKey, username);
-            try {
-                preferences.flush();
-            } catch (BackingStoreException e) {
-                LOG.error("failed to store username in java preferences, this will force you to push the bridge button everytime to authenticate", e);
-            }
-        }
-        ap.setUsername(username);
 
+        if (username != null) {
+            ap.setUsername(username);
+        }
         philipsSDK.connect(ap);
 
     }
