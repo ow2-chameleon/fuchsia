@@ -15,18 +15,14 @@
 
     <dependencies>
         <dependency>
-            <artifactId>hue-sdk-core</artifactId>
-            <groupId>philips</groupId>
-            <version>0.0.5-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/src/main/resources/huelocalsdk.jar</systemPath>
+            <groupId>philips.sdk</groupId>
+            <artifactId>huesdkresources</artifactId>
+            <version>1.11.2</version>
         </dependency>
         <dependency>
-            <artifactId>hue-sdk-resources</artifactId>
-            <groupId>philips</groupId>
-            <version>0.0.5-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/src/main/resources/huesdkresources.jar</systemPath>
+            <groupId>philips.sdk</groupId>
+            <artifactId>huelocalsdk</artifactId>
+            <version>1.11.2</version>
         </dependency>
     </dependencies>
 

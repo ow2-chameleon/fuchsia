@@ -13,6 +13,8 @@
     <name>OW2 Chameleon - Fuchsia Base Philips Hue</name>
 
     <modules>
+        <module>huesdk-libinstall</module>
+        <module>huesdkresources-libinstall</module>
         <module>huesdk-bundle</module>
     </modules>
 
