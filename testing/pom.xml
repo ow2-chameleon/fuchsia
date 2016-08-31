@@ -47,6 +47,11 @@
             <artifactId>org.apache.felix.ipojo.annotations</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.ipojo.manipulator</artifactId>
+            <version>${ipojo.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.ow2.chameleon.fuchsia</groupId>
             <artifactId>org.ow2.chameleon.fuchsia.core</artifactId>
             <version>${project.version}</version>

@@ -324,6 +324,11 @@
                 <artifactId>org.apache.felix.ipojo.annotations</artifactId>
                 <version>${ipojo.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>org.apache.felix.ipojo.manipulator</artifactId>
+                <version>${ipojo.version}</version>
+            </dependency>
 
             <!-- Rabbit MQ -->
             <dependency>
