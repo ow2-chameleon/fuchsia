@@ -1,0 +1,62 @@
+<!--
+  #%L
+  OW2 Chameleon - Fuchsia Framework
+  %%
+  Copyright (C) 2009 - 2016 OW2 Chameleon
+  %%
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  
+       http://www.apache.org/licenses/LICENSE-2.0
+  
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  #L%
+  -->
+<configuration>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- On Windows machines setting withJansi to true enables ANSI
+         color code interpretation by the Jansi library. This require
+         org.fusesource.jansi:jansi:1.8 on the class path.  Note that
+         Unix-based operating systems such as Linux and Mac OS X
+         support ANSI color codes by default. -->
+        <withJansi>true</withJansi>
+        <encoder>
+            <pattern>%highlight([%level]\t %logger{15}) %cyan({%thread}) - %msg %n</pattern>
+            <!-- If you don't want colors, you can use the following line, and comment the previous -->
+            <!--<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>-->
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+
+        <file>logs/chameleon.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>logs/chameleon.%d{yyyy-MM-dd}.log</fileNamePattern>
+
+            <!-- keep 1 days' worth of history -->
+            <maxHistory>5</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="warn" additivity="false">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
+    </root>
+
+    <!-- Logger configuration -->
+    <logger name="ch.qos.logback" level="WARN"/>
+    <logger name="net.sf.ehcache" level="WARN"/>
+    <logger name="org.apache" level="WARN"/>
+
+</configuration>

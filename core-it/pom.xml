@@ -18,6 +18,7 @@
         <dependency>
             <groupId>org.ow2.chameleon.fuchsia</groupId>
             <artifactId>org.ow2.chameleon.fuchsia.core</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.osgi</groupId>
@@ -64,17 +65,29 @@
             <scope>test</scope>
             <version>${project.version}</version>
         </dependency>
+
+        <!--LOG-->
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${TEST.slf4j-api.version}</version>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>${TEST.logback-classic.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.log</artifactId>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
 
@@ -95,11 +108,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>${compiler.plugin.version}</version>
-                <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
-                </configuration>
             </plugin>
         </plugins>
     </build>

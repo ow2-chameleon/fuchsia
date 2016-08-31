@@ -26,12 +26,6 @@
     <!-- Project dependencies -->
     <dependencies>
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>1.7.6</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.osgi</groupId>
             <artifactId>org.osgi.compendium</artifactId>
         </dependency>
@@ -55,6 +49,7 @@
         <dependency>
             <groupId>org.ow2.chameleon.fuchsia</groupId>
             <artifactId>org.ow2.chameleon.fuchsia.core</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
@@ -107,16 +102,6 @@
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${TEST.slf4j-api.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>${TEST.logback-classic.version}</version>
-        </dependency>
 
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
@@ -141,7 +126,33 @@
             <artifactId>jetty-servlet</artifactId>
             <version>7.5.4.v20111024</version>
         </dependency>
-        
+
+        <!--LOG-->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.log</artifactId>
+            <version>${felix.log.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <!-- Build configuration -->

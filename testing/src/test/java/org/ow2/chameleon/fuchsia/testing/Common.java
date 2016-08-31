@@ -24,6 +24,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.OptionUtils;
+import org.ops4j.pax.exam.options.CompositeOption;
+import org.ops4j.pax.exam.options.DefaultCompositeOption;
 import org.ow2.chameleon.testing.helpers.BaseTest;
 
 import java.io.IOException;
@@ -57,7 +59,7 @@ public class Common extends BaseTest {
         Option[] options = super.defaultConfiguration();
 
         options = OptionUtils.combine(options, fuchsiaBundles());
-
+        options = OptionUtils.combine(options, log());
         if (deployAssertj()) {
             options = OptionUtils.combine(options, assertjBundles());
         }
@@ -78,6 +80,15 @@ public class Common extends BaseTest {
         );
     }
 
+
+    public CompositeOption log() {
+        return new DefaultCompositeOption(
+                mavenBundle("org.apache.felix", "org.apache.felix.log").versionAsInProject(),
+                mavenBundle("org.slf4j", "slf4j-api").versionAsInProject(),
+                mavenBundle("ch.qos.logback", "logback-core").versionAsInProject(),
+                mavenBundle("ch.qos.logback", "logback-classic").versionAsInProject()
+        );
+    }
 
     /**
      * Method to override to instruct pax exam to not deploy assertj.

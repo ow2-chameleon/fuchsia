@@ -44,6 +44,7 @@
         <dependency>
             <groupId>org.ow2.chameleon.fuchsia</groupId>
             <artifactId>org.ow2.chameleon.fuchsia.core</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
@@ -97,21 +98,6 @@
         </dependency>
 
         <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-core</artifactId>
-            <version>0.9.6</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>${TEST.logback-classic.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-
-        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
@@ -158,11 +144,6 @@
 
         <dependency>
             <groupId>org.apache.felix</groupId>
-            <artifactId>org.apache.felix.log</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.felix</groupId>
             <artifactId>org.apache.felix.eventadmin</artifactId>
         </dependency>
 
@@ -179,10 +160,27 @@
             <scope>test</scope>
         </dependency>
 
+
+        <!--LOG-->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>${TEST.slf4j-api.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.log</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

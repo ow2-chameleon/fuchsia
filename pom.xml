@@ -35,13 +35,13 @@
         <ipojo.plugin.version>1.12.1</ipojo.plugin.version>
         <osgi-core.version>5.0.0</osgi-core.version>
         <osgi.compendium.version>4.3.0</osgi.compendium.version>
-        <felix.framework.version>4.2.1</felix.framework.version>
+        <felix.framework.version>5.4.0</felix.framework.version>
         <felix.configadmin.version>1.6.0</felix.configadmin.version>
         <felix.eventadmin.version>1.3.2</felix.eventadmin.version>
         <commons-io>2.4</commons-io>
         <felix.log.version>1.0.1</felix.log.version>
-        <slf4j.version>1.6.6</slf4j.version>
-        <chameleon.version>1.10.3</chameleon.version>
+        <slf4j.version>1.7.6</slf4j.version>
+        <chameleon.version>1.10.7</chameleon.version>
         <apacheCXF.version>1.3</apacheCXF.version>
         <com.rabbitmq>3.1.4</com.rabbitmq>
 
@@ -72,8 +72,7 @@
         <tinybundles.version>1.0.0</tinybundles.version>
         <ops4j.version>1.4.0</ops4j.version>
         <tinybundles-ipojo.version>0.3.0</tinybundles-ipojo.version>
-        <TEST.slf4j-api.version>1.5.6</TEST.slf4j-api.version>
-        <TEST.logback-classic.version>0.9.6</TEST.logback-classic.version>
+        <TEST.logback-classic.version>1.0.13</TEST.logback-classic.version>
 
         <!-- Encoding -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -280,12 +279,6 @@
     <!-- ===================== -->
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>org.ow2.chameleon.fuchsia</groupId>
-                <artifactId>org.ow2.chameleon.fuchsia.core</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
             <!-- OSGi -->
             <dependency>
                 <groupId>org.osgi</groupId>
@@ -436,6 +429,11 @@
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
+                <version>${TEST.logback-classic.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-core</artifactId>
                 <version>${TEST.logback-classic.version}</version>
             </dependency>
         </dependencies>

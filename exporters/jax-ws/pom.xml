@@ -46,6 +46,7 @@
         <dependency>
             <groupId>org.ow2.chameleon.fuchsia</groupId>
             <artifactId>org.ow2.chameleon.fuchsia.core</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
