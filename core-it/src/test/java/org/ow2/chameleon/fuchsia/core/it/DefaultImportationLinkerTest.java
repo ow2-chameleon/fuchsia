@@ -95,6 +95,13 @@ public class DefaultImportationLinkerTest extends Common {
     }
 
     @Override
+    protected List<String> getExtraExports() {
+        return Arrays.asList(
+                "org.ow2.chameleon.fuchsia.core.it.components"
+        );
+    }
+
+    @Override
     public boolean deployTestBundle() {
         return false;
     }

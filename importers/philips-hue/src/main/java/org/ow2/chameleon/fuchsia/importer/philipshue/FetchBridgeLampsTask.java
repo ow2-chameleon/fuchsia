@@ -52,7 +52,7 @@ public class FetchBridgeLampsTask extends TimerTask {
 
         for(PHLight light:bridge.getResourceCache().getAllLights()){
 
-            if(!light.isReachable()){
+            if( (light.getLastKnownLightState() != null) && (!light.getLastKnownLightState() .isReachable())){
 
                 ServiceRegistration sr=lamps.remove(light.getIdentifier());
                 if(sr!=null)

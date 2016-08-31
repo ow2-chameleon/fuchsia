@@ -20,7 +20,6 @@ package org.ow2.chameleon.fuchsia.importer.philipshue.shell;
  * #L%
  */
 
-import com.philips.lighting.hue.listener.PHLightListener;
 import com.philips.lighting.hue.sdk.utilities.PHUtilities;
 import com.philips.lighting.model.PHBridge;
 import com.philips.lighting.model.PHHueError;
@@ -38,7 +37,7 @@ import static org.ow2.chameleon.fuchsia.tools.shell.util.FuchsiaGogoUtil.getArgu
 @Component(immediate = true)
 @Instantiate
 @Provides
-public class PhilipsHueGogoCommand extends PHLightListener {
+public class PhilipsHueGogoCommand {
 
     @ServiceProperty(name = "osgi.command.scope", value = "philips")
     private String scope;
@@ -90,7 +89,6 @@ public class PhilipsHueGogoCommand extends PHLightListener {
 
     private void listLamps(String... parameters){
         StringBuilder sb=new StringBuilder();
-        bridge.findNewLights(this);
         for (PHLight light : bridge.getResourceCache().getAllLights()) {
 
             StringBuilder deviceStr=new StringBuilder();
@@ -157,17 +155,5 @@ public class PhilipsHueGogoCommand extends PHLightListener {
 
     private int getColorValue(String value) {
         return (value != null) ? Integer.parseInt(value) : 0;
-    }
-
-    public void onSuccess() {
-        // not used
-    }
-
-    public void onError(int i, String s) {
-        // not used
-    }
-
-    public void onStateUpdate(Hashtable<String, String> hashtable, List<PHHueError> phHueErrors) {
-        // not used
     }
 }
