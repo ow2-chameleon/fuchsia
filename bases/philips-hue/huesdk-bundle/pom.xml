@@ -18,11 +18,13 @@
             <groupId>philips.sdk</groupId>
             <artifactId>huesdkresources</artifactId>
             <version>1.11.2</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>philips.sdk</groupId>
             <artifactId>huelocalsdk</artifactId>
             <version>1.11.2</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
@@ -40,7 +42,7 @@
                             ${project.artifactId}
                         </Bundle-SymbolicName>
                         <Export-Package>!org.json,*</Export-Package>
-                        <Embed-Dependency>*;scope=system;inline=true</Embed-Dependency>
+                        <Embed-Dependency>*;scope=compile;inline=true</Embed-Dependency>
                         <Privage-Package>org.json</Privage-Package>
                     </instructions>
                 </configuration>
