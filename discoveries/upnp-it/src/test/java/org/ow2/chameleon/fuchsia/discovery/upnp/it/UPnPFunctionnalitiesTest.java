@@ -25,6 +25,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.ops4j.pax.exam.Option;
+import org.ops4j.pax.exam.options.CompositeOption;
+import org.ops4j.pax.exam.options.DefaultCompositeOption;
 import org.ow2.chameleon.fuchsia.core.FuchsiaConstants;
 import org.ow2.chameleon.fuchsia.core.component.ImportationLinker;
 import org.ow2.chameleon.testing.helpers.BaseTest;
@@ -68,7 +70,11 @@ public class UPnPFunctionnalitiesTest extends BaseTest {
                 wrappedBundle(mavenBundle("org.easytesting", "fest-util").versionAsInProject()),
                 wrappedBundle(mavenBundle("org.easytesting", "fest-assert").versionAsInProject()),
 
-                bootDelegationPackage("com.intellij.rt.coverage.data")
+                bootDelegationPackage("com.intellij.rt.coverage.data"),
+                mavenBundle("org.apache.felix", "org.apache.felix.log").versionAsInProject(),
+                mavenBundle("org.slf4j", "slf4j-api").versionAsInProject(),
+                mavenBundle("ch.qos.logback", "logback-core").versionAsInProject(),
+                mavenBundle("ch.qos.logback", "logback-classic").versionAsInProject()
         );
     }
 
