@@ -120,6 +120,7 @@ public class JSONRPCImporterTest extends ImporterComponentAbstract {
                 mavenBundle().groupId("org.ow2.chameleon.fuchsia.tools").artifactId("fuchsia-proxies-utils").versionAsInProject(),
                 mavenBundle().groupId("javax.portlet").artifactId("portlet-api").versionAsInProject(),
                 mavenBundle().groupId("javax.servlet").artifactId("javax.servlet-api").versionAsInProject(),
+                mavenBundle().groupId("commons-logging").artifactId("commons-logging").versionAsInProject(),
                 systemPackages("com.sun.net.httpserver", "sun.misc", "com.sun.net.httpserver.spi")
         );
     }
