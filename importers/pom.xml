@@ -31,7 +31,7 @@
                 <module>zwave</module>
                 <module>json-rpc</module>
                 <module>raspberrypi</module>
-		<module>json-rpc-it</module>
+	<!--	<module>json-rpc-it</module>-->
             </modules>
         </profile>
         <profile>
